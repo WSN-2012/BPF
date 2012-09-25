@@ -1,0 +1,52 @@
+<project name="WSN-General" basedir="." default="main">
+	
+	
+	<!-- ******************* PROPERTIES ************************ -->
+	<!-- Properties DIRS -->
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="jar.dir" value="${build.dir}/jar"/>
+	<property name="config.dir" value="config" />
+
+	<!-- Proprties FILES -->
+	<property name="jar.file" value="${jar.dir}/${ant.project.name}.jar" />
+	
+	<!-- Properties Manifest -->
+	<property name="main-class" value=""/> <!-- TODO: Add the main -->
+	
+	
+	<!-- ******************* TARGETS ************************ -->
+	<target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+	
+	<target name="prepare">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${jar.dir}" />
+		<mkdir dir="${jar.dir}/config" />
+	</target>
+
+    <target name="compile" depends="prepare">
+        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}"
+			debug="on" debuglevel="lines,vars,source" />
+    </target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="${jar.file}" basedir="${classes.dir}">
+			<manifest>
+        		<attribute name="Main-Class" value="${main-class}"/>
+				<attribute name="Class-Path" value="${manifest.classpath}"/>
+    		</manifest>
+		</jar>
+		<copy todir="${jar.dir}/${config.dir}">
+    		<fileset dir="${config.dir}"/>
+ 		</copy>
+	</target>
+
+
+	<!-- This is the target that is run automatically -->
+    <target name="main" depends="clean,compile,jar"/>
+
+</project>
