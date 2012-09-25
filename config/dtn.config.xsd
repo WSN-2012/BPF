@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.bytewalla.tslab.ssvl.kth.se/DTNConf" elementFormDefault="qualified" targetNamespace="http://www.bytewalla.tslab.ssvl.kth.se/DTNConf">
+
+
+    <complexType name="DTNConfiguration">
+    	<all>
+    		<element name="StorageSetting" type="tns:StorageSetting"/>
+    		<element name="InterfacesSetting" type="tns:InterfacesSetting">
+    		</element>
+    		<element name="LinksSetting" type="tns:LinksSetting"/>
+    		<element name="RoutesSetting" type="tns:RoutesSetting"/>
+    		<element name="DiscoveriesSetting" type="tns:DiscoveriesSetting"/>
+    	</all>
+    </complexType>
+
+    <element name="DTNConfiguration" type="tns:DTNConfiguration"/>
+
+
+    <complexType name="StorageSetting">
+    	<attribute name="type" use="required">
+    		<simpleType>
+    			<restriction base="string">
+    				<enumeration value="phone"/>
+    				<enumeration value="sdcard"/>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="quota" type="int">
+    		<annotation>
+    			<documentation>
+    				Storage Quota setting (MB)
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="storage_path" type="string"/>
+    </complexType>
+
+    <complexType name="Interface">
+    	<attribute name="id" type="string" use="required"/>
+    	<attribute name="local_port" type="int" use="optional"/>
+    	<attribute name="conv_layer_type">
+    	
+    		<simpleType>
+    			<restriction base="string">
+    				<enumeration value="tcp"/>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    </complexType>
+
+
+
+    <complexType name="InterfacesSetting">
+    	<sequence>
+    		<element maxOccurs="unbounded" minOccurs="0" name="Interface" type="tns:Interface">
+    		</element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="Link">
+    	<attribute name="id" type="string" use="required"/>
+    	<attribute name="dest" type="string"/>
+    	<attribute name="type">
+    		<simpleType>
+    			<restriction base="string">
+    				<enumeration value="ALWAYSON"/>
+    				<enumeration value="ONDEMAND"/>
+    				<enumeration value="SCHEDULED"/>
+    				<enumeration value="OPPORTUNISTIC"/>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="conv_layer_type">
+    		<simpleType>
+    			<restriction base="string">
+    				<enumeration value="tcp"/>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    </complexType>
+
+    <complexType name="LinksSetting">
+    	<sequence>
+    		<element maxOccurs="unbounded" minOccurs="0" name="Link" type="tns:Link"/>
+    	</sequence>
+    </complexType>
+
+    <complexType name="Route">
+    	<attribute name="dest" type="string" use="required"/>
+    	<attribute name="link_id" type="string"/>
+    </complexType>
+    
+    <complexType name="RoutesSetting">
+    	<sequence>
+    		<element maxOccurs="unbounded" minOccurs="0" name="Route" type="tns:Route">
+    		</element>
+    	</sequence>
+    	<attribute name="router_type" use="required">
+    		<simpleType>
+    			<restriction base="string">
+    				<enumeration value="static"/>
+    				<enumeration value="prophet"/>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="local_eid" type="string"/>
+    	
+	    	<attribute name="P_encounter" type="float"/>
+    		<attribute name="P_encounter_first" type="float"/>
+    		
+    		<attribute name="alpha" type="float"/>
+    		<attribute name="beta" type="float"/>
+    		<attribute name="delta" type="float"/>
+    		<attribute name="K" type="int"/>
+    		<attribute name="queuing" type="string"/>
+ 	
+    </complexType>
+    
+
+    <complexType name="Discovery">
+    	<attribute name="id" type="string" use="required"/>
+    	<attribute name="address_family">
+    		<simpleType>
+    			<restriction base="string">
+    				<enumeration value="ip"/>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    	<attribute name="port" type="int"/>
+    </complexType>
+
+    <complexType name="DiscoveriesSetting">
+    	<sequence>
+    		<element maxOccurs="unbounded" minOccurs="0" name="Discovery" type="tns:Discovery"/>
+    		<element maxOccurs="unbounded" minOccurs="0" name="Announce" type="tns:Announce"/>
+    	</sequence>
+    </complexType>
+
+    <complexType name="Announce">
+    	<attribute name="interface_id" type="string" use="required"/>
+    	<attribute name="discovery_id" type="string"/>
+    	<attribute name="conv_layer_type" type="string"/>
+    	<attribute name="interval" type="int" use="optional"/>
+    </complexType>
+</schema>
