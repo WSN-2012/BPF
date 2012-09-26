@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import se.kth.ssvl.tslab.wsn.general.DTNService;
-import se.kth.ssvl.tslab.wsn.general.R;
+
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.systemlib.energy.BatteryObserver;
 import se.kth.ssvl.tslab.wsn.general.systemlib.energy.BatteryStat;

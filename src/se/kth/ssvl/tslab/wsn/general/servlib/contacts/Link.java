@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.DTNService;
-import se.kth.ssvl.tslab.wsn.general.R;
+
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleList;

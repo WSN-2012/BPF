@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 import se.kth.ssvl.tslab.wsn.general.DTNManager;
 import se.kth.ssvl.tslab.wsn.general.DTNService;
-import se.kth.ssvl.tslab.wsn.general.R;
+
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.custody_signal_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleAcceptRequest;

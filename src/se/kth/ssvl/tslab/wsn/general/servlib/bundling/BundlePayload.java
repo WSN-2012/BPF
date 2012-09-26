@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.DTNService;
-import se.kth.ssvl.tslab.wsn.general.R;
+
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHeldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundlePayloadWrongTypeException;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;

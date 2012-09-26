@@ -23,7 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.reg;
 import java.io.File;
 
 import se.kth.ssvl.tslab.wsn.general.DTNService;
-import se.kth.ssvl.tslab.wsn.general.R;
+
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;

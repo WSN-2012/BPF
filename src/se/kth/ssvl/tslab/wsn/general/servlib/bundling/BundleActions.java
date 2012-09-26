@@ -22,8 +22,8 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 import java.util.Iterator;
 import java.util.ListIterator;
 
-import se.kth.ssvl.tslab.wsn.general.DTNService;
-import se.kth.ssvl.tslab.wsn.general.R;
+
+import se.kth.ssvl.tslab.bytewalla.javadtn.servlib.bundling.FragmentManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleSendCancelledEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
@@ -193,9 +193,7 @@ public class BundleActions {
 							bundle.bundleid(), link.type_str(), link.name(),
 							link.nexthop(), total_len, link.params().mtu()));
 
-			if (DTNService.context().getResources()
-					.getString(R.string.DTNEnableProactiveFragmentation)
-					.equals("true")) {
+			if (FragmentManager.DTNEnableProactiveFragmentation.equals("true")) {
 
 				FragmentState proactive_fragment_state = FragmentManager
 						.getInstance().proactively_fragment(bundle, link,
