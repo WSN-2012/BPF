@@ -29,7 +29,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import android.content.Context;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
@@ -50,10 +49,8 @@ public class StorageImplementation<Type> {
 	/**
 	 * Construct
 	 * 
-	 * @param context
-	 *            Application context
 	 */
-	StorageImplementation(Context context) {
+	StorageImplementation() {
 
 	}
 
