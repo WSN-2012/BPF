@@ -24,7 +24,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.TimerTask;
 
-import se.kth.ssvl.tslab.wsn.general.DTNService;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**

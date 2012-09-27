@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Map;
 
-import se.kth.ssvl.tslab.wsn.general.DTNManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol;

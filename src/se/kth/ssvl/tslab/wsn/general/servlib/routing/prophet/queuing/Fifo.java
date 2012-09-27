@@ -1,7 +1,5 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;

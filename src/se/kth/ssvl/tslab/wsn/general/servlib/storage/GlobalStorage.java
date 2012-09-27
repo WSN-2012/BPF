@@ -23,8 +23,6 @@ package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.StorageSetting.storage_type_t;
-import android.content.Context;
-import android.os.Environment;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**

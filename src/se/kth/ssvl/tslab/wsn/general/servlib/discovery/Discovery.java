@@ -23,7 +23,6 @@ package se.kth.ssvl.tslab.wsn.general.servlib.discovery;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import se.kth.ssvl.tslab.wsn.general.DTNManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundlePayload.location_t;
@@ -167,8 +166,7 @@ public abstract class Discovery {
 	public boolean announce(String name, int argc, String ClType, int interval) {
 
 		if (list_.indexOf(name) != -1) {
-			Logger.getInstance()
-(TAG, "discovery for name already exists");
+			Logger.getInstance().error(TAG, "discovery for name already exists");
 			return false;
 		}
 

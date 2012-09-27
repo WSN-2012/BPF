@@ -27,7 +27,6 @@ import java.net.SocketException;
 import java.nio.channels.AsynchronousCloseException;
 import java.util.Iterator;
 
-import se.kth.ssvl.tslab.wsn.general.DTNService;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfoVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;

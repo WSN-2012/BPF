@@ -92,7 +92,6 @@ public abstract class ProphetQueuing {
 
 	public void maintainQuota() {
 		BundleStore bs = BundleStore.getInstance();
-		Log.v(TAG, "" + GlobalStorage.getInstance().get_total_size());
 		while (bs.quota() != 0
 				&& (GlobalStorage.getInstance().get_total_size() > bs.quota())) {
 			if (!this.removeNextBundle())

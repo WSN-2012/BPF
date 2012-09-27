@@ -33,9 +33,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing;
 import se.kth.ssvl.tslab.wsn.general.systemlib.storage.StorageIterator;
-import android.content.ContentValues;
-import android.content.Context;
-import android.os.Environment;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**

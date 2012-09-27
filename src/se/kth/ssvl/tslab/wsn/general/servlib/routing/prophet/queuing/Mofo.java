@@ -2,8 +2,6 @@ package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 public class Mofo extends ProphetQueuing {

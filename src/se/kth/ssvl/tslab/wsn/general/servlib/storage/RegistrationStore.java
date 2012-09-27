@@ -28,9 +28,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.config.StorageSetting.storage_type_
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.RegistrationList;
 import se.kth.ssvl.tslab.wsn.general.systemlib.storage.StorageIterator;
-import android.content.ContentValues;
-import android.content.Context;
-import android.os.Environment;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**

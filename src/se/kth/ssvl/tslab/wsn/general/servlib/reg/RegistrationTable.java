@@ -22,14 +22,12 @@ package se.kth.ssvl.tslab.wsn.general.servlib.reg;
 
 import java.io.File;
 
-import se.kth.ssvl.tslab.wsn.general.DTNService;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
-import android.content.Context;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
@@ -137,8 +135,7 @@ public class RegistrationTable {
 			Registration api_reg = reg;
 
 			if (api_reg == null) {
-				Logger.getInstance()
-	(TAG,
+				Logger.getInstance().error(TAG,
 								String.format(
 										"non-api registration %s passed to registration store",
 										reg.regid()));
@@ -151,8 +148,7 @@ public class RegistrationTable {
 							.endpoint().str()));
 
 			if (!RegistrationStore.getInstance().add(api_reg)) {
-				Logger.getInstance()
-	(TAG,
+				Logger.getInstance().error(TAG,
 								String.format(
 										"error adding registration %d/%s: error in persistent store",
 										reg.regid(), reg.endpoint().str()));
@@ -221,8 +217,7 @@ public class RegistrationTable {
 			reg.free_payload();
 
 			if (reg == null) {
-				Logger.getInstance()
-	(TAG,
+				Logger.getInstance().error(TAG,
 								String.format(
 										"error removing registration %s: no matching registration",
 										regid));
@@ -276,8 +271,7 @@ public class RegistrationTable {
 			}
 
 			if (!RegistrationStore.getInstance().update(api_reg)) {
-				Logger.getInstance()
-	(TAG,
+				Logger.getInstance().error(TAG,
 								String.format(
 										"error updating registration %s/%s: error in persistent store",
 										reg.regid(), reg.endpoint().str()));

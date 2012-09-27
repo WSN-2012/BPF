@@ -335,7 +335,7 @@ public class EndpointID implements Serializable {
 		// rebuild the string
 		if (!validate()) {
 			Logger.getInstance()
-(TAG,
+					.error(TAG,
 							"EndpointID::append_service_wildcard: failed to format appended URI");
 			return false;
 		}
