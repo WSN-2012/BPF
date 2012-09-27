@@ -20,18 +20,13 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
 
-
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
-import se.kth.ssvl.tslab.wsn.general.DTNService;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
-import android.content.Context;
-import android.net.DhcpInfo;
-import android.net.wifi.WifiManager;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
@@ -40,28 +35,29 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
  * @author María José Peroza Marval (mjpm@kth.se)
  */
 
-public class TCPConvergenceLayer extends StreamConvergenceLayer implements Serializable{
+public class TCPConvergenceLayer extends StreamConvergenceLayer implements
+		Serializable {
 
 	/**
 	 * Unique identifier according to Java Serializable specification
 	 */
 	private static final long serialVersionUID = -5515355466259078293L;
-	
+
 	/**
 	 * TCP ConvergeceLayer follow in this application
 	 */
 	public static final byte TCPCL_VERSION = 0x00;
-	
+
 	/**
 	 * Default port for TCP ConvergenceLayer
 	 */
 	public static final short TCPCL_DEFAULT_PORT = 4556;
-	
+
 	/**
 	 * TAG for Android Logging mechanism
 	 */
 	private static final String TAG = "TCPConvergenceLayer";
-	
+
 	/**
 	 * Constructors
 	 */
@@ -78,6 +74,7 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements Seria
 
 	/**
 	 * Get the IP address that the DHCP server assigns to the mobile phone
+	 * 
 	 * @return The current IP address
 	 */
 	public static InetAddress getting_my_ip() {
@@ -110,7 +107,6 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements Seria
 
 		return local_addr_;
 	}
-	
 
 	/**
 	 * Bring up an interface.
@@ -120,10 +116,11 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements Seria
 
 		Logger.getInstance().debug(TAG, "adding interface " + iface.name());
 		InetAddress local_addr_ = getting_my_ip();
-			
+
 		// check that the local interface / port are valid
 		if (local_addr_ == null) {
-			Logger.getInstance().error(TAG, "invalid local address setting of null");
+			Logger.getInstance().error(TAG,
+					"invalid local address setting of null");
 			return false;
 		}
 
@@ -133,27 +130,27 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements Seria
 		}
 
 		// create a new server socket for the requested interface
-		
-		listen_ = new TCPListener(iface.clayer(),local_port);
-		
+
+		listen_ = new TCPListener(iface.clayer(), local_port);
+
 		if (!listen_.isBound()) {
 
 			Logger.getInstance().warning(TAG, "listener in not bound");
 		}
-		
+
 		iface.set_cl_info(listen_);
 		listen_.start();
-		Interface.set_iface_counter(Interface.iface_counter()+1);
-		
+		Interface.set_iface_counter(Interface.iface_counter() + 1);
+
 		return true;
 
 	}
-	
+
 	/**
 	 * Set the local port
 	 */
 	@Override
-	public void set_local_port (short port){
+	public void set_local_port(short port) {
 		local_port = port;
 	}
 
@@ -162,11 +159,11 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements Seria
 	 */
 	@Override
 	public boolean interface_down(Interface iface) {
-		
-		TCPListener listener = (TCPListener)(iface.cl_info());
+
+		TCPListener listener = (TCPListener) (iface.cl_info());
 		assert (listener != null) : "TCPConvergenceLayer : interface_down, socket is null";
 		listener.stop();
-		Interface.set_iface_counter(Interface.iface_counter()-1);
+		Interface.set_iface_counter(Interface.iface_counter() - 1);
 		return true;
 	}
 
@@ -184,34 +181,32 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements Seria
 		buf.append(text);
 
 	}
-	
+
 	/**
-	 * Parse the destination  IPaddress and the remote port
+	 * Parse the destination IPaddress and the remote port
 	 */
 	@Override
-	public boolean parse_nexthop (Link link, LinkParams lparams){
-		
-		TCPLinkParams params = (TCPLinkParams)(lparams);
-	    assert(params != null);
-	   
-	    
-	    params.remote_addr_ = link.dest_ip();
-	    params.remote_port_ = link.remote_port();
-	        	    
-	    
-	    // if the port wasn't specified, use the default
-	    if (params.remote_port_ == 0) {
-	        params.remote_port_ = TCPCL_DEFAULT_PORT;
-	    }
-	    
-	    return true;
+	public boolean parse_nexthop(Link link, LinkParams lparams) {
+
+		TCPLinkParams params = (TCPLinkParams) (lparams);
+		assert (params != null);
+
+		params.remote_addr_ = link.dest_ip();
+		params.remote_port_ = link.remote_port();
+
+		// if the port wasn't specified, use the default
+		if (params.remote_port_ == 0) {
+			params.remote_port_ = TCPCL_DEFAULT_PORT;
+		}
+
+		return true;
 	}
 
 	/**
-     * Tunable link parameter.
-     * 
-     * @author María José Peroza Marval (mjpm@kth.se)
-     */
+	 * Tunable link parameter.
+	 * 
+	 * @author María José Peroza Marval (mjpm@kth.se)
+	 */
 	public class TCPLinkParams extends StreamLinkParams {
 
 		/**
@@ -222,12 +217,12 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements Seria
 		public boolean hexdump_; // /< Log a hexdump of all traffic
 		public InetAddress local_addr_; // /< Local address to bind to
 		public InetAddress remote_addr_; // /< Peer address used for
-		
-		public InetAddress remote_addr(){
+
+		public InetAddress remote_addr() {
 			return remote_addr_;
 		}
-		
-		public short local_port_;									// rcvr-connect
+
+		public short local_port_; // rcvr-connect
 		public short remote_port_; // /< Peer port used for rcvr-connect
 
 		/**
@@ -244,8 +239,7 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements Seria
 		}
 
 	}
-	
-	
+
 	@Override
 	public void dump_link(Link link, StringBuffer buf) {
 
@@ -264,19 +258,19 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements Seria
 
 	}
 
-	
 	@Override
-	public LinkParams new_link_params(){
-		
+	public LinkParams new_link_params() {
+
 		return new TCPLinkParams(true);
 	}
-	
+
 	/**
 	 * Create a new TCPConnection
 	 */
 	@Override
-	public TCPConnection new_connection(Link link, LinkParams p)throws OutOfMemoryError {
-		
+	public TCPConnection new_connection(Link link, LinkParams p)
+			throws OutOfMemoryError {
+
 		TCPLinkParams params = (TCPLinkParams) p;
 		assert (params != null);
 		dest_addr_ = link.dest_ip();
@@ -284,15 +278,11 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements Seria
 		return new TCPConnection(this, params);
 	}
 
-	
-	
-	TCPListener listen_;  // / Listener (Represents a server socket waiting for a connection) 
-	
+	TCPListener listen_; // / Listener (Represents a server socket waiting for a
+							// connection)
+
 	protected InetAddress dest_addr_; // / Destination IPaddress
 	protected short dest_port_; // / destination port
 	protected short local_port; // / local port
-	
-	
-
 
 }

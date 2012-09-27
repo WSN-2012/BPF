@@ -25,26 +25,28 @@ import java.util.Date;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 
 /**
- * Bundle Event class used in DTN System for communicating between different components.
+ * Bundle Event class used in DTN System for communicating between different
+ * components.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleEvent {
 	/**
-	 *  The enum indicating the Event Type
+	 * The enum indicating the Event Type
 	 */
 	protected event_type_t type_;
 
 	/**
-	 * Flag showing whether this particular event should be processed by other components as well.
+	 * Flag showing whether this particular event should be processed by other
+	 * components as well.
 	 */
 	protected boolean daemon_only_ = false;
 
 	/**
 	 * Priority value to sort BundleEvent to be run in the Bundle Daemon
 	 */
-	private int priority_; 
-	
-	
+	private int priority_;
+
 	/**
 	 * Notifier to be notified when the event is completed.
 	 */
@@ -64,16 +66,18 @@ public class BundleEvent {
 
 	/**
 	 * main Constructor
+	 * 
 	 * @param type
 	 */
 	public BundleEvent(event_type_t type) {
 		type_ = type;
 		daemon_only_ = false;
-		processed_notifier_ =  null;
+		processed_notifier_ = null;
 	}
 
 	/**
-	 * Accessor for the enum indicating the Event Type 
+	 * Accessor for the enum indicating the Event Type
+	 * 
 	 * @return the type_
 	 */
 	public event_type_t type() {
@@ -82,14 +86,18 @@ public class BundleEvent {
 
 	/**
 	 * Setter for the enum indicating the Event Type
-	 * @param type the type_ to set
+	 * 
+	 * @param type
+	 *            the type_ to set
 	 */
 	public void set_type(event_type_t type) {
 		type_ = type;
 	}
 
 	/**
-	 * Accessor for the flag showing whether this particular event should be processed by other components as well.
+	 * Accessor for the flag showing whether this particular event should be
+	 * processed by other components as well.
+	 * 
 	 * @return the daemon_only_
 	 */
 	public boolean daemon_only() {
@@ -97,8 +105,11 @@ public class BundleEvent {
 	}
 
 	/**
-	 * Setter for the flag showing whether this particular event should be processed by other components as well.
-	 * @param daemonOnly the daemon_only_ to set
+	 * Setter for the flag showing whether this particular event should be
+	 * processed by other components as well.
+	 * 
+	 * @param daemonOnly
+	 *            the daemon_only_ to set
 	 */
 	public void set_daemon_only(boolean daemon_only) {
 		daemon_only_ = daemon_only;
@@ -106,6 +117,7 @@ public class BundleEvent {
 
 	/**
 	 * Accessor for the Notifier to be notified when the event is completed
+	 * 
 	 * @return the processed_notifier_
 	 */
 	public MsgBlockingQueue<Integer> processed_notifier() {
@@ -114,14 +126,18 @@ public class BundleEvent {
 
 	/**
 	 * Setter for the Notifier to be notified when the event is completed
-	 * @param processedNotifier the processed_notifier_ to set
+	 * 
+	 * @param processedNotifier
+	 *            the processed_notifier_ to set
 	 */
-	public void set_processed_notifier(MsgBlockingQueue<Integer> processed_notifier) {
+	public void set_processed_notifier(
+			MsgBlockingQueue<Integer> processed_notifier) {
 		processed_notifier_ = processed_notifier;
 	}
 
 	/**
 	 * Accessor for the time the event is posted to BundleDaemon's queue.
+	 * 
 	 * @return the posted_time_
 	 */
 	public Date posted_time() {
@@ -130,14 +146,18 @@ public class BundleEvent {
 
 	/**
 	 * Setter for the time the event is posted to BundleDaemon's queue.
-	 * @param postedTime the posted_time_ to set
+	 * 
+	 * @param postedTime
+	 *            the posted_time_ to set
 	 */
 	public void set_posted_time(Date postedTime) {
 		posted_time_ = postedTime;
 	}
 
 	/**
-	 * Accessor for the priority value to sort BundleEvent to be run in the Bundle Daemon
+	 * Accessor for the priority value to sort BundleEvent to be run in the
+	 * Bundle Daemon
+	 * 
 	 * @return the priority
 	 */
 	public int priority() {
@@ -145,8 +165,11 @@ public class BundleEvent {
 	}
 
 	/**
-	 * Setter for the priority value to sort BundleEvent to be run in the Bundle Daemon
-	 * @param priority the priority to set
+	 * Setter for the priority value to sort BundleEvent to be run in the Bundle
+	 * Daemon
+	 * 
+	 * @param priority
+	 *            the priority to set
 	 */
 	public void set_priority(int priority) {
 		this.priority_ = priority;

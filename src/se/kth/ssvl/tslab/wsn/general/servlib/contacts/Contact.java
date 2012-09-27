@@ -72,7 +72,6 @@ public class Contact implements Serializable {
 		Logger.getInstance().info(TAG, "new contact" + this);
 	}
 
-	
 	/**
 	 * Store the convergence layer state associated with the contact.
 	 */
@@ -114,7 +113,7 @@ public class Contact implements Serializable {
 	/**
 	 * Virtual from SerializableObject
 	 */
-	
+
 	// / @{ Accessors
 	public Date start_time() {
 		return start_time_;

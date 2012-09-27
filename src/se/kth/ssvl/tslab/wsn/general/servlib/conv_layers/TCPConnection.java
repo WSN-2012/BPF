@@ -32,7 +32,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.Date;
 
-import se.kth.ssvl.tslab.wsn.general.DTNService;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer.TCPLinkParams;
@@ -42,7 +41,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
  * "Helper class (and thread) that manages an established connection with a peer
- * daemon. 
+ * daemon.
  * 
  * Although the same class is used in both cases, a particular Connection is
  * either a receiver or a sender, as indicated by the direction variable. Note
@@ -123,7 +122,7 @@ public class TCPConnection extends Connection {
 	/**
 	 * Connect the socket to the remote endpoint.
 	 */
-	
+
 	@Override
 	void connect() throws ConnectionException {
 
@@ -133,7 +132,8 @@ public class TCPConnection extends Connection {
 			try {
 				initialize_channels_and_streams();
 			} catch (IOException e) {
-				Logger.getInstance().info(TAG,
+				Logger.getInstance().info(
+						TAG,
 						"receiving connection from remote side and fail with "
 								+ e.getMessage());
 				throw new ConnectionException();
@@ -147,8 +147,10 @@ public class TCPConnection extends Connection {
 		// cache the remote addr and port in the fields in the socket
 		TCPLinkParams params = (TCPLinkParams) (params_);
 		assert (params != null);
-		Logger.getInstance().debug(TAG, "connect: connecting to " + params.remote_addr_
-				+ params.remote_port_);
+		Logger.getInstance().debug(
+				TAG,
+				"connect: connecting to " + params.remote_addr_
+						+ params.remote_port_);
 		InetSocketAddress remote = new InetSocketAddress(params.remote_addr_,
 				params.remote_port_);
 		try {
@@ -172,7 +174,8 @@ public class TCPConnection extends Connection {
 		try {
 			socket_.setSoTimeout(SOCKET_TIMEOUT * 1000);
 		} catch (SocketException e1) {
-			Logger.getInstance().error(TAG, "Socket exception in set socket timeout");
+			Logger.getInstance().error(TAG,
+					"Socket exception in set socket timeout");
 		}
 
 	}
@@ -184,7 +187,7 @@ public class TCPConnection extends Connection {
 	void disconnect() {
 		try {
 			socket_.close();
-			//stop();
+			// stop();
 		} catch (IOException e) {
 			Logger.getInstance().debug(TAG, "IOException in disconnect");
 		}
@@ -193,7 +196,7 @@ public class TCPConnection extends Connection {
 	/**
 	 * Sending and receiving data by the socket
 	 */
-	
+
 	@Override
 	void handle_poll_activity(int timeout) {
 
@@ -213,8 +216,8 @@ public class TCPConnection extends Connection {
 			// check that there's something to read
 			if (num_to_read_ > 0) {
 
-
-				Logger.getInstance().debug(TAG, "before reading position is " + recvbuf_.position());
+				Logger.getInstance().debug(TAG,
+						"before reading position is " + recvbuf_.position());
 
 				java.nio.ByteBuffer temp_java_nio_buf = java.nio.ByteBuffer
 						.allocate(recvbuf_.remaining());
@@ -233,21 +236,24 @@ public class TCPConnection extends Connection {
 
 					);
 
-				
-				Logger.getInstance().debug(TAG, "buffer position now is " + recvbuf_.position());
+				Logger.getInstance().debug(TAG,
+						"buffer position now is " + recvbuf_.position());
 
 				process_data();
 
 				if (recvbuf_.remaining() == 0) {
-					Logger.getInstance().error(TAG, "after process_data left no space in recvbuf!!");
+					Logger.getInstance().error(TAG,
+							"after process_data left no space in recvbuf!!");
 
 				}
 
 			}
 
 		} catch (IOException e) {
-			Logger.getInstance().error(TAG, "IOException, in reading data from the read_stream_:"
-					+ e.getMessage());
+			Logger.getInstance().error(
+					TAG,
+					"IOException, in reading data from the read_stream_:"
+							+ e.getMessage());
 		}
 
 		// send keep alive message if we should send it
@@ -283,17 +289,17 @@ public class TCPConnection extends Connection {
 			write_channel_ = write_channel;
 		}
 
-		
 		@Override
 		protected void timeout(Date now) {
 
-			Log
-					.e(TAG,
+			Logger.getInstance()
+					.error(TAG,
 							"write socket timeout timer fire, closing the write_channel");
 			try {
 				write_channel_.close();
 			} catch (IOException e) {
-				Logger.getInstance().error(TAG,
+				Logger.getInstance().error(
+						TAG,
 						"IOException write socket timeout timer close write channel :"
 								+ e.getMessage());
 			}
@@ -302,7 +308,6 @@ public class TCPConnection extends Connection {
 
 	}
 
-	
 	@Override
 	void send_data() {
 
@@ -310,9 +315,8 @@ public class TCPConnection extends Connection {
 		sendbuf_.rewind();
 		try {
 
-		
-			Logger.getInstance().debug(TAG, "Going to write " + last_position
-					+ " bytes to the stream");
+			Logger.getInstance().debug(TAG,
+					"Going to write " + last_position + " bytes to the stream");
 			java.nio.ByteBuffer temp = java.nio.ByteBuffer
 					.allocate(last_position);
 			BufferHelper.copy_data(temp, 0, sendbuf_, 0, last_position);
@@ -320,16 +324,17 @@ public class TCPConnection extends Connection {
 			WriteSocketTimeoutTimer write_socket_timeout_timer = new WriteSocketTimeoutTimer(
 					write_channel_);
 
-			Logger.getInstance().debug(TAG, "scheduling write_timeout_task in " + SOCKET_TIMEOUT
-					+ " seconds");
-			try{
-			// add the timer to keep looking for Socket timeout
-			write_socket_timeout_timer.schedule_in(SOCKET_TIMEOUT);
+			Logger.getInstance().debug(
+					TAG,
+					"scheduling write_timeout_task in " + SOCKET_TIMEOUT
+							+ " seconds");
+			try {
+				// add the timer to keep looking for Socket timeout
+				write_socket_timeout_timer.schedule_in(SOCKET_TIMEOUT);
 
-			}
-			catch
-			(IllegalStateException e){
-				Logger.getInstance().error(TAG, "write socket timer stop when it shouldn't be stopped");
+			} catch (IllegalStateException e) {
+				Logger.getInstance().error(TAG,
+						"write socket timer stop when it shouldn't be stopped");
 			}
 			write_channel_.write(temp);
 
@@ -337,8 +342,6 @@ public class TCPConnection extends Connection {
 			// successful
 			write_socket_timeout_timer.cancel();
 			write_socket_timeout_timer = null;
-
-		
 
 			// move the remaining data back to beginning for next writting
 			// the position of the buffer will be moved to the newly available

@@ -24,9 +24,10 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
 
 /**
  * Event for querying Interface attribute
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class IfaceAttributesQueryRequest  extends CLAQueryReport {
+public class IfaceAttributesQueryRequest extends CLAQueryReport {
 	public IfaceAttributesQueryRequest(String query_id, Interface iface,
 			AttributeNameVector attribute_names) {
 		super(event_type_t.CLA_IFACE_ATTRIB_QUERY, query_id, true);
@@ -36,17 +37,18 @@ public class IfaceAttributesQueryRequest  extends CLAQueryReport {
 	}
 
 	/**
-	 *  Interface for which the given attributes are requested.
+	 * Interface for which the given attributes are requested.
 	 */
 	private Interface iface_;
 
 	/**
-	 *  Link attributes requested by name.
+	 * Link attributes requested by name.
 	 */
 	private AttributeNameVector attribute_names_;
 
 	/**
 	 * Getter for the Interface for which the given attributes are requested.
+	 * 
 	 * @return the iface_
 	 */
 	public Interface iface() {
@@ -55,7 +57,9 @@ public class IfaceAttributesQueryRequest  extends CLAQueryReport {
 
 	/**
 	 * Setter for the Interface for which the given attributes are requested.
-	 * @param iface the iface_ to set
+	 * 
+	 * @param iface
+	 *            the iface_ to set
 	 */
 	public void set_iface(Interface iface) {
 		iface_ = iface;
@@ -63,6 +67,7 @@ public class IfaceAttributesQueryRequest  extends CLAQueryReport {
 
 	/**
 	 * Getter for the Link attributes requested by name.
+	 * 
 	 * @return the attribute_names_
 	 */
 	public AttributeNameVector attribute_names() {
@@ -71,10 +76,11 @@ public class IfaceAttributesQueryRequest  extends CLAQueryReport {
 
 	/**
 	 * Setter for the Link attributes requested by name.
-	 * @param attributeNames the attribute_names_ to set
+	 * 
+	 * @param attributeNames
+	 *            the attribute_names_ to set
 	 */
 	public void set_attribute_names(AttributeNameVector attribute_names) {
 		attribute_names_ = attribute_names;
 	}
 };
-

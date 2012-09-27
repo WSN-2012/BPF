@@ -19,30 +19,30 @@
  */
 package se.kth.ssvl.tslab.wsn.general.applib.types;
 
-
 /**
  * This class represents DTNEndpointID to be used by the Application
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class DTNEndpointID  {
-    
-	
+public class DTNEndpointID {
+
 	/**
 	 * Empty Constructor
 	 */
-	public DTNEndpointID()
-	{
-	
+	public DTNEndpointID() {
+
 	}
+
 	/**
 	 * Constructor with input URI
-	 * @param uri input URI for this EndpointID
+	 * 
+	 * @param uri
+	 *            input URI for this EndpointID
 	 */
-	public DTNEndpointID(String uri)
-	{
+	public DTNEndpointID(String uri) {
 		uri_ = uri;
 	}
-	
+
 	/**
 	 * Internal variable for holding URI
 	 */
@@ -56,15 +56,15 @@ public class DTNEndpointID  {
 	}
 
 	/**
-	 * @param uri the uri_ to set
+	 * @param uri
+	 *            the uri_ to set
 	 */
 	public void set_uri(String uri) {
 		uri_ = uri;
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return uri_;
 	}
 }

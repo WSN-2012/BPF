@@ -22,7 +22,8 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
 /**
  * Event class to query Contact Event
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class ContactQueryRequest extends BundleEvent {
 	public ContactQueryRequest() {

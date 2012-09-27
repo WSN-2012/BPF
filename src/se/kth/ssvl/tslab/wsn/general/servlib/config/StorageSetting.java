@@ -23,63 +23,58 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * This class represents StorageSetting in the configuration file
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class StorageSetting {
-	
+
 	/**
 	 * Storage Type of the DTN Bundles
 	 */
-	public static enum storage_type_t
-	{
-		PHONE("phone"),
-		SDCard("sdcard");
-		
+	public static enum storage_type_t {
+		PHONE("phone"), SDCard("sdcard");
+
 		private static final Map<String, storage_type_t> lookupCaption = new HashMap<String, storage_type_t>();
 
-		
-		
 		static {
-			for (storage_type_t s : EnumSet
-					.allOf(storage_type_t.class))
-				{ 
-			
-				  lookupCaption.put(s.getCaption(), s);
-				}
+			for (storage_type_t s : EnumSet.allOf(storage_type_t.class)) {
+
+				lookupCaption.put(s.getCaption(), s);
+			}
 		}
 
-		
 		private String caption;
+
 		private storage_type_t(String caption) {
 
 			this.caption = caption;
 		}
 
-
 		public String getCaption() {
 			return caption;
 		}
-	} 
-	
+	}
+
 	/**
-	 * Relative storage path where to put DTNBundle data.
-	 * If the storage type is SDCard, it's relative to root of the SDCard ( normally "/sdcard" in filesystem ).
-	 * If the storage type is Phone, it's relative to the application specific folder in the phone
+	 * Relative storage path where to put DTNBundle data. If the storage type is
+	 * SDCard, it's relative to root of the SDCard ( normally "/sdcard" in
+	 * filesystem ). If the storage type is Phone, it's relative to the
+	 * application specific folder in the phone
 	 */
 	private String storage_path_;
-	
+
 	private storage_type_t storage_type_;
-	
+
 	/**
-	 *  Quota of storage to consume, Unit is in MB
+	 * Quota of storage to consume, Unit is in MB
 	 */
 	private int quota;
 
 	/**
 	 * Accessor for the storage_type_t of this storage setting
+	 * 
 	 * @return the storage_type_
 	 * @see storage_type_t
 	 */
@@ -89,7 +84,9 @@ public class StorageSetting {
 
 	/**
 	 * Setter for the storage_type_t of this storage setting
-	 * @param storageType the storage_type_ to set
+	 * 
+	 * @param storageType
+	 *            the storage_type_ to set
 	 * @see storage_type_t
 	 */
 	public void set_storage_type(storage_type_t storage_type) {
@@ -98,6 +95,7 @@ public class StorageSetting {
 
 	/**
 	 * Accessor for the quota of storage to consume, Unit is in MB
+	 * 
 	 * @return the quota
 	 */
 	public int quota() {
@@ -106,16 +104,20 @@ public class StorageSetting {
 
 	/**
 	 * Setter for the quota of storage to consume, Unit is in MB
-	 * @param quota the quota to set
+	 * 
+	 * @param quota
+	 *            the quota to set
 	 */
 	public void set_quota(int quota) {
 		this.quota = quota;
 	}
 
 	/**
-	 * Accessor for the relative storage path where to put DTNBundle data.
-	 * If the storage type is SDCard, it's relative to root of the SDCard ( normally "/sdcard" in filesystem ).
-	 * If the storage type is Phone, it's relative to the application specific folder in the phone
+	 * Accessor for the relative storage path where to put DTNBundle data. If
+	 * the storage type is SDCard, it's relative to root of the SDCard (
+	 * normally "/sdcard" in filesystem ). If the storage type is Phone, it's
+	 * relative to the application specific folder in the phone
+	 * 
 	 * @return the storage_path_
 	 */
 	public String storage_path() {
@@ -123,13 +125,16 @@ public class StorageSetting {
 	}
 
 	/**
-	 * Setter for the relative storage path where to put DTNBundle data.
-	 * If the storage type is SDCard, it's relative to root of the SDCard ( normally "/sdcard" in filesystem ).
-	 * If the storage type is Phone, it's relative to the application specific folder in the phone
-	 * @param storagePath the storage_path_ to set
+	 * Setter for the relative storage path where to put DTNBundle data. If the
+	 * storage type is SDCard, it's relative to root of the SDCard ( normally
+	 * "/sdcard" in filesystem ). If the storage type is Phone, it's relative to
+	 * the application specific folder in the phone
+	 * 
+	 * @param storagePath
+	 *            the storage_path_ to set
 	 */
 	public void set_storage_path(String storagePath) {
 		storage_path_ = storagePath;
 	}
-	
+
 }

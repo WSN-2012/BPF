@@ -24,32 +24,35 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 
 /**
  * Event generated after the Bundle was canceled successfully
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleSendCancelledEvent extends BundleEvent {
 	/**
 	 * Constructor
+	 * 
 	 * @param bundle
 	 * @param link
 	 */
 	public BundleSendCancelledEvent(Bundle bundle, final Link link) {
 		super(event_type_t.BUNDLE_CANCELLED);
 		bundle_ = bundle;
-		link_   = link;
+		link_ = link;
 	}
 
 	/**
-	 *  The canceled bundle
+	 * The canceled bundle
 	 */
 	private Bundle bundle_;
 
 	/**
-	 *  The link the Bundle was queued on
+	 * The link the Bundle was queued on
 	 */
 	private Link link_;
 
 	/**
 	 * Accessor for the canceled bundle
+	 * 
 	 * @return the bundle_
 	 */
 	public Bundle bundle() {
@@ -58,7 +61,9 @@ public class BundleSendCancelledEvent extends BundleEvent {
 
 	/**
 	 * Setter for the canceled bundle
-	 * @param bundle the bundle_ to set
+	 * 
+	 * @param bundle
+	 *            the bundle_ to set
 	 */
 	public void set_bundle(Bundle bundle) {
 		bundle_ = bundle;
@@ -66,6 +71,7 @@ public class BundleSendCancelledEvent extends BundleEvent {
 
 	/**
 	 * Accessor for the link the Bundle was queued on
+	 * 
 	 * @return the link_
 	 */
 	public Link link() {
@@ -74,7 +80,9 @@ public class BundleSendCancelledEvent extends BundleEvent {
 
 	/**
 	 * Setter for the link the Bundle was queued on
-	 * @param link the link_ to set
+	 * 
+	 * @param link
+	 *            the link_ to set
 	 */
 	public void set_link(Link link) {
 		link_ = link;

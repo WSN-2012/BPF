@@ -21,10 +21,10 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.contacts;
 
 /**
- *  This class is used in NamedAttribute and in AttributeNameVector
+ * This class is used in NamedAttribute and in AttributeNameVector
  * 
  * @author María José Peroza Marval (mjpm@kth.se)
- *
+ * 
  */
 
 public class AttributeName {

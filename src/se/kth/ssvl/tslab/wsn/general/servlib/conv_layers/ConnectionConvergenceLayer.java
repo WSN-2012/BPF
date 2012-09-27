@@ -93,8 +93,8 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 		assert (!link.isdeleted());
 		assert (link.cl_info() == null);
 
-		String text = String.format("adding %s link %s", link.type_str(), link
-				.nexthop());
+		String text = String.format("adding %s link %s", link.type_str(),
+				link.nexthop());
 		Logger.getInstance().debug(TAG, text);
 
 		// "Create a new parameters structure, parse the options, and store
@@ -252,15 +252,18 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 		if (!conn.contact_broken()) {
 
 			try {
-				conn.cmdqueue().put(
-						conn.new CLMsg(CLConnection.clmsg_t.CLMSG_BREAK_CONTACT));
+				conn.cmdqueue()
+						.put(conn.new CLMsg(
+								CLConnection.clmsg_t.CLMSG_BREAK_CONTACT));
 			} catch (InterruptedException e) {
-				Logger.getInstance().error(TAG, "InteruptedException in close_contact command");
+				Logger.getInstance().error(TAG,
+						"InteruptedException in close_contact command");
 			}
 		}
 
 		while (conn.isAlive()) {
-			Logger.getInstance().debug(TAG, "waiting for connection thread to stop...");
+			Logger.getInstance().debug(TAG,
+					"waiting for connection thread to stop...");
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -286,12 +289,14 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 				// "if we've started the bundle but not gotten anything
 				// out, we need to push the bundle back onto the link
 				// queue so it's there when the link re-opens"[DTN2]
-				if (!link.del_from_inflight(inflight.bundle(), inflight
-						.total_length())
-						|| !link.add_to_queue(inflight.bundle(), inflight
-								.total_length())) {
-					Logger.getInstance().warning(TAG, "inflight queue mismatch for bundle "
-							+ inflight.bundle().bundleid());
+				if (!link.del_from_inflight(inflight.bundle(),
+						inflight.total_length())
+						|| !link.add_to_queue(inflight.bundle(),
+								inflight.total_length())) {
+					Logger.getInstance().warning(
+							TAG,
+							"inflight queue mismatch for bundle "
+									+ inflight.bundle().bundleid());
 				}
 
 			} else {
@@ -326,8 +331,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 						&& params.reactive_frag_enabled()
 						&& (rcvd_len > header_block_length)) {
 					String text = String
-							.format(
-									"partial arrival of bundle: got %d bytes [hdr %d payload %s]",
+							.format("partial arrival of bundle: got %d bytes [hdr %d payload %s]",
 									rcvd_len, header_block_length, incoming
 											.bundle().payload().length());
 					Logger.getInstance().debug(TAG, text);
@@ -385,7 +389,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 		try {
 			conn.cmdqueue().put(
 					conn.new CLMsg(CLConnection.clmsg_t.CLMSG_BUNDLES_QUEUED));
-			
+
 		} catch (InterruptedException e) {
 			Logger.getInstance().error(TAG, "Interupt in bundle queue command");
 		}
@@ -394,14 +398,15 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 
 	@Override
 	public void cancel_bundle(Link link, Bundle bundle) {
-		
-		if(bundle==null){
-			Logger.getInstance().error(TAG, "bundle is null when cancel_bundle is called");
-			
+
+		if (bundle == null) {
+			Logger.getInstance().error(TAG,
+					"bundle is null when cancel_bundle is called");
+
 		}
 
 		Logger.getInstance().debug(TAG, "cancel_bundle, bundle is " + bundle);
-		
+
 		assert (!link.isdeleted()) : "ConnectionConvergenceLayer : cancel_bundle, link is deleted";
 
 		// "the bundle should be on the inflight queue for cancel_bundle to
@@ -442,13 +447,10 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 				bundle, link);
 		Logger.getInstance().debug(TAG, text);
 
-		
 		try {
-			conn.cmdqueue()
-					.put(
-							conn.new CLMsg(
-									CLConnection.clmsg_t.CLMSG_CANCEL_BUNDLE,
-									bundle));
+			conn.cmdqueue().put(
+					conn.new CLMsg(CLConnection.clmsg_t.CLMSG_CANCEL_BUNDLE,
+							bundle));
 		} catch (InterruptedException e) {
 
 			Logger.getInstance().error(TAG, "Cancel bundle command");

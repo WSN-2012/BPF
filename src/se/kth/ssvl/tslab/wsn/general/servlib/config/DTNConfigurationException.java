@@ -21,7 +21,8 @@ package se.kth.ssvl.tslab.wsn.general.servlib.config;
 
 /**
  * The DTNConfigurationException for using inside the DTNConfiguration package
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class DTNConfigurationException extends Exception {
 
@@ -36,12 +37,12 @@ public class DTNConfigurationException extends Exception {
 	public DTNConfigurationException(String message) {
 		super(message);
 	}
-	
+
 	/**
-	 * Default Constructor 
+	 * Default Constructor
 	 */
 	public DTNConfigurationException() {
-		
+
 	}
 
 }

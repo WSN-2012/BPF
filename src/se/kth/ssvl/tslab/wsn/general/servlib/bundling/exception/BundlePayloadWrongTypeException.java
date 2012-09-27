@@ -21,6 +21,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception;
 
 /**
  * Bundle Payload Wrong Type Exception
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundlePayloadWrongTypeException extends Exception {

@@ -20,7 +20,8 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
 /**
- * Bundle Report Event 
+ * Bundle Report Event
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleReportEvent extends BundleEvent {

@@ -9,12 +9,13 @@ public class BundleResponse {
 	public short offerCount;
 	public short reserve;
 	public ArrayList<BundleResponseEntry> entries = new ArrayList<BundleResponseEntry>();
+
 	public String toString() {
 		String st = String.format("Flags %x\n" + "Lenght %d\n"
 				+ "OfferCount %d\n" + "Reserve %d\n", flags, length,
 				offerCount, reserve);
-		
-		for(BundleResponseEntry e: entries)
+
+		for (BundleResponseEntry e : entries)
 			st += e.toString();
 
 		return st;

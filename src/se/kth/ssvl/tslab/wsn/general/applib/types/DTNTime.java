@@ -25,9 +25,10 @@ import java.util.Date;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;
 
 /**
- * Class representing Time in DTN. This consists of seconds passed from 1 Jan, 2000 and the nanosecs passed from that particular seconds.
+ * Class representing Time in DTN. This consists of seconds passed from 1 Jan,
+ * 2000 and the nanosecs passed from that particular seconds.
  */
-public class DTNTime  {
+public class DTNTime {
 	/**
 	 * seconds passed from 1 Jan, 2000
 	 */
@@ -37,44 +38,43 @@ public class DTNTime  {
 	 */
 	private long nanosecs_;
 	/**
-	 * Timeval conversion is the number of seconds from the starting point in Java( 1 Jan, 1970 to 1 Jan, 2000 )
+	 * Timeval conversion is the number of seconds from the starting point in
+	 * Java( 1 Jan, 1970 to 1 Jan, 2000 )
 	 */
-	  public static long TIMEVAL_CONVERSION;
-	 
-	    static {
-	    	Calendar ref_calendar         = Calendar.getInstance();
-	    	// set year to 2000 , start date is 1900
-	    	ref_calendar.setTime(new Date(100,0,1));
-	    	
-	    	TIMEVAL_CONVERSION = ref_calendar.getTimeInMillis() / 1000;
-	    }
-	    
+	public static long TIMEVAL_CONVERSION;
+
+	static {
+		Calendar ref_calendar = Calendar.getInstance();
+		// set year to 2000 , start date is 1900
+		ref_calendar.setTime(new Date(100, 0, 1));
+
+		TIMEVAL_CONVERSION = ref_calendar.getTimeInMillis() / 1000;
+	}
+
 	/**
-	 * Constructor from seconds and nanoseconds    
+	 * Constructor from seconds and nanoseconds
+	 * 
 	 * @param secs
 	 * @param nanosecs
 	 */
-	public DTNTime(long secs, long nanosecs)
-	{
+	public DTNTime(long secs, long nanosecs) {
 		secs_ = secs;
 		nanosecs_ = nanosecs;
 	}
-	
+
 	/**
-	 *  Construct the DTNTime based on the current time
+	 * Construct the DTNTime based on the current time
 	 */
-    public DTNTime()
-    {
-		
-    	secs_ =  TimeHelper.current_seconds_from_ref();
-    	nanosecs_ = 0; // set to zero as it couldn't be done with java
-	
-    }
-	
-	
-	
+	public DTNTime() {
+
+		secs_ = TimeHelper.current_seconds_from_ref();
+		nanosecs_ = 0; // set to zero as it couldn't be done with java
+
+	}
+
 	/**
 	 * Getter function for seconds passed from 1 Jan, 2000
+	 * 
 	 * @return the secs_
 	 */
 	public long secs_() {
@@ -83,7 +83,9 @@ public class DTNTime  {
 
 	/**
 	 * Setter function for seconds passed from 1 Jan, 2000
-	 * @param secs the secs_ to set
+	 * 
+	 * @param secs
+	 *            the secs_ to set
 	 */
 	public void set_secs(long secs) {
 		secs_ = secs;
@@ -91,6 +93,7 @@ public class DTNTime  {
 
 	/**
 	 * Getter function for nanosecs passed from that particular seconds
+	 * 
 	 * @return the nanosecs_
 	 */
 	public long nanosecs() {
@@ -99,11 +102,12 @@ public class DTNTime  {
 
 	/**
 	 * Setter functions for nanosecs passed from that particular seconds
-	 * @param nanosecs the nanosecs_ to set
+	 * 
+	 * @param nanosecs
+	 *            the nanosecs_ to set
 	 */
 	public void set_nanosecs(long nanosecs) {
 		nanosecs_ = nanosecs;
 	}
 
-	
 }

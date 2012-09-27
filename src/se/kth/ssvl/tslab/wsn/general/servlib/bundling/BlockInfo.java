@@ -35,6 +35,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
  * Class representing DTN protocol blocks.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BlockInfo implements Serializable {
@@ -48,20 +49,21 @@ public class BlockInfo implements Serializable {
 	 * String TAG to support Android logging mechanism
 	 */
 	private final static String TAG = "BlockInfo";
-	
+
 	/**
 	 * Internal byte array to store data
 	 */
 	private byte[] storage_array_;
-	
+
 	/**
 	 * Default buffer size
 	 */
 	private final static int DATA_BUFFER_SIZE = CLConnection.DEFAULT_BLOCK_BUFFER_SIZE;
 
 	/**
-	 *  "Default constructor assigns the owner and optionally the 
-	 *  BlockInfo source (i.e. the block as it arrived off the wire)" [DTN2]
+	 * "Default constructor assigns the owner and optionally the BlockInfo
+	 * source (i.e. the block as it arrived off the wire)" [DTN2]
+	 * 
 	 * @param owner
 	 * @param source
 	 */
@@ -73,32 +75,33 @@ public class BlockInfo implements Serializable {
 		contents_ = new SerializableByteBuffer(DATA_BUFFER_SIZE);
 		data_length_ = 0;
 		data_offset_ = 0;
-		complete_    = false;
-		reloaded_    = false;
-	
+		complete_ = false;
+		reloaded_ = false;
+
 	}
-	
+
 	/**
 	 * Getter for the storage array
+	 * 
 	 * @return
 	 */
-	public byte[] storage_array()
-	{
+	public byte[] storage_array() {
 		return storage_array_;
 	}
-	
+
 	/**
 	 * Setter for the storage array
+	 * 
 	 * @param storage_array
 	 * @return
 	 */
-	public byte[] set_storage_array(byte[] storage_array)
-	{
+	public byte[] set_storage_array(byte[] storage_array) {
 		return storage_array_ = storage_array;
 	}
 
 	/**
 	 * "create BlockInfo by copying metadata from another BlockInfo" [DTN2]
+	 * 
 	 * @param bi
 	 */
 	public BlockInfo(BlockInfo bi) {
@@ -106,19 +109,18 @@ public class BlockInfo implements Serializable {
 		owner_type_ = bi.owner_type_;
 		source_ = bi.source_;
 		eid_list_ = (EndpointIDVector) bi.eid_list_.clone();
-		
+
 		IByteBuffer src = bi.contents();
 		byte[] temp = new byte[bi.contents().capacity()];
 		src.rewind();
 		src.get(temp);
 		contents_ = new SerializableByteBuffer(src.capacity());
 		contents_.put(temp);
-		
+
 		data_length_ = bi.data_length_;
 		data_offset_ = bi.data_offset_;
-		complete_   = bi.complete_;
-		reloaded_    = bi.reloaded_;
-		
+		complete_ = bi.complete_;
+		reloaded_ = bi.reloaded_;
 
 	}
 
@@ -152,15 +154,16 @@ public class BlockInfo implements Serializable {
 
 	/**
 	 * Setter for the contents in the Buffer
+	 * 
 	 * @param contents
 	 */
-	public final void set_contents(IByteBuffer contents)
-	{
+	public final void set_contents(IByteBuffer contents) {
 		contents_ = contents;
 	}
-	
+
 	/**
 	 * Getter for the Block owner
+	 * 
 	 * @return
 	 */
 	public final BlockProcessor owner() {
@@ -168,7 +171,9 @@ public class BlockInfo implements Serializable {
 	}
 
 	/**
-	 * "If the Block is created from another block info. This is how to get the source block info."[DTN2]
+	 * "If the Block is created from another block info. This is how to get the source block info."
+	 * [DTN2]
+	 * 
 	 * @return
 	 */
 	public final BlockInfo source() {
@@ -177,6 +182,7 @@ public class BlockInfo implements Serializable {
 
 	/**
 	 * EndpointID list of this BlockInfo
+	 * 
 	 * @return
 	 */
 	public final EndpointIDVector eid_list() {
@@ -189,16 +195,17 @@ public class BlockInfo implements Serializable {
 	public final IByteBuffer contents() {
 		return contents_.asReadOnlyBuffer();
 	}
-	
+
 	/**
 	 * Return writable buffer for other method
-	*/
+	 */
 	public IByteBuffer writable_contents() {
 		return contents_;
 	}
 
 	/**
 	 * Getter for the data length of this BlockInfo
+	 * 
 	 * @return
 	 */
 	public int data_length() {
@@ -207,6 +214,7 @@ public class BlockInfo implements Serializable {
 
 	/**
 	 * Getter for the data offset of this BlockInfo
+	 * 
 	 * @return
 	 */
 	public int data_offset() {
@@ -214,7 +222,9 @@ public class BlockInfo implements Serializable {
 	}
 
 	/**
-	 * The fulllength of this block calculated by the summation of data_offset and data_length
+	 * The fulllength of this block calculated by the summation of data_offset
+	 * and data_length
+	 * 
 	 * @return
 	 */
 	public int full_length() {
@@ -222,7 +232,9 @@ public class BlockInfo implements Serializable {
 	}
 
 	/**
-	 * Flag to indicate whether this BlockInfo is already processed by the BlockProcessor
+	 * Flag to indicate whether this BlockInfo is already processed by the
+	 * BlockProcessor
+	 * 
 	 * @return
 	 */
 	public boolean complete() {
@@ -231,6 +243,7 @@ public class BlockInfo implements Serializable {
 
 	/**
 	 * Flag to indicate whether the BlockInfo is reloaded
+	 * 
 	 * @return
 	 */
 	public boolean reloaded() {
@@ -239,20 +252,23 @@ public class BlockInfo implements Serializable {
 
 	/**
 	 * Flag to check whether this Block is the last Block in the list of blocks
+	 * 
 	 * @return
 	 */
 	public boolean last_block() {
-		 //check if it's too small to be flagged as last
-		if (contents_.position() < 2) return false;
-		
-		
+		// check if it's too small to be flagged as last
+		if (contents_.position() < 2)
+			return false;
+
 		int flags = flags();
-		int last_flag_bit = BundleProtocol.block_flag_t.BLOCK_FLAG_LAST_BLOCK.getCode();
+		int last_flag_bit = BundleProtocol.block_flag_t.BLOCK_FLAG_LAST_BLOCK
+				.getCode();
 		return (flags & last_flag_bit) > 0;
 	}
 
 	/**
 	 * Setter for the owner of the Block ( BlockProcessor )
+	 * 
 	 * @param o
 	 */
 	public void set_owner(BlockProcessor o) {
@@ -261,14 +277,16 @@ public class BlockInfo implements Serializable {
 
 	/**
 	 * Setter for the EndpointID List of this BlockInfo
+	 * 
 	 * @param l
 	 */
 	public void set_eid_list(final EndpointIDVector l) {
 		eid_list_ = l;
 	}
-	
+
 	/**
 	 * Setter for the complete flag
+	 * 
 	 * @param t
 	 */
 	public void set_complete(boolean t) {
@@ -277,6 +295,7 @@ public class BlockInfo implements Serializable {
 
 	/**
 	 * Setter for the data_length field
+	 * 
 	 * @param l
 	 */
 	public void set_data_length(int l) {
@@ -285,6 +304,7 @@ public class BlockInfo implements Serializable {
 
 	/**
 	 * Setter for the data_offset
+	 * 
 	 * @param o
 	 */
 	public void set_data_offset(int o) {
@@ -292,7 +312,9 @@ public class BlockInfo implements Serializable {
 	}
 
 	/**
-	 * Routine for adding EndpointID to the Endpoint ID List maintained by this BlockInfo
+	 * Routine for adding EndpointID to the Endpoint ID List maintained by this
+	 * BlockInfo
+	 * 
 	 * @param e
 	 */
 	public void add_eid(EndpointID e) {
@@ -301,6 +323,7 @@ public class BlockInfo implements Serializable {
 
 	/**
 	 * Setter for the reloaded flag
+	 * 
 	 * @param t
 	 */
 	public void set_reloaded(boolean t) {
@@ -309,61 +332,62 @@ public class BlockInfo implements Serializable {
 
 	/**
 	 * Getter for the type of Block
+	 * 
 	 * @return
 	 */
 	public bundle_block_type_t type() {
-		
-	    if (owner_ != null)
-	         return owner_.block_type();
 
-	    // if the data is there already read from the binary data
-	    
-	    byte[] type_value = BufferHelper.get_data(contents_, 0, BundleProtocol.PREAMBLE_FIXED_LENGTH);
-	   
-	    bundle_block_type_t type = bundle_block_type_t.get(type_value[0]);
-	    
-	    if (owner_ != null)
-	        assert(type == owner_.block_type()
-	               || owner_.block_type() == BundleProtocol.bundle_block_type_t.UNKNOWN_BLOCK);
-	    
-	
-	    return type;
+		if (owner_ != null)
+			return owner_.block_type();
+
+		// if the data is there already read from the binary data
+
+		byte[] type_value = BufferHelper.get_data(contents_, 0,
+				BundleProtocol.PREAMBLE_FIXED_LENGTH);
+
+		bundle_block_type_t type = bundle_block_type_t.get(type_value[0]);
+
+		if (owner_ != null)
+			assert (type == owner_.block_type() || owner_.block_type() == BundleProtocol.bundle_block_type_t.UNKNOWN_BLOCK);
+
+		return type;
 	}
 
 	/**
-	 * Getter Block Processing Control flag.
-	 * Not Applicable to primary block
+	 * Getter Block Processing Control flag. Not Applicable to primary block
 	 */
 	public int flags() {
-		 if (type() == BundleProtocol.bundle_block_type_t.PRIMARY_BLOCK) {
-		        return bundle_block_type_t.PRIMARY_BLOCK.getCode();
-		    }
-		    
-		
-		 
-		    int flags[] = new int[1];
-		    
-		    BufferHelper.read_SDNV(contents_, BundleProtocol.PREAMBLE_FIXED_LENGTH, flags);assert(flags[0] > 0) ;
-		    return flags[0];
+		if (type() == BundleProtocol.bundle_block_type_t.PRIMARY_BLOCK) {
+			return bundle_block_type_t.PRIMARY_BLOCK.getCode();
+		}
+
+		int flags[] = new int[1];
+
+		BufferHelper.read_SDNV(contents_, BundleProtocol.PREAMBLE_FIXED_LENGTH,
+				flags);
+		assert (flags[0] > 0);
+		return flags[0];
 	}
 
 	/**
-	 * Set Block Processing control flag
-	 * Not Applicable for PrimaryBlock
+	 * Set Block Processing control flag Not Applicable for PrimaryBlock
 	 */
 	public void set_flags(int flags) {
-		 if (type() == BundleProtocol.bundle_block_type_t.PRIMARY_BLOCK) {
-			 Logger.getInstance().error(TAG, "trying to set flags for primary block!!, Should not come here");
-			 return;
-		    }
-		BufferHelper.write_SDNV(contents_, BundleProtocol.PREAMBLE_FIXED_LENGTH, flags);
+		if (type() == BundleProtocol.bundle_block_type_t.PRIMARY_BLOCK) {
+			Logger.getInstance()
+					.error(TAG,
+							"trying to set flags for primary block!!, Should not come here");
+			return;
+		}
+		BufferHelper.write_SDNV(contents_,
+				BundleProtocol.PREAMBLE_FIXED_LENGTH, flags);
 	}
 
 	/**
 	 * Owner of this block
 	 */
 	protected BlockProcessor owner_;
-	
+
 	/**
 	 * Extracted from owner
 	 */
@@ -371,36 +395,35 @@ public class BlockInfo implements Serializable {
 	/**
 	 * Owner of this block
 	 */
-	protected BlockInfo source_;  
-	
+	protected BlockInfo source_;
+
 	/**
 	 * List of EIDs used in this block
 	 */
-	protected EndpointIDVector eid_list_;  
-	
+	protected EndpointIDVector eid_list_;
+
 	/**
 	 * Block contents with length set to the amount currently in the buffer
 	 */
-	protected IByteBuffer contents_; 
-	
+	protected IByteBuffer contents_;
+
 	/**
 	 * Length of the block data (with out preamble)
 	 */
-	protected int data_length_; 
+	protected int data_length_;
 	/**
 	 * Offset of first byte of the block data
 	 */
 	protected int data_offset_;
-	
+
 	/**
 	 * Whether or not this block is complete
 	 */
 	protected boolean complete_;
-	
+
 	/**
 	 * Whether or not this block is reloaded
 	 */
-	protected boolean reloaded_; 
-	
-};
+	protected boolean reloaded_;
 
+};

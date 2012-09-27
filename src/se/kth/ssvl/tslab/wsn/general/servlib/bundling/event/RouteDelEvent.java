@@ -21,9 +21,9 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 
-
 /**
  * Event class for route delete events
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class RouteDelEvent extends BundleEvent {
@@ -33,12 +33,13 @@ public class RouteDelEvent extends BundleEvent {
 	}
 
 	/**
-	 *  The destination eid to be removed
+	 * The destination eid to be removed
 	 */
 	private EndpointIDPattern dest_;
 
 	/**
 	 * Getter for the destination eid to be removed
+	 * 
 	 * @return the dest_
 	 */
 	public EndpointIDPattern dest() {
@@ -47,7 +48,9 @@ public class RouteDelEvent extends BundleEvent {
 
 	/**
 	 * Setter for the destination eid to be removed
-	 * @param dest the dest_ to set
+	 * 
+	 * @param dest
+	 *            the dest_ to set
 	 */
 	public void set_dest(EndpointIDPattern dest) {
 		dest_ = dest;

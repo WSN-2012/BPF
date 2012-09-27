@@ -21,10 +21,10 @@ package se.kth.ssvl.tslab.wsn.general.systemlib.util;
 
 import java.io.Serializable;
 
-
 /**
  * String Vector implemented by List
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class StringVector extends List<String> implements Serializable {
 

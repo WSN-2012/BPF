@@ -22,9 +22,9 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 
-
 /**
  * Event class for canceling a bundle transmission
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleCancelRequest extends BundleEvent {
@@ -43,7 +43,7 @@ public class BundleCancelRequest extends BundleEvent {
 	 */
 	public BundleCancelRequest(Bundle bundle, Link link) {
 		super(event_type_t.BUNDLE_CANCEL);
-		
+
 		bundle_ = bundle;
 		link_ = link;
 		// should be processed only by the daemon
@@ -51,17 +51,18 @@ public class BundleCancelRequest extends BundleEvent {
 	}
 
 	/**
-	 *  Bundle to be cancelled
+	 * Bundle to be cancelled
 	 */
 	private Bundle bundle_;
 
 	/**
-	 *  Link where the bundle is going to
+	 * Link where the bundle is going to
 	 */
 	private Link link_;
 
 	/**
-	 *  Accessor for the Bundle to be cancelled
+	 * Accessor for the Bundle to be cancelled
+	 * 
 	 * @return the bundle_
 	 */
 	public Bundle bundle() {
@@ -70,7 +71,9 @@ public class BundleCancelRequest extends BundleEvent {
 
 	/**
 	 * Setter for the Bundle to be cancelled
-	 * @param bundle the bundle_ to set
+	 * 
+	 * @param bundle
+	 *            the bundle_ to set
 	 */
 	public void set_bundle(Bundle bundle) {
 		bundle_ = bundle;
@@ -78,6 +81,7 @@ public class BundleCancelRequest extends BundleEvent {
 
 	/**
 	 * Accessor for the Link where the bundle is going to
+	 * 
 	 * @return the link_
 	 */
 	public Link link() {
@@ -86,10 +90,11 @@ public class BundleCancelRequest extends BundleEvent {
 
 	/**
 	 * Setter for the Link where the bundle is going to
-	 * @param link the link_ to set
+	 * 
+	 * @param link
+	 *            the link_ to set
 	 */
 	public void set_link(Link link) {
 		link_ = link;
 	}
 };
-

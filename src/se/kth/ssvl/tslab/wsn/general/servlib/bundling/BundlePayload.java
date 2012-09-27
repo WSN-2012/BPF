@@ -20,7 +20,6 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,19 +31,18 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import se.kth.ssvl.tslab.wsn.general.DTNService;
-
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHeldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundlePayloadWrongTypeException;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import android.content.Context;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
- * This class is created separately from DTN Bundle for supporting different locations of the Bundle including memory, disk, or no data at all.
+ * This class is created separately from DTN Bundle for supporting different
+ * locations of the Bundle including memory, disk, or no data at all.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundlePayload implements Serializable {
@@ -57,12 +55,13 @@ public class BundlePayload implements Serializable {
 	 * Serial version UID to support Java Serializable
 	 */
 	private static final long serialVersionUID = -6766691157807333304L;
-	
+
 	/**
 	 * Default memory size in case of Bundle location is Memory only
 	 */
 	private static final int DEFAULT_DATA_BUFFER_SIZE = 200;
 	private int bundleid_;
+
 	public BundlePayload(Lock lock) {
 
 		location_ = location_t.DISK;
@@ -75,10 +74,7 @@ public class BundlePayload implements Serializable {
 	 * Options for payload location state.
 	 */
 	public static enum location_t {
-		MEMORY(1), 
-		DISK(2), 
-		NODATA(3), 
-		;
+		MEMORY(1), DISK(2), NODATA(3), ;
 
 		private static final Map<Integer, location_t> lookup = new HashMap<Integer, location_t>();
 
@@ -108,26 +104,25 @@ public class BundlePayload implements Serializable {
 	public void init(int bundleid, location_t location) {
 		bundleid_ = bundleid;
 		location_ = location;
-		
-		if ( location == location_t.NODATA)
+
+		if (location == location_t.NODATA)
 			return;
 
-		
 		if (location == location_t.MEMORY)
-			 data_ = new byte[DEFAULT_DATA_BUFFER_SIZE];
+			data_ = new byte[DEFAULT_DATA_BUFFER_SIZE];
 		if (location_ == location_t.DISK)
-		// Only when the location is DISK
-		file_ = BundleStore.getInstance().get_payload_file(bundleid);
+			// Only when the location is DISK
+			file_ = BundleStore.getInstance().get_payload_file(bundleid);
 
 	}
 
-	/** 
+	/**
 	 * Get File object, this will be valid in case of Payload location as Disk
 	 */
-	public File file()
-	{
+	public File file() {
 		return file_;
 	}
+
 	/**
 	 * Set the payload length in preparation for filling in with data. This will
 	 * remove all existing data in case of Memory
@@ -138,15 +133,13 @@ public class BundlePayload implements Serializable {
 		if (location_ == location_t.MEMORY) {
 			lock_.lock();
 			try {
-				
-				byte[] old_data =  data_.clone();
+
+				byte[] old_data = data_.clone();
 				int old_length = old_data.length;
 				data_ = new byte[length];
 
-				if (old_length < length)
-				{
-					for(int i=0; i < old_data.length;i++)
-					{
+				if (old_length < length) {
+					for (int i = 0; i < old_data.length; i++) {
 						data_[i] = old_data[i];
 					}
 				}
@@ -157,28 +150,31 @@ public class BundlePayload implements Serializable {
 	}
 
 	/**
-	 * Move payload data from the current file object to the newly created file in API temp folder. 
+	 * Move payload data from the current file object to the newly created file
+	 * in API temp folder.
+	 * 
 	 * @return
 	 */
-	public boolean move_data_to_api_temp_folder()
-	{
+	public boolean move_data_to_api_temp_folder() {
 		Context context = DTNService.context();
-		String TempPrefixName = context.getResources().getString(R.string.DTNAPITempFilePrefix);
-		File dir = DTNService.context().getDir(TempPrefixName, Context.MODE_PRIVATE);
+		String TempPrefixName = context.getResources().getString(
+				R.string.DTNAPITempFilePrefix);
+		File dir = DTNService.context().getDir(TempPrefixName,
+				Context.MODE_PRIVATE);
 		try {
-			File file = File.createTempFile(
-					"bundle_payload_for_api_bid" + bundleid_, ".dat", dir);
+			File file = File.createTempFile("bundle_payload_for_api_bid"
+					+ bundleid_, ".dat", dir);
 			copy_to_file(file);
-			
+
 			file_ = file;
-			
+
 			return true;
 		} catch (IOException e) {
 			Logger.getInstance().error(TAG, "migrate IO Exception");
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Truncate the payload.
 	 * 
@@ -196,15 +192,14 @@ public class BundlePayload implements Serializable {
 
 				// copy existing data to new temp
 				byte[] temp = new byte[length];
-				for(int i=0; i < length; i ++)
-				{
+				for (int i = 0; i < length; i++) {
 					temp[i] = data_[i];
 				}
 				data_ = temp;
 				length_ = length;
 				break;
 			case DISK:
-				RandomAccessFile file_handle_ =   pin_file_handle();
+				RandomAccessFile file_handle_ = pin_file_handle();
 				file_handle_.setLength(length);
 				unpin_file_handle(file_handle_);
 				break;
@@ -249,13 +244,13 @@ public class BundlePayload implements Serializable {
 	 * Set payload data and length according to byte array
 	 */
 	public void set_data(byte[] byte_array) {
-		
+
 		IByteBuffer temp = new SerializableByteBuffer(byte_array.length);
 		temp.put(byte_array);
 		temp.rewind();
 		set_data(temp, byte_array.length);
 	}
-	
+
 	/**
 	 * Append a chunk of payload data, extending the length to accomodate the
 	 * new data.
@@ -290,13 +285,12 @@ public class BundlePayload implements Serializable {
 			lock_.unlock();
 		}
 	}
-	
-	
 
 	/**
 	 * Writes len bytes of payload data from another payload at the given
-	 * src_offset to the given dst_offset.
-	 * The data to be read can not be larger than 1024.
+	 * src_offset to the given dst_offset. The data to be read can not be larger
+	 * than 1024.
+	 * 
 	 * @throws IOException
 	 * @throws BundlePayloadWrongTypeException
 	 */
@@ -304,10 +298,11 @@ public class BundlePayload implements Serializable {
 			int dst_offset) {
 		lock_.lock();
 		try {
-			Logger.getInstance().debug(TAG, String.format(
-					"write_data: length_=%d src_offset=%d "
-							+ "dst_offset=%d len %d", 
-					length_, src_offset, dst_offset, len));
+			Logger.getInstance().debug(
+					TAG,
+					String.format("write_data: length_=%d src_offset=%d "
+							+ "dst_offset=%d len %d", length_, src_offset,
+							dst_offset, len));
 
 			assert (length_ >= dst_offset + len) : "BundlePayload:write_data, length_ is not longer than dest offset + length ";
 			assert (src.length() >= src_offset + len) : "BundlePayload:write_data, src.length is not longer than dest offset + length ";
@@ -337,78 +332,75 @@ public class BundlePayload implements Serializable {
 	}
 
 	/**
-	 * Copy Payload content to the specified file regardless of payload location.
-	 * @param file target file
+	 * Copy Payload content to the specified file regardless of payload
+	 * location.
+	 * 
+	 * @param file
+	 *            target file
 	 */
-	public boolean copy_to_file(File file)
-	{
+	public boolean copy_to_file(File file) {
 		lock_.lock();
 		FileOutputStream out = null;
 		try {
-		
-			
 
-		out = new FileOutputStream(file);
-		int DEFAULT_BUFFER_SIZE = 1024;
-		
-		int len = DEFAULT_BUFFER_SIZE;
-		int left = length_;
-		int offset = 0;
-		do
-		{
-			if (left < DEFAULT_BUFFER_SIZE) 
-			{
-				len = left;
-			}
-			else
-			{
-				len = DEFAULT_BUFFER_SIZE;
-			}
-			byte[] byte_array_buf = new byte[len];
-			read_data(offset, len, byte_array_buf);
-			
-			out.write(byte_array_buf);
-			
-			offset+= len;
-			left  -= len;
-		}
-		while(   left > 0   );
-	} catch (FileNotFoundException e) {
-		
-		Logger.getInstance().error(TAG, e.getMessage());
-		return false;
-	} catch (IOException e) {
-		Logger.getInstance().error(TAG, e.getMessage());
-		return false;
-	} finally {
-		try {
-			out.close();
+			out = new FileOutputStream(file);
+			int DEFAULT_BUFFER_SIZE = 1024;
 
-			
+			int len = DEFAULT_BUFFER_SIZE;
+			int left = length_;
+			int offset = 0;
+			do {
+				if (left < DEFAULT_BUFFER_SIZE) {
+					len = left;
+				} else {
+					len = DEFAULT_BUFFER_SIZE;
+				}
+				byte[] byte_array_buf = new byte[len];
+				read_data(offset, len, byte_array_buf);
+
+				out.write(byte_array_buf);
+
+				offset += len;
+				left -= len;
+			} while (left > 0);
+		} catch (FileNotFoundException e) {
+
+			Logger.getInstance().error(TAG, e.getMessage());
+			return false;
 		} catch (IOException e) {
 			Logger.getInstance().error(TAG, e.getMessage());
+			return false;
+		} finally {
+			try {
+				out.close();
+
+			} catch (IOException e) {
+				Logger.getInstance().error(TAG, e.getMessage());
+			}
+
+			lock_.unlock();
 		}
-		
-		lock_.unlock();
-	}
-	
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * Replace existing payload with the specified file according to the input file.
-	 * @param file input file
+	 * Replace existing payload with the specified file according to the input
+	 * file.
+	 * 
+	 * @param file
+	 *            input file
 	 * @return
 	 */
 	public boolean replace_with_file(File file) {
 		lock_.lock();
 		FileInputStream in = null;
-		try {  
-			if (location_ != location_t.DISK) throw new BundlePayloadWrongTypeException();
+		try {
+			if (location_ != location_t.DISK)
+				throw new BundlePayloadWrongTypeException();
 			assert location_ == location_t.DISK;
 
-			set_length((int)file.length());
+			set_length((int) file.length());
 			in = new FileInputStream(file);
 
 			RandomAccessFile file_handle_ = pin_file_handle();
@@ -421,11 +413,11 @@ public class BundlePayload implements Serializable {
 				file_handle_.write(buf, 0, len);
 				offset += len;
 			}
-			
+
 			unpin_file_handle(file_handle_);
-			
+
 		} catch (FileNotFoundException e) {
-			
+
 			Logger.getInstance().error(TAG, e.getMessage());
 			return false;
 		} catch (BundlePayloadWrongTypeException e) {
@@ -438,20 +430,19 @@ public class BundlePayload implements Serializable {
 			try {
 				in.close();
 
-			
 			} catch (IOException e) {
 				Logger.getInstance().error(TAG, e.getMessage());
-			lock_.unlock();
-			return false;
+				lock_.unlock();
+				return false;
 			}
 		}
-		
-			return true;
+
+		return true;
 	}
-	
+
 	/**
-	 * Read the payload content from offset position with len bytes
-	 * and copy into the beginning of byte_array.
+	 * Read the payload content from offset position with len bytes and copy
+	 * into the beginning of byte_array.
 	 */
 	public final boolean read_data(int offset, int len, byte[] byte_array) {
 		lock_.lock();
@@ -460,24 +451,19 @@ public class BundlePayload implements Serializable {
 
 			assert (byte_array != null) : "BundlePayload:read_data, byte_array is null";
 
-			
 			switch (location_) {
 			case MEMORY:
 
-				
-				for (int i = offset, j=0; i < offset + len && j < len ; i++, j++)
-				{
+				for (int i = offset, j = 0; i < offset + len && j < len; i++, j++) {
 					byte_array[j] = data_[i];
 				}
-				
-				
+
 				break;
 
 			case DISK:
-				RandomAccessFile file_handle_ =  pin_file_handle();
+				RandomAccessFile file_handle_ = pin_file_handle();
 				file_handle_.seek(offset);
 				file_handle_.read(byte_array);
-			
 
 				unpin_file_handle(file_handle_);
 				break;
@@ -501,11 +487,11 @@ public class BundlePayload implements Serializable {
 		return true;
 	}
 
-	
 	/**
 	 * Copy out a chunk of payload data into the supplied Byte buffer. The data
-	 * will be pasted from the current position of the buffer
-	 * The position of the Byte Buffer (buf) will not be moved from this operation
+	 * will be pasted from the current position of the buffer The position of
+	 * the Byte Buffer (buf) will not be moved from this operation
+	 * 
 	 * @return pointer to the buffer for convenience
 	 * @throws BundlePayloadWrongTypeException
 	 * @throws IOException
@@ -518,22 +504,19 @@ public class BundlePayload implements Serializable {
 
 			assert (buf != null) : "BundlePayload:read_data, buf is null";
 
-			
 			switch (location_) {
 			case MEMORY:
 
-				
-				for (int i = offset; i < offset + len ; i++)
-				{
+				for (int i = offset; i < offset + len; i++) {
 					buf.put(data_[i]);
 				}
-				
+
 				break;
 
 			case DISK:
 				byte[] temp = new byte[len];
-				RandomAccessFile file_handle_ =  pin_file_handle();
-				 file_handle_.seek(offset);
+				RandomAccessFile file_handle_ = pin_file_handle();
+				file_handle_.seek(offset);
 				file_handle_.read(temp);
 				buf.put(temp);
 
@@ -575,8 +558,8 @@ public class BundlePayload implements Serializable {
 	/**
 	 * Close the file_ to return resource
 	 */
-	protected void unpin_file_handle(RandomAccessFile file_handle_) throws IOException,
-			BundlePayloadWrongTypeException {
+	protected void unpin_file_handle(RandomAccessFile file_handle_)
+			throws IOException, BundlePayloadWrongTypeException {
 		if (location_ != location_t.DISK)
 			throw new BundlePayloadWrongTypeException();
 
@@ -587,10 +570,9 @@ public class BundlePayload implements Serializable {
 		return lock_;
 	}
 
-	
-
 	/**
-	 * Write data from the current buffer position to the payload offset with the length
+	 * Write data from the current buffer position to the payload offset with
+	 * the length
 	 */
 	protected void internal_write(IByteBuffer bp, int offset, int len) {
 		assert lock_.isHeldByCurrentThread() : "BundlePayload:internal_write, lock not held by current Thread";
@@ -602,15 +584,11 @@ public class BundlePayload implements Serializable {
 		case MEMORY:
 
 			bp.mark();
-			try
-			{
-				for( int i = offset; i < offset + len; i++)
-				{
+			try {
+				for (int i = offset; i < offset + len; i++) {
 					data_[i] = bp.get();
 				}
-			}
-			finally
-			{
+			} finally {
 				bp.reset();
 			}
 			break;
@@ -618,52 +596,48 @@ public class BundlePayload implements Serializable {
 			// check if we need to seek
 			bp.mark();
 			try {
-				
-				RandomAccessFile file_handle_ =  pin_file_handle();
+
+				RandomAccessFile file_handle_ = pin_file_handle();
 				bp.get(temp);
 				file_handle_.seek(offset);
 
 				file_handle_.write(temp);
 
-				
-				
 				unpin_file_handle(file_handle_);
 			} catch (BundlePayloadWrongTypeException e) {
 
 				Logger.getInstance().error(TAG, e.getMessage());
 			} catch (IOException e) {
 				Logger.getInstance().error(TAG, e.getMessage());
-			}
-			finally
-			{
+			} finally {
 				bp.reset();
 			}
 			break;
 		case NODATA:
-			
+
 		}
 	}
 
 	/**
 	 * location of the data
 	 */
-	protected location_t location_; // /< 
+	protected location_t location_; // /<
 
 	/**
 	 * internal payload data in case of memory
 	 */
 	protected byte[] data_;
-	
+
 	/**
 	 * the payload length
 	 */
-	protected int length_; 
-	
+	protected int length_;
+
 	/**
 	 * file handle, for location = DISK only
 	 */
 	protected File file_;
-	
+
 	/**
 	 * the lock for this Bundle payload to support mutual exclusion
 	 */

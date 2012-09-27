@@ -64,7 +64,7 @@ public class DiscoveryTable {
 		List<DiscoveryEntry> discovery_entries = config.discoveries_setting()
 				.discovery_entries();
 		Iterator<DiscoveryEntry> i = discovery_entries.iterator();
-	
+
 		while (i.hasNext()) {
 
 			DiscoveryEntry element = i.next();
@@ -79,11 +79,11 @@ public class DiscoveryTable {
 		}
 
 	}
-	
-	public void start(){
+
+	public void start() {
 		try {
-			List<AnnounceEntry> announce_entries = config_.discoveries_setting()
-			.announce_entries();
+			List<AnnounceEntry> announce_entries = config_
+					.discoveries_setting().announce_entries();
 			Iterator<AnnounceEntry> it = announce_entries.iterator();
 
 			while (it.hasNext()) {
@@ -107,15 +107,15 @@ public class DiscoveryTable {
 				Discovery disc = find(DiscoveryID, iter);
 				if (disc.equals(null)) {
 					String text = String
-					.format(
-							"error adding announce %s to %s: no such discovery agent",
-							AnnounceID, DiscoveryID);
+							.format("error adding announce %s to %s: no such discovery agent",
+									AnnounceID, DiscoveryID);
 					Logger.getInstance().debug(TAG, text);
 					return;
 				}
 
 				if (!disc.announce(AnnounceID, code, ClType, interval)) {
-					Logger.getInstance().debug(TAG, "Error creting the Announce" + AnnounceID);
+					Logger.getInstance().debug(TAG,
+							"Error creting the Announce" + AnnounceID);
 				}
 				disc.start();
 			}
@@ -169,7 +169,6 @@ public class DiscoveryTable {
 
 	}
 
-
 	/**
 	 * Clear the table
 	 */
@@ -188,14 +187,12 @@ public class DiscoveryTable {
 
 	}
 
-
 	/**
 	 * Constructor
 	 */
 	protected DiscoveryTable() {
 		dlist_ = new DiscoveryList();
 	}
-
 
 	/**
 	 * Find a discory instance for name
@@ -214,6 +211,6 @@ public class DiscoveryTable {
 
 	}
 
-	protected DiscoveryList dlist_;  // / List of Discoveries
+	protected DiscoveryList dlist_; // / List of Discoveries
 
 }

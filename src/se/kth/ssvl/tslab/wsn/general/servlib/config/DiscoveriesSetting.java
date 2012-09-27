@@ -27,6 +27,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
 /**
  * Class to represent discovery setting in the DTN Configuration
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class DiscoveriesSetting {
@@ -67,6 +68,7 @@ public class DiscoveriesSetting {
 
 		/**
 		 * Accessor for unique identification for the Discovery
+		 * 
 		 * @return the id
 		 */
 		public String id() {
@@ -75,7 +77,9 @@ public class DiscoveriesSetting {
 
 		/**
 		 * Setter function for unique identification for the Discovery
-		 * @param id the id to set
+		 * 
+		 * @param id
+		 *            the id to set
 		 */
 		public void set_id(String id) {
 			this.id = id;
@@ -83,6 +87,7 @@ public class DiscoveriesSetting {
 
 		/**
 		 * Accessor for the address family of this discovery
+		 * 
 		 * @return the address_family_
 		 */
 		public address_family_t address_family() {
@@ -91,7 +96,9 @@ public class DiscoveriesSetting {
 
 		/**
 		 * Setter for the address family of this discovery
-		 * @param addressFamily the address_family_ to set
+		 * 
+		 * @param addressFamily
+		 *            the address_family_ to set
 		 */
 		public void set_address_family(address_family_t address_family) {
 			address_family_ = address_family;
@@ -99,6 +106,7 @@ public class DiscoveriesSetting {
 
 		/**
 		 * Accessor for the port communicating by this Discovery
+		 * 
 		 * @return the port
 		 */
 		public short port() {
@@ -107,6 +115,7 @@ public class DiscoveriesSetting {
 
 		/**
 		 * Setter for the port communicating by this Discovery
+		 * 
 		 * @param port
 		 *            the port to set
 		 */
@@ -118,14 +127,13 @@ public class DiscoveriesSetting {
 	/**
 	 * Constructor
 	 */
-	public DiscoveriesSetting()
-	{
+	public DiscoveriesSetting() {
 		discovery_entries_ = new List<DiscoveryEntry>();
-		announce_entries_  = new List<AnnounceEntry>();
+		announce_entries_ = new List<AnnounceEntry>();
 	}
-	
+
 	/**
-	 * The class represents Announce 
+	 * The class represents Announce
 	 */
 	public static class AnnounceEntry {
 		private String interface_id_;
@@ -134,8 +142,9 @@ public class DiscoveriesSetting {
 		private int interval_;
 
 		/**
-		 * Accessor for the interface ID set in the Interfaces Setting. This ID identifies where in which 
-		 * interface this announce will make
+		 * Accessor for the interface ID set in the Interfaces Setting. This ID
+		 * identifies where in which interface this announce will make
+		 * 
 		 * @return the interface_id
 		 */
 		public String interface_id() {
@@ -143,8 +152,9 @@ public class DiscoveriesSetting {
 		}
 
 		/**
-		 * Setter for the interface ID set in the Interfaces Setting.  This ID identifies where in which 
-		 * interface this announce will make
+		 * Setter for the interface ID set in the Interfaces Setting. This ID
+		 * identifies where in which interface this announce will make
+		 * 
 		 * @param interfaceId
 		 *            the interface_id to set
 		 */
@@ -154,6 +164,7 @@ public class DiscoveriesSetting {
 
 		/**
 		 * Accessor for the unique identifier of this Discovery Entry
+		 * 
 		 * @return the discovery_id
 		 */
 		public String discovery_id() {
@@ -162,6 +173,7 @@ public class DiscoveriesSetting {
 
 		/**
 		 * Setter for the unique identifier of this Discovery Entry
+		 * 
 		 * @param discoveryId
 		 *            the discovery_id to set
 		 */
@@ -170,8 +182,11 @@ public class DiscoveriesSetting {
 		}
 
 		/**
-		 * Accessor for how many seconds this Discovery will try to discover other nodes. The more often means more power consumption to the phone.
-		 * The less often means the less chances the node will be discovered.
+		 * Accessor for how many seconds this Discovery will try to discover
+		 * other nodes. The more often means more power consumption to the
+		 * phone. The less often means the less chances the node will be
+		 * discovered.
+		 * 
 		 * @return the tcp_interval
 		 */
 		public int interval() {
@@ -179,8 +194,10 @@ public class DiscoveriesSetting {
 		}
 
 		/**
-		 * Setter for how many seconds this Discovery will try to discover other nodes. The more often means more power consumption to the phone.
-		 * The less often means the less chances the node will be discovered.
+		 * Setter for how many seconds this Discovery will try to discover other
+		 * nodes. The more often means more power consumption to the phone. The
+		 * less often means the less chances the node will be discovered.
+		 * 
 		 * @param tcpInterval
 		 *            the tcp_interval to set
 		 */
@@ -190,6 +207,7 @@ public class DiscoveriesSetting {
 
 		/**
 		 * Accessor for the Convergence Layer used in this Discovery
+		 * 
 		 * @return the conv_layer_type_
 		 */
 		public conv_layer_type_t conv_layer_type() {
@@ -198,6 +216,7 @@ public class DiscoveriesSetting {
 
 		/**
 		 * Setter for the Convergence Layer used in this Discovery
+		 * 
 		 * @param convLayerType
 		 *            the conv_layer_type_ to set
 		 */
@@ -218,6 +237,7 @@ public class DiscoveriesSetting {
 
 	/**
 	 * The list of Discovery in this DiscoveriesSetting
+	 * 
 	 * @return the discoveries_
 	 */
 	public List<DiscoveryEntry> discovery_entries() {
@@ -226,7 +246,9 @@ public class DiscoveriesSetting {
 
 	/**
 	 * Set the discovery_entries for this Discoveries Setting
-	 * @param discoveries the discoveries_ to set
+	 * 
+	 * @param discoveries
+	 *            the discoveries_ to set
 	 */
 	public void set_discovery_entries(List<DiscoveryEntry> discovery_entries) {
 		discovery_entries_ = discovery_entries;
@@ -234,14 +256,17 @@ public class DiscoveriesSetting {
 
 	/**
 	 * The list of Announce in this DiscoveriesSetting
-	 * @return the announce_entries_ the list of Announce in this DiscoveriesSetting
+	 * 
+	 * @return the announce_entries_ the list of Announce in this
+	 *         DiscoveriesSetting
 	 */
 	public List<AnnounceEntry> announce_entries() {
 		return announce_entries_;
 	}
 
 	/**
-	 *  Set the announce_entries for this Discoveries Setting
+	 * Set the announce_entries for this Discoveries Setting
+	 * 
 	 * @param announceEntries
 	 *            the announce_entries_ to set
 	 */

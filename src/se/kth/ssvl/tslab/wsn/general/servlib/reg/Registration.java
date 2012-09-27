@@ -18,7 +18,6 @@
  *    
  */
 
-
 package se.kth.ssvl.tslab.wsn.general.servlib.reg;
 
 import java.io.Serializable;
@@ -41,438 +40,460 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
- * Registration class represents "registration' application that includes 
+ * Registration class represents "registration' application that includes
  * mechanisms to consume bundles.
  * 
- * Registration state is stored in the database while Registration is stored in the RegisrationTable.
+ * Registration state is stored in the database while Registration is stored in
+ * the RegisrationTable.
  * 
  * @author Sharjeel Ahmed (sharjeel@kth.se)
  */
 
-
-public abstract class Registration implements Serializable{
+public abstract class Registration implements Serializable {
 
 	/**
 	 * SerialVersionID to Support Serializable.
 	 */
 	private static final long serialVersionUID = -3930115048521087734L;
-	
+
 	/**
 	 * TAG for Android Logging
 	 */
 
 	private static final String TAG = "Registration";
-	
+
 	/**
-	 * Administration Registrations ID of Admin Registration 
+	 * Administration Registrations ID of Admin Registration
 	 */
 	final static int ADMIN_REGID = 0;
 
 	/**
-	 * Administration Registrations ID of Link State Router 
+	 * Administration Registrations ID of Link State Router
 	 */
 	final static int LINKSTATEROUTER_REGID = 1;
 
 	/**
-	 * Administration Registrations ID of Ping Registration 
+	 * Administration Registrations ID of Ping Registration
 	 */
 	final static int PING_REGID = 2;
 
 	/**
-	 * Administration Registrations ID of External Router Registration 
+	 * Administration Registrations ID of External Router Registration
 	 */
 	final static int EXTERNALROUTER_REGID = 3;
 	/**
-	 * Administration Registrations ID of DTLSR Registration 
-	 */	
-    final static int DTLSR_REGID = 4;
+	 * Administration Registrations ID of DTLSR Registration
+	 */
+	final static int DTLSR_REGID = 4;
 
-    /* prophet */
-    protected final static int PROPHET_REGID = 5;
-    
+	/* prophet */
+	protected final static int PROPHET_REGID = 5;
+
 	/**
-	 * Number of Max reserved id for Admin Registrations 
-	 */	
-    public final static int MAX_RESERVED_REGID = 10;
-    
+	 * Number of Max reserved id for Admin Registrations
+	 */
+	public final static int MAX_RESERVED_REGID = 10;
+
 	/**
-	 * List if BundlePayload 
-	 */	
+	 * List if BundlePayload
+	 */
 	private List<BundlePayload> api_temp_payload_list_;
 
-	
 	/**
-     * Enum options for how to handle bundles when not connected.
-     */
-    public enum failure_action_t 
-    {
-    	DROP(0), 		// Drop bundles
-    	DEFER(1),		// Spool bundles until requested
-    	EXEC(2);		// Execute the specified callback procedure
+	 * Enum options for how to handle bundles when not connected.
+	 */
+	public enum failure_action_t {
+		DROP(0), // Drop bundles
+		DEFER(1), // Spool bundles until requested
+		EXEC(2); // Execute the specified callback procedure
 
-        private static final Map<Integer,failure_action_t> lookup 
-             = new HashMap<Integer,failure_action_t>();
+		private static final Map<Integer, failure_action_t> lookup = new HashMap<Integer, failure_action_t>();
 
-        static {
-             for(failure_action_t s : EnumSet.allOf(failure_action_t.class))
-                  lookup.put(s.getCode(), s);
-        }
+		static {
+			for (failure_action_t s : EnumSet.allOf(failure_action_t.class))
+				lookup.put(s.getCode(), s);
+		}
 
-        private int code;
+		private int code;
 
-        private failure_action_t(int code) {
-             this.code = code;
-        }
+		private failure_action_t(int code) {
+			this.code = code;
+		}
 
-        public int getCode() { return code; }
+		public int getCode() {
+			return code;
+		}
 
-        public static failure_action_t get(int code) { 
-             return lookup.get(code); 
-        }
-    }
+		public static failure_action_t get(int code) {
+			return lookup.get(code);
+		}
+	}
 
-    
-    /**
-     * Get a string representation of enum failure_action_t.
-     */
-    final public static String failure_action_toa(failure_action_t action){
-    	
-        switch(action) {
-	        case DROP:  return "DROP";
-	        case DEFER:	return "DEFER";
-	        case EXEC:  return "EXEC";
-        }
+	/**
+	 * Get a string representation of enum failure_action_t.
+	 */
+	final public static String failure_action_toa(failure_action_t action) {
+
+		switch (action) {
+		case DROP:
+			return "DROP";
+		case DEFER:
+			return "DEFER";
+		case EXEC:
+			return "EXEC";
+		}
 		return null;
-    };
+	};
 
-    /**
-     * Constructor to initialize Registration
-     * @param regid Registration id of new Registration
-     * @param endpoint EndpoidID of destination 
-     * @param failure_action Action to perform DROP, DEFER, EXEC
-     * @param session_flags Session flags if any else 0
-     * @param expiration Set Expiration time of registration, -1 for unlimited time
-     * @param script ""  
-     *  
-     */
-    
-    public Registration(int regid, final EndpointIDPattern endpoint,
-    		failure_action_t failure_action,
-            int session_flags,
-            int expiration,
-            final String script){
-    	
-	        regid_ = regid;
-	        endpoint_ = endpoint;
-	        failure_action_ = failure_action;
-	        session_flags_ = session_flags;
-	        script_ = script;
-	        expiration_ = expiration;
-	        expiration_timer_ = null;
-	        active_ = false;
-	        expired_ = false;
-	        delivery_cache_ = new BundleInfoCache(1024);
-	        
-	        init_expiration_timer();
-	        api_temp_payload_list_ = new List<BundlePayload>();
-    }
-    
-    /**
-     * Abstract hook for subclasses to deliver a bundle to this registration.
-     * @param bundle Bundle to deliver
-     */
-    
-    public abstract void deliver_bundle(Bundle bundle);
+	/**
+	 * Constructor to initialize Registration
+	 * 
+	 * @param regid
+	 *            Registration id of new Registration
+	 * @param endpoint
+	 *            EndpoidID of destination
+	 * @param failure_action
+	 *            Action to perform DROP, DEFER, EXEC
+	 * @param session_flags
+	 *            Session flags if any else 0
+	 * @param expiration
+	 *            Set Expiration time of registration, -1 for unlimited time
+	 * @param script
+	 *            ""
+	 * 
+	 */
 
-    /**
-     *  Function to delete previously created file when migrate to api temp
-     */
-    public void free_payload()
-    {
-    	Iterator<BundlePayload>  itr = api_temp_payload_list_.iterator();
-    	while (itr.hasNext())
-    	{
-    		BundlePayload payload = itr.next();
-    		if (payload.location() == location_t.DISK)
-    		payload.file().delete();
-    	}
-    	
-    }
-    
-    /**
-     * Deliver the bundle if it isn't a duplicate.
-     */
-    public boolean deliver_if_not_duplicate(Bundle bundle){
-        if (! delivery_cache_.add_entry(bundle, EndpointID.NULL_EID())) {
-            Logger.getInstance().error(TAG, String.format("suppressing duplicate delivery of bundle %s", bundle.bundleid()));
-            
-            return false;
-        }
-       // because the Bundle Daemon logic will tell Bundle Store to remove the content of the bundle
-        // in order the API layer still able to use the data storing in DISK
-        // the file have to be migrate
-        if (bundle.payload().location() == location_t.DISK)
-        {
-        	bundle.payload().move_data_to_api_temp_folder();
-        }
-        
-        Logger.getInstance().debug(TAG, String.format("delivering bundle %s", bundle.bundleid()));
-        deliver_bundle(bundle);
-        
-        
-        return true;
-    }
-    
-    //@{
-    /// Accessors
-    
-    /**
-     * Get the id of Registration
-     * @return Registration id of current regisration.
-     */
-    public final int durable_key() { 
-    	return regid_; 
-    }
+	public Registration(int regid, final EndpointIDPattern endpoint,
+			failure_action_t failure_action, int session_flags, int expiration,
+			final String script) {
 
-    /**
-     * Get the id of Registration
-     * @return Registration id of current registration.
-     */
-    
-    final public int regid() { 
-    	return regid_; 
-    }
-    
-    /**
-     * Test function to set the id of Registration
-     * @param regid New Registration id
-     */
-    
-    final public void test_set_regid(int regid) { 
-    	regid_ = regid; 
-    }
+		regid_ = regid;
+		endpoint_ = endpoint;
+		failure_action_ = failure_action;
+		session_flags_ = session_flags;
+		script_ = script;
+		expiration_ = expiration;
+		expiration_timer_ = null;
+		active_ = false;
+		expired_ = false;
+		delivery_cache_ = new BundleInfoCache(1024);
 
+		init_expiration_timer();
+		api_temp_payload_list_ = new List<BundlePayload>();
+	}
 
-    /**
-     * Getter function of endpoint_
-     * @return Return endpoint_
-     */
-    
-    public final EndpointIDPattern endpoint(){ 
-    	return endpoint_; 
-    } 
+	/**
+	 * Abstract hook for subclasses to deliver a bundle to this registration.
+	 * 
+	 * @param bundle
+	 *            Bundle to deliver
+	 */
 
-    /**
-     * Getter function of failure_action_
-     * @return Return failure_action_
-     */
+	public abstract void deliver_bundle(Bundle bundle);
 
-    public failure_action_t failure_action() {
-    	return failure_action_;
-    }
-    
-    /**
-     * Getter function of session_flags
-     * @return Return session_flags_
-     */
-    final public int session_flags() { 
-    	return session_flags_; 
-    }
+	/**
+	 * Function to delete previously created file when migrate to api temp
+	 */
+	public void free_payload() {
+		Iterator<BundlePayload> itr = api_temp_payload_list_.iterator();
+		while (itr.hasNext()) {
+			BundlePayload payload = itr.next();
+			if (payload.location() == location_t.DISK)
+				payload.file().delete();
+		}
 
-    /**
-     * Getter function of scrip_
-     * @return Return script_
-     */
+	}
 
-    final public String script() { 
-    	return script_;
-    }
-    
+	/**
+	 * Deliver the bundle if it isn't a duplicate.
+	 */
+	public boolean deliver_if_not_duplicate(Bundle bundle) {
+		if (!delivery_cache_.add_entry(bundle, EndpointID.NULL_EID())) {
+			Logger.getInstance().error(
+					TAG,
+					String.format(
+							"suppressing duplicate delivery of bundle %s",
+							bundle.bundleid()));
 
-    /**
-     * Getter function of expiration_
-     * @return Return expiration_
-     */
-    final public int expiration() { 
-    	return expiration_; 
-    }
+			return false;
+		}
+		// because the Bundle Daemon logic will tell Bundle Store to remove the
+		// content of the bundle
+		// in order the API layer still able to use the data storing in DISK
+		// the file have to be migrate
+		if (bundle.payload().location() == location_t.DISK) {
+			bundle.payload().move_data_to_api_temp_folder();
+		}
 
-    /**
-     * Current status of registration
-     * @return True if registration is active else false 
-     */
-    
-    final public boolean active() { 
-    	return active_; 
-    }
-    
-    /**
-     * Current expiration status of registration
-     * @return True if registration has expired else false 
-     */
+		Logger.getInstance().debug(TAG,
+				String.format("delivering bundle %s", bundle.bundleid()));
+		deliver_bundle(bundle);
 
-    final public boolean expired() { 
-    	return expired_; 
-    }
+		return true;
+	}
 
-    /**
-     * Set registration status
-     * @param a current status of registration  
-     */
+	// @{
+	// / Accessors
 
-    public void set_active(boolean a)  { 
-    	active_ = a; 
-    }
+	/**
+	 * Get the id of Registration
+	 * 
+	 * @return Registration id of current regisration.
+	 */
+	public final int durable_key() {
+		return regid_;
+	}
 
-    /**
-     * Set registration expiration status
-     * @param e current status of registration  
-     */
+	/**
+	 * Get the id of Registration
+	 * 
+	 * @return Registration id of current registration.
+	 */
 
-    public void set_expired(boolean e) { 
-    	expired_ = e; 
-    }
+	final public int regid() {
+		return regid_;
+	}
 
-    /**
-     * Force registration to expire and call unregister on bound registration. 
-     */
-    public void force_expire(){
-        assert(active_)
-        :TAG+": force_expire() Already inactive";
-        
-        cleanup_expiration_timer();
-        set_expired(true);
-    }
+	/**
+	 * Test function to set the id of Registration
+	 * 
+	 * @param regid
+	 *            New Registration id
+	 */
 
-    /**
-     * Protected class to handle automatic expiration of the registerations. 
-     */
+	final public void test_set_regid(int regid) {
+		regid_ = regid;
+	}
 
-    protected static class ExpirationTimer extends VirtualTimerTask implements Serializable{
+	/**
+	 * Getter function of endpoint_
+	 * 
+	 * @return Return endpoint_
+	 */
+
+	public final EndpointIDPattern endpoint() {
+		return endpoint_;
+	}
+
+	/**
+	 * Getter function of failure_action_
+	 * 
+	 * @return Return failure_action_
+	 */
+
+	public failure_action_t failure_action() {
+		return failure_action_;
+	}
+
+	/**
+	 * Getter function of session_flags
+	 * 
+	 * @return Return session_flags_
+	 */
+	final public int session_flags() {
+		return session_flags_;
+	}
+
+	/**
+	 * Getter function of scrip_
+	 * 
+	 * @return Return script_
+	 */
+
+	final public String script() {
+		return script_;
+	}
+
+	/**
+	 * Getter function of expiration_
+	 * 
+	 * @return Return expiration_
+	 */
+	final public int expiration() {
+		return expiration_;
+	}
+
+	/**
+	 * Current status of registration
+	 * 
+	 * @return True if registration is active else false
+	 */
+
+	final public boolean active() {
+		return active_;
+	}
+
+	/**
+	 * Current expiration status of registration
+	 * 
+	 * @return True if registration has expired else false
+	 */
+
+	final public boolean expired() {
+		return expired_;
+	}
+
+	/**
+	 * Set registration status
+	 * 
+	 * @param a
+	 *            current status of registration
+	 */
+
+	public void set_active(boolean a) {
+		active_ = a;
+	}
+
+	/**
+	 * Set registration expiration status
+	 * 
+	 * @param e
+	 *            current status of registration
+	 */
+
+	public void set_expired(boolean e) {
+		expired_ = e;
+	}
+
+	/**
+	 * Force registration to expire and call unregister on bound registration.
+	 */
+	public void force_expire() {
+		assert (active_) : TAG + ": force_expire() Already inactive";
+
+		cleanup_expiration_timer();
+		set_expired(true);
+	}
+
+	/**
+	 * Protected class to handle automatic expiration of the registerations.
+	 */
+
+	protected static class ExpirationTimer extends VirtualTimerTask implements
+			Serializable {
 
 		private static final long serialVersionUID = -5622142083769634464L;
 
-		public ExpirationTimer(Registration reg){
-    		reg_ = reg;
-    	}
-        Registration reg_;
+		public ExpirationTimer(Registration reg) {
+			reg_ = reg;
+		}
 
-		
-	    /**
-	     * If registration has expired then forward the registration to BundleDaemon
-	     * to handle it.  
-	     */
+		Registration reg_;
+
+		/**
+		 * If registration has expired then forward the registration to
+		 * BundleDaemon to handle it.
+		 */
 
 		@Override
 		protected void timeout(Date now) {
-			
+
 			reg_.set_expired(true);
-	        
-	        if (! reg_.active()) {
-	            BundleDaemon.getInstance().post(new RegistrationExpiredEvent(reg_));
-	        }			
+
+			if (!reg_.active()) {
+				BundleDaemon.getInstance().post(
+						new RegistrationExpiredEvent(reg_));
+			}
 		}
 
-		
-    }
-    
-    /**
-     * Initiate expiration timer 
-     */
+	}
 
-    protected void init_expiration_timer(){
-    	if(expiration_!=0){
-        	expiration_timer_ = new ExpirationTimer(this);
-        	expiration_timer_.schedule_in(expiration_);
-	    } else {
-	        set_expired(true);
-	    }
-    };
-    
-    /**
-     * Protected class to handle automatic expiration of the registerations. 
-     */
+	/**
+	 * Initiate expiration timer
+	 */
 
-    /**
-     * Clean up expiration time and set to null 
-     */
+	protected void init_expiration_timer() {
+		if (expiration_ != 0) {
+			expiration_timer_ = new ExpirationTimer(this);
+			expiration_timer_.schedule_in(expiration_);
+		} else {
+			set_expired(true);
+		}
+	};
 
-    protected void cleanup_expiration_timer(){
-        
-        if (expiration_timer_!=null) {
-        	expiration_timer_.cancel();
-            boolean pending = expiration_timer_.cancelled();
-            
-            if (!pending) {
-                assert(expired_);
-            }
-            
-            expiration_timer_ = null;
-        }
+	/**
+	 * Protected class to handle automatic expiration of the registerations.
+	 */
 
-    }
-    
-    /**
-     *  Int to store Registration id
-     */
-    protected int regid_;
+	/**
+	 * Clean up expiration time and set to null
+	 */
 
-    /**
-     *  EndpointId to store the endpointid of destination.
-     */
+	protected void cleanup_expiration_timer() {
 
-    protected EndpointIDPattern endpoint_;
-    
-    /**
-     *  failure action an enum object to set different options 
-     */
+		if (expiration_timer_ != null) {
+			expiration_timer_.cancel();
+			boolean pending = expiration_timer_.cancelled();
 
-    protected failure_action_t failure_action_;
-    
-    /**
-     *  Int to store session flags
-     */
+			if (!pending) {
+				assert (expired_);
+			}
 
-    protected int session_flags_;	
+			expiration_timer_ = null;
+		}
 
-    /**
-     *  Script to run
-     */
+	}
 
-    protected String script_;
-    
-    /**
-     *  Expiration time of registration
-     */
+	/**
+	 * Int to store Registration id
+	 */
+	protected int regid_;
 
-    protected int expiration_;
-    
-    /**
-     *  Expiration Timer object
-     */
+	/**
+	 * EndpointId to store the endpointid of destination.
+	 */
 
-    protected ExpirationTimer expiration_timer_;
-    
-    /**
-     *  Registration status
-     */
-    protected boolean active_;    
+	protected EndpointIDPattern endpoint_;
 
-    /**
-     *  Registration status if its bound or not
-     */
-    protected boolean bound_;    
-    /**
-     *  Registration status if its already expired or not
-     */
+	/**
+	 * failure action an enum object to set different options
+	 */
 
-    protected boolean expired_;
-    
-    /**
-     *  BundleInfoCache object
-     */
-    
-    protected BundleInfoCache delivery_cache_;
-    
+	protected failure_action_t failure_action_;
+
+	/**
+	 * Int to store session flags
+	 */
+
+	protected int session_flags_;
+
+	/**
+	 * Script to run
+	 */
+
+	protected String script_;
+
+	/**
+	 * Expiration time of registration
+	 */
+
+	protected int expiration_;
+
+	/**
+	 * Expiration Timer object
+	 */
+
+	protected ExpirationTimer expiration_timer_;
+
+	/**
+	 * Registration status
+	 */
+	protected boolean active_;
+
+	/**
+	 * Registration status if its bound or not
+	 */
+	protected boolean bound_;
+	/**
+	 * Registration status if its already expired or not
+	 */
+
+	protected boolean expired_;
+
+	/**
+	 * BundleInfoCache object
+	 */
+
+	protected BundleInfoCache delivery_cache_;
+
 }
-

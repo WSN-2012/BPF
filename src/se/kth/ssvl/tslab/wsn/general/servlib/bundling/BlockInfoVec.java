@@ -24,10 +24,9 @@ import java.util.Iterator;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.bundle_block_type_t;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
-
-
 /**
  * Class for a list of BlockInfos
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BlockInfoVec extends List<BlockInfo> {
@@ -35,12 +34,10 @@ public class BlockInfoVec extends List<BlockInfo> {
 	/**
 	 * Default constructor.
 	 */
-	 public BlockInfoVec()
-	 {
-		 super();
-		 dict_        = new Dictionary();
-	 }
-	
+	public BlockInfoVec() {
+		super();
+		dict_ = new Dictionary();
+	}
 
 	/**
 	 * SerialUID to support Java Serializable
@@ -48,31 +45,30 @@ public class BlockInfoVec extends List<BlockInfo> {
 	private static final long serialVersionUID = -3597536043536434003L;
 
 	/**
-	 * "Append a block using the given processor and optional source block." [DTN2]
+	 * "Append a block using the given processor and optional source block."
+	 * [DTN2]
 	 * 
 	 * @return "the newly allocated block." [DTN2]
 	 */
 	public BlockInfo append_block(BlockProcessor owner, final BlockInfo source) {
-		
+
 		BlockInfo newly_added_block = new BlockInfo(owner, source);
 		this.add(newly_added_block);
 		return newly_added_block;
-	
+
 	}
-	
-	
+
 	/**
 	 * "Find the block for the given type." [DTN2]
+	 * 
 	 * @return the block or null if not found
 	 */
 	public final BlockInfo find_block(bundle_block_type_t type) {
-		
+
 		Iterator<BlockInfo> iter = this.iterator();
-		while(iter.hasNext())
-		{
+		while (iter.hasNext()) {
 			BlockInfo block_info = iter.next();
-			if (block_info.type() == type)
-			{
+			if (block_info.type() == type) {
 				return block_info;
 			}
 		}
@@ -98,5 +94,4 @@ public class BlockInfoVec extends List<BlockInfo> {
 	 */
 	protected Dictionary dict_;
 
-	
 }

@@ -23,6 +23,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeVector;
 
 /**
  * Class for reporting Interface attributes
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class IfaceAttributesReportEvent extends CLAQueryReport {
@@ -34,12 +35,13 @@ public class IfaceAttributesReportEvent extends CLAQueryReport {
 	}
 
 	/**
-	 *  Interface attribute values by name.
+	 * Interface attribute values by name.
 	 */
 	private AttributeVector attributes_;
 
 	/**
 	 * Getter for the Interface attribute values by name.
+	 * 
 	 * @return the attributes_
 	 */
 	public AttributeVector attributes() {
@@ -47,7 +49,8 @@ public class IfaceAttributesReportEvent extends CLAQueryReport {
 	}
 
 	/**
-	 * @param attributes the attributes_ to set
+	 * @param attributes
+	 *            the attributes_ to set
 	 */
 	public void set_attributes(AttributeVector attributes) {
 		attributes_ = attributes;

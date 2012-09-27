@@ -100,7 +100,8 @@ public class TCPListener extends CLInfo implements Runnable {
 		try {
 			server_socket_.close();
 		} catch (IOException e) {
-			Logger.getInstance().debug(TAG, "IOException stopping server_socket: " + e.getMessage());
+			Logger.getInstance().debug(TAG,
+					"IOException stopping server_socket: " + e.getMessage());
 		}
 		server_socket_ = null;
 	}
@@ -110,7 +111,6 @@ public class TCPListener extends CLInfo implements Runnable {
 
 	private boolean listening_ = false; // / Listening flag
 
-	
 	/**
 	 * Main loop
 	 */

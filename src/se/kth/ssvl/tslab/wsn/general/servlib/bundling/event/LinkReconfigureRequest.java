@@ -22,14 +22,15 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeVector;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 
-
 /**
  * Event class for reconfiguring an existing link.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class LinkReconfigureRequest extends BundleEvent {
 	/**
 	 * main constructor
+	 * 
 	 * @param link
 	 * @param parameters
 	 */
@@ -37,10 +38,9 @@ public class LinkReconfigureRequest extends BundleEvent {
 
 	{
 		super(event_type_t.LINK_RECONFIGURE);
-	    link_ = link;
-	    parameters_ = parameters;
-		
-		
+		link_ = link;
+		parameters_ = parameters;
+
 		daemon_only_ = true;
 	}
 
@@ -50,12 +50,13 @@ public class LinkReconfigureRequest extends BundleEvent {
 	private Link link_;
 
 	/**
-	 *  Set of key, value pairs
+	 * Set of key, value pairs
 	 */
 	private AttributeVector parameters_;
 
 	/**
 	 * Getter for the link to be changed
+	 * 
 	 * @return the link_
 	 */
 	public Link link() {
@@ -64,7 +65,9 @@ public class LinkReconfigureRequest extends BundleEvent {
 
 	/**
 	 * Setter for the link to be changed
-	 * @param link the link_ to set
+	 * 
+	 * @param link
+	 *            the link_ to set
 	 */
 	public void set_link(Link link) {
 		link_ = link;
@@ -72,6 +75,7 @@ public class LinkReconfigureRequest extends BundleEvent {
 
 	/**
 	 * Getter for the Set of key, value pairs
+	 * 
 	 * @return the parameters_
 	 */
 	public AttributeVector parameters() {
@@ -80,7 +84,9 @@ public class LinkReconfigureRequest extends BundleEvent {
 
 	/**
 	 * Setter for the Set of key, value pairs
-	 * @param parameters the parameters_ to set
+	 * 
+	 * @param parameters
+	 *            the parameters_ to set
 	 */
 	public void set_parameters(AttributeVector parameters) {
 		parameters_ = parameters;

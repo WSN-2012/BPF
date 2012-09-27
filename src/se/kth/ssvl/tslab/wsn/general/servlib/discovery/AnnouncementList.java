@@ -24,10 +24,11 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
 /**
  * This class represents a list of announcements
+ * 
  * @author María José Peroza Marval (mjpm@kth.se)
  */
 
-public class AnnouncementList extends List<Announce>{
+public class AnnouncementList extends List<Announce> {
 
 	/**
 	 * Unique identifier according to Java Serializable specification

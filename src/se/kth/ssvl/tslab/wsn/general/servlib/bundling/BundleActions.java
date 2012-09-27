@@ -22,8 +22,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 import java.util.Iterator;
 import java.util.ListIterator;
 
-
-import se.kth.ssvl.tslab.bytewalla.javadtn.servlib.bundling.FragmentManager;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.FragmentManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleSendCancelledEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
@@ -78,8 +77,11 @@ public class BundleActions {
 			}
 
 			if (!link.isNotUnavailable()) {
-				Logger.getInstance().error(TAG, String.format(
-						"not opening link %s since not available", link.name()));
+				Logger.getInstance().error(
+						TAG,
+						String.format(
+								"not opening link %s since not available",
+								link.name()));
 				return;
 			}
 
@@ -155,9 +157,9 @@ public class BundleActions {
 
 		if (bundle.xmit_link_block_set().find_blocks(link) != null) {
 			Logger.getInstance().error(TAG,
-					String.format("BundleActions::queue_bundle: "
-							+ "link not ready to handle bundle (block vector already exists), "
-							+ "dropping send request"));
+							String.format("BundleActions::queue_bundle: "
+									+ "link not ready to handle bundle (block vector already exists), "
+									+ "dropping send request"));
 			return false;
 		}
 
@@ -188,10 +190,11 @@ public class BundleActions {
 
 		if ((link.params().mtu() != 0) && (total_len > link.params().mtu())) {
 			Logger.getInstance().error(TAG,
-					String.format(
-							"queue bundle id %d on %s link %s (%s): length %d > mtu %d, generating fragmentations",
-							bundle.bundleid(), link.type_str(), link.name(),
-							link.nexthop(), total_len, link.params().mtu()));
+							String.format(
+									"queue bundle id %d on %s link %s (%s): length %d > mtu %d, generating fragmentations",
+									bundle.bundleid(), link.type_str(),
+									link.name(), link.nexthop(), total_len,
+									link.params().mtu()));
 
 			if (FragmentManager.DTNEnableProactiveFragmentation.equals("true")) {
 
@@ -216,7 +219,7 @@ public class BundleActions {
 					return false;
 				} catch (BundleListLockNotHoldByCurrentThread e) {
 					Logger.getInstance().error(TAG,
-							"Bundle Action queue bundle, fragments bundle list not locked");
+									"Bundle Action queue bundle, fragments bundle list not locked");
 				} finally {
 					fragment_list.get_lock().unlock();
 				}
@@ -228,8 +231,7 @@ public class BundleActions {
 		// "Make sure that the bundle isn't unexpectedly already on the
 		// queue or in flight on the link" [DTN2]
 		if (link.queue().contains(bundle)) {
-			Logger.getInstance()
-					.error(TAG,
+			Logger.getInstance().error(TAG,
 							String.format(
 									"queue bundle id %d on link %s: already queued on link",
 									bundle.bundleid(), link.name()));
@@ -238,9 +240,9 @@ public class BundleActions {
 
 		if (link.inflight().contains(bundle)) {
 			Logger.getInstance().error(TAG,
-					String.format(
-							"queue bundle id %d  on link %s: already in flight on link",
-							bundle.bundleid(), link.name()));
+							String.format(
+									"queue bundle id %d  on link %s: already in flight on link",
+									bundle.bundleid(), link.name()));
 			return false;
 		}
 
@@ -302,10 +304,11 @@ public class BundleActions {
 			return;
 		}
 
-		Logger.getInstance().debug(TAG,
-				String.format(
-						"BundleActions::cancel_bundle: cancelling bundle id %d on link %s",
-						bundle.bundleid(), link.name()));
+		Logger.getInstance()
+				.debug(TAG,
+						String.format(
+								"BundleActions::cancel_bundle: cancelling bundle id %d on link %s",
+								bundle.bundleid(), link.name()));
 
 		// "First try to remove the bundle from the link's delayed-send
 		// queue. If it's there, then safely remove it and post the send
@@ -318,11 +321,13 @@ public class BundleActions {
 
 		BlockInfoVec blocks = bundle.xmit_link_block_set().find_blocks(link);
 		if (blocks == null) {
-			Logger.getInstance().warning(TAG,
-					String.format(
-							"BundleActions::cancel_bundle: "
-									+ "cancel bundle id but no blocks queued or inflight on link %s",
-							bundle, link.name()));
+			Logger.getInstance()
+					.warning(
+							TAG,
+							String.format(
+									"BundleActions::cancel_bundle: "
+											+ "cancel bundle id but no blocks queued or inflight on link %s",
+									bundle, link.name()));
 			return;
 		}
 

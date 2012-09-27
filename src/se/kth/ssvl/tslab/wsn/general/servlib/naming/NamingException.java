@@ -1,6 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.naming;
 
-public class NamingException extends Exception{
+public class NamingException extends Exception {
 
 	/**
 	 * 
@@ -9,9 +9,10 @@ public class NamingException extends Exception{
 
 }
 
-class InvalidURIException extends NamingException{
+class InvalidURIException extends NamingException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5741173888437721994L;}
+	private static final long serialVersionUID = 5741173888437721994L;
+}

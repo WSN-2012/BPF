@@ -85,13 +85,15 @@ public class InterfaceTable {
 			ConvergenceLayer cl = ConvergenceLayer
 					.find_clayer(conv_layer_type_);
 			if (cl != null) {
-				Logger.getInstance().debug(TAG, "can't find convergence layer for" + id);
+				Logger.getInstance().debug(TAG,
+						"can't find convergence layer for" + id);
 
 			}
 			cl.set_local_port(local_port);
 
 			if (!InterfaceTable.getInstance().add(id, cl, conv_layer_type_)) {
-				Logger.getInstance().debug(TAG, "error adding interface %s" + id);
+				Logger.getInstance().debug(TAG,
+						"error adding interface %s" + id);
 			}
 
 		}
@@ -128,7 +130,8 @@ public class InterfaceTable {
 
 		Interface iface = new Interface(name, proto, cl);
 		if (!cl.interface_up(iface)) {
-			Logger.getInstance().error(TAG, "convergence layer error adding interface" + name);
+			Logger.getInstance().error(TAG,
+					"convergence layer error adding interface" + name);
 			return false;
 		}
 
@@ -151,7 +154,8 @@ public class InterfaceTable {
 			iface = iter.next();
 			iter.remove();
 			if (iface.clayer().interface_down(iface)) {
-				Logger.getInstance().info(TAG, "shutdown interface " + iface.name());
+				Logger.getInstance().info(TAG,
+						"shutdown interface " + iface.name());
 			} else {
 				Logger.getInstance().error(TAG,
 						"error deleting interfaces from the convergence layer");
@@ -172,8 +176,8 @@ public class InterfaceTable {
 
 		while (iter.hasNext()) {
 			iface = iter.next();
-			String text = String.format("%s: Convergence Layer: %s\n", iface
-					.name(), iface.proto());
+			String text = String.format("%s: Convergence Layer: %s\n",
+					iface.name(), iface.proto());
 			buf.append(text);
 
 			iface.clayer().dump_interface(iface, buf);

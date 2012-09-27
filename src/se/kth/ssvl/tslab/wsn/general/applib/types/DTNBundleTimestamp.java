@@ -19,45 +19,60 @@
  */
 package se.kth.ssvl.tslab.wsn.general.applib.types;
 
-
 /**
  * API type to represent DTNBundleTimestamp
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class DTNBundleTimestamp{
+public class DTNBundleTimestamp {
 	/**
 	 * Seconds from reference time in the protocol ( 1 Jan, 2000)
 	 */
 	private long secs_;
-	
+
 	/**
-	 * Unique sequence number of Bundle within the second according to the protocol
+	 * Unique sequence number of Bundle within the second according to the
+	 * protocol
 	 */
 	private long seqno_;
+
 	/**
-	 * Getter function for seconds from reference Time in the protocol ( 1 Jan, 2000)
+	 * Getter function for seconds from reference Time in the protocol ( 1 Jan,
+	 * 2000)
+	 * 
 	 * @return the secs_
 	 */
 	public long secs() {
 		return secs_;
 	}
+
 	/**
-	 * Setter function for seconds from reference Time in the protocol ( 1 Jan, 2000)
-	 * @param secs the secs_ to set
+	 * Setter function for seconds from reference Time in the protocol ( 1 Jan,
+	 * 2000)
+	 * 
+	 * @param secs
+	 *            the secs_ to set
 	 */
 	public void set_secs(long secs) {
 		secs_ = secs;
 	}
+
 	/**
-	 * Getter function for unique sequence number of Bundle within the second according to the protocol
+	 * Getter function for unique sequence number of Bundle within the second
+	 * according to the protocol
+	 * 
 	 * @return the seqno_
 	 */
 	public long seqno() {
 		return seqno_;
 	}
+
 	/**
-	 * Setter function for unique sequence number of Bundle within the second according to the protocol
-	 * @param seqno the seqno_ to set
+	 * Setter function for unique sequence number of Bundle within the second
+	 * according to the protocol
+	 * 
+	 * @param seqno
+	 *            the seqno_ to set
 	 */
 	public void set_seqno(long seqno) {
 		seqno_ = seqno;

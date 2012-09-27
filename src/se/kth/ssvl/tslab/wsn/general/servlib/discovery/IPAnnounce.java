@@ -32,114 +32,114 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
- * "Helper class that 1) formats outbound beacons to advertise this
- * CL instance via neighbor discovery, and 2) responds to inbound
- * advertisements by creating a new Contact"[DTN2].
+ * "Helper class that 1) formats outbound beacons to advertise this CL instance
+ * via neighbor discovery, and 2) responds to inbound advertisements by creating
+ * a new Contact"[DTN2].
  * 
  * @author María José Peroza Marval (mjpm@kth.se)
  */
 
-public class IPAnnounce extends Announce{
-	
+public class IPAnnounce extends Announce {
+
 	/**
 	 * TAG for Android Logging mechanism
 	 */
 	private static final String TAG = "IPAnnounce";
-	
+
 	/**
-     * Serialize announcement out to buffer
-     */
+	 * Serialize announcement out to buffer
+	 */
 	@Override
-	public DiscoveryHeader format_advertisement(IByteBuffer buf, int len){
-	    	
-	    		    		    	
-	    	BundleDaemon BDaemon = BundleDaemon.getInstance();
-	    	EndpointID local = (BDaemon.local_eid());  
-	    	    int length = FOUR_BYTE_ALIGN(local.length() + 19);
+	public DiscoveryHeader format_advertisement(IByteBuffer buf, int len) {
 
-	    	    if (len <= length)
-	    	        return null;
+		BundleDaemon BDaemon = BundleDaemon.getInstance();
+		EndpointID local = (BDaemon.local_eid());
+		int length = FOUR_BYTE_ALIGN(local.length() + 19);
 
-	    	    DiscoveryHeader hdr = new DiscoveryHeader();
-	    	    
-	    	    hdr.set_cl_type((byte)IPDiscovery.str_to_type(type()).getCode());
-	    	    hdr.set_interval((byte)(interval_ / 100));
-	    	    hdr.set_length((short)length);
-	    	    hdr.set_inet_addr(cl_addr_);
-	    	    hdr.set_inet_port(cl_port_);
-	    	    hdr.set_name_len((short)local.length());
-	    	    hdr.set_sender_name(local.str());
-	    	   
-	    	    data_sent_ = Calendar.getInstance().getTimeInMillis();
-	    	    
-	    	    return hdr;    	
-	    	
-	    }
+		if (len <= length)
+			return null;
 
-	    /**
-	     * Export cl_addr to use in sending Announcement out on correct interface
-	     */
-	    public InetAddress cl_addr(){ return cl_addr_; }
+		DiscoveryHeader hdr = new DiscoveryHeader();
 
-	
-	    /**
-	     * Constructor
-	     */
-	    public IPAnnounce(){
-	    	
-	    	super();
-	    	try {
-				cl_addr_ = InetAddress.getByName("0.0.0.0");
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    	cl_port_ = TCPConvergenceLayer.TCPCL_DEFAULT_PORT;
-	    }
+		hdr.set_cl_type((byte) IPDiscovery.str_to_type(type()).getCode());
+		hdr.set_interval((byte) (interval_ / 100));
+		hdr.set_length((short) length);
+		hdr.set_inet_addr(cl_addr_);
+		hdr.set_inet_port(cl_port_);
+		hdr.set_name_len((short) local.length());
+		hdr.set_sender_name(local.str());
 
-	    /**
-	     * Deserialize parameters for configuration
-	     */
-	    @Override
-		public boolean configure(String name, ConvergenceLayer cl,int argc, String ClType, int interval){
-	    	
-	    	 if (cl == null) return false;
+		data_sent_ = Calendar.getInstance().getTimeInMillis();
 
-	    	    cl_ = cl;
-	    	    name_ = name;
-	    	    type_ =ClType;
+		return hdr;
 
-	    	    // validate convergence layer details
-	    	    if (type_.compareTo("tcp")!=0)	    	        
-	    	    {
-	    	        Logger.getInstance().error(TAG,"cl type not supported");
-	    	        return false;
-	    	    }
-	    	    
-	    	    interval_ = interval;
-	    	  
-	    	    if (interval_ == 0)
-	    	    {
-	    	        Logger.getInstance().error(TAG,"interval must be greater than 0");
-	    	        return false;
-	    	    }
+	}
 
-	    	    // convert from seconds to ms
-	    	    interval_ *= 1000;
+	/**
+	 * Export cl_addr to use in sending Announcement out on correct interface
+	 */
+	public InetAddress cl_addr() {
+		return cl_addr_;
+	}
 
-	    	    StringBuffer buf = new StringBuffer();
-	    	    buf.append(cl_addr_ + "/n");
-	    	    buf.append(cl_port_);
-	    	    int end = buf.length()-1;
-	    	    local_ = buf.substring  (0,end);	    	    	    
-	    	    return true;
-	    	
-	    }
+	/**
+	 * Constructor
+	 */
+	public IPAnnounce() {
 
-	    /**
-	     * next hop info for CL to be advertised
-	     */	    
-	    InetAddress cl_addr_;
-	    short cl_port_;
+		super();
+		try {
+			cl_addr_ = InetAddress.getByName("0.0.0.0");
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		cl_port_ = TCPConvergenceLayer.TCPCL_DEFAULT_PORT;
+	}
+
+	/**
+	 * Deserialize parameters for configuration
+	 */
+	@Override
+	public boolean configure(String name, ConvergenceLayer cl, int argc,
+			String ClType, int interval) {
+
+		if (cl == null)
+			return false;
+
+		cl_ = cl;
+		name_ = name;
+		type_ = ClType;
+
+		// validate convergence layer details
+		if (type_.compareTo("tcp") != 0) {
+			Logger.getInstance().error(TAG, "cl type not supported");
+			return false;
+		}
+
+		interval_ = interval;
+
+		if (interval_ == 0) {
+			Logger.getInstance().error(TAG, "interval must be greater than 0");
+			return false;
+		}
+
+		// convert from seconds to ms
+		interval_ *= 1000;
+
+		StringBuffer buf = new StringBuffer();
+		buf.append(cl_addr_ + "/n");
+		buf.append(cl_port_);
+		int end = buf.length() - 1;
+		local_ = buf.substring(0, end);
+		return true;
+
+	}
+
+	/**
+	 * next hop info for CL to be advertised
+	 */
+	InetAddress cl_addr_;
+	short cl_port_;
 
 }

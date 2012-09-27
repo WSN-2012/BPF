@@ -21,9 +21,10 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
 /**
  * An event response to ContactQuery Event
- * @author Rerngvit Yanggratoke (rerngvit@kth.se)  
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class ContactReportEvent  extends BundleEvent {
+public class ContactReportEvent extends BundleEvent {
 
 	/**
 	 * Constructor

@@ -19,9 +19,9 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
-
 /**
  * Event class for querying Bundle information
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleQueryRequest extends BundleEvent {

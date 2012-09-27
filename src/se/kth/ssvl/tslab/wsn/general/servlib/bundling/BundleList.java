@@ -34,7 +34,9 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
- * Class for Bundles list having locking function for using in Multi-thread environment.
+ * Class for Bundles list having locking function for using in Multi-thread
+ * environment.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleList implements Serializable {
@@ -53,23 +55,21 @@ public class BundleList implements Serializable {
 	 * Internal data structure to keep track of the list
 	 */
 	private List<Bundle> list_;
-	
+
 	/**
 	 * Event ticket to support blocking operation of the list
 	 */
 	private Integer ticket = new Integer(0);
 
-
-
 	/**
-	 * Default Constructor. This will generate default name and new Lock. 
+	 * Default Constructor. This will generate default name and new Lock.
 	 */
 	public BundleList() {
 		name_ = "default_name";
 		list_ = new List<Bundle>();
 		lock_ = new Lock();
 		own_lock_ = true;
-		assert(ticket!=null);
+		assert (ticket != null);
 	}
 
 	/**
@@ -103,6 +103,7 @@ public class BundleList implements Serializable {
 
 	/**
 	 * "Peek at the first bundle on the list." [DTN2]
+	 * 
 	 * @return "the bundle or null if the list is empty" [DTN2]
 	 */
 	public Bundle front() {
@@ -121,6 +122,7 @@ public class BundleList implements Serializable {
 
 	/**
 	 * "Peek at the last bundle on the list." [DTN2]
+	 * 
 	 * @return "the bundle or null if the list is empty" [DTN2]
 	 */
 	public Bundle back() {
@@ -156,7 +158,7 @@ public class BundleList implements Serializable {
 		} finally {
 			bundle.get_lock().unlock();
 			lock_.unlock();
-			
+
 		}
 		return true;
 	}
@@ -169,7 +171,7 @@ public class BundleList implements Serializable {
 		bundle.get_lock().lock();
 		try {
 			add_bundle(bundle, list_.size());
-		
+
 		} catch (BundleLockNotHeldByCurrentThread e) {
 			Logger.getInstance().error(TAG, e.getMessage());
 			return false;
@@ -179,8 +181,7 @@ public class BundleList implements Serializable {
 		} catch (BundleListLockNotHoldByCurrentThread e) {
 			Logger.getInstance().error(TAG, e.getMessage());
 			return false;
-		} 
-		finally {
+		} finally {
 			bundle.get_lock().unlock();
 			lock_.unlock();
 		}
@@ -189,17 +190,20 @@ public class BundleList implements Serializable {
 	}
 
 	/**
-	 * Comparator to sort bundle in the list according to the Bundle Fragmentation Offset
+	 * Comparator to sort bundle in the list according to the Bundle
+	 * Fragmentation Offset
+	 * 
 	 * @author Rerngvit Yanggratoke (rerngvit@kth.se)
 	 */
 
-	public static class SORT_FRAG_OFFSET implements Comparator<Bundle>, Serializable{
+	public static class SORT_FRAG_OFFSET implements Comparator<Bundle>,
+			Serializable {
 
 		/**
 		 * Serial version UID to support Java Serializable
 		 */
 		private static final long serialVersionUID = 1755643092976266794L;
-		
+
 		/**
 		 * Singleton instance implementation
 		 */
@@ -211,6 +215,7 @@ public class BundleList implements Serializable {
 
 		/**
 		 * Singleton interface for SORT_FRAG_OFFSET object
+		 * 
 		 * @return
 		 */
 		public static SORT_FRAG_OFFSET getInstance() {
@@ -221,7 +226,7 @@ public class BundleList implements Serializable {
 		}
 
 		// End Singleton Implementation of the SORT_FRAG_OFFSET
-		
+
 		public int compare(Bundle arg0, Bundle arg1) {
 			if (arg0.frag_offset() < arg1.frag_offset())
 				return -1;
@@ -234,17 +239,19 @@ public class BundleList implements Serializable {
 	}
 
 	/**
-	 * Comparator to sort Bundles in the list according to Bundle delivery priority
+	 * Comparator to sort Bundles in the list according to Bundle delivery
+	 * priority
+	 * 
 	 * @author Rerngvit Yanggratoke (rerngvit@kth.se)
 	 */
-	public static class SORT_PRIORITY implements Comparator<Bundle>, Serializable {
+	public static class SORT_PRIORITY implements Comparator<Bundle>,
+			Serializable {
 
-		
 		/**
 		 * Serial version UID to support serial UID
 		 */
 		private static final long serialVersionUID = 6723296430467979292L;
-		
+
 		/**
 		 * Internal Singleton implementation variable
 		 */
@@ -259,6 +266,7 @@ public class BundleList implements Serializable {
 
 		/**
 		 * Singleton interface
+		 * 
 		 * @return
 		 */
 		public static SORT_PRIORITY getInstance() {
@@ -269,7 +277,7 @@ public class BundleList implements Serializable {
 		}
 
 		// End Singleton Implementation of the SORT_PRIORITY
-		
+
 		public int compare(Bundle arg0, Bundle arg1) {
 			if (arg0.priority().getCode() < arg1.priority().getCode())
 				return 1;
@@ -278,13 +286,14 @@ public class BundleList implements Serializable {
 			else
 				return 0;
 		}
-		
+
 	}
 
 	/**
 	 * Insert the given bundle sorted by the given sort method.
 	 */
-	public boolean insert_sorted(Bundle bundle, Comparator<Bundle> sort_comparator) {
+	public boolean insert_sorted(Bundle bundle,
+			Comparator<Bundle> sort_comparator) {
 		lock_.lock();
 		bundle.get_lock().lock();
 		try {
@@ -300,13 +309,11 @@ public class BundleList implements Serializable {
 		} catch (BundleListLockNotHoldByCurrentThread e) {
 			Logger.getInstance().error(TAG, e.getMessage());
 			return false;
-		}
-		finally
-		{
+		} finally {
 			bundle.get_lock().unlock();
 			lock_.unlock();
 		}
-		
+
 	}
 
 	/**
@@ -314,13 +321,10 @@ public class BundleList implements Serializable {
 	 */
 	public boolean sort(Comparator<Bundle> sort_comparator) {
 		lock_.lock();
-		try
-		{
-		Collections.sort(this.list_, sort_comparator);
-		return true;
-		}
-		finally
-		{
+		try {
+			Collections.sort(this.list_, sort_comparator);
+			return true;
+		} finally {
 			lock_.unlock();
 		}
 	}
@@ -332,8 +336,7 @@ public class BundleList implements Serializable {
 	public void insert_random(Bundle bundle) {
 
 		lock_.lock();
-		try
-		{
+		try {
 			int random_position = (int) (Math.random() * this.size());
 			add_bundle(bundle, random_position);
 		} catch (BundleLockNotHeldByCurrentThread e) {
@@ -342,18 +345,18 @@ public class BundleList implements Serializable {
 			Logger.getInstance().error(TAG, e.getMessage());
 		} catch (BundleListLockNotHoldByCurrentThread e) {
 			Logger.getInstance().error(TAG, e.getMessage());
-		}
-		finally
-		{
+		} finally {
 			lock_.unlock();
-		
+
 		}
 	}
 
 	/**
-	 * Remove (and return)  the first bundle on the list.
+	 * Remove (and return) the first bundle on the list.
 	 * 
-	 * @param free whether to free the bundle. This freeing will remove Bundle from storage including its payload
+	 * @param free
+	 *            whether to free the bundle. This freeing will remove Bundle
+	 *            from storage including its payload
 	 * @return a bundle or null if the BundleList is empty
 	 */
 	public Bundle pop_front(boolean free) {
@@ -365,7 +368,7 @@ public class BundleList implements Serializable {
 			assert (!list_.isEmpty());
 
 			Bundle ret = del_bundle(0, free);
-			
+
 			return ret;
 		} catch (BundleListLockNotHoldByCurrentThread e) {
 			Logger.getInstance().error(TAG, e.getMessage());
@@ -377,7 +380,10 @@ public class BundleList implements Serializable {
 
 	/**
 	 * Remove (and return) the last bundle on the list.
-	 * @param free whether to free the bundle. This freeing will remove Bundle from storage including its payload
+	 * 
+	 * @param free
+	 *            whether to free the bundle. This freeing will remove Bundle
+	 *            from storage including its payload
 	 */
 	public Bundle pop_back(boolean free) {
 		lock_.lock();
@@ -386,7 +392,7 @@ public class BundleList implements Serializable {
 				return null;
 
 			Bundle ret = del_bundle(list_.size() - 1, free);
-		
+
 			return ret;
 		} catch (BundleListLockNotHoldByCurrentThread e) {
 			Logger.getInstance().error(TAG, e.getMessage());
@@ -397,13 +403,13 @@ public class BundleList implements Serializable {
 
 	}
 
-	
-	
 	/**
 	 * Remove the given bundle from the list. Returns true if the bundle was
 	 * successfully removed, false otherwise.
 	 * 
-	 * @param free whether to free the bundle. This freeing will remove Bundle from storage including its payload
+	 * @param free
+	 *            whether to free the bundle. This freeing will remove Bundle
+	 *            from storage including its payload
 	 */
 	public boolean erase(Bundle bundle, boolean free) {
 		if (bundle == null) {
@@ -417,16 +423,14 @@ public class BundleList implements Serializable {
 
 		try {
 			int pos = list_.indexOf(bundle);
-			if (pos == -1) return false;
-
+			if (pos == -1)
+				return false;
 
 			Bundle b = del_bundle(pos, free);
 			assert (b == bundle);
 
-			
-		
 			return true;
-	
+
 		} catch (BundleListLockNotHoldByCurrentThread e) {
 			Logger.getInstance().error(TAG, e.getMessage());
 			return false;
@@ -474,64 +478,53 @@ public class BundleList implements Serializable {
 	}
 
 	/**
-	 * "Search the list for a bundle with the given source eid and timestamp." [DTN2]
+	 * "Search the list for a bundle with the given source eid and timestamp."
+	 * [DTN2]
 	 * 
 	 * @return the found bundle otherwise, null.
 	 */
 	public Bundle find(final EndpointID source_eid,
 			final BundleTimestamp creation_ts) {
 		lock_.lock();
-    	try
-    	{
-    		Iterator<Bundle> iter = list_.iterator();
-    		while(iter.hasNext())
-    		{
-    			Bundle bundle = iter.next();
-    			if (bundle.creation_ts().equals(creation_ts)
-    					&& bundle.source().equals(source_eid))
-    				return bundle;
-    		}
-    		return null;
-    		
-    	}
-    	finally
-    	{
-    		lock_.unlock();
-    	}
+		try {
+			Iterator<Bundle> iter = list_.iterator();
+			while (iter.hasNext()) {
+				Bundle bundle = iter.next();
+				if (bundle.creation_ts().equals(creation_ts)
+						&& bundle.source().equals(source_eid))
+					return bundle;
+			}
+			return null;
+
+		} finally {
+			lock_.unlock();
+		}
 	}
 
 	/**
-	 * "Search the list for a bundle with the given GBOF IDthe found bundle otherwise, null
+	 * "Search the list for a bundle with the given GBOF IDthe found bundle
+	 * otherwise, null
 	 * 
 	 * @return the found bundle otherwise, null.
 	 */
 	public Bundle find(GbofId gbof_id) {
 		lock_.lock();
-    	try
-    	{
-    		Iterator<Bundle> iter = list_.iterator();
-    		while(iter.hasNext())
-    		{
-    			Bundle bundle = iter.next();
-    			if (gbof_id.equals(
-    					bundle.source(), 
-    					bundle.creation_ts(), 
-    					bundle.is_fragment(),
-    					bundle.payload().length(), 
-    					bundle.frag_offset())
-    					)
-    				return bundle;
-    		}
-    		return null;
-    		
-    	}
-    	finally
-    	{
-    		lock_.unlock();
-    	}
+		try {
+			Iterator<Bundle> iter = list_.iterator();
+			while (iter.hasNext()) {
+				Bundle bundle = iter.next();
+				if (gbof_id.equals(bundle.source(), bundle.creation_ts(),
+						bundle.is_fragment(), bundle.payload().length(),
+						bundle.frag_offset()))
+					return bundle;
+			}
+			return null;
+
+		} finally {
+			lock_.unlock();
+		}
 
 	}
-
 
 	/**
 	 * "Move all bundles from this list to another." [DTN2]
@@ -582,19 +575,17 @@ public class BundleList implements Serializable {
 	 */
 	public final boolean empty() {
 		lock_.lock();
-		try
-		{
-		return list_.isEmpty();
-		}
-		finally
-		{
+		try {
+			return list_.isEmpty();
+		} finally {
 			lock_.unlock();
 		}
 	}
 
 	/**
-	 * "Iterator used to iterate through the list. Iterations _must_ be completed
-	 * while holding the list lock, and this method will assert as such." [DTN2]
+	 * "Iterator used to iterate through the list. Iterations _must_ be
+	 * completed while holding the list lock, and this method will assert as
+	 * such." [DTN2]
 	 * 
 	 * @throws BundleListLockNotHoldByCurrentThread
 	 */
@@ -603,20 +594,21 @@ public class BundleList implements Serializable {
 		if (!lock_.isHeldByCurrentThread()) {
 			throw new BundleListLockNotHoldByCurrentThread();
 		}
-		
+
 		return list_.listIterator();
 	}
 
 	/**
-	 * "Iterator used to mark the end of the list. Iterations _must_ be completed
-	 * while holding the list lock, and this method will assert as such." [DTN2]
+	 * "Iterator used to mark the end of the list. Iterations _must_ be
+	 * completed while holding the list lock, and this method will assert as
+	 * such." [DTN2]
 	 */
 	public final ListIterator<Bundle> end()
 			throws BundleListLockNotHoldByCurrentThread {
 		if (!lock_.isHeldByCurrentThread()) {
 			throw new BundleListLockNotHoldByCurrentThread();
 		}
- 
+
 		return list_.listIterator(list_.size());
 	}
 
@@ -629,65 +621,80 @@ public class BundleList implements Serializable {
 
 	/**
 	 * "Helper routine to add a bundle at the indicated position." [DTN2]
-	 * @throws BundleLockNotHeldByCurrentThread 
-	 * @throws InterruptedException 
+	 * 
+	 * @throws BundleLockNotHeldByCurrentThread
+	 * @throws InterruptedException
 	 */
-	private void add_bundle(final Bundle b, final int pos) throws BundleListLockNotHoldByCurrentThread, BundleLockNotHeldByCurrentThread, InterruptedException {
-		if(!lock_.isHeldByCurrentThread()) throw new BundleListLockNotHoldByCurrentThread();
-	    if(!b.get_lock().isHeldByCurrentThread()) throw new BundleLockNotHeldByCurrentThread();
-	    
-	    if (b.is_queued_on(this)) {
-	        Logger.getInstance().error(TAG, String.format("ERROR in add bundle: " +
-	                "bundle id %d already on list [%s]",
-	                b.bundleid(), name_));
-	        
-	        return;
-	    }
-	  
-	    list_.add(pos, b);
-	    
-	    
-	    b.mappings().add(this);
-	    
-	    
+	private void add_bundle(final Bundle b, final int pos)
+			throws BundleListLockNotHoldByCurrentThread,
+			BundleLockNotHeldByCurrentThread, InterruptedException {
+		if (!lock_.isHeldByCurrentThread())
+			throw new BundleListLockNotHoldByCurrentThread();
+		if (!b.get_lock().isHeldByCurrentThread())
+			throw new BundleLockNotHeldByCurrentThread();
 
-	    Logger.getInstance().debug(TAG, String.format("bundle id %d is added to list [%s] , the size become",
-	              b.bundleid(), name_, list_.size()));
-	    
+		if (b.is_queued_on(this)) {
+			Logger.getInstance().error(
+					TAG,
+					String.format("ERROR in add bundle: "
+							+ "bundle id %d already on list [%s]",
+							b.bundleid(), name_));
+
+			return;
+		}
+
+		list_.add(pos, b);
+
+		b.mappings().add(this);
+
+		Logger.getInstance().debug(
+				TAG,
+				String.format(
+						"bundle id %d is added to list [%s] , the size become",
+						b.bundleid(), name_, list_.size()));
+
 	}
 
 	/**
-	 * Helper routine to remove a bundle from the indicated position. This is called by other public functions such as pop_front
-	 * This is the function will actually post the bundle free event to the Bundle daemon
+	 * Helper routine to remove a bundle from the indicated position. This is
+	 * called by other public functions such as pop_front This is the function
+	 * will actually post the bundle free event to the Bundle daemon
+	 * 
 	 * @param pos
-	 *            Position to delete
-	 *            a flag indicate whether to free the bundle as well
-	 * @param free whether to free the bundle. This freeing will remove Bundle from storage including its payload
-	 * @throws BundleListLockNotHoldByCurrentThread 
+	 *            Position to delete a flag indicate whether to free the bundle
+	 *            as well
+	 * @param free
+	 *            whether to free the bundle. This freeing will remove Bundle
+	 *            from storage including its payload
+	 * @throws BundleListLockNotHoldByCurrentThread
 	 * @returns the bundle that, before this call, was at the position
 	 * 
 	 */
-	private Bundle del_bundle(final int pos, boolean free) throws BundleListLockNotHoldByCurrentThread {
+	private Bundle del_bundle(final int pos, boolean free)
+			throws BundleListLockNotHoldByCurrentThread {
 
 		Bundle b = list_.get(pos);
 		assert (lock_.isHeldByCurrentThread());
 
-		if(!lock_.isHeldByCurrentThread()) throw new BundleListLockNotHoldByCurrentThread();
-		
+		if (!lock_.isHeldByCurrentThread())
+			throw new BundleListLockNotHoldByCurrentThread();
+
 		b.get_lock().lock();
-		
-		
-		
+
 		try {
 
-			Logger.getInstance().debug(TAG, String.format(
-					"bundle id %d del_bundle: deleting mapping [%s]", b
-							.bundleid(), name_));
+			Logger.getInstance().debug(
+					TAG,
+					String.format(
+							"bundle id %d del_bundle: deleting mapping [%s]",
+							b.bundleid(), name_));
 
 			if (!b.mappings().contains(this)) {
-				Logger.getInstance().error(TAG, String.format("ERROR in del bundle: "
-						+ "bundle id %d has no mapping for list [%s]", b
-						.bundleid(), name_));
+				Logger.getInstance().error(
+						TAG,
+						String.format("ERROR in del bundle: "
+								+ "bundle id %d has no mapping for list [%s]",
+								b.bundleid(), name_));
 			} else {
 				b.mappings().remove(this);
 			}
@@ -696,13 +703,13 @@ public class BundleList implements Serializable {
 			list_.remove(b);
 
 			if (free)
-			BundleDaemon.getInstance().post(new BundleFreeEvent(b));
-			
+				BundleDaemon.getInstance().post(new BundleFreeEvent(b));
+
 			return b;
 		} catch (BundleLockNotHeldByCurrentThread e) {
 			Logger.getInstance().error(TAG, e.getMessage());
 			return null;
-		
+
 		} finally {
 			b.get_lock().unlock();
 
@@ -721,17 +728,15 @@ public class BundleList implements Serializable {
 	/**
 	 * name of the list
 	 */
-	private String name_; 
-
-	
+	private String name_;
 
 	/**
 	 * Lock for supporting mutual exclusion
 	 */
 	protected Lock lock_;
-	
+
 	/**
 	 * bit to define lock ownership
 	 */
-	protected boolean own_lock_;  
+	protected boolean own_lock_;
 };

@@ -30,7 +30,6 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
 public class APIRegistrationList extends List<APIRegistration> {
 
-
 	/**
 	 * SerialVersionID to Support Serializable.
 	 */

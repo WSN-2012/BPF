@@ -21,9 +21,9 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.CustodySignal;
 
-
 /**
  * Event class for custody transfer signal arrivals.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 
@@ -35,12 +35,13 @@ public class CustodySignalEvent extends BundleEvent {
 	}
 
 	/**
-	 *  The parsed data from the custody transfer signal
+	 * The parsed data from the custody transfer signal
 	 */
 	private CustodySignal.data_t data_;
 
 	/**
 	 * Getter for the parsed data from the custody transfer signal
+	 * 
 	 * @return the data_
 	 */
 	public CustodySignal.data_t data() {
@@ -49,7 +50,9 @@ public class CustodySignalEvent extends BundleEvent {
 
 	/**
 	 * Setter for the parsed data from the custody transfer signal
-	 * @param data the data_ to set
+	 * 
+	 * @param data
+	 *            the data_ to set
 	 */
 	public void set_data(CustodySignal.data_t data) {
 		data_ = data;

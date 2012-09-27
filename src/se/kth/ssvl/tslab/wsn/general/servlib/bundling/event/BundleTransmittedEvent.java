@@ -25,60 +25,64 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 
 /**
- * Event generated from the Contact in the Convergence Layer to notify the main components about Bundle successfully transmission
+ * Event generated from the Contact in the Convergence Layer to notify the main
+ * components about Bundle successfully transmission
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleTransmittedEvent extends BundleEvent {
 	/**
 	 * main constructor
+	 * 
 	 * @param bundle
 	 * @param contact
 	 * @param link
 	 * @param bytes_sent
 	 * @param reliably_sent
 	 */
-	public BundleTransmittedEvent(Bundle bundle, Contact contact,
-			Link link, int bytes_sent,
+	public BundleTransmittedEvent(Bundle bundle, Contact contact, Link link,
+			int bytes_sent,
 
 			int reliably_sent) {
 
 		super(event_type_t.BUNDLE_TRANSMITTED);
 		bundle_ = bundle;
-		contact_   = contact;
-		link_      = link;
+		contact_ = contact;
+		link_ = link;
 		bytes_sent_ = bytes_sent;
 		reliably_sent_ = reliably_sent;
-		
+
 	}
 
 	/**
-	 *  The transmitted bundle
+	 * The transmitted bundle
 	 */
 	private Bundle bundle_;
 
 	/**
-	 *  The contact where the bundle was sent
+	 * The contact where the bundle was sent
 	 */
 	private Contact contact_;
 
 	/**
-	 *  Total number of bytes sent
+	 * Total number of bytes sent
 	 */
 	private int bytes_sent_;
 
 	/**
-	 *  The total number of bytes reliably sent
+	 * The total number of bytes reliably sent
 	 */
 	private int reliably_sent_;
 
 	/**
-	 * The link over which the bundle was sent
-	 * (may not have a contact when the transmission result is reported)
+	 * The link over which the bundle was sent (may not have a contact when the
+	 * transmission result is reported)
 	 */
 	private Link link_;
 
 	/**
 	 * Getter for the transmitted bundle
+	 * 
 	 * @return the bundle_
 	 */
 	public Bundle bundle() {
@@ -87,7 +91,9 @@ public class BundleTransmittedEvent extends BundleEvent {
 
 	/**
 	 * Setter for the transmitted bundle
-	 * @param bundle the bundle_ to set
+	 * 
+	 * @param bundle
+	 *            the bundle_ to set
 	 */
 	public void set_bundle(Bundle bundle) {
 		bundle_ = bundle;
@@ -95,6 +101,7 @@ public class BundleTransmittedEvent extends BundleEvent {
 
 	/**
 	 * Getter for the contact where the bundle was sent
+	 * 
 	 * @return the contact_
 	 */
 	public Contact contact() {
@@ -103,7 +110,9 @@ public class BundleTransmittedEvent extends BundleEvent {
 
 	/**
 	 * Setter for the contact where the bundle was sent
-	 * @param contact the contact_ to set
+	 * 
+	 * @param contact
+	 *            the contact_ to set
 	 */
 	public void set_contact(Contact contact) {
 		contact_ = contact;
@@ -111,6 +120,7 @@ public class BundleTransmittedEvent extends BundleEvent {
 
 	/**
 	 * Getter for the total number of bytes sent
+	 * 
 	 * @return the bytes_sent_
 	 */
 	public int bytes_sent() {
@@ -119,7 +129,9 @@ public class BundleTransmittedEvent extends BundleEvent {
 
 	/**
 	 * Setter for the total number of bytes sent
-	 * @param bytesSent the bytes_sent_ to set
+	 * 
+	 * @param bytesSent
+	 *            the bytes_sent_ to set
 	 */
 	public void set_bytes_sent(int bytesSent) {
 		bytes_sent_ = bytesSent;
@@ -127,6 +139,7 @@ public class BundleTransmittedEvent extends BundleEvent {
 
 	/**
 	 * Getter for the total number of bytes reliably sent
+	 * 
 	 * @return the reliably_sent_
 	 */
 	public int reliably_sent() {
@@ -135,7 +148,9 @@ public class BundleTransmittedEvent extends BundleEvent {
 
 	/**
 	 * Setter for the total number of bytes reliably sent
-	 * @param reliablySent the reliably_sent_ to set
+	 * 
+	 * @param reliablySent
+	 *            the reliably_sent_ to set
 	 */
 	public void set_reliably_sent(int reliablySent) {
 		reliably_sent_ = reliablySent;
@@ -143,6 +158,7 @@ public class BundleTransmittedEvent extends BundleEvent {
 
 	/**
 	 * Getter for the link the bundle was transmitted
+	 * 
 	 * @return the link_
 	 */
 	public Link link() {
@@ -151,7 +167,9 @@ public class BundleTransmittedEvent extends BundleEvent {
 
 	/**
 	 * Setter for the link the bundle was transmitted
-	 * @param link the link_ to set
+	 * 
+	 * @param link
+	 *            the link_ to set
 	 */
 	public void set_link(Link link) {
 		link_ = link;

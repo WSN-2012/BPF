@@ -22,81 +22,90 @@ package se.kth.ssvl.tslab.wsn.general.servlib.config;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
-
-
 /**
  * The class represents links setting in the configuration file.
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class LinksSetting {
 	/**
 	 * Class represents individual link entry in the links
 	 */
-	public static class LinkEntry
-	{
+	public static class LinkEntry {
 		private String id_;
 		private String dest_;
 		private Link.link_type_t type_;
 		private conv_layer_type_t conv_layer_type_;
+
 		/**
 		 * @return the id_
 		 */
 		public String id() {
 			return id_;
 		}
+
 		/**
-		 * @param id the id_ to set
+		 * @param id
+		 *            the id_ to set
 		 */
 		public void set_id(String id) {
 			id_ = id;
 		}
+
 		/**
 		 * @return the dest_
 		 */
 		public String des() {
 			return dest_;
 		}
+
 		/**
-		 * @param dest the dest_ to set
+		 * @param dest
+		 *            the dest_ to set
 		 */
 		public void set_des(String dest) {
 			dest_ = dest;
 		}
+
 		/**
 		 * @return the type_
 		 */
 		public Link.link_type_t type() {
 			return type_;
 		}
+
 		/**
-		 * @param type the type_ to set
+		 * @param type
+		 *            the type_ to set
 		 */
 		public void set_type(Link.link_type_t type) {
 			type_ = type;
 		}
+
 		/**
 		 * @return the conv_layer_type_
 		 */
 		public conv_layer_type_t conv_layer_type() {
 			return conv_layer_type_;
 		}
+
 		/**
-		 * @param convLayerType the conv_layer_type_ to set
+		 * @param convLayerType
+		 *            the conv_layer_type_ to set
 		 */
 		public void set_conv_layer_type(conv_layer_type_t conv_layer_type) {
 			conv_layer_type_ = conv_layer_type;
 		}
-		
+
 	}
 
 	/**
-	 * Empty Constructor 
+	 * Empty Constructor
 	 */
-	public LinksSetting()
-	{
+	public LinksSetting() {
 		link_entries_ = new List<LinkEntry>();
 	}
-	
+
 	/**
 	 * The list maintaining the links inside this setting
 	 */
@@ -104,6 +113,7 @@ public class LinksSetting {
 
 	/**
 	 * Accessor for the Link Entries inside this Link Setting
+	 * 
 	 * @return the link_entries_
 	 */
 	public List<LinkEntry> link_entries() {
@@ -111,8 +121,10 @@ public class LinksSetting {
 	}
 
 	/**
-	 * Setter for the Link Entries inside this Link Setting 
-	 * @param linkEntries the link_entries_ to set
+	 * Setter for the Link Entries inside this Link Setting
+	 * 
+	 * @param linkEntries
+	 *            the link_entries_ to set
 	 */
 	public void set_link_entries(List<LinkEntry> link_entries) {
 		link_entries_ = link_entries;

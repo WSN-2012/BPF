@@ -29,27 +29,26 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 /**
  * A set of BlockInfoVecs, one for each outgoing link.
  * 
- *  @author Sharjeel Ahmed (sharjeel@kth.se) 
+ * @author Sharjeel Ahmed (sharjeel@kth.se)
  */
 public class LinkBlockSet implements Serializable {
-	
 
 	/**
 	 * SerialVersionID to Support Serializable.
 	 */
-	
+
 	private static final long serialVersionUID = -2517952327858102558L;
-	
+
 	/**
 	 * TAG for Android Logging
 	 */
 	private static String TAG = "LinkBlockSet";
-	
+
 	/**
 	 * Lock object for this class
 	 */
 	private Lock lock_;
-	
+
 	/**
 	 * HashMap to store BlockInfoVec of each link
 	 */
@@ -57,165 +56,148 @@ public class LinkBlockSet implements Serializable {
 
 	/**
 	 * Disable external construction of the object
-	 * @param lock Lock object 
+	 * 
+	 * @param lock
+	 *            Lock object
 	 */
 	public LinkBlockSet(Lock lock) {
 		lock_ = lock;
-		map_ =  new HashMap<Link, BlockInfoVec>();
-	
-	}
+		map_ = new HashMap<Link, BlockInfoVec>();
 
-	
+	}
 
 	/**
 	 * Create a new BlockInfoVec for the given link.
-	 * @param link Create a new link for given link
+	 * 
+	 * @param link
+	 *            Create a new link for given link
 	 * @return Pointer to the new BlockInfoVec
 	 */
 	public BlockInfoVec create_blocks(final Link link) {
 		lock_.lock();
-		try
-		{
-		if (map_.get(link) != null)
-		{
-			Logger.getInstance().error(TAG, "Blocks already exist for the given link");
-			return null;
-		}
-		
-		BlockInfoVec blocks = new BlockInfoVec();
-		map_.put(link, blocks);
-		return blocks;
-		}
-		finally
-		{
+		try {
+			if (map_.get(link) != null) {
+				Logger.getInstance().error(TAG,
+						"Blocks already exist for the given link");
+				return null;
+			}
+
+			BlockInfoVec blocks = new BlockInfoVec();
+			map_.put(link, blocks);
+			return blocks;
+		} finally {
 			lock_.unlock();
 		}
 	}
 
 	/**
 	 * Find the BlockInfoVec for the given link.
-	 * @param link Find blocks for given link
+	 * 
+	 * @param link
+	 *            Find blocks for given link
 	 * @return Pointer to the BlockInfoVec or NULL if not found
 	 */
 	public BlockInfoVec find_blocks(final Link link) {
 		lock_.lock();
-		try
-		{
+		try {
 			return map_.get(link);
-		}
-		finally
-		{
+		} finally {
 			lock_.unlock();
 		}
 	}
 
 	/**
 	 * Remove the BlockInfoVec for the given link.
-	 * @param link Delete blocks for the given link
+	 * 
+	 * @param link
+	 *            Delete blocks for the given link
 	 * @return True if successfully deleted else false
 	 */
 	public final boolean delete_blocks(final Link link) {
 		lock_.lock();
-		try
-		{
+		try {
 			BlockInfoVec result = map_.remove(link);
-			
-			if ( result == null) 
-			{
-				Logger.getInstance().error(TAG, "delete_block when there are not blocks for the given link");
+
+			if (result == null) {
+				Logger.getInstance().error(TAG,
+								"delete_block when there are not blocks for the given link");
 				return false;
 			}
-			
-			
+
 			return true;
-		}
-		finally
-		{
+		} finally {
 			lock_.unlock();
 		}
 	}
 
 	/**
 	 * Size of map_
+	 * 
 	 * @return Size of map
 	 */
-	public int size()
-	{
+	public int size() {
 		lock_.lock();
-		try
-		{
+		try {
 			return map_.size();
-		}
-		finally
-		{
-			
+		} finally {
+
 			lock_.unlock();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Clear the map
 	 */
-	public void clear()
-	{
+	public void clear() {
 		lock_.lock();
-		try
-		{
-		    map_.clear();
-		}
-		finally
-		{
-			
+		try {
+			map_.clear();
+		} finally {
+
 			lock_.unlock();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Get the map
+	 * 
 	 * @return Return the map
 	 */
-	public HashMap<Link, BlockInfoVec> map()
-	{
+	public HashMap<Link, BlockInfoVec> map() {
 		lock_.lock();
-		try
-		{
+		try {
 			return map_;
-		}
-		finally
-		{
+		} finally {
 			lock_.unlock();
 		}
 	}
-	
+
 	/**
 	 * Get a copy of this object
+	 * 
 	 * @return Return a copy of LinkBlockSet
 	 */
 	public LinkBlockSet get_copy() {
 		lock_.lock();
-		try
-		{
+		try {
 			LinkBlockSet new_link_block_set = new LinkBlockSet(lock_);
-			
+
 			new_link_block_set.map().putAll(map_);
-			
-			
+
 			return new_link_block_set;
-		}
-		finally
-		{
+		} finally {
 			lock_.unlock();
 		}
 	}
-	
+
 	/**
 	 * Test function to get the lock
+	 * 
 	 * @return Return the lock function
 	 */
-    final public Lock test_get_lock()
-    {
-    	return lock_;
-    }
+	final public Lock test_get_lock() {
+		return lock_;
+	}
 }

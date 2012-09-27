@@ -27,10 +27,14 @@ public class ProphetRegistration extends Registration {
 
 	@Override
 	public void deliver_bundle(Bundle bundle) {
-		Logger.getInstance().debug(TAG, "Prophet bundle from " + bundle.source());
+		Logger.getInstance().debug(TAG,
+				"Prophet bundle from " + bundle.source());
 		router_.deliver_bundle(bundle);
-		BundleDaemon.getInstance().post_at_head(new BundleDeliveredEvent(bundle, this));
-		BundleDaemon.getInstance().post_at_head(new BundleDeleteRequest(bundle, status_report_reason_t.REASON_NO_ADDTL_INFO));
+		BundleDaemon.getInstance().post_at_head(
+				new BundleDeliveredEvent(bundle, this));
+		BundleDaemon.getInstance().post_at_head(
+				new BundleDeleteRequest(bundle,
+						status_report_reason_t.REASON_NO_ADDTL_INFO));
 	}
 
 }

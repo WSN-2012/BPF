@@ -24,14 +24,18 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 
 /**
  * BundleEvent to query parameters of the Convergence Layer
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class CLAParametersQueryRequest  extends CLAQueryReport {
-	
+public class CLAParametersQueryRequest extends CLAQueryReport {
+
 	/**
 	 * Constructor
-	 * @param query_id unique identifier 
-	 * @param cla the Convergence Layer in question
+	 * 
+	 * @param query_id
+	 *            unique identifier
+	 * @param cla
+	 *            the Convergence Layer in question
 	 * @param parameter_names
 	 */
 	public CLAParametersQueryRequest(final String query_id,
@@ -44,17 +48,18 @@ public class CLAParametersQueryRequest  extends CLAQueryReport {
 	}
 
 	/**
-	 *  Convergence layer for which the given parameters are requested.
+	 * Convergence layer for which the given parameters are requested.
 	 */
 	private ConvergenceLayer cla_;
 
 	/**
-	 *  Convergence layer parameters requested by name.
+	 * Convergence layer parameters requested by name.
 	 */
 	private AttributeNameVector parameter_names_;
 
 	/**
 	 * Getter for the Convergence Layer in question
+	 * 
 	 * @return the cla_
 	 */
 	public ConvergenceLayer cla() {
@@ -63,7 +68,9 @@ public class CLAParametersQueryRequest  extends CLAQueryReport {
 
 	/**
 	 * Setter for the Convergence Layer in question
-	 * @param cla the cla_ to set
+	 * 
+	 * @param cla
+	 *            the cla_ to set
 	 */
 	public void set_cla(ConvergenceLayer cla) {
 		cla_ = cla;
@@ -71,6 +78,7 @@ public class CLAParametersQueryRequest  extends CLAQueryReport {
 
 	/**
 	 * Getter for the Convergence layer parameters requested by name.
+	 * 
 	 * @return the parameter_names_
 	 */
 	public AttributeNameVector parameter_names() {
@@ -79,7 +87,9 @@ public class CLAParametersQueryRequest  extends CLAQueryReport {
 
 	/**
 	 * Setter for the Convergence layer parameters requested by name.
-	 * @param parameterNames the parameter_names_ to set
+	 * 
+	 * @param parameterNames
+	 *            the parameter_names_ to set
 	 */
 	public void set_parameter_names(AttributeNameVector parameterNames) {
 		parameter_names_ = parameterNames;

@@ -35,6 +35,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
  * Class to represent DTN Bundle
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 
@@ -57,8 +58,7 @@ public class Bundle implements Serializable {
 	 * For temporary bundles, the location can be set to MEMORY
 	 */
 	public Bundle(BundlePayload.location_t location) {
-		
-		
+
 		int id = BundleStore.getInstance().next_id();
 		init(id);
 
@@ -72,7 +72,6 @@ public class Bundle implements Serializable {
 		}
 
 	}
-
 
 	/**
 	 * Copy the metadata from one bundle to another (used in fragmentation).
@@ -112,12 +111,12 @@ public class Bundle implements Serializable {
 		} else if (is_fragment()) {
 			buf.append(String.format(
 					"bundle id %d [%s -> %s %d byte payload, fragment @%d/%d]",
-					bundleid_, source_.toString(), dest_.toString(), payload_
-							.length(), frag_offset_, orig_length_));
+					bundleid_, source_.toString(), dest_.toString(),
+					payload_.length(), frag_offset_, orig_length_));
 		} else {
 			buf.append(String.format("bundle id %d [%s -> %s %d byte payload]",
-					bundleid_, source_.toString(), dest_.toString(), payload_
-							.length()));
+					bundleid_, source_.toString(), dest_.toString(),
+					payload_.length()));
 		}
 	}
 
@@ -131,10 +130,10 @@ public class Bundle implements Serializable {
 		buf.append(String.format("         custodian: %s\n", custodian_.str()));
 		buf.append(String.format("           replyto: %s\n", replyto_.str()));
 		buf.append(String.format("           prevhop: %s\n", prevhop_.str()));
-		buf.append(String.format("    payload_length: %d bytes\n", payload_
-				.length()));
-		buf.append(String.format("          priority: %s\n", priority_
-				.toString()));
+		buf.append(String.format("    payload_length: %d bytes\n",
+				payload_.length()));
+		buf.append(String.format("          priority: %s\n",
+				priority_.toString()));
 		buf.append(String.format(" custody_requested: %s\n",
 				(custody_requested_)));
 		buf.append(String.format("     local_custody: %s\n", local_custody_));
@@ -145,8 +144,8 @@ public class Bundle implements Serializable {
 		buf.append(String.format("     delivery_rcpt: %s\n", delivery_rcpt_));
 		buf.append(String.format("     deletion_rcpt: %s\n", deletion_rcpt_));
 		buf.append(String.format("    app_acked_rcpt: %s\n", app_acked_rcpt_));
-		buf.append(String.format("       creation_ts: %d.%d\n", creation_ts_
-				.seconds(), creation_ts_.seqno()));
+		buf.append(String.format("       creation_ts: %d.%d\n",
+				creation_ts_.seconds(), creation_ts_.seqno()));
 		buf.append(String.format("        expiration: %d \n", expiration_));
 		buf.append(String.format("       is_fragment: %s\n", is_fragment_));
 		buf.append(String.format("          is_admin: %s\n", is_admin_));
@@ -161,9 +160,7 @@ public class Bundle implements Serializable {
 
 		lock_.lock();
 		try {
-			buf
-					.append(String.format("queued on %d lists:\n", mappings_
-							.size()));
+			buf.append(String.format("queued on %d lists:\n", mappings_.size()));
 			Iterator<BundleList> map_itr = mappings_.iterator();
 			while (map_itr.hasNext()) {
 				BundleList list = map_itr.next();
@@ -183,8 +180,8 @@ public class Bundle implements Serializable {
 						buf.append("(incomplete)");
 
 					}
-					buf.append(String.format("data length: %d", block
-							.full_length()));
+					buf.append(String.format("data length: %d",
+							block.full_length()));
 				}
 			}
 
@@ -209,10 +206,9 @@ public class Bundle implements Serializable {
 		return payload_.length();
 	}
 
-	
-
 	/**
 	 * Setter for the custody timer of this Bundle
+	 * 
 	 * @param custody_timers
 	 */
 	public void set_custody_timers(CustodyTimerVec custody_timers) {
@@ -233,6 +229,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Return a pointer to the mappings. Requires that the bundle be locked.
+	 * 
 	 * @throws BundleLockNotHeldByCurrentThread
 	 */
 	public Set<BundleList> mappings() throws BundleLockNotHeldByCurrentThread {
@@ -241,42 +238,36 @@ public class Bundle implements Serializable {
 		else
 			throw new BundleLockNotHeldByCurrentThread();
 	}
-	
+
 	/**
 	 * Setter for the mapping of this Bundle
+	 * 
 	 * @param mappings
 	 */
 	public void set_mappings(Set<BundleList> mappings) {
 		lock_.lock();
-		try
-		{
+		try {
 			mappings_ = mappings;
-		}
-		finally
-		{
+		} finally {
 			lock_.unlock();
 		}
 	}
-	
+
 	/**
 	 * Getter for the mapping copy of this Bundle
+	 * 
 	 * @return
 	 */
-	public Set<BundleList> get_mappings_copy()
-	{
+	public Set<BundleList> get_mappings_copy() {
 		lock_.lock();
-		try
-		{
+		try {
 			Set<BundleList> copy_of_mappings = new Set<BundleList>();
 			copy_of_mappings.addAll(mappings_);
 			return copy_of_mappings;
-		}
-		finally
-		{
+		} finally {
 			lock_.unlock();
 		}
 	}
-	
 
 	/**
 	 * Return true if the bundle is on the given list.
@@ -295,20 +286,20 @@ public class Bundle implements Serializable {
 	 */
 	public boolean validate(StringBuffer errbuf) {
 		if (!source_.valid()) {
-			errbuf.append(String.format("invalid source eid [%s]", source_
-					.toString()));
+			errbuf.append(String.format("invalid source eid [%s]",
+					source_.toString()));
 			return false;
 		}
 
 		if (!dest_.valid()) {
-			errbuf.append(String.format("invalid dest eid [%s]", dest_
-					.toString()));
+			errbuf.append(String.format("invalid dest eid [%s]",
+					dest_.toString()));
 			return false;
 		}
 
 		if (!replyto_.valid()) {
-			errbuf.append(String.format("invalid replyto eid [%s]", replyto_
-					.toString()));
+			errbuf.append(String.format("invalid replyto eid [%s]",
+					replyto_.toString()));
 			return false;
 		}
 
@@ -332,7 +323,7 @@ public class Bundle implements Serializable {
 	/**
 	 * Values for the bundle priority field.
 	 */
-	public enum priority_values_t{
+	public enum priority_values_t {
 		COS_INVALID("_UNKNOWN_PRIORITY_", -1), // /< invalid
 		COS_BULK("BULK", 0), // /< lowest priority
 		COS_NORMAL("NORMAL", 1), // /< regular priority
@@ -386,6 +377,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the bundle ID field in the database
+	 * 
 	 * @return
 	 */
 	public final int bundleid() {
@@ -394,6 +386,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the lock used in this Bundle
+	 * 
 	 * @return
 	 */
 	public final Lock get_lock() {
@@ -402,6 +395,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the flag whether this Bundle is expired
+	 * 
 	 * @return
 	 */
 	public final boolean expired() {
@@ -410,6 +404,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the source EndpointID of this Bundle
+	 * 
 	 * @return
 	 */
 	public final EndpointID source() {
@@ -417,7 +412,8 @@ public class Bundle implements Serializable {
 	}
 
 	/**
-	 * Setter for the source EndpointID of this Bundle 
+	 * Setter for the source EndpointID of this Bundle
+	 * 
 	 * @param source
 	 */
 	public final void set_source(EndpointID source) {
@@ -426,6 +422,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the destination EndpointID of this Bundle
+	 * 
 	 * @return
 	 */
 	public final EndpointID dest() {
@@ -434,6 +431,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the destination EndpointID of this Bundle
+	 * 
 	 * @param dest
 	 */
 	public final void set_dest(EndpointID dest) {
@@ -442,6 +440,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the custodian EndpointID of this Bundle
+	 * 
 	 * @return
 	 */
 	public final EndpointID custodian() {
@@ -450,14 +449,16 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the custodian EndpointID of this Bundle
+	 * 
 	 * @param custodian
 	 */
 	public final void set_custodian(EndpointID custodian) {
 		custodian_ = custodian;
 	}
-	
+
 	/**
 	 * Getter for the replyto EndpointID of this Bundle
+	 * 
 	 * @return
 	 */
 	public final EndpointID replyto() {
@@ -466,6 +467,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the replyto EndpointID of this Bundle
+	 * 
 	 * @param replyto
 	 */
 	public final void set_replyto(EndpointID replyto) {
@@ -474,6 +476,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the previous hop EndpointID
+	 * 
 	 * @return
 	 */
 	public final EndpointID prevhop() {
@@ -482,6 +485,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the previous hop EndpointID
+	 * 
 	 * @param prevhop
 	 */
 	public final void set_prevhop(EndpointID prevhop) {
@@ -490,6 +494,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the flag whether this Bundle is a fragment of another Bundle
+	 * 
 	 * @return
 	 */
 	public boolean is_fragment() {
@@ -497,7 +502,9 @@ public class Bundle implements Serializable {
 	}
 
 	/**
-	 * Getter for the flag whether this Bundle is admin Bundle, for example, Bundle Status Report and Custody Signal Bundle.
+	 * Getter for the flag whether this Bundle is admin Bundle, for example,
+	 * Bundle Status Report and Custody Signal Bundle.
+	 * 
 	 * @return
 	 */
 	public boolean is_admin() {
@@ -506,6 +513,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the flag whether this Bundle shouldn't be fragmented
+	 * 
 	 * @return
 	 */
 	public boolean do_not_fragment() {
@@ -514,6 +522,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the flag whether this Bundle was requested for Custody
+	 * 
 	 * @return
 	 */
 	public boolean custody_requested() {
@@ -522,6 +531,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the flag whether this Bundle have Singleton destination
+	 * 
 	 * @return
 	 */
 	public boolean singleton_dest() {
@@ -530,6 +540,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the priority value of this Bundle
+	 * 
 	 * @return
 	 */
 	public priority_values_t priority() {
@@ -537,8 +548,9 @@ public class Bundle implements Serializable {
 	}
 
 	/**
-	 * Getter for the flag indicating whether the sender of this Bundle would like to 
-	 * receive receipt
+	 * Getter for the flag indicating whether the sender of this Bundle would
+	 * like to receive receipt
+	 * 
 	 * @return
 	 */
 	public boolean receive_rcpt() {
@@ -546,7 +558,9 @@ public class Bundle implements Serializable {
 	}
 
 	/**
-	 * Getter for the flag indicating whether the sender would like to know about custody status
+	 * Getter for the flag indicating whether the sender would like to know
+	 * about custody status
+	 * 
 	 * @return
 	 */
 	public boolean custody_rcpt() {
@@ -555,6 +569,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the forwarding receipt flag
+	 * 
 	 * @return
 	 */
 	public boolean forward_rcpt() {
@@ -563,6 +578,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the delivery receipt flag
+	 * 
 	 * @return
 	 */
 	public boolean delivery_rcpt() {
@@ -571,6 +587,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the deletion receipt flag
+	 * 
 	 * @return
 	 */
 	public boolean deletion_rcpt() {
@@ -579,6 +596,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the application acknowledge receipt flag
+	 * 
 	 * @return
 	 */
 	public boolean app_acked_rcpt() {
@@ -587,6 +605,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the Bundle expiration time in seconds
+	 * 
 	 * @return
 	 */
 	public int expiration() {
@@ -594,7 +613,9 @@ public class Bundle implements Serializable {
 	}
 
 	/**
-	 * Getter for the fragment offset of this Bundle. This is applicable when this Bundle is a fragment.
+	 * Getter for the fragment offset of this Bundle. This is applicable when
+	 * this Bundle is a fragment.
+	 * 
 	 * @return
 	 */
 	public int frag_offset() {
@@ -602,7 +623,9 @@ public class Bundle implements Serializable {
 	}
 
 	/**
-	 * If this Bundle is a fragment, this is a getter for the original length which this Bundle is fragmented from.
+	 * If this Bundle is a fragment, this is a getter for the original length
+	 * which this Bundle is fragmented from.
+	 * 
 	 * @return
 	 */
 	public int orig_length() {
@@ -610,7 +633,9 @@ public class Bundle implements Serializable {
 	}
 
 	/**
-	 * Getter for the flag indicating whether this Bundle is a local custody of this node.
+	 * Getter for the flag indicating whether this Bundle is a local custody of
+	 * this node.
+	 * 
 	 * @return
 	 */
 	public boolean local_custody() {
@@ -619,6 +644,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the owner of this Bundle
+	 * 
 	 * @return
 	 */
 	public final String owner() {
@@ -627,6 +653,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the flag indicating that fragment of this Bundle is coming.
+	 * 
 	 * @return
 	 */
 	public boolean fragmented_incoming() {
@@ -635,6 +662,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the payload of this Bundle
+	 * 
 	 * @return
 	 */
 	public final BundlePayload payload() {
@@ -643,6 +671,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the forwarding log of this Bundle
+	 * 
 	 * @return
 	 */
 	public final ForwardingLog fwdlog() {
@@ -650,7 +679,9 @@ public class Bundle implements Serializable {
 	}
 
 	/**
-	 * Getter for the Bundle Creation Timestamp of this Bundle according to the Protocol
+	 * Getter for the Bundle Creation Timestamp of this Bundle according to the
+	 * Protocol
+	 * 
 	 * @return
 	 */
 	public final BundleTimestamp creation_ts() {
@@ -659,16 +690,17 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the list of blocks received in this Bundle
+	 * 
 	 * @return
 	 */
 	public final BlockInfoVec recv_blocks() {
 		return recv_blocks_;
 	}
 
-
 	/**
-	 *  Use to retrieve local custody value publicly, for test case coding
-	 *  purpose only
+	 * Use to retrieve local custody value publicly, for test case coding
+	 * purpose only
+	 * 
 	 * @return
 	 */
 	public final boolean test_local_custody() {
@@ -677,6 +709,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the is_fragment flag
+	 * 
 	 * @param t
 	 */
 	public void set_is_fragment(boolean t) {
@@ -685,6 +718,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the is_admin flag
+	 * 
 	 * @param t
 	 */
 	public void set_is_admin(boolean t) {
@@ -693,6 +727,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the do_not_fragment
+	 * 
 	 * @param t
 	 */
 	public void set_do_not_fragment(boolean t) {
@@ -701,6 +736,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the custody requested flag
+	 * 
 	 * @param t
 	 */
 	public void set_custody_requested(boolean t) {
@@ -709,6 +745,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the singleton destination flag
+	 * 
 	 * @param t
 	 */
 	public void set_singleton_dest(boolean t) {
@@ -717,6 +754,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the priority value
+	 * 
 	 * @param p
 	 */
 	public void set_priority(priority_values_t p) {
@@ -725,6 +763,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for thr receive receipt flag
+	 * 
 	 * @param t
 	 */
 	public void set_receive_rcpt(boolean t) {
@@ -733,6 +772,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the custody receipt flag
+	 * 
 	 * @param t
 	 */
 	public void set_custody_rcpt(boolean t) {
@@ -741,6 +781,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the forwarding receipt flag
+	 * 
 	 * @param t
 	 */
 	public void set_forward_rcpt(boolean t) {
@@ -749,6 +790,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the delivery receipt flag
+	 * 
 	 * @param t
 	 */
 	public void set_delivery_rcpt(boolean t) {
@@ -757,6 +799,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the deletion receipt flag
+	 * 
 	 * @param t
 	 */
 	public void set_deletion_rcpt(boolean t) {
@@ -765,6 +808,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the application acknowledgment flag
+	 * 
 	 * @param t
 	 */
 	public void set_app_acked_rcpt(boolean t) {
@@ -773,6 +817,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the expiration time of this Bundle in seconds
+	 * 
 	 * @param e
 	 */
 	public void set_expiration(int e) {
@@ -781,6 +826,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the fragment offset
+	 * 
 	 * @param o
 	 */
 	public void set_frag_offset(int o) {
@@ -789,6 +835,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the total application unit length
+	 * 
 	 * @param l
 	 */
 	public void set_orig_length(int l) {
@@ -797,6 +844,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the local custdy flag
+	 * 
 	 * @param t
 	 */
 	public void set_local_custody(boolean t) {
@@ -805,6 +853,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the owner of this Bundle
+	 * 
 	 * @param s
 	 */
 	public void set_owner(final String s) {
@@ -813,6 +862,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the fragmented incoming flag
+	 * 
 	 * @param t
 	 */
 	public void set_fragmented_incoming(boolean t) {
@@ -821,6 +871,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the creation timestamp
+	 * 
 	 * @param ts
 	 */
 	public void set_creation_ts(final BundleTimestamp ts) {
@@ -829,23 +880,25 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Test function for setting the lock. This is used in test case only
+	 * 
 	 * @param lock
 	 */
 	public void test_set_lock(Lock lock) {
 		lock_ = lock;
 	}
 
-	
 	/**
 	 * Setter function for the BundleID
+	 * 
 	 * @param id
 	 */
 	public void set_bundleid(int id) {
 		bundleid_ = id;
 	}
-	
+
 	/**
 	 * Setter function for the BundlePayload
+	 * 
 	 * @param payload
 	 */
 	public void set_payload(BundlePayload payload) {
@@ -854,6 +907,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the expiration timer
+	 * 
 	 * @return
 	 */
 	public ExpirationTimer expiration_timer() {
@@ -862,6 +916,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Setter for the custody timer list
+	 * 
 	 * @return
 	 */
 	public CustodyTimerVec custody_timers() {
@@ -870,6 +925,7 @@ public class Bundle implements Serializable {
 
 	/**
 	 * Getter for the outgoing link block set
+	 * 
 	 * @return
 	 */
 	public LinkBlockSet xmit_link_block_set() {
@@ -877,25 +933,26 @@ public class Bundle implements Serializable {
 	}
 
 	/**
-	 * Setter for the outgoing link block set 
+	 * Setter for the outgoing link block set
+	 * 
 	 * @param xmit_blocks
 	 */
 	public void set_xmit_blocks(LinkBlockSet xmit_blocks) {
 		xmit_link_block_set_ = xmit_blocks;
 	}
 
-
 	/**
 	 * Setter for the list of blocks received
+	 * 
 	 * @param xmit_blocks
 	 */
 	public void set_recv_blocks(BlockInfoVec recv_blocks) {
 		recv_blocks_ = recv_blocks;
 	}
 
-
 	/**
 	 * Setter for the expiration timer
+	 * 
 	 * @param e
 	 */
 	public void set_expiration_timer(ExpirationTimer e) {
@@ -906,92 +963,93 @@ public class Bundle implements Serializable {
 	 * Source EndpointID
 	 */
 	private EndpointID source_;
-	
+
 	/**
 	 * Destination EndpointID
 	 */
-	private EndpointID dest_; 
-	
+	private EndpointID dest_;
+
 	/**
 	 * Current custodian EndpointID
 	 */
 	private EndpointID custodian_;
-	
+
 	/**
 	 * Reply-To EndpointID
 	 */
-	private EndpointID replyto_; 
-	
+	private EndpointID replyto_;
+
 	/**
 	 * Previous hop EndpointID
 	 */
-	private EndpointID prevhop_; 
-	
+	private EndpointID prevhop_;
+
 	/**
 	 * Flag indicating whether this bundle is a fragmented of another Bundle
 	 */
 	private boolean is_fragment_;
-	
+
 	/**
-	 * Flag indicating whether this bundle is an admin bundle ( ex. Custody Signal Bundle, or Status Report Bundle )
+	 * Flag indicating whether this bundle is an admin bundle ( ex. Custody
+	 * Signal Bundle, or Status Report Bundle )
 	 */
-	private boolean is_admin_; 
-	
+	private boolean is_admin_;
+
 	/**
 	 * Flag indicating whether this bundle shouldn't be fragmented
 	 */
-	private boolean do_not_fragment_; 
-	
+	private boolean do_not_fragment_;
+
 	/**
 	 * Flag indicating whether this bundle is requested for custody
 	 */
 	private boolean custody_requested_;
-	
+
 	/**
 	 * Flag indicating whether this bundle has singleton destination
 	 */
-	private boolean singleton_dest_; 
-	
+	private boolean singleton_dest_;
+
 	/**
 	 * Internal Bundle priority
 	 */
-	private priority_values_t priority_; 
-	
+	private priority_values_t priority_;
+
 	/**
 	 * Receive report flag
 	 */
 	private boolean receive_rcpt_;
-	
+
 	/**
 	 * Custody transfer report flag
 	 */
-	private boolean custody_rcpt_; 
-	
+	private boolean custody_rcpt_;
+
 	/**
 	 * Forwarding report flag
 	 */
-	private boolean forward_rcpt_; 
-	
+	private boolean forward_rcpt_;
+
 	/**
 	 * Delivery report flag
 	 */
-	private boolean delivery_rcpt_; 
-	
+	private boolean delivery_rcpt_;
+
 	/**
 	 * Deletion report flag
 	 */
-	private boolean deletion_rcpt_; 
-	
+	private boolean deletion_rcpt_;
+
 	/**
 	 * Application Acknowledgement Flag
 	 */
-	private boolean app_acked_rcpt_; 
-	
+	private boolean app_acked_rcpt_;
+
 	/**
 	 * Bundle Creation Timestamp
 	 */
-	private BundleTimestamp creation_ts_; 
-	
+	private BundleTimestamp creation_ts_;
+
 	/**
 	 * Bundle expiration time in seconds
 	 */
@@ -1001,70 +1059,66 @@ public class Bundle implements Serializable {
 	 * Fragmentation offset
 	 */
 	private int frag_offset_;
-	
+
 	/**
 	 * Original application unit length
 	 */
-	private int orig_length_; 
-	
+	private int orig_length_;
+
 	/**
 	 * Internal reference to this Bundle's payload
 	 */
-	private BundlePayload payload_; 
+	private BundlePayload payload_;
 
-	
 	/**
 	 * Bundle identifier
 	 */
-	private int bundleid_ = -1; 
-	
+	private int bundleid_ = -1;
+
 	/**
 	 * Lock for mutual exclusion of the Bundle from different threads
 	 */
-	private Lock lock_; 
-	
+	private Lock lock_;
 
 	/**
 	 * Flag indicating whether this Bundle have local custody in this daemon
 	 */
 	private boolean local_custody_;
-	
+
 	/**
-	 * String owner of this Bundle. 
+	 * String owner of this Bundle.
 	 */
 	private String owner_;
-	
+
 	/**
 	 * ForwardingLog of this Bundle
 	 */
-	private ForwardingLog fwdlog_; 
-	
+	private ForwardingLog fwdlog_;
+
 	/**
 	 * Expiration Timer of this Bundle
 	 */
 	private ExpirationTimer expiration_timer_;
-	
+
 	/**
 	 * Custody Timers list of this Bundle
 	 */
 	private CustodyTimerVec custody_timers_;
-	
+
 	/**
-	 * Flag indicating whether this Bundle has fragments incoming. 
+	 * Flag indicating whether this Bundle has fragments incoming.
 	 */
-	boolean fragmented_incoming_; 
+	boolean fragmented_incoming_;
 
 	/**
 	 * List of BlockInfo received
 	 */
-	private BlockInfoVec recv_blocks_; 
-
+	private BlockInfoVec recv_blocks_;
 
 	/**
 	 * Block vector for each link
 	 */
-	private LinkBlockSet xmit_link_block_set_;  
-
+	private LinkBlockSet xmit_link_block_set_;
 
 	/**
 	 * The set of BundleLists that contain the Bundle.
@@ -1072,10 +1126,10 @@ public class Bundle implements Serializable {
 	private Set<BundleList> mappings_;
 
 	/**
-	 * Flag indicating whether this Bundle is fully consumed or generated by the BlockProcessor
+	 * Flag indicating whether this Bundle is fully consumed or generated by the
+	 * BlockProcessor
 	 */
 	private boolean complete_;
-
 
 	/**
 	 * Initialization helper function.
@@ -1100,7 +1154,7 @@ public class Bundle implements Serializable {
 		complete_ = false;
 		lock_ = new Lock();
 		fwdlog_ = new ForwardingLog(lock_);
-		//in_datastore_ = false;
+		// in_datastore_ = false;
 		is_admin_ = false;
 		is_fragment_ = false;
 		local_custody_ = false;
@@ -1117,7 +1171,8 @@ public class Bundle implements Serializable {
 		source_ = new EndpointID();
 		xmit_link_block_set_ = new LinkBlockSet(lock_);
 
-		Logger.getInstance().debug(TAG, String.format("Bundle::init bundle id %d", id));
+		Logger.getInstance().debug(TAG,
+				String.format("Bundle::init bundle id %d", id));
 	}
 
 	/**
@@ -1128,7 +1183,8 @@ public class Bundle implements Serializable {
 	}
 
 	/**
-	 * @param complete the complete_ to set
+	 * @param complete
+	 *            the complete_ to set
 	 */
 	public void set_complete(boolean complete) {
 		complete_ = complete;

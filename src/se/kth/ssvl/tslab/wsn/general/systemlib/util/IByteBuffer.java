@@ -24,104 +24,122 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Interface for logical Byte Buffer used in Android DTN. 
- * This class functions are mainly inspired by the java.nio.ByteBuffer 
- * but have Serializable function in its subclass (SerializableByteBuffer).
- * This Serializable function is needed because Bundle have to be saved for persistent storage using Java Serializable function
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * Interface for logical Byte Buffer used in Android DTN. This class functions
+ * are mainly inspired by the java.nio.ByteBuffer but have Serializable function
+ * in its subclass (SerializableByteBuffer). This Serializable function is
+ * needed because Bundle have to be saved for persistent storage using Java
+ * Serializable function
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public interface IByteBuffer{
+public interface IByteBuffer {
 
 	/**
 	 * Retriving current position of the Byte Buffer
+	 * 
 	 * @return current position
 	 */
 	public int position();
 
 	/**
 	 * Setting the current position of the Byte Buffer
-	 * @param pos the position needed to be set
+	 * 
+	 * @param pos
+	 *            the position needed to be set
 	 */
 	public void position(int pos);
-	
+
 	/**
 	 * Change the position of this Buffer back to the beginning
 	 */
 	public void rewind();
-	
+
 	/**
-	 * Retrieve one byte from the current position of the buffer and move the position forward
+	 * Retrieve one byte from the current position of the buffer and move the
+	 * position forward
+	 * 
 	 * @return
 	 */
 	public byte get();
 
 	/**
-	 * Mark the current position and will be used together with reset to revert the position back
+	 * Mark the current position and will be used together with reset to revert
+	 * the position back
 	 */
 	public void mark();
-	
+
 	/**
 	 * Revert to the marked position before..
 	 */
 	public void reset();
-	
+
 	/**
 	 * Accessor for the internal capacity of this IByteBuffer
-	 * @return the internal capacity of this IByteBuffer 
+	 * 
+	 * @return the internal capacity of this IByteBuffer
 	 */
 	public int capacity();
-	
+
 	/**
 	 * Get the byte in particular index without moving the buffer position
-	 * @param index the input index
+	 * 
+	 * @param index
+	 *            the input index
 	 * @return the byte data at that index.
 	 */
 	public byte get(int index);
 
-	
 	/**
-	 * Read from the stream and store them as maximum size is the remaining of this IByteBuffer
+	 * Read from the stream and store them as maximum size is the remaining of
+	 * this IByteBuffer
 	 */
-	public void readFromStream(InputStream in) throws IOException ;
-	
-	
+	public void readFromStream(InputStream in) throws IOException;
+
 	/**
 	 * Write to the stream from the particular offset with specified length
 	 */
-	public void writeWithStream(OutputStream out, int offset, int length) throws IOException;
-	
+	public void writeWithStream(OutputStream out, int offset, int length)
+			throws IOException;
+
 	/**
-	 * Get data from this serializable byte_array from current position into the input byte_array
-	 * and moving position to the end after that
+	 * Get data from this serializable byte_array from current position into the
+	 * input byte_array and moving position to the end after that
 	 */
 	public void get(byte[] byte_array);
-	
+
 	/**
-	 * Put byte into the ByteBuffer in the current position and move the position forward 
+	 * Put byte into the ByteBuffer in the current position and move the
+	 * position forward
+	 * 
 	 * @param b
 	 */
 	public void put(byte b);
 
 	/**
 	 * Write the byte to index without changing the position
+	 * 
 	 * @param index
 	 * @param b
 	 */
 	public void put(int index, byte b);
-	
+
 	/**
-	 * Put data into this serializable ByteBuffer by getting data from this byte_array
+	 * Put data into this serializable ByteBuffer by getting data from this
+	 * byte_array
 	 */
 	public void put(byte[] byte_array);
 
 	/**
-	 * Accessor for the remaining number 
+	 * Accessor for the remaining number
+	 * 
 	 * @return
 	 */
 	public int remaining();
-	
+
 	/**
-	 * Return the IByteBuffer asReadOnlyBuffer. The mark and position are separated.
+	 * Return the IByteBuffer asReadOnlyBuffer. The mark and position are
+	 * separated.
+	 * 
 	 * @return
 	 */
 	public IByteBuffer asReadOnlyBuffer();
@@ -131,36 +149,37 @@ public interface IByteBuffer{
 	 */
 	public int getInt(int i);
 
-	
 	/**
-	 * Get short value from the ByteBuffer without changing position 
+	 * Get short value from the ByteBuffer without changing position
 	 */
 	public short getShort();
 
 	/**
 	 * Put int value into the ByteBuffer and move position by 4
-	 * @param value the int value needed to be put
+	 * 
+	 * @param value
+	 *            the int value needed to be put
 	 */
 	public void putInt(int value);
 
 	/**
 	 * Put short value into the ByteBuffer and move position by 2
-	 * @param value the short value needed to be put
+	 * 
+	 * @param value
+	 *            the short value needed to be put
 	 */
 	public void putShort(short value);
 
-	
 	/**
 	 * Get int with adding position + 4
 	 */
 	public int getInt();
 
 	/**
-	 * Retrieve the byte array representation of this IByteBuffer. 
+	 * Retrieve the byte array representation of this IByteBuffer.
+	 * 
 	 * @return
 	 */
 	public byte[] array();
 
-	
-	
 }

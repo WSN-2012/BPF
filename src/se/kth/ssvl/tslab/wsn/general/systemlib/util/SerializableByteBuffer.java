@@ -26,7 +26,8 @@ import java.io.Serializable;
 
 /**
  * A serializabe implementation of IByteBuffer
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class SerializableByteBuffer implements Serializable, IByteBuffer {
 
@@ -34,22 +35,22 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 	 * Serial version UID to support Java Serializable
 	 */
 	private static final long serialVersionUID = 342019056131683430L;
-	
+
 	/**
 	 * Internal variable to hold the ByteBuffer capacity
 	 */
 	protected int capacity_;
-	
+
 	/**
-	 * Internal variable to hold the ByteBuffer position 
+	 * Internal variable to hold the ByteBuffer position
 	 */
 	protected int position_;
-	
+
 	/**
 	 * Internal variable to hold the mark
 	 */
 	protected int mark_ = 0;
-	
+
 	/**
 	 * Internal variable for keeping data
 	 */
@@ -57,19 +58,19 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 
 	/**
 	 * Constructor with specified capacity
+	 * 
 	 * @param capacity
 	 */
 	public SerializableByteBuffer(int capacity) {
-		backing_array_ = new byte[capacity]; 
+		backing_array_ = new byte[capacity];
 		capacity_ = capacity;
 		position_ = 0;
-		
-		
-		
+
 	}
 
 	/**
 	 * Constructor by providing another SerializableByteBuffer
+	 * 
 	 * @param src
 	 */
 	private SerializableByteBuffer(SerializableByteBuffer src) {
@@ -80,22 +81,18 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 		backing_array_ = src.backing_array_.clone();
 	}
 
-	
 	public int position() {
 		return position_;
 	}
 
-	
 	public void position(int pos) {
 		position_ = pos;
 	}
 
-	
 	public void rewind() {
 		position_ = 0;
 	}
 
-	
 	public byte get() {
 
 		byte result = backing_array_[position_];
@@ -103,12 +100,10 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 		return result;
 	}
 
-	
 	public byte get(int index) {
 		return backing_array_[index];
 	}
 
-	
 	public void get(byte[] byte_array) {
 		for (int i = 0; i < byte_array.length; i++) {
 			byte_array[i] = backing_array_[position_++];
@@ -116,13 +111,11 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 
 	}
 
-	
 	public void put(byte b) {
 		backing_array_[position_] = b;
 		position_++;
 	}
 
-	
 	public void put(byte[] byte_array) {
 		for (int i = 0; i < byte_array.length; i++) {
 			backing_array_[position_++] = byte_array[i];
@@ -130,24 +123,20 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 
 	}
 
-	
 	public byte[] array() {
 		return backing_array_.clone();
 	}
 
-	
 	public IByteBuffer asReadOnlyBuffer() {
 
 		return new SerializableByteBuffer(this);
 	}
 
-	
 	public int capacity() {
 
 		return capacity_;
 	}
 
-	
 	public int getInt(int i) {
 		int old_position = position_;
 		position_ = i;
@@ -156,35 +145,28 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 		return result;
 	}
 
-	
 	public int getInt() {
 		byte[] byte_array = new byte[4];
 		get(byte_array);
 		return byte_array_to_int(byte_array);
 	}
 
-	
 	public short getShort() {
 		byte[] byte_array = new byte[2];
 		get(byte_array);
 		return byte_array_to_short(byte_array);
 	}
 
-	
 	public void mark() {
 		mark_ = position_;
 
 	}
 
-	
 	public void put(int index, byte b) {
 		backing_array_[index] = b;
 
 	}
 
-	
-
-	
 	public void putInt(int value) {
 		byte[] byte_array = int_to_byte_array(value);
 		put(byte_array);
@@ -193,6 +175,7 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 
 	/**
 	 * Routine to convert int to byte array
+	 * 
 	 * @param value
 	 * @return
 	 */
@@ -203,6 +186,7 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 
 	/**
 	 * Routine to convert byte array to int
+	 * 
 	 * @param b
 	 * @return
 	 */
@@ -213,6 +197,7 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 
 	/**
 	 * Routine to convert short to byte array
+	 * 
 	 * @param value
 	 * @return
 	 */
@@ -222,50 +207,43 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 
 	/**
 	 * Routine to convert byte array to short
+	 * 
 	 * @param b
 	 * @return
 	 */
 	private static final short byte_array_to_short(byte[] b) {
-		return (short) (
-				           ( b[0] << 8) 
-				           +
-				            ((b[1] & 0xFF))
-				            
+		return (short) ((b[0] << 8) + ((b[1] & 0xFF))
 
 		);
 
 	}
 
-	
 	public void putShort(short value) {
 		byte[] byte_array = short_to_byte_array(value);
 		put(byte_array);
 
 	}
 
-	
 	public int remaining() {
 		return capacity_ - position_;
 	}
 
-	
 	public void reset() {
 		position_ = mark_;
 
 	}
 
-	
-	public void writeWithStream(OutputStream out, int offset, int length) throws IOException {
+	public void writeWithStream(OutputStream out, int offset, int length)
+			throws IOException {
 
 		out.write(backing_array_, offset, length);
-		
+
 	}
 
-	
 	public void readFromStream(InputStream in) throws IOException {
 		int read_count = in.read(backing_array_, position_, remaining());
 		position_ += read_count;
-		
+
 	}
 
 }

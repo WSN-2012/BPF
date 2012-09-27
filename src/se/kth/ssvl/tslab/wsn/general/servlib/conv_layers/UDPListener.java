@@ -99,7 +99,8 @@ public class UDPListener extends CLInfo implements Runnable {
 		try {
 			server_socket_.close();
 		} catch (Exception e) {
-			Logger.getInstance().debug(TAG, "Exception stopping server_socket: " + e.getMessage());
+			Logger.getInstance().debug(TAG,
+					"Exception stopping server_socket: " + e.getMessage());
 		}
 		server_socket_ = null;
 	}
@@ -109,7 +110,6 @@ public class UDPListener extends CLInfo implements Runnable {
 
 	private boolean listening_ = false; // / Listening flag
 
-	
 	/**
 	 * Main loop
 	 */
@@ -118,7 +118,7 @@ public class UDPListener extends CLInfo implements Runnable {
 		while (listening_) {
 			try {
 				Logger.getInstance().debug(TAG, "start accepting connection");
-//				socket = server_socket_.accept();
+				// socket = server_socket_.accept();
 			} catch (Exception e) {
 				Logger.getInstance().debug(TAG, "IOException in accept");
 				continue;

@@ -22,7 +22,9 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 
 /**
- * Event class to remove Bundle from the system. This includes removing from the storage.
+ * Event class to remove Bundle from the system. This includes removing from the
+ * storage.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleFreeEvent extends BundleEvent {
@@ -35,12 +37,13 @@ public class BundleFreeEvent extends BundleEvent {
 	}
 
 	/**
-	 *  The Bundle to be freed
+	 * The Bundle to be freed
 	 */
 	private Bundle bundle_;
 
 	/**
 	 * Accessor for the Bundle to be freed
+	 * 
 	 * @return the bundle_
 	 */
 	public Bundle bundle() {
@@ -49,7 +52,9 @@ public class BundleFreeEvent extends BundleEvent {
 
 	/**
 	 * Setter for the Bundle to be freed
-	 * @param bundle the bundle_ to set
+	 * 
+	 * @param bundle
+	 *            the bundle_ to set
 	 */
 	public void set_bundle(Bundle bundle) {
 		bundle_ = bundle;

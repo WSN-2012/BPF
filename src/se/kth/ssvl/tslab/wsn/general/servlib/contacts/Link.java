@@ -28,8 +28,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import se.kth.ssvl.tslab.wsn.general.DTNService;
-
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleList;
@@ -444,7 +442,8 @@ public class Link implements Serializable {
 		lock_.lock();
 		try {
 			if (isdeleted()) {
-				Logger.getInstance().debug(TAG, "cannot reconfigure deleted link" + name());
+				Logger.getInstance().debug(TAG,
+						"cannot reconfigure deleted link" + name());
 				return false;
 			}
 
@@ -462,8 +461,10 @@ public class Link implements Serializable {
 		lock_.lock();
 		try {
 			if (isdeleted()) {
-				Logger.getInstance().debug(TAG, "reconfigure_link: cannot reconfigure deleted link"
-						+ name());
+				Logger.getInstance().debug(
+						TAG,
+						"reconfigure_link: cannot reconfigure deleted link"
+								+ name());
 				return;
 			}
 
@@ -585,24 +586,30 @@ public class Link implements Serializable {
 			break; // any old state is valid
 
 		case AVAILABLE:
-			assert (state_ == state_t.OPEN || state_ == state_t.UNAVAILABLE) : Log
-					.d(TAG, "The state of the Link can not be changed to"
-							+ state_to_str(new_state));
+			assert (state_ == state_t.OPEN || state_ == state_t.UNAVAILABLE) : Logger
+					.getInstance().debug(
+							TAG,
+							"The state of the Link can not be changed to"
+									+ state_to_str(new_state));
 			break;
 
 		case OPENING:
-			assert (state_ == state_t.AVAILABLE || state_ == state_t.UNAVAILABLE) : Log
-					.d(TAG, "The state of the Link can not be changed to"
-							+ state_to_str(new_state));
+			assert (state_ == state_t.AVAILABLE || state_ == state_t.UNAVAILABLE) : Logger
+					.getInstance().debug(
+							TAG,
+							"The state of the Link can not be changed to"
+									+ state_to_str(new_state));
 			break;
 
 		case OPEN:
 			/*
 			 * for opportunisticlinks
 			 */
-			assert (state_ == state_t.OPENING || state_ == state_t.UNAVAILABLE) : Log
-					.d(TAG, "The state of the Link can not be changed to"
-							+ state_to_str(new_state));
+			assert (state_ == state_t.OPENING || state_ == state_t.UNAVAILABLE) : Logger
+					.getInstance().debug(
+							TAG,
+							"The state of the Link can not be changed to"
+									+ state_to_str(new_state));
 			break;
 
 		default:
@@ -804,8 +811,7 @@ public class Link implements Serializable {
 
 			if (queue_.contains(bundle)) {
 				String text = String
-						.format(
-								"add_to_queue: bundle id %d already in queue for link %s",
+						.format("add_to_queue: bundle id %d already in queue for link %s",
 								bundle.bundleid(), name_str());
 				Logger.getInstance().error(TAG, text);
 				return false;
@@ -910,8 +916,7 @@ public class Link implements Serializable {
 
 			} else {
 				String text = String
-						.format(
-								"del_from_inflight: %s bytes_inflight %s < total_len %s",
+						.format("del_from_inflight: %s bytes_inflight %s < total_len %s",
 								bundle, bytes_inflight_, total_len);
 				Logger.getInstance().error(TAG, text);
 			}
@@ -934,8 +939,8 @@ public class Link implements Serializable {
 	public int format(StringBuffer buf, int sz) {
 
 		String text = String.format("%s [%s %s %s %s state=%s]", name(),
-				nexthop(), remote_eid(), link_type_to_str(type()), clayer_
-						.name(), state_to_str(state()));
+				nexthop(), remote_eid(), link_type_to_str(type()),
+				clayer_.name(), state_to_str(state()));
 		buf.append(text);
 		return text.length();
 
@@ -951,15 +956,15 @@ public class Link implements Serializable {
 		try {
 
 			if (isdeleted()) {
-				Logger.getInstance().debug(TAG, "Link.dump: cannot dump deleted link %s" + name());
+				Logger.getInstance().debug(TAG,
+						"Link.dump: cannot dump deleted link %s" + name());
 				return;
 			}
 
 			String text = String
-					.format(
-							"Link %s:\n clayer: %s\n type: %s\n state: %s\n nexthop: %s\n remote eid: "
-									+ "%s\n mtu: %s\n min_retry_interval: %s\n max_retry_interval: %s\n idle_close_time: %s\n "
-									+ "potential_downtime: %s\n prevhop_hdr: %s\n",
+					.format("Link %s:\n clayer: %s\n type: %s\n state: %s\n nexthop: %s\n remote eid: "
+							+ "%s\n mtu: %s\n min_retry_interval: %s\n max_retry_interval: %s\n idle_close_time: %s\n "
+							+ "potential_downtime: %s\n prevhop_hdr: %s\n",
 							name(), clayer_.name(), link_type_to_str(type()),
 							state_to_str(state()), nexthop(), remote_eid(),
 							params_.mtu_, params_.min_retry_interval_,
@@ -1002,8 +1007,9 @@ public class Link implements Serializable {
 		 */
 		Params() {
 
-			if (DTNService.context().getResources().getString(
-					R.string.DTNEnableProactiveFragmentation).equals("true")) {
+			if (DTNService.context().getResources()
+					.getString(R.string.DTNEnableProactiveFragmentation)
+					.equals("true")) {
 				mtu_ = Integer.parseInt(DTNService.context().getResources()
 						.getString(R.string.DTNFragmentationMTU));
 			} else {
@@ -1225,8 +1231,10 @@ public class Link implements Serializable {
 		lock_.lock();
 
 		if (isdeleted()) {
-			Logger.getInstance().debug(TAG, "Link.dump_stats: cannot dump stats for deleted link %s"
-					+ name());
+			Logger.getInstance().debug(
+					TAG,
+					"Link.dump_stats: cannot dump stats for deleted link %s"
+							+ name());
 			return;
 		}
 
@@ -1241,14 +1249,12 @@ public class Link implements Serializable {
 		}
 
 		String text = String
-				.format(
-						"%s contact_attempts -- %s contacts -- %s bundles_transmitted -- %s bytes_transmitted -- "
-								+ "%s bundles_queued -- %s bytes_queued -- %s bundles_inflight -- %s bytes_inflight -- "
-								+ "%s bundles_cancelled -- %s uptime -- "
-								+ "%s throughput_bps", stats_
-								.contact_attempts(), stats_.contacts(), stats_
-								.bundles_transmitted(), stats_
-								.bytes_transmitted(), bundles_queued_,
+				.format("%s contact_attempts -- %s contacts -- %s bundles_transmitted -- %s bytes_transmitted -- "
+						+ "%s bundles_queued -- %s bytes_queued -- %s bundles_inflight -- %s bytes_inflight -- "
+						+ "%s bundles_cancelled -- %s uptime -- "
+						+ "%s throughput_bps", stats_.contact_attempts(),
+						stats_.contacts(), stats_.bundles_transmitted(),
+						stats_.bytes_transmitted(), bundles_queued_,
 						bytes_queued_, bundles_inflight_, bytes_inflight_,
 						stats_.bundles_cancelled(), uptime, throughput);
 

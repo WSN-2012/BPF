@@ -19,11 +19,11 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.routing;
 
-
 /**
- * This is a non-abstract version of TableBasedRouter. 
+ * This is a non-abstract version of TableBasedRouter.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class StaticBundleRouter  extends TableBasedRouter{
-	
+public class StaticBundleRouter extends TableBasedRouter {
+
 }

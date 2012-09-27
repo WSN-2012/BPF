@@ -22,9 +22,9 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol;
 
-
 /**
  * Bundle Event for deleting a Bundle
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleDeleteRequest extends BundleEvent {
@@ -40,6 +40,7 @@ public class BundleDeleteRequest extends BundleEvent {
 
 	/**
 	 * Constructor with DTNBundle specified
+	 * 
 	 * @param bundle
 	 * @param reason
 	 */
@@ -53,19 +54,19 @@ public class BundleDeleteRequest extends BundleEvent {
 		daemon_only_ = true;
 	}
 
-
 	/**
-	 *  Bundle to be deleted
+	 * Bundle to be deleted
 	 */
 	private Bundle bundle_;
 
 	/**
-	 *  The reason code
+	 * The reason code
 	 */
 	private BundleProtocol.status_report_reason_t reason_;
 
 	/**
 	 * Accessor for the Bundle to be deleted
+	 * 
 	 * @return the bundle_
 	 */
 	public Bundle bundle() {
@@ -74,7 +75,9 @@ public class BundleDeleteRequest extends BundleEvent {
 
 	/**
 	 * Setter for the Bundle to be deleted
-	 * @param bundle the bundle_ to set
+	 * 
+	 * @param bundle
+	 *            the bundle_ to set
 	 */
 	public void set_bundle(Bundle bundle) {
 		bundle_ = bundle;
@@ -82,6 +85,7 @@ public class BundleDeleteRequest extends BundleEvent {
 
 	/**
 	 * Accessor for the reason code
+	 * 
 	 * @return the reason_
 	 */
 	public BundleProtocol.status_report_reason_t reason() {
@@ -90,7 +94,9 @@ public class BundleDeleteRequest extends BundleEvent {
 
 	/**
 	 * Setter for the reason code
-	 * @param reason the reason_ to set
+	 * 
+	 * @param reason
+	 *            the reason_ to set
 	 */
 	public void set_reason(BundleProtocol.status_report_reason_t reason) {
 		reason_ = reason;

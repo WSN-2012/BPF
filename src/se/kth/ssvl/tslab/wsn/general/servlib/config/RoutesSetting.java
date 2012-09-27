@@ -25,146 +25,168 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
 /**
  * This class represents RouteSetting in the configuration file
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class RoutesSetting {
 	/**
 	 * ROuter type for this setting
 	 */
 	private router_type_t router_type_;
-	
+
 	/**
 	 * The local EID of this setting
 	 */
 	private String local_eid;
-	
+
 	/**
 	 * Queuing Policy
 	 */
 	private String queuing_policy;
-	
+
 	/**
 	 * @return the queuing_policy
 	 */
 	public String getQueuing_policy() {
 		return queuing_policy;
 	}
+
 	/**
-	 * @param queuing_policy the queuing_policy to set
+	 * @param queuing_policy
+	 *            the queuing_policy to set
 	 */
 	public void setQueuing_policy(String queuing_policy) {
-		Logger.getInstance().info("queuing", "-"+queuing_policy+"-");
+		Logger.getInstance().info("queuing", "-" + queuing_policy + "-");
 		this.queuing_policy = queuing_policy;
 	}
 
 	/**
 	 * Class to represents route entry inside
 	 */
-	public static class RouteEntry
-	{
+	public static class RouteEntry {
 		/**
 		 * Empty constructor
 		 */
-		public RouteEntry()
-		{
-			
+		public RouteEntry() {
+
 		}
-		
+
 		/**
 		 * Constructor with dest and link_id setting
 		 */
-		public RouteEntry(String dest, String link_id)
-		{
+		public RouteEntry(String dest, String link_id) {
 			dest_ = dest;
 			link_id_ = link_id;
 		}
+
 		private String dest_;
 		private String link_id_;
+
 		/**
 		 * Accessor for the destination of this route entry
+		 * 
 		 * @return the dest
 		 */
 		public String dest() {
 			return dest_;
 		}
+
 		/**
 		 * Setter for the destination this route entry
-		 * @param dest the dest to set
+		 * 
+		 * @param dest
+		 *            the dest to set
 		 */
 		public void set_dest(String dest) {
 			this.dest_ = dest;
 		}
+
 		/**
 		 * Accessor for the link ID of this route entry
+		 * 
 		 * @return the link_id
 		 */
 		public String link_id() {
 			return link_id_;
 		}
+
 		/**
 		 * Setter for the link ID of this route entry
-		 * @param linkId the link_id to set
+		 * 
+		 * @param linkId
+		 *            the link_id to set
 		 */
 		public void set_link_id(String link_id) {
 			link_id_ = link_id;
 		}
-		
+
 	}
+
 	/**
 	 * Constructor of this route setting
 	 */
-	public RoutesSetting()
-	{
+	public RoutesSetting() {
 		route_entries_ = new List<RouteEntry>();
 	}
+
 	/**
 	 * Accessor for the router type of this route setting
+	 * 
 	 * @return the router_type_
 	 */
 	public router_type_t router_type() {
 		return router_type_;
 	}
+
 	/**
 	 * Setter for the router type of this route setting
-	 * @param routerType the router_type_ to set
+	 * 
+	 * @param routerType
+	 *            the router_type_ to set
 	 */
 	public void set_router_type(router_type_t router_type) {
 		router_type_ = router_type;
 	}
-	
-	private List<RouteEntry> route_entries_;
 
+	private List<RouteEntry> route_entries_;
 
 	/**
 	 * Accessor for the route entries inside this route setting
+	 * 
 	 * @return the route_entries_
 	 */
 	public List<RouteEntry> route_entries() {
 		return route_entries_;
 	}
 
-
 	/**
 	 * Setter for the route entries inside this route setting
-	 * @param routeEntries the route_entries_ to set
+	 * 
+	 * @param routeEntries
+	 *            the route_entries_ to set
 	 */
 	public void set_route_entries(List<RouteEntry> route_entries) {
 		route_entries_ = route_entries;
 	}
+
 	/**
-	 * Accessor for Local Endpoint ID of this route setting 
+	 * Accessor for Local Endpoint ID of this route setting
+	 * 
 	 * @return the local_eid
 	 */
 	public String local_eid() {
 		return local_eid;
 	}
+
 	/**
-	 * Setter for Local Endpoint ID of this route setting 
-	 * @param localEid the local_eid to set
+	 * Setter for Local Endpoint ID of this route setting
+	 * 
+	 * @param localEid
+	 *            the local_eid to set
 	 */
 	public void set_local_eid(String localEid) {
 		local_eid = localEid;
 	}
-	
+
 	public ProphetSetting prophet = new ProphetSetting();
 }

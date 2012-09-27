@@ -21,6 +21,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.reg;
 
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
+
 /**
  * This class extends List class to make a RegistrationList
  * 

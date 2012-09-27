@@ -23,11 +23,13 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeVector;
 
 /**
  * Set Link Default Event
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class SetLinkDefaultsRequest  extends BundleEvent {
+public class SetLinkDefaultsRequest extends BundleEvent {
 	/**
 	 * main constructor
+	 * 
 	 * @param parameters
 	 */
 	public SetLinkDefaultsRequest(AttributeVector parameters) {
@@ -44,6 +46,7 @@ public class SetLinkDefaultsRequest  extends BundleEvent {
 
 	/**
 	 * Getter for the Set of key, value pairs
+	 * 
 	 * @return the parameters_
 	 */
 	public AttributeVector parameters() {
@@ -52,7 +55,9 @@ public class SetLinkDefaultsRequest  extends BundleEvent {
 
 	/**
 	 * Setter for the Set of key, value pairs
-	 * @param parameters the parameters_ to set
+	 * 
+	 * @param parameters
+	 *            the parameters_ to set
 	 */
 	public void set_parameters(AttributeVector parameters) {
 		parameters_ = parameters;

@@ -18,11 +18,10 @@ public class RIBDictionary {
 				rIBDEntryCount, reserved);
 
 		Iterator<Short> sid = entries.keySet().iterator();
-		while(sid.hasNext()) {
+		while (sid.hasNext()) {
 			st += entries.get(sid.next()).toString();
 		}
 
 		return st;
 	}
 }
-

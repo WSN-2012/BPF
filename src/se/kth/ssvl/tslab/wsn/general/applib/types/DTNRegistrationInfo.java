@@ -19,111 +19,126 @@
  */
 package se.kth.ssvl.tslab.wsn.general.applib.types;
 
-
 /**
  * Registration state of the DTN API Bundle
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class DTNRegistrationInfo  {
+public class DTNRegistrationInfo {
 
 	/**
 	 * EndpointID particular to this Registration State
 	 */
 	private DTNEndpointID endpoint_;
-	
+
 	/**
 	 * Registration flags
 	 */
 	private int flags_ = 0;
-	
+
 	/**
 	 * Expiration time in seconds
 	 */
 	private int expiration_ = 0;
-	
+
 	/**
 	 * Whether the status of the Registration begins with passive
 	 */
 	private boolean init_passive_ = false;
-	
+
 	/**
 	 * Main Constructor
+	 * 
 	 * @param endpoint
 	 * @param flags
 	 * @param expiration
 	 * @param init_passive
 	 */
-	public DTNRegistrationInfo(DTNEndpointID endpoint, int flags , int expiration, boolean init_passive)
-	{
+	public DTNRegistrationInfo(DTNEndpointID endpoint, int flags,
+			int expiration, boolean init_passive) {
 		endpoint_ = new DTNEndpointID(endpoint.uri());
-		flags_    = flags;
+		flags_ = flags;
 		expiration_ = expiration;
 		init_passive_ = init_passive;
-		
+
 	}
-	
-	
+
 	/**
 	 * Getter function for EndpointID particular to this Registration State
+	 * 
 	 * @return the endpoint_
 	 */
 	public DTNEndpointID endpoint() {
 		return endpoint_;
 	}
+
 	/**
 	 * Setter function for EndpointID particular to this Registration State
-	 * @param endpoint the endpoint_ to set
+	 * 
+	 * @param endpoint
+	 *            the endpoint_ to set
 	 */
 	public void set_endpoint(DTNEndpointID endpoint) {
 		endpoint_ = endpoint;
 	}
-	
+
 	/**
 	 * Getter function for Registration flags
+	 * 
 	 * @return the flags_
 	 */
 	public int flags() {
 		return flags_;
 	}
+
 	/**
 	 * Setter function for Registration flags
-	 * @param flags the flags_ to set
+	 * 
+	 * @param flags
+	 *            the flags_ to set
 	 */
 	public void set_flags(int flags) {
 		flags_ = flags;
 	}
+
 	/**
 	 * Getter function for expiration time of this Registration in seconds
+	 * 
 	 * @return the expiration_
 	 */
 	public int expiration() {
 		return expiration_;
 	}
+
 	/**
 	 * Setter function for expiration time of this Registration in seconds
-	 * @param expiration the expiration_ to set
+	 * 
+	 * @param expiration
+	 *            the expiration_ to set
 	 */
 	public void set_expiration(int expiration) {
 		expiration_ = expiration;
 	}
+
 	/**
-	 * Getter function for whether the status of the Registration begins with passive
+	 * Getter function for whether the status of the Registration begins with
+	 * passive
+	 * 
 	 * @return the init_passive_
 	 */
 	public boolean init_passive() {
 		return init_passive_;
 	}
+
 	/**
-	 * Setter function for whether the status of the Registration begins with passive
-	 * @param initPassive the init_passive_ to set
+	 * Setter function for whether the status of the Registration begins with
+	 * passive
+	 * 
+	 * @param initPassive
+	 *            the init_passive_ to set
 	 */
 	public void set_init_passive(boolean init_passive) {
 		init_passive_ = init_passive;
 	}
 
-
-	
-	
-	
-	
 }

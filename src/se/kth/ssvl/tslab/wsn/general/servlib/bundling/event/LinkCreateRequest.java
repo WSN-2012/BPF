@@ -23,14 +23,15 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeVector;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 
-
 /**
  * Event class for creating and opening a link
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class LinkCreateRequest  extends BundleEvent {
+public class LinkCreateRequest extends BundleEvent {
 	/**
 	 * main constructor
+	 * 
 	 * @param name
 	 * @param link_type
 	 * @param endpoint
@@ -43,41 +44,42 @@ public class LinkCreateRequest  extends BundleEvent {
 
 	{
 		super(event_type_t.LINK_CREATE);
-		name_        = name;
-		link_type_   = link_type;
-		endpoint_    = endpoint;
-		cla_         = cla;
-		parameters_  = parameters;
+		name_ = name;
+		link_type_ = link_type;
+		endpoint_ = endpoint;
+		cla_ = cla;
+		parameters_ = parameters;
 		daemon_only_ = true;
 	}
 
 	/**
-	 *  Identifier for the link
+	 * Identifier for the link
 	 */
 	private String name_;
 
 	/**
-	 *  Next hop EID
+	 * Next hop EID
 	 */
 	private String endpoint_;
 
 	/**
-	 *  Type of link
+	 * Type of link
 	 */
 	private Link.link_type_t link_type_;
 
 	/**
-	 *  CL to use
+	 * CL to use
 	 */
 	private ConvergenceLayer cla_;
 
 	/**
-	 *  An optional set of key, value pairs
+	 * An optional set of key, value pairs
 	 */
 	private AttributeVector parameters_;
 
 	/**
 	 * Getter for the Identifier for the link
+	 * 
 	 * @return the name_
 	 */
 	public String name() {
@@ -86,7 +88,9 @@ public class LinkCreateRequest  extends BundleEvent {
 
 	/**
 	 * Setter for the Identifier for the link
-	 * @param name the name_ to set
+	 * 
+	 * @param name
+	 *            the name_ to set
 	 */
 	public void set_name(String name) {
 		name_ = name;
@@ -94,6 +98,7 @@ public class LinkCreateRequest  extends BundleEvent {
 
 	/**
 	 * Getter for the Next hop EID
+	 * 
 	 * @return the endpoint_
 	 */
 	public String endpoint() {
@@ -102,7 +107,9 @@ public class LinkCreateRequest  extends BundleEvent {
 
 	/**
 	 * Setter for the Next hop EID
-	 * @param endpoint the endpoint_ to set
+	 * 
+	 * @param endpoint
+	 *            the endpoint_ to set
 	 */
 	public void set_endpoint(String endpoint) {
 		endpoint_ = endpoint;
@@ -110,6 +117,7 @@ public class LinkCreateRequest  extends BundleEvent {
 
 	/**
 	 * Getter for the type of link
+	 * 
 	 * @return the link_type_
 	 */
 	public Link.link_type_t link_type() {
@@ -118,7 +126,9 @@ public class LinkCreateRequest  extends BundleEvent {
 
 	/**
 	 * Setter for the type of link
-	 * @param linkType the link_type_ to set
+	 * 
+	 * @param linkType
+	 *            the link_type_ to set
 	 */
 	public void set_link_type(Link.link_type_t link_type) {
 		link_type_ = link_type;
@@ -126,6 +136,7 @@ public class LinkCreateRequest  extends BundleEvent {
 
 	/**
 	 * Getter for the CL to use
+	 * 
 	 * @return the cla_
 	 */
 	public ConvergenceLayer cla() {
@@ -134,7 +145,9 @@ public class LinkCreateRequest  extends BundleEvent {
 
 	/**
 	 * Setter for the CL to use
-	 * @param cla the cla_ to set
+	 * 
+	 * @param cla
+	 *            the cla_ to set
 	 */
 	public void set_cla(ConvergenceLayer cla) {
 		cla_ = cla;
@@ -142,6 +155,7 @@ public class LinkCreateRequest  extends BundleEvent {
 
 	/**
 	 * Getter for the optional set of key, value pairs
+	 * 
 	 * @return the parameters_
 	 */
 	public AttributeVector parameters() {
@@ -150,7 +164,9 @@ public class LinkCreateRequest  extends BundleEvent {
 
 	/**
 	 * Setter for the optional set of key, value pairs
-	 * @param parameters the parameters_ to set
+	 * 
+	 * @param parameters
+	 *            the parameters_ to set
 	 */
 	public void set_parameters(AttributeVector parameters) {
 		parameters_ = parameters;

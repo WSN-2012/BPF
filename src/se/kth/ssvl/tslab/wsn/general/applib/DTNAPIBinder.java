@@ -133,8 +133,9 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 
 		EndpointID eid = new EndpointID(BundleDaemon.getInstance().local_eid());
 		if (eid.append_service_tag(service) == false) {
-			Logger.getInstance().error(TAG,
-					"DTNAPIBinder:dtn_build_local_eid error appending service tag");
+			Logger.getInstance()
+(TAG,
+							"DTNAPIBinder:dtn_build_local_eid error appending service tag");
 			return dtn_api_status_report_code.DTN_EINTERNAL;
 		}
 
@@ -536,7 +537,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 			switch (info) {
 			case UNKNOWN:
 				Logger.getInstance()
-						.error(TAG,
+	(TAG,
 								String.format(
 										"bundle destination %s in unknown scheme and "
 												+ "app did not assert singleton/multipoint",
@@ -590,10 +591,11 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 		} else if (b.source().subsume(BundleDaemon.getInstance().local_eid())) {
 			// Allow source EIDs that subsume the local eid
 		} else {
-			Logger.getInstance().error(TAG,
-					String.format(
-							"this node is not a member of the bundle's source EID (%s)",
-							b.source().toString()));
+			Logger.getInstance()
+(TAG,
+							String.format(
+									"this node is not a member of the bundle's source EID (%s)",
+									b.source().toString()));
 			return dtn_api_status_report_code.DTN_EINVAL;
 		}
 
@@ -690,8 +692,10 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 						reason), notifier_, -1, true);
 
 		if (!result[0]) {
-			Logger.getInstance().info(TAG, String.format("DTN_SEND bundle not accepted: reason %s",
-					reason[0].toString()));
+			Logger.getInstance().info(
+					TAG,
+					String.format("DTN_SEND bundle not accepted: reason %s",
+							reason[0].toString()));
 
 			switch (reason[0]) {
 			case REASON_DEPLETED_STORAGE:
@@ -768,11 +772,13 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 		dtn_bundle_id.set_frag_offset(0);
 		dtn_bundle_id.set_orig_length(0);
 
-		Logger.getInstance().info(TAG,
-				String.format(
-						"DTN_SEND bundle %d, with payload type %s, payload length %d bytes",
-						b.bundleid(), b.payload().location().toString(), b
-								.payload().length()));
+		Logger.getInstance()
+				.info(TAG,
+						String.format(
+								"DTN_SEND bundle %d, with payload type %s, payload length %d bytes",
+								b.bundleid(),
+								b.payload().location().toString(), b.payload()
+										.length()));
 
 		// deliver the bundle
 		BundleDaemon.getInstance().post(
@@ -888,7 +894,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 			switch (info) {
 			case UNKNOWN:
 				Logger.getInstance()
-						.error(TAG,
+	(TAG,
 								String.format(
 										"bundle destination %s in unknown scheme and "
 												+ "app did not assert singleton/multipoint",
@@ -942,10 +948,11 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 		} else if (b.source().subsume(BundleDaemon.getInstance().local_eid())) {
 			// Allow source EIDs that subsume the local eid
 		} else {
-			Logger.getInstance().error(TAG,
-					String.format(
-							"this node is not a member of the bundle's source EID (%s)",
-							b.source().toString()));
+			Logger.getInstance()
+(TAG,
+							String.format(
+									"this node is not a member of the bundle's source EID (%s)",
+									b.source().toString()));
 			return dtn_api_status_report_code.DTN_EINVAL;
 		}
 
@@ -1042,8 +1049,10 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 						reason), notifier_, -1, true);
 
 		if (!result[0]) {
-			Logger.getInstance().info(TAG, String.format("DTN_SEND bundle not accepted: reason %s",
-					reason[0].toString()));
+			Logger.getInstance().info(
+					TAG,
+					String.format("DTN_SEND bundle not accepted: reason %s",
+							reason[0].toString()));
 
 			switch (reason[0]) {
 			case REASON_DEPLETED_STORAGE:
@@ -1120,11 +1129,13 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 		dtn_bundle_id.set_frag_offset(0);
 		dtn_bundle_id.set_orig_length(0);
 
-		Logger.getInstance().info(TAG,
-				String.format(
-						"DTN_SEND bundle %d, with payload type %s, payload length %d bytes",
-						b.bundleid(), b.payload().location().toString(), b
-								.payload().length()));
+		Logger.getInstance()
+				.info(TAG,
+						String.format(
+								"DTN_SEND bundle %d, with payload type %s, payload length %d bytes",
+								b.bundleid(),
+								b.payload().location().toString(), b.payload()
+										.length()));
 
 		// deliver the bundle
 		BundleDaemon.getInstance().post(
@@ -1290,8 +1301,10 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 		}
 		api_reg.set_active(true);
 
-		Logger.getInstance().info(TAG, String.format("DTN_BIND: bound to registration %d",
-				reg.regid()));
+		Logger.getInstance()
+				.info(TAG,
+						String.format("DTN_BIND: bound to registration %d",
+								reg.regid()));
 
 		return dtn_api_status_report_code.DTN_SUCCESS;
 	}
@@ -1332,7 +1345,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 
 					if (!(reg instanceof APIRegistration)) {
 						Logger.getInstance()
-								.error(TAG,
+			(TAG,
 										String.format(
 												"registration %d is not an API registration!!",
 												regid));
@@ -1342,8 +1355,11 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 					api_reg.set_active(false);
 
 					bindings_.remove(handle);
-					Logger.getInstance().info(TAG, String.format(
-							"DTN_UNBIND: unbound from registration %d", regid));
+					Logger.getInstance().info(
+							TAG,
+							String.format(
+									"DTN_UNBIND: unbound from registration %d",
+									regid));
 					return dtn_api_status_report_code.DTN_SUCCESS;
 				}
 
@@ -1358,5 +1374,4 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 						regid));
 		return dtn_api_status_report_code.DTN_ENOTFOUND;
 	}
-
 }

@@ -42,8 +42,10 @@ import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
- * The BundleRouter is responsible for making routing decision. It will contact other components if the Bundle should be forward to particular links.
- * It received Event from BundleDaemon and process accordingly.
+ * The BundleRouter is responsible for making routing decision. It will contact
+ * other components if the Bundle should be forward to particular links. It
+ * received Event from BundleDaemon and process accordingly.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public abstract class BundleRouter extends BundleEventHandler {
@@ -54,12 +56,13 @@ public abstract class BundleRouter extends BundleEventHandler {
 	private static String TAG = "BundleRouter";
 
 	/**
-	 * Router Type implemented. In this implementation, it supports only Static Bundle routing
+	 * Router Type implemented. In this implementation, it supports only Static
+	 * Bundle routing
 	 */
 	public static enum router_type_t {
 
-		STATIC_BUNDLE_ROUTER("static", (byte) 0x00),
-		PROPHET_BUNDLE_ROUTER("prophet", (byte) 0x01);
+		STATIC_BUNDLE_ROUTER("static", (byte) 0x00), PROPHET_BUNDLE_ROUTER(
+				"prophet", (byte) 0x01);
 
 		private static final Map<Byte, router_type_t> lookup = new HashMap<Byte, router_type_t>();
 		private static final Map<String, router_type_t> caption_map = new HashMap<String, router_type_t>();
@@ -95,37 +98,35 @@ public abstract class BundleRouter extends BundleEventHandler {
 	}
 
 	/**
-	 *  Initialization function called by the DTNServer upon, the start service is requested
+	 * Initialization function called by the DTNServer upon, the start service
+	 * is requested
 	 */
 	public static void init(DTNConfiguration dtn) {
 		config_ = new Config();
 		config_.set_type(dtn.routes_setting().router_type());
-		dtn_config_ = dtn;		
+		dtn_config_ = dtn;
 	}
-	
-	
 
 	/**
-	 * Method to create a Bundle Router. The type of BundleRouter created depends on the config
-	 * inside the BundleRouter object
+	 * Method to create a Bundle Router. The type of BundleRouter created
+	 * depends on the config inside the BundleRouter object
 	 * 
 	 * @throws RoutingException
 	 */
-	public static BundleRouter create_router()
-			throws RoutingException {
+	public static BundleRouter create_router() throws RoutingException {
 		router_type_t type = config_.type_;
 		BundleRouter router;
 		if (type == router_type_t.STATIC_BUNDLE_ROUTER) {
 			router = new StaticBundleRouter();
 			router.name_ = "static bundle router";
-		}
-		else if (type == router_type_t.PROPHET_BUNDLE_ROUTER) {
+		} else if (type == router_type_t.PROPHET_BUNDLE_ROUTER) {
 			router = new ProphetBundleRouter();
 			router.name_ = "prophet bundle router";
-		}
-		else {
-			Logger.getInstance().error(TAG, String.format("Unknow router Type %s with code %d", type
-					.getCaption(), type.getCode()));
+		} else {
+			Logger.getInstance().error(
+					TAG,
+					String.format("Unknow router Type %s with code %d",
+							type.getCaption(), type.getCode()));
 			throw new RoutingException();
 		}
 
@@ -149,7 +150,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 		}
 
 		/**
-		 *  "The routing algorithm type" [DTN2]
+		 * "The routing algorithm type" [DTN2]
 		 */
 		private router_type_t type_;
 
@@ -159,13 +160,13 @@ public abstract class BundleRouter extends BundleEventHandler {
 		private boolean add_nexthop_routes_;
 
 		/**
-		 *  "Whether or not to open discovered opportunistic links when
-		 *  they become available" [DTN2]
+		 * "Whether or not to open discovered opportunistic links when they
+		 * become available" [DTN2]
 		 */
 		private boolean open_discovered_links_;
 
 		/**
-		 *  "Default priority for new routes" [DTN2]
+		 * "Default priority for new routes" [DTN2]
 		 */
 		private int default_priority_;
 
@@ -175,9 +176,9 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 		private int max_route_to_chain_;
 
-		
 		/**
 		 * Accessor for the routing algorithm type
+		 * 
 		 * @return the type_
 		 */
 		public router_type_t type() {
@@ -186,6 +187,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 		/**
 		 * Setter for the routing algorithm type
+		 * 
 		 * @param type
 		 *            the type_ to set
 		 */
@@ -195,6 +197,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 		/**
 		 * Accessor for whether or not to add routes for nexthop links that know
+		 * 
 		 * @return the add_nexthop_routes_
 		 */
 		public boolean add_nexthop_routes() {
@@ -203,6 +206,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 		/**
 		 * Setter for whether or not to add routes for nexthop links that know
+		 * 
 		 * @param addNexthopRoutes
 		 *            the add_nexthop_routes_ to set
 		 */
@@ -211,8 +215,9 @@ public abstract class BundleRouter extends BundleEventHandler {
 		}
 
 		/**
-		 * Accessor for whether or not to open discovered opportunistic links when
-		 *  they become available
+		 * Accessor for whether or not to open discovered opportunistic links
+		 * when they become available
+		 * 
 		 * @return the open_discovered_links_
 		 */
 		public boolean open_discovered_links() {
@@ -221,7 +226,8 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 		/**
 		 * Setter for whether or not to open discovered opportunistic links when
-		 *  they become available
+		 * they become available
+		 * 
 		 * @param openDiscoveredLinks
 		 *            the open_discovered_links_ to set
 		 */
@@ -231,6 +237,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 		/**
 		 * Accessor for default priority for new routes
+		 * 
 		 * @return the default_priority_
 		 */
 		public int default_priority() {
@@ -239,6 +246,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 		/**
 		 * Setter for default priority for new routes
+		 * 
 		 * @param defaultPriority
 		 *            the default_priority_ to set
 		 */
@@ -247,7 +255,9 @@ public abstract class BundleRouter extends BundleEventHandler {
 		}
 
 		/**
-		 * Accessor for maximum number of route_to entries to follow for a lookup
+		 * Accessor for maximum number of route_to entries to follow for a
+		 * lookup
+		 * 
 		 * @return the max_route_to_chain_
 		 */
 		public int max_route_to_chain() {
@@ -256,6 +266,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 		/**
 		 * Setter for maximum number of route_to entries to follow for a lookup
+		 * 
 		 * @param maxRouteToChain
 		 *            the max_route_to_chain_ to set
 		 */
@@ -263,22 +274,21 @@ public abstract class BundleRouter extends BundleEventHandler {
 			max_route_to_chain_ = max_route_to_chain;
 		}
 
-	
 	};
 
 	/**
 	 * stored DTNConfiguration inside Bundle Router to check value later on
 	 */
 	private static DTNConfiguration dtn_config_;
-	
+
 	/**
 	 * stored Config particulary for the router
 	 */
 	protected static Config config_;
 
-	
 	/**
 	 * Getter function for the Config object
+	 * 
 	 * @return the saved Config object or the result of generation
 	 */
 	public static Config config() {
@@ -292,37 +302,31 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 	/**
 	 * Set config Object inside the Bundle Router
-	 * @param config object to set
+	 * 
+	 * @param config
+	 *            object to set
 	 */
 	public void set_config(Config config) {
 		config_ = config;
 	}
+
 	/**
 	 * "called after all the global data structures are set up" [DTN2]
 	 */
 	abstract public void initialize(DTNConfiguration dtn_config_);
-	
-	
+
 	/**
 	 * Display storage information
 	 */
 	public void displayStorage(Bundle bundle, BundleStore bs) {
-		Log
-		.i(
-				TAG,
-				String
-						.format(
-								"cur size %d + bundle size %d bytes / quota %d bytes",
-								GlobalStorage.getInstance().get_total_size(), 
-								bundle.payload().length(),
-								bs.quota()
-								));
+		Logger.getInstance().info(TAG, String.format(
+				"cur size %d + bundle size %d bytes / quota %d bytes",
+				GlobalStorage.getInstance().get_total_size(), bundle.payload()
+						.length(), bs.quota()));
 	}
-	
 
 	/**
-	 * "Check whether or not this bundle should be
-	 * accepted by the router.
+	 * "Check whether or not this bundle should be accepted by the router.
 	 * 
 	 * The default implementation checks if the bundle size will exceed the
 	 * configured DTNConfiguration storage quota." [DTN2]
@@ -335,16 +339,12 @@ public abstract class BundleRouter extends BundleEventHandler {
 		if (bs.quota() != 0
 				&& (GlobalStorage.getInstance().get_total_size()
 						+ bundle.payload().length() > bs.quota())) {
-			Log
-					.i(
-							TAG,
-							String
-									.format(
-											"accept_bundle: rejecting bundle %d since "
-													+ "cur size %d + bundle size %d bytes > quota %d bytes",
-											bundle.bundleid(), bs.total_size(),
-											bundle.payload().length(), bs
-													.quota()));
+			Logger.getInstance().info(TAG,
+					String.format(
+							"accept_bundle: rejecting bundle %d since "
+									+ "cur size %d + bundle size %d bytes > quota %d bytes",
+							bundle.bundleid(), bs.total_size(), bundle
+									.payload().length(), bs.quota()));
 
 			error_status[0] = BundleProtocol.status_report_reason_t.REASON_DEPLETED_STORAGE;
 			return false;
@@ -354,8 +354,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 	}
 
 	/**
-	 * "Check whether or not this bundle can be deleted by
-	 * the router.
+	 * "Check whether or not this bundle can be deleted by the router.
 	 * 
 	 * The default implementation returns true if the bundle is queued on more
 	 * than one list (i.e. the pending bundles list)." [DTN2]
@@ -363,10 +362,8 @@ public abstract class BundleRouter extends BundleEventHandler {
 	public boolean can_delete_bundle(Bundle bundle) {
 		int num_mapping = bundle.num_mappings();
 		if (num_mapping > 1) {
-			Log
-					.d(TAG, "can_delete_bundle(" + bundle
-							+ "): not deleting because " + " bundle has "
-							+ num_mapping);
+			Logger.getInstance().debug(TAG, "can_delete_bundle(" + bundle
+					+ "): not deleting because " + " bundle has " + num_mapping);
 			return false;
 
 		}
@@ -405,15 +402,17 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 		// "check if we've already sent or are in the process of sending
 		// the bundle on this link" [DTN2]
-		if (info!=null)
-		{
-		if (info.state() == ForwardingInfo.state_t.TRANSMITTED
-				|| info.state() == ForwardingInfo.state_t.QUEUED) {
-			Logger.getInstance().debug(TAG, String.format("should_fwd bundle %d: "
-					+ "skip %s due to forwarding log entry %s", bundle
-					.bundleid(), link.name(), info.state().toString()));
-			return false;
-		}
+		if (info != null) {
+			if (info.state() == ForwardingInfo.state_t.TRANSMITTED
+					|| info.state() == ForwardingInfo.state_t.QUEUED) {
+				Logger.getInstance().debug(
+						TAG,
+						String.format("should_fwd bundle %d: "
+								+ "skip %s due to forwarding log entry %s",
+								bundle.bundleid(), link.name(), info.state()
+										.toString()));
+				return false;
+			}
 		}
 		// "check if we've already sent or are in the process of sending
 		// the bundle to the node via some other link" [DTN2]
@@ -425,15 +424,12 @@ public abstract class BundleRouter extends BundleEventHandler {
 					ForwardingInfo.ANY_ACTION);
 
 			if (count > 0) {
-				Log
-						.d(
-								TAG,
-								String
-										.format(
-												"should_fwd bundle %d: "
-														+ "skip %s since already sent or queued %d times for remote eid %s",
-												bundle.bundleid(), link.name(),
-												count, link.remote_eid().toString()));
+				Logger.getInstance().debug(TAG,
+						String.format(
+								"should_fwd bundle %d: "
+										+ "skip %s since already sent or queued %d times for remote eid %s",
+								bundle.bundleid(), link.name(), count, link
+										.remote_eid().toString()));
 				return false;
 			}
 
@@ -445,15 +441,12 @@ public abstract class BundleRouter extends BundleEventHandler {
 					ForwardingInfo.ANY_ACTION);
 
 			if (count > 0) {
-				Log
-						.d(
-								TAG,
-								String
-										.format(
-												"should_fwd bundle %d: "
-														+ "skip %s since transmission suppressed to remote eid %s",
-												bundle.bundleid(), link.name(),
-												link.remote_eid().toString()));
+				Logger.getInstance().debug(TAG,
+						String.format(
+								"should_fwd bundle %d: "
+										+ "skip %s since transmission suppressed to remote eid %s",
+								bundle.bundleid(), link.name(), link
+										.remote_eid().toString()));
 				return false;
 			}
 		}
@@ -469,35 +462,33 @@ public abstract class BundleRouter extends BundleEventHandler {
 					action.getCode());
 
 			if (count > 0) {
-				Log
-						.d(
-								TAG,
-								String
-										.format(
-												"should_fwd bundle %d: "
-														+ "skip %s since already transmitted or queued (count %d)",
-												bundle.bundleid(), link.name(),
-												count));
+				Logger.getInstance().debug(TAG,
+						String.format(
+								"should_fwd bundle %d: "
+										+ "skip %s since already transmitted or queued (count %d)",
+								bundle.bundleid(), link.name(), count));
 				return false;
 			} else {
-				Logger.getInstance().debug(TAG, String.format("should_fwd bundle %d: "
-						+ "link %s ok since transmission count=%d", bundle
-						.bundleid(), link.name(), count));
+				Logger.getInstance().debug(
+						TAG,
+						String.format("should_fwd bundle %d: "
+								+ "link %s ok since transmission count=%d",
+								bundle.bundleid(), link.name(), count));
 			}
 		}
 
 		// "otherwise log the reason why we should send it" [DTN2]
-		
-		String info_string = info!=null? info.state().toString() : "no info";
-		
-		Logger.getInstance().debug(TAG, String.format("should_fwd bundle %d: "
-				+ "match %s: forwarding log entry %s", bundle.bundleid(), link
-				.name(), info_string));
+
+		String info_string = info != null ? info.state().toString() : "no info";
+
+		Logger.getInstance().debug(
+				TAG,
+				String.format("should_fwd bundle %d: "
+						+ "match %s: forwarding log entry %s",
+						bundle.bundleid(), link.name(), info_string));
 
 		return true;
 	}
-
-	
 
 	/**
 	 * "Hook to force route recomputation from the command interpreter. The
@@ -522,29 +513,28 @@ public abstract class BundleRouter extends BundleEventHandler {
 	}
 
 	/**
-	 *  "Name of this particular router" [DTN2]
+	 * "Name of this particular router" [DTN2]
 	 */
 	protected String name_;
 
 	/**
-	 *  "The list of all bundles still pending delivery" [DTN2]
+	 * "The list of all bundles still pending delivery" [DTN2]
 	 */
 	protected BundleList pending_bundles_;
 
 	/**
-	 *  "The list of all bundles that I have custody of" [DTN2]
+	 * "The list of all bundles that I have custody of" [DTN2]
 	 */
 	protected BundleList custody_bundles_;
 
 	/**
-	 *  "The actions interface, set by the BundleDaemon when the router is initialized." [DTN2]
+	 * "The actions interface, set by the BundleDaemon when the router is initialized."
+	 * [DTN2]
 	 */
 	protected BundleActions actions_;
-
 
 	public ProphetRegistration getProphetRegistration() {
 		return null;
 	}
-
 
 }

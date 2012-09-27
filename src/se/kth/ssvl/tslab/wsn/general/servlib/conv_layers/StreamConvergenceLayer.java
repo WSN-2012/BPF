@@ -303,15 +303,12 @@ public abstract class StreamConvergenceLayer extends ConnectionConvergenceLayer 
 
 	}
 
-	
 	@Override
 	public abstract CLConnection new_connection(Link link, LinkParams params);
 
-	
 	@Override
 	public abstract LinkParams new_link_params();
 
-	
 	@Override
 	public abstract boolean parse_nexthop(Link link, LinkParams params);
 

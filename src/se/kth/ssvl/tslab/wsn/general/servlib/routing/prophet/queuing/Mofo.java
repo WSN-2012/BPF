@@ -29,7 +29,8 @@ public class Mofo extends ProphetQueuing {
 			return -1;
 		}
 
-		Logger.getInstance().info("Queuing", "Deleting bundle ft: " + cursor.getInt(forwardColumn));
+		Logger.getInstance().info("Queuing",
+				"Deleting bundle ft: " + cursor.getInt(forwardColumn));
 		int result = cursor.getInt(fieldColumn);
 		cursor.close();
 

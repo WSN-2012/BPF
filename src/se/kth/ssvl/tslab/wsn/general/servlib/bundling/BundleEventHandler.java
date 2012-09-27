@@ -80,268 +80,263 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
  * Abstract class for handling various Bundle Events.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public abstract class BundleEventHandler {
 
 	private static final String TAG = "BundleEventHandler";
+
 	/**
 	 * Main event handler
 	 */
-	 public abstract void handle_event(BundleEvent event);
+	public abstract void handle_event(BundleEvent event);
 
 	/**
-	 * Event dispatcher function. This will dispatch input event to handle routine according to the event's type code.
+	 * Event dispatcher function. This will dispatch input event to handle
+	 * routine according to the event's type code.
 	 */
-	protected void dispatch_event(BundleEvent e)
-	{
-		Logger.getInstance().debug(TAG, String.format("dispatching event (%s) %s", 
-				          e.toString(),  
-				          e.type().getCaption()
-				          ));
-	
-		switch(e.type())
-		{
+	protected void dispatch_event(BundleEvent e) {
+		Logger.getInstance().debug(
+				TAG,
+				String.format("dispatching event (%s) %s", e.toString(), e
+						.type().getCaption()));
+
+		switch (e.type()) {
 		case BUNDLE_RECEIVED:
-	        handle_bundle_received((BundleReceivedEvent)e);
-	        break;
+			handle_bundle_received((BundleReceivedEvent) e);
+			break;
 
-	    case BUNDLE_TRANSMITTED:
-	        handle_bundle_transmitted((BundleTransmittedEvent)e);
-	        break;
+		case BUNDLE_TRANSMITTED:
+			handle_bundle_transmitted((BundleTransmittedEvent) e);
+			break;
 
-	    case BUNDLE_DELIVERED:
-	        handle_bundle_delivered((BundleDeliveredEvent)e);
-	        break;
+		case BUNDLE_DELIVERED:
+			handle_bundle_delivered((BundleDeliveredEvent) e);
+			break;
 
-	    case BUNDLE_EXPIRED:
-	        handle_bundle_expired((BundleExpiredEvent)e);
-	        break;
-	        
-	    case BUNDLE_FREE:
-	        handle_bundle_free((BundleFreeEvent)e);
-	        break;
+		case BUNDLE_EXPIRED:
+			handle_bundle_expired((BundleExpiredEvent) e);
+			break;
 
-	    case BUNDLE_SEND:
-	        handle_bundle_send((BundleSendRequest)e);
-	        break;
+		case BUNDLE_FREE:
+			handle_bundle_free((BundleFreeEvent) e);
+			break;
 
-	    case BUNDLE_CANCEL:
-	        handle_bundle_cancel((BundleCancelRequest)e);
-	        break;
+		case BUNDLE_SEND:
+			handle_bundle_send((BundleSendRequest) e);
+			break;
 
-	    case BUNDLE_CANCELLED:
-	        handle_bundle_cancelled((BundleSendCancelledEvent)e);
-	        break;
+		case BUNDLE_CANCEL:
+			handle_bundle_cancel((BundleCancelRequest) e);
+			break;
 
-	    case BUNDLE_INJECT:
-	        handle_bundle_inject((BundleInjectRequest)e);
-	        break;
+		case BUNDLE_CANCELLED:
+			handle_bundle_cancelled((BundleSendCancelledEvent) e);
+			break;
 
-	    case BUNDLE_INJECTED:
-	        handle_bundle_injected((BundleInjectedEvent)e);
-	        break;
+		case BUNDLE_INJECT:
+			handle_bundle_inject((BundleInjectRequest) e);
+			break;
 
-	    case BUNDLE_DELETE:
-	        handle_bundle_delete((BundleDeleteRequest)e);
-	        break;
+		case BUNDLE_INJECTED:
+			handle_bundle_injected((BundleInjectedEvent) e);
+			break;
 
-	    case BUNDLE_ACCEPT_REQUEST:
-	        handle_bundle_accept((BundleAcceptRequest)e);
-	        break;
+		case BUNDLE_DELETE:
+			handle_bundle_delete((BundleDeleteRequest) e);
+			break;
 
-	    case BUNDLE_QUERY:
-	        handle_bundle_query((BundleQueryRequest)e);
-	        break;
+		case BUNDLE_ACCEPT_REQUEST:
+			handle_bundle_accept((BundleAcceptRequest) e);
+			break;
 
-	    case BUNDLE_REPORT:
-	        handle_bundle_report((BundleReportEvent)e);
-	        break;
-	        
-	  
-	        
-	    case REGISTRATION_ADDED:
-	        handle_registration_added((RegistrationAddedEvent)e);
-	        break;
+		case BUNDLE_QUERY:
+			handle_bundle_query((BundleQueryRequest) e);
+			break;
 
-	    case REGISTRATION_REMOVED:
-	        handle_registration_removed((RegistrationRemovedEvent)e);
-	        break;
+		case BUNDLE_REPORT:
+			handle_bundle_report((BundleReportEvent) e);
+			break;
 
-	    case REGISTRATION_EXPIRED:
-	        handle_registration_expired((RegistrationExpiredEvent)e);
-	        break;
-	 
-	    case REGISTRATION_DELETE:
-	        handle_registration_delete((RegistrationDeleteRequest)e);
-	        break;
+		case REGISTRATION_ADDED:
+			handle_registration_added((RegistrationAddedEvent) e);
+			break;
 
-	   case ROUTE_ADD:
-	        handle_route_add((RouteAddEvent)e);
-	        break;
+		case REGISTRATION_REMOVED:
+			handle_registration_removed((RegistrationRemovedEvent) e);
+			break;
 
-	    case ROUTE_DEL:
-	        handle_route_del((RouteDelEvent)e);
-	        break;
+		case REGISTRATION_EXPIRED:
+			handle_registration_expired((RegistrationExpiredEvent) e);
+			break;
 
-	    case ROUTE_QUERY:
-	        handle_route_query((RouteQueryRequest)e);
-	        break;
+		case REGISTRATION_DELETE:
+			handle_registration_delete((RegistrationDeleteRequest) e);
+			break;
 
-	    case ROUTE_REPORT:
-	        handle_route_report((RouteReportEvent)e);
-	        break;
+		case ROUTE_ADD:
+			handle_route_add((RouteAddEvent) e);
+			break;
 
-	    case CONTACT_UP:
-	        handle_contact_up((ContactUpEvent)e);
-	        break;
+		case ROUTE_DEL:
+			handle_route_del((RouteDelEvent) e);
+			break;
 
-	    case CONTACT_DOWN:
-	        handle_contact_down((ContactDownEvent)e);
-	        break;
+		case ROUTE_QUERY:
+			handle_route_query((RouteQueryRequest) e);
+			break;
 
-	    case CONTACT_QUERY:
-	        handle_contact_query((ContactQueryRequest)e);
-	        break;
+		case ROUTE_REPORT:
+			handle_route_report((RouteReportEvent) e);
+			break;
 
-	    case CONTACT_REPORT:
-	        handle_contact_report((ContactReportEvent)e);
-	        break;
+		case CONTACT_UP:
+			handle_contact_up((ContactUpEvent) e);
+			break;
 
-	    case CONTACT_ATTRIB_CHANGED:
-	        handle_contact_attribute_changed((ContactAttributeChangedEvent)e);
-	        break;
+		case CONTACT_DOWN:
+			handle_contact_down((ContactDownEvent) e);
+			break;
 
-	    case LINK_CREATED:
-	        handle_link_created((LinkCreatedEvent)e);
-	        break;
+		case CONTACT_QUERY:
+			handle_contact_query((ContactQueryRequest) e);
+			break;
 
-	    case LINK_DELETED:
-	        handle_link_deleted((LinkDeletedEvent)e);
-	        break;
+		case CONTACT_REPORT:
+			handle_contact_report((ContactReportEvent) e);
+			break;
 
-	    case LINK_AVAILABLE:
-	        handle_link_available((LinkAvailableEvent)e);
-	        break;
+		case CONTACT_ATTRIB_CHANGED:
+			handle_contact_attribute_changed((ContactAttributeChangedEvent) e);
+			break;
 
-	    case LINK_UNAVAILABLE:
-	        handle_link_unavailable((LinkUnavailableEvent)e);
-	        break;
+		case LINK_CREATED:
+			handle_link_created((LinkCreatedEvent) e);
+			break;
 
-	    case LINK_STATE_CHANGE_REQUEST:
-	        handle_link_state_change_request((LinkStateChangeRequest)e);
-	        break;
+		case LINK_DELETED:
+			handle_link_deleted((LinkDeletedEvent) e);
+			break;
 
-	   
+		case LINK_AVAILABLE:
+			handle_link_available((LinkAvailableEvent) e);
+			break;
 
-	    case LINK_DELETE:
-	        handle_link_delete((LinkDeleteRequest)e);
-	        break;
+		case LINK_UNAVAILABLE:
+			handle_link_unavailable((LinkUnavailableEvent) e);
+			break;
 
-	    case LINK_RECONFIGURE:
-	        handle_link_reconfigure((LinkReconfigureRequest)e);
-	        break;
+		case LINK_STATE_CHANGE_REQUEST:
+			handle_link_state_change_request((LinkStateChangeRequest) e);
+			break;
 
-	    case LINK_QUERY:
-	        handle_link_query((LinkQueryRequest)e);
-	        break;
+		case LINK_DELETE:
+			handle_link_delete((LinkDeleteRequest) e);
+			break;
 
-	    case LINK_REPORT:
-	        handle_link_report((LinkReportEvent)e);
-	        break;
-	        
-	    case LINK_ATTRIB_CHANGED:
-	        handle_link_attribute_changed((LinkAttributeChangedEvent)e);
-	        break;
+		case LINK_RECONFIGURE:
+			handle_link_reconfigure((LinkReconfigureRequest) e);
+			break;
 
-	    case REASSEMBLY_COMPLETED:
-	        handle_reassembly_completed((ReassemblyCompletedEvent)e);
-	        break;
+		case LINK_QUERY:
+			handle_link_query((LinkQueryRequest) e);
+			break;
 
-	    case CUSTODY_SIGNAL:
-	        handle_custody_signal((CustodySignalEvent)e);
-	        break;
+		case LINK_REPORT:
+			handle_link_report((LinkReportEvent) e);
+			break;
 
-	    case CUSTODY_TIMEOUT:
-	        handle_custody_timeout((CustodyTimeoutEvent)e);
-	        break;
+		case LINK_ATTRIB_CHANGED:
+			handle_link_attribute_changed((LinkAttributeChangedEvent) e);
+			break;
 
-	    case DAEMON_SHUTDOWN:
-	        handle_shutdown_request((ShutdownRequest)e);
-	        break;
+		case REASSEMBLY_COMPLETED:
+			handle_reassembly_completed((ReassemblyCompletedEvent) e);
+			break;
 
-	    case DAEMON_STATUS:
-	        handle_status_request((StatusRequest)e);
-	        break;
+		case CUSTODY_SIGNAL:
+			handle_custody_signal((CustodySignalEvent) e);
+			break;
 
-	    case CLA_SET_PARAMS:
-	        handle_cla_set_params((CLASetParamsRequest)e);
-	        break;
+		case CUSTODY_TIMEOUT:
+			handle_custody_timeout((CustodyTimeoutEvent) e);
+			break;
 
-	    case CLA_PARAMS_SET:
-	        handle_cla_params_set((CLAParamsSetEvent)e);
-	        break;
+		case DAEMON_SHUTDOWN:
+			handle_shutdown_request((ShutdownRequest) e);
+			break;
 
-	    case CLA_SET_LINK_DEFAULTS:
-	        handle_set_link_defaults((SetLinkDefaultsRequest)e);
-	        break;
+		case DAEMON_STATUS:
+			handle_status_request((StatusRequest) e);
+			break;
 
-	    case CLA_EID_REACHABLE:
-	        handle_new_eid_reachable((NewEIDReachableEvent)e);
-	        break;
+		case CLA_SET_PARAMS:
+			handle_cla_set_params((CLASetParamsRequest) e);
+			break;
 
-	    case CLA_BUNDLE_QUEUED_QUERY:
-	        handle_bundle_queued_query((BundleQueuedQueryRequest)e);
-	        break;
+		case CLA_PARAMS_SET:
+			handle_cla_params_set((CLAParamsSetEvent) e);
+			break;
 
-	    case CLA_BUNDLE_QUEUED_REPORT:
-	        handle_bundle_queued_report((BundleQueuedReportEvent)e);
-	        break;
+		case CLA_SET_LINK_DEFAULTS:
+			handle_set_link_defaults((SetLinkDefaultsRequest) e);
+			break;
 
-	    case CLA_EID_REACHABLE_QUERY:
-	        handle_eid_reachable_query((EIDReachableQueryRequest)e);
-	        break;
+		case CLA_EID_REACHABLE:
+			handle_new_eid_reachable((NewEIDReachableEvent) e);
+			break;
 
-	    case CLA_EID_REACHABLE_REPORT:
-	        handle_eid_reachable_report((EIDReachableReportEvent)e);
-	        break;
+		case CLA_BUNDLE_QUEUED_QUERY:
+			handle_bundle_queued_query((BundleQueuedQueryRequest) e);
+			break;
 
-	    case CLA_LINK_ATTRIB_QUERY:
-	        handle_link_attributes_query((LinkAttributesQueryRequest)e);
-	        break;
+		case CLA_BUNDLE_QUEUED_REPORT:
+			handle_bundle_queued_report((BundleQueuedReportEvent) e);
+			break;
 
-	    case CLA_LINK_ATTRIB_REPORT:
-	        handle_link_attributes_report((LinkAttributesReportEvent)e);
-	        break;
+		case CLA_EID_REACHABLE_QUERY:
+			handle_eid_reachable_query((EIDReachableQueryRequest) e);
+			break;
 
-	    case CLA_IFACE_ATTRIB_QUERY:
-	        handle_iface_attributes_query((IfaceAttributesQueryRequest)e);
-	        break;
+		case CLA_EID_REACHABLE_REPORT:
+			handle_eid_reachable_report((EIDReachableReportEvent) e);
+			break;
 
-	    case CLA_IFACE_ATTRIB_REPORT:
-	        handle_iface_attributes_report((IfaceAttributesReportEvent)e);
-	        break;
+		case CLA_LINK_ATTRIB_QUERY:
+			handle_link_attributes_query((LinkAttributesQueryRequest) e);
+			break;
 
-	    case CLA_PARAMS_QUERY:
-	        handle_cla_parameters_query((CLAParametersQueryRequest)e);
-	        break;
+		case CLA_LINK_ATTRIB_REPORT:
+			handle_link_attributes_report((LinkAttributesReportEvent) e);
+			break;
 
-	    case CLA_PARAMS_REPORT:
-	        handle_cla_parameters_report((CLAParametersReportEvent)e);
-	        break;
+		case CLA_IFACE_ATTRIB_QUERY:
+			handle_iface_attributes_query((IfaceAttributesQueryRequest) e);
+			break;
 
-	    default:
-	    	Logger.getInstance().error(TAG, String.format("unimplemented event type %s, code = ", 
-	    			 e.type().getCaption(), 
-	    			 e.type().getCode())
-	    			 
-	    	);
-	        
-	    } 
-		
-		
-		
-		
+		case CLA_IFACE_ATTRIB_REPORT:
+			handle_iface_attributes_report((IfaceAttributesReportEvent) e);
+			break;
+
+		case CLA_PARAMS_QUERY:
+			handle_cla_parameters_query((CLAParametersQueryRequest) e);
+			break;
+
+		case CLA_PARAMS_REPORT:
+			handle_cla_parameters_report((CLAParametersReportEvent) e);
+			break;
+
+		default:
+			Logger.getInstance().error(
+					TAG,
+					String.format("unimplemented event type %s, code = ", e
+							.type().getCaption(), e.type().getCode())
+
+			);
+
+		}
+
 	}
 
 	/**
@@ -366,7 +361,8 @@ public abstract class BundleEventHandler {
 	abstract protected void handle_bundle_expired(BundleExpiredEvent event);
 
 	/**
-	 * "Default event handler when bundles are free (i.e. no more references)." [DTN2]
+	 * "Default event handler when bundles are free (i.e. no more references)."
+	 * [DTN2]
 	 */
 	abstract protected void handle_bundle_free(BundleFreeEvent event);
 
@@ -416,9 +412,9 @@ public abstract class BundleEventHandler {
 	 */
 	abstract protected void handle_bundle_report(BundleReportEvent request);
 
-	
 	/**
-	 * "Default event handler when a new application registration arrives." [DTN2]
+	 * "Default event handler when a new application registration arrives."
+	 * [DTN2]
 	 */
 	abstract protected void handle_registration_added(
 			RegistrationAddedEvent event);
@@ -597,6 +593,7 @@ public abstract class BundleEventHandler {
 
 	/**
 	 * "Default event handlers for bundle queue report." [DTN2]
+	 * 
 	 * @param event
 	 */
 	abstract protected void handle_bundle_queued_report(
@@ -604,6 +601,7 @@ public abstract class BundleEventHandler {
 
 	/**
 	 * "Default event handlers for new EID reachable." [DTN2]
+	 * 
 	 * @param event
 	 */
 	abstract protected void handle_eid_reachable_query(
@@ -611,6 +609,7 @@ public abstract class BundleEventHandler {
 
 	/**
 	 * "Default event handlers for new EID reachable report." [DTN2]
+	 * 
 	 * @param event
 	 */
 	abstract protected void handle_eid_reachable_report(
@@ -618,6 +617,7 @@ public abstract class BundleEventHandler {
 
 	/**
 	 * "Default event handlers for link attribute query." [DTN2]
+	 * 
 	 * @param event
 	 */
 	abstract protected void handle_link_attributes_query(
@@ -625,6 +625,7 @@ public abstract class BundleEventHandler {
 
 	/**
 	 * "Default event handler for link attribute query report." [DTN2]
+	 * 
 	 * @param event
 	 */
 	abstract protected void handle_link_attributes_report(
@@ -632,6 +633,7 @@ public abstract class BundleEventHandler {
 
 	/**
 	 * "Default event handler for interface attribute query." [DTN2]
+	 * 
 	 * @param event
 	 */
 	abstract protected void handle_iface_attributes_query(
@@ -639,6 +641,7 @@ public abstract class BundleEventHandler {
 
 	/**
 	 * "Default event handler for interface attribute query report." [DTN2]
+	 * 
 	 * @param event
 	 */
 	abstract protected void handle_iface_attributes_report(
@@ -646,13 +649,15 @@ public abstract class BundleEventHandler {
 
 	/**
 	 * "Default event handler for cla parameters query." [DTN2]
+	 * 
 	 * @param event
 	 */
 	abstract protected void handle_cla_parameters_query(
 			CLAParametersQueryRequest event);
 
 	/**
-	 * "Default event handler for cla parameters query report." [DTN2] 
+	 * "Default event handler for cla parameters query report." [DTN2]
+	 * 
 	 * @param event
 	 */
 	abstract protected void handle_cla_parameters_report(

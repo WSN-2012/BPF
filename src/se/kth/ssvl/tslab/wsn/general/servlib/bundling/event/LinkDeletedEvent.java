@@ -23,16 +23,17 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 
 /**
  * Event generated after Link deletion
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class LinkDeletedEvent extends ContactEvent {
 
 	public LinkDeletedEvent(final Link link, ContactEvent.reason_t reason) {
 		super(event_type_t.LINK_DELETED, reason);
-		
+
 		link_ = link;
 		reason_ = reason;
-		
+
 	}
 
 	/**
@@ -42,6 +43,7 @@ public class LinkDeletedEvent extends ContactEvent {
 
 	/**
 	 * Getter for the link that was deleted
+	 * 
 	 * @return the link_
 	 */
 	public Link link() {
@@ -50,7 +52,9 @@ public class LinkDeletedEvent extends ContactEvent {
 
 	/**
 	 * Setter for the link that was deleted
-	 * @param link the link_ to set
+	 * 
+	 * @param link
+	 *            the link_ to set
 	 */
 	public void set_link(Link link) {
 		link_ = link;

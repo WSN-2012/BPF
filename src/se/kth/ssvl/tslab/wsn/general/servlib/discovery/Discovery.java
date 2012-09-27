@@ -59,9 +59,8 @@ public abstract class Discovery {
 	 */
 	private static final String TAG = "Discovery";
 	private static HashMap<String, String> discoveries = new HashMap<String, String>();
-	
-	public static HashMap<String, String> discoveries()
-	{
+
+	public static HashMap<String, String> discoveries() {
 		return discoveries;
 	}
 
@@ -168,7 +167,8 @@ public abstract class Discovery {
 	public boolean announce(String name, int argc, String ClType, int interval) {
 
 		if (list_.indexOf(name) != -1) {
-			Logger.getInstance().error(TAG, "discovery for name already exists");
+			Logger.getInstance()
+(TAG, "discovery for name already exists");
 			return false;
 		}
 
@@ -187,9 +187,9 @@ public abstract class Discovery {
 		Announce announce = Announce.create_announce(name, cl, argc, ClType,
 				interval);
 		if (announce == null) {
-			Log
-					.e(TAG,
-							"no announce implemented for This type of convergence layer");
+			Logger.getInstance().error
+		(TAG,
+					"no announce implemented for This type of convergence layer");
 			return false;
 		}
 
@@ -207,7 +207,8 @@ public abstract class Discovery {
 		Iterator<Announce> i = list_.iterator();
 
 		if (!find(name, i)) {
-			Logger.getInstance().error(TAG, "error removing announce,no such object");
+			Logger.getInstance().error(TAG,
+					"error removing announce,no such object");
 			return false;
 		}
 
@@ -233,11 +234,11 @@ public abstract class Discovery {
 
 		ContactManager cm = Daemon.contactmgr();
 
-//		ConvergenceLayer cl = ConvergenceLayer.find_clayer(cl_type);
-//		if (cl == null) {
-//			Logger.getInstance().error(TAG, "unknown convergence layer type");
-//			return;
-//		}
+		// ConvergenceLayer cl = ConvergenceLayer.find_clayer(cl_type);
+		// if (cl == null) {
+		// Logger.getInstance().error(TAG, "unknown convergence layer type");
+		// return;
+		// }
 
 		// Look for match on convergence layer and remote EID
 
@@ -245,43 +246,43 @@ public abstract class Discovery {
 
 		if (link == null) {
 			link = cm.new_opportunistic_link(
-					(link==null) ? ConvergenceLayer.find_clayer(cl_type) : link.clayer(), 
-							cl_addr, remote_eid);
-			
+					(link == null) ? ConvergenceLayer.find_clayer(cl_type)
+							: link.clayer(), cl_addr, remote_eid);
+
 			if (link == null) {
-				Logger.getInstance().debug(TAG, "failed to create opportunistic link");
+				Logger.getInstance().debug(TAG,
+						"failed to create opportunistic link");
 				return;
 			}
-			
+
 			Bundle bundle = new Bundle(location_t.MEMORY);
 			bundle.set_dest(remote_eid);
 			bundle.set_source(BundleDaemon.getInstance().local_eid());
 			link.queue().insert_random(bundle);
-			
-			if(discoveries.get(remote_eid.str()).equals(cl_addr)){
-			}
-			else {
+
+			if (discoveries.get(remote_eid.str()).equals(cl_addr)) {
+			} else {
 				discoveries.remove(remote_eid.str());
 				discoveries.put(remote_eid.str(), cl_addr);
-				DTNManager.getInstance().notify_user("New peer discovered", remote_eid.str());
+				DTNManager.getInstance().notify_user("New peer discovered",
+						remote_eid.str());
 			}
-			
+
 			BundleDaemon BD = BundleDaemon.getInstance();
 			// request to set link available
 			BD.post(new LinkStateChangeRequest(link, Link.state_t.AVAILABLE,
 					ContactEvent.reason_t.DISCOVERY));
-		}
-		else {
+		} else {
 			assert (link != null);
 			if (!link.isNotUnavailable()) {
 				link.lock().lock();
 				link.set_nexthop(cl_addr);
 				link.lock().unlock();
-				
+
 				BundleDaemon BD = BundleDaemon.getInstance();
 				// request to set link available
-				BD.post(new LinkStateChangeRequest(link, Link.state_t.AVAILABLE,
-						ContactEvent.reason_t.DISCOVERY));
+				BD.post(new LinkStateChangeRequest(link,
+						Link.state_t.AVAILABLE, ContactEvent.reason_t.DISCOVERY));
 			}
 		}
 	}

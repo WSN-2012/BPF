@@ -21,9 +21,9 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
 
-
 /**
  * Event class for discovery of a new EID.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class NewEIDReachableEvent extends BundleEvent {
@@ -49,7 +49,8 @@ public class NewEIDReachableEvent extends BundleEvent {
 	}
 
 	/**
-	 * @param iface the iface_ to set
+	 * @param iface
+	 *            the iface_ to set
 	 */
 	public void set_iface(Interface iface) {
 		iface_ = iface;
@@ -63,7 +64,8 @@ public class NewEIDReachableEvent extends BundleEvent {
 	}
 
 	/**
-	 * @param endpoint the endpoint_ to set
+	 * @param endpoint
+	 *            the endpoint_ to set
 	 */
 	public void set_endpoint(String endpoint) {
 		endpoint_ = endpoint;

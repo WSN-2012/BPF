@@ -22,9 +22,10 @@ package se.kth.ssvl.tslab.wsn.general.servlib.routing;
 
 /**
  * Base Exception in Routing package
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class RoutingException extends Exception{
+public class RoutingException extends Exception {
 
 	/**
 	 * 
@@ -35,9 +36,10 @@ public class RoutingException extends Exception{
 
 /**
  * Exception represents Router type unknown
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-class UnknownRouterTypeException extends RoutingException{
+class UnknownRouterTypeException extends RoutingException {
 
 	/**
 	 * 

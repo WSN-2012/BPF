@@ -27,10 +27,10 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
-
 /**
- * This class is for Registration  testing purpose to take the log of bundle's metadata.
- *  */
+ * This class is for Registration testing purpose to take the log of bundle's
+ * metadata.
+ * */
 
 public class LoggingRegistration extends Registration {
 
@@ -39,7 +39,6 @@ public class LoggingRegistration extends Registration {
 	 */
 	private static final long serialVersionUID = 4762023883066134693L;
 
-	
 	/**
 	 * TAG for Android Logging
 	 */
@@ -49,24 +48,28 @@ public class LoggingRegistration extends Registration {
 	 * Constructor to initialize this class.
 	 */
 
-	public LoggingRegistration(final  EndpointIDPattern endpoint){
-		super(RegistrationStore.getInstance().next_regid(), endpoint, Registration.failure_action_t.DEFER, 0, 0,"");
+	public LoggingRegistration(final EndpointIDPattern endpoint) {
+		super(RegistrationStore.getInstance().next_regid(), endpoint,
+				Registration.failure_action_t.DEFER, 0, 0, "");
 		set_active(true);
-	 }
+	}
 
 	/**
-	 * Delivery bundle take the log of Bundle and then forward it to BundleDaemon
-	 * @param b Bundle to take log of its metadata  
+	 * Delivery bundle take the log of Bundle and then forward it to
+	 * BundleDaemon
+	 * 
+	 * @param b
+	 *            Bundle to take log of its metadata
 	 */
 
 	@Override
-	public void deliver_bundle(Bundle b){
-		 
-	    StringBuffer buf = new StringBuffer();
-	    b.format_verbose(buf);
-	    
-	    Logger.getInstance().debug(TAG, buf.toString());
+	public void deliver_bundle(Bundle b) {
 
-	    BundleDaemon.getInstance().post(new BundleDeliveredEvent(b, this)); 
-	 }	
+		StringBuffer buf = new StringBuffer();
+		b.format_verbose(buf);
+
+		Logger.getInstance().debug(TAG, buf.toString());
+
+		BundleDaemon.getInstance().post(new BundleDeliveredEvent(b, this));
+	}
 }

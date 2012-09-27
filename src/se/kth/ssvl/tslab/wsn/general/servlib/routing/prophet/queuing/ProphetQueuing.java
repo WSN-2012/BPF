@@ -78,11 +78,10 @@ public abstract class ProphetQueuing {
 
 	public boolean removeNextBundle() {
 		int bundleID = this.getLastBundle();
-		if(bundleID != -1) {
+		if (bundleID != -1) {
 			this.delete(bundleID);
 			return true;
-		}
-		else
+		} else
 			return false;
 	}
 
@@ -93,10 +92,10 @@ public abstract class ProphetQueuing {
 
 	public void maintainQuota() {
 		BundleStore bs = BundleStore.getInstance();
-		Log.v(TAG, ""+GlobalStorage.getInstance().get_total_size());
-		while(bs.quota() != 0
+		Log.v(TAG, "" + GlobalStorage.getInstance().get_total_size());
+		while (bs.quota() != 0
 				&& (GlobalStorage.getInstance().get_total_size() > bs.quota())) {
-			if(!this.removeNextBundle())
+			if (!this.removeNextBundle())
 				break;
 		}
 	}

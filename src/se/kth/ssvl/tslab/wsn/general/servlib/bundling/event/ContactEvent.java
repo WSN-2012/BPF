@@ -24,10 +24,10 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Base class for the Contact related Event
- * @author Rerngvit Yanggratoke (rerngvit@kth.se) 
+ * 
+ * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class ContactEvent extends BundleEvent {
 
@@ -35,22 +35,16 @@ public class ContactEvent extends BundleEvent {
 	 * Reason codes for the particular event
 	 */
 	public static enum reason_t {
-		INVALID("INVALID", 0), 
-		NO_INFO("no additional info"),
-		USER("user action"), 
-		BROKEN("connection broken"), 
-		DISCOVERY("link discovery"), 
-		CL_ERROR("cl protocol error"), 
-		CL_VERSION("cl version mismatch"),
-											
-		SHUTDOWN("peer shut down"), 
-		RECONNECT("re-establishing connection"), 
-												
-		IDLE("connection idle"), 
-		TIMEOUT("schedule timed out"), 
-		MAGIC_NUMBER("remote magic number"), 
-		PEER_EID("Invalid Peer EID"), 
-		FIND_CONTACT("No link available/create"),
+		INVALID("INVALID", 0), NO_INFO("no additional info"), USER(
+				"user action"), BROKEN("connection broken"), DISCOVERY(
+				"link discovery"), CL_ERROR("cl protocol error"), CL_VERSION(
+				"cl version mismatch"),
+
+		SHUTDOWN("peer shut down"), RECONNECT("re-establishing connection"),
+
+		IDLE("connection idle"), TIMEOUT("schedule timed out"), MAGIC_NUMBER(
+				"remote magic number"), PEER_EID("Invalid Peer EID"), FIND_CONTACT(
+				"No link available/create"),
 
 		;
 
@@ -95,7 +89,8 @@ public class ContactEvent extends BundleEvent {
 	}
 
 	/**
-	 *  Constructor
+	 * Constructor
+	 * 
 	 * @param type
 	 * @param reason
 	 */
@@ -109,10 +104,11 @@ public class ContactEvent extends BundleEvent {
 	/**
 	 * reason code used internally, default to NO_INFO
 	 */
-	protected reason_t reason_ = reason_t.NO_INFO; 
+	protected reason_t reason_ = reason_t.NO_INFO;
 
 	/**
 	 * Getter for the reason code used internally, default to NO_INFO
+	 * 
 	 * @return the reason_
 	 */
 	public reason_t reason() {
@@ -121,7 +117,9 @@ public class ContactEvent extends BundleEvent {
 
 	/**
 	 * Setter for the reason code used internally, default to NO_INFO
-	 * @param reason the reason_ to set
+	 * 
+	 * @param reason
+	 *            the reason_ to set
 	 */
 	public void set_reason(reason_t reason) {
 		reason_ = reason;

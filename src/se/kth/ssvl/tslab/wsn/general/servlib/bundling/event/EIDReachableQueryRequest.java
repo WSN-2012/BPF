@@ -20,13 +20,16 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
+
 /**
  * Class for notifying EndpointID reachability
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class EIDReachableQueryRequest extends CLAQueryReport {
 	/**
 	 * constructor
+	 * 
 	 * @param query_id
 	 * @param iface
 	 * @param endpoint
@@ -42,17 +45,19 @@ public class EIDReachableQueryRequest extends CLAQueryReport {
 	}
 
 	/**
-	 *  Interface on which to check if the given endpoint is reachable.
+	 * Interface on which to check if the given endpoint is reachable.
 	 */
 	private Interface iface_;
 
 	/**
-	 *  Endpoint ID to be checked for reachable status.
+	 * Endpoint ID to be checked for reachable status.
 	 */
 	private String endpoint_;
 
 	/**
-	 * Getter for the Interface on which to check if the given endpoint is reachable.
+	 * Getter for the Interface on which to check if the given endpoint is
+	 * reachable.
+	 * 
 	 * @return the iface_
 	 */
 	public Interface iface() {
@@ -60,8 +65,11 @@ public class EIDReachableQueryRequest extends CLAQueryReport {
 	}
 
 	/**
-	 * Setter for the Interface on which to check if the given endpoint is reachable.
-	 * @param iface the iface_ to set
+	 * Setter for the Interface on which to check if the given endpoint is
+	 * reachable.
+	 * 
+	 * @param iface
+	 *            the iface_ to set
 	 */
 	public void set_iface(Interface iface) {
 		iface_ = iface;
@@ -69,6 +77,7 @@ public class EIDReachableQueryRequest extends CLAQueryReport {
 
 	/**
 	 * Getter for the Endpoint ID to be checked for reachable status.
+	 * 
 	 * @return the endpoint_
 	 */
 	public String endpoint() {
@@ -77,7 +86,9 @@ public class EIDReachableQueryRequest extends CLAQueryReport {
 
 	/**
 	 * Setter for the Endpoint ID to be checked for reachable status.
-	 * @param endpoint the endpoint_ to set
+	 * 
+	 * @param endpoint
+	 *            the endpoint_ to set
 	 */
 	public void set_endpoint(String endpoint) {
 		endpoint_ = endpoint;

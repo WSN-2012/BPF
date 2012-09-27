@@ -23,9 +23,9 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo.action_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 
-
 /**
  * BundleEvent for requesting Bundle sending
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleSendRequest extends BundleEvent {
@@ -41,6 +41,7 @@ public class BundleSendRequest extends BundleEvent {
 
 	/**
 	 * Constructor specifying Bundle, link, and action
+	 * 
 	 * @param bundle
 	 * @param link
 	 * @param action
@@ -48,29 +49,30 @@ public class BundleSendRequest extends BundleEvent {
 	public BundleSendRequest(Bundle bundle, Link link, action_t action) {
 		super(event_type_t.BUNDLE_SEND);
 		bundle_ = bundle;
-		link_   = link;
+		link_ = link;
 		action_ = action;
 		// should be processed only by the daemon
 		daemon_only_ = true;
 	}
 
 	/**
-	 *  Bundle to be sent
+	 * Bundle to be sent
 	 */
 	private Bundle bundle_;
 
 	/**
-	 *  Link on which to send the bundle
+	 * Link on which to send the bundle
 	 */
 	private Link link_;
 
 	/**
-	 *  Forwarding action to use when sending bundle
+	 * Forwarding action to use when sending bundle
 	 */
 	private action_t action_;
 
 	/**
 	 * Getter for the Bundle to be sent
+	 * 
 	 * @return the bundle_
 	 */
 	public Bundle bundle() {
@@ -79,7 +81,9 @@ public class BundleSendRequest extends BundleEvent {
 
 	/**
 	 * Setter for the Bundle to be sent
-	 * @param bundle the bundle_ to set
+	 * 
+	 * @param bundle
+	 *            the bundle_ to set
 	 */
 	public void set_bundle(Bundle bundle) {
 		bundle_ = bundle;
@@ -87,6 +91,7 @@ public class BundleSendRequest extends BundleEvent {
 
 	/**
 	 * Getter for the Link on which to send the bundle
+	 * 
 	 * @return the link_
 	 */
 	public Link link() {
@@ -95,7 +100,9 @@ public class BundleSendRequest extends BundleEvent {
 
 	/**
 	 * Setter for the Link on which to send the bundle
-	 * @param link the link_ to set
+	 * 
+	 * @param link
+	 *            the link_ to set
 	 */
 	public void set_link(Link link) {
 		link_ = link;
@@ -103,6 +110,7 @@ public class BundleSendRequest extends BundleEvent {
 
 	/**
 	 * Getter for the Forwarding action to use when sending bundle
+	 * 
 	 * @return the action_
 	 */
 	public action_t action() {
@@ -111,7 +119,9 @@ public class BundleSendRequest extends BundleEvent {
 
 	/**
 	 * Setter for the Forwarding action to use when sending bundle
-	 * @param action the action_ to set
+	 * 
+	 * @param action
+	 *            the action_ to set
 	 */
 	public void set_action(action_t action) {
 		action_ = action;

@@ -23,6 +23,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeVector;
 
 /**
  * Link Attributes Report Class
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class LinkAttributesReportEvent extends CLAQueryReport {
@@ -39,6 +40,7 @@ public class LinkAttributesReportEvent extends CLAQueryReport {
 
 	/**
 	 * Getter for the Link attribute values given by name.
+	 * 
 	 * @return the attributes_
 	 */
 	public AttributeVector attributes() {
@@ -47,7 +49,9 @@ public class LinkAttributesReportEvent extends CLAQueryReport {
 
 	/**
 	 * Setter for the Link attribute values given by name.
-	 * @param attributes the attributes_ to set
+	 * 
+	 * @param attributes
+	 *            the attributes_ to set
 	 */
 	public void set_attributes(AttributeVector attributes) {
 		attributes_ = attributes;

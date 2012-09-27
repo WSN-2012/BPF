@@ -213,7 +213,8 @@ public class IPDiscovery extends Discovery implements Runnable {
 	protected boolean configure() {
 
 		if (thread_.isAlive()) {
-			Logger.getInstance().warning(TAG, "reconfiguration of IPDiscovery not supported");
+			Logger.getInstance().warning(TAG,
+					"reconfiguration of IPDiscovery not supported");
 			return false;
 		}
 
@@ -229,10 +230,12 @@ public class IPDiscovery extends Discovery implements Runnable {
 		// static IntAddress mcast_mask = 224.0.0.0" [DTN2];
 		//
 		// if (remote_addr_ == BROADCAST) {
-		// Logger.getInstance().debug(TAG, "configuring broadcast socket for remote address");
+		// Logger.getInstance().debug(TAG,
+		// "configuring broadcast socket for remote address");
 		//
 		// } else if (!remote_addr_.isMulticastAddress()) {
-		// Logger.getInstance().debug(TAG, "configuring unicast socket for remote address");
+		// Logger.getInstance().debug(TAG,
+		// "configuring unicast socket for remote address");
 		// }
 
 		try {
@@ -274,7 +277,8 @@ public class IPDiscovery extends Discovery implements Runnable {
 
 					if (remaining == 0) {
 						try {
-							// Logger.getInstance().debug(TAG, "announce ready for sending");
+							// Logger.getInstance().debug(TAG,
+							// "announce ready for sending");
 							hdr = announce.format_advertisement(buf, 1024);
 
 							buf.put(hdr.cl_type());
@@ -295,17 +299,20 @@ public class IPDiscovery extends Discovery implements Runnable {
 							}
 
 							DatagramPacket pack = new DatagramPacket(data,
-									data.length, InetAddress
-											.getByName("255.255.255.255"),
+									data.length,
+									InetAddress.getByName("255.255.255.255"),
 									port_);
 							socket_.send(pack);
 							min_diff = announce.interval();
 						} catch (Exception e) {
-							Logger.getInstance().error(TAG, "error sending the packet "
-									+ e.getMessage());
+							Logger.getInstance().error(
+									TAG,
+									"error sending the packet "
+											+ e.getMessage());
 						}
 					} else {
-						// Logger.getInstance().debug(TAG, "Could not send discovery request");
+						// Logger.getInstance().debug(TAG,
+						// "Could not send discovery request");
 						if (remaining < min_diff) {
 							min_diff = announce.interval_remaining();
 						}
@@ -324,7 +331,8 @@ public class IPDiscovery extends Discovery implements Runnable {
 				DatagramPacket packet = new DatagramPacket(Rdata, Rdata.length);
 
 				socket_.receive(packet);
-				Logger.getInstance().debug("B4", "Received beacon: "+packet.getAddress());
+				Logger.getInstance().debug("B4",
+						"Received beacon: " + packet.getAddress());
 
 				// String s = new String(packet.getData(), 0,
 				// packet.getLength());
@@ -365,19 +373,20 @@ public class IPDiscovery extends Discovery implements Runnable {
 						.cl_type()));
 
 				BundleDaemon BD = BundleDaemon.getInstance();
-				
+
 				if (remote_eid.equals(BD.local_eid())) {
-					// Logger.getInstance().debug(TAG, "ignoring beacon from self" + remote_eid);
+					// Logger.getInstance().debug(TAG,
+					// "ignoring beacon from self" + remote_eid);
 				} else {
 					// distribute to all beacons registered for this CL type
 					handle_neighbor_discovered(Type, nexthop, remote_eid);
 				}
 
-				Logger.getInstance().debug("B4", "beacon: "+remote_eid);
+				Logger.getInstance().debug("B4", "beacon: " + remote_eid);
 
 			} catch (Exception e) {
-				 Logger.getInstance().info(TAG, "Fail receiving the UDP datagram " +
-				 e.getMessage());
+				Logger.getInstance().info(TAG,
+						"Fail receiving the UDP datagram " + e.getMessage());
 			}
 
 		}

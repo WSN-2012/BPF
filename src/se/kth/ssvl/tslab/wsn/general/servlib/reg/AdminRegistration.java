@@ -32,105 +32,129 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
- * This class is for internal registration. It receives all the administrative 
- * destined for the router itself. It receives bundles like ping bundles, acknowledgments,
- * status reports.
+ * This class is for internal registration. It receives all the administrative
+ * destined for the router itself. It receives bundles like ping bundles,
+ * acknowledgments, status reports.
  * 
  * @author Sharjeel Ahmed (sharjeel@kth.se)
  */
 
-public class AdminRegistration extends Registration{
-	
+public class AdminRegistration extends Registration {
 
 	/**
 	 * SerialVersionID to Support Serializable.
 	 */
 	private static final long serialVersionUID = 5047066101158253955L;
-	
+
 	/**
 	 * TAG for Android Logging
 	 */
 
 	private static String TAG = "AdminRegistration";
-	
 
 	/**
 	 * Constructor to initialize this class.
 	 */
-	public AdminRegistration(){
-		super(Registration.ADMIN_REGID, new EndpointIDPattern(BundleDaemon.getInstance().local_eid()), Registration.failure_action_t.DEFER, 0, 0, "");
+	public AdminRegistration() {
+		super(Registration.ADMIN_REGID, new EndpointIDPattern(BundleDaemon
+				.getInstance().local_eid()),
+				Registration.failure_action_t.DEFER, 0, 0, "");
 		set_active(true);
 	}
-	
+
 	/**
-	 * Delivery bundle process the administrative bundles and forward it to BundleDaemon
-	 * @param bundle Administrative bundle to process.  
+	 * Delivery bundle process the administrative bundles and forward it to
+	 * BundleDaemon
+	 * 
+	 * @param bundle
+	 *            Administrative bundle to process.
 	 */
 	@Override
-	public void deliver_bundle(Bundle bundle){
+	public void deliver_bundle(Bundle bundle) {
 
-	    int payload_len = bundle.payload().length();
-	    	
-	    byte[] payload_buf = new byte[payload_len];
-	
-        bundle.payload().read_data(0, payload_len, payload_buf);
-	    
-	    Logger.getInstance().debug(TAG, String.format("got %d byte bundle", payload_len));
-	        
-	    if (payload_len == 0) {
-	        Logger.getInstance().debug(TAG, String.format("admin registration got 0 byte %d", bundle.bundleid()));
-		    BundleDaemon.getInstance().post(new BundleDeliveredEvent(bundle, this));		
-		    return;
-	    }
+		int payload_len = bundle.payload().length();
 
-	    if (!bundle.is_admin()) {
-	        Logger.getInstance().debug(TAG, String.format("non-admin %d sent to local eid", bundle.bundleid()));
-		    BundleDaemon.getInstance().post(new BundleDeliveredEvent(bundle, this));		
-		    return;
-	    }
+		byte[] payload_buf = new byte[payload_len];
 
-	    byte typecode = (byte) (payload_buf[0] >> 4);
-	    
-	    switch(admin_record_type_t.get(typecode)) {
-	    
-	    case ADMIN_STATUS_REPORT:
-	    {
-	        Logger.getInstance().debug(TAG, String.format("status report %d received at admin registration", bundle.bundleid()));
-	        break;
-	    }
-	    
-	    case ADMIN_CUSTODY_SIGNAL:
-	    {
-	        Logger.getInstance().debug(TAG, String.format("ADMIN_CUSTODY_SIGNAL %d received", bundle.bundleid()));
-	        CustodySignal.data_t data = new CustodySignal.data_t();
-	        
-	        IByteBuffer buf = new SerializableByteBuffer(payload_buf.length);
-	        buf.put(payload_buf);
-	        
-	        boolean ok = CustodySignal.parse_custody_signal(data, buf, payload_len);
-	        
-	        if (!ok) {
-	            Logger.getInstance().debug(TAG, String.format("malformed custody signal %d", bundle.bundleid()));
-	            break;
-	        }
+		bundle.payload().read_data(0, payload_len, payload_buf);
 
-	        BundleDaemon.getInstance().post(new CustodySignalEvent(data));
+		Logger.getInstance().debug(TAG,
+				String.format("got %d byte bundle", payload_len));
 
-	        break;
-	    }
-	    
-	    case ADMIN_ANNOUNCE:
-	    {
-	        Logger.getInstance().debug(TAG, String.format("ADMIN_ANNOUNCE from %d", bundle.source().str()));
-	        break;
-	    }
-	        
-	    default:
-	        Logger.getInstance().warning(TAG, String.format("unexpected admin bundle with type %s %s",
-	                 typecode, bundle.bundleid()));
-	    }    
+		if (payload_len == 0) {
+			Logger.getInstance().debug(
+					TAG,
+					String.format("admin registration got 0 byte %d",
+							bundle.bundleid()));
+			BundleDaemon.getInstance().post(
+					new BundleDeliveredEvent(bundle, this));
+			return;
+		}
 
+		if (!bundle.is_admin()) {
+			Logger.getInstance().debug(
+					TAG,
+					String.format("non-admin %d sent to local eid",
+							bundle.bundleid()));
+			BundleDaemon.getInstance().post(
+					new BundleDeliveredEvent(bundle, this));
+			return;
+		}
 
-	    BundleDaemon.getInstance().post(new BundleDeliveredEvent(bundle, this));		
+		byte typecode = (byte) (payload_buf[0] >> 4);
+
+		switch (admin_record_type_t.get(typecode)) {
+
+		case ADMIN_STATUS_REPORT: {
+			Logger.getInstance().debug(
+					TAG,
+					String.format(
+							"status report %d received at admin registration",
+							bundle.bundleid()));
+			break;
+		}
+
+		case ADMIN_CUSTODY_SIGNAL: {
+			Logger.getInstance().debug(
+					TAG,
+					String.format("ADMIN_CUSTODY_SIGNAL %d received",
+							bundle.bundleid()));
+			CustodySignal.data_t data = new CustodySignal.data_t();
+
+			IByteBuffer buf = new SerializableByteBuffer(payload_buf.length);
+			buf.put(payload_buf);
+
+			boolean ok = CustodySignal.parse_custody_signal(data, buf,
+					payload_len);
+
+			if (!ok) {
+				Logger.getInstance().debug(
+						TAG,
+						String.format("malformed custody signal %d",
+								bundle.bundleid()));
+				break;
+			}
+
+			BundleDaemon.getInstance().post(new CustodySignalEvent(data));
+
+			break;
+		}
+
+		case ADMIN_ANNOUNCE: {
+			Logger.getInstance().debug(
+					TAG,
+					String.format("ADMIN_ANNOUNCE from %d", bundle.source()
+							.str()));
+			break;
+		}
+
+		default:
+			Logger.getInstance().warning(
+					TAG,
+					String.format("unexpected admin bundle with type %s %s",
+							typecode, bundle.bundleid()));
+		}
+
+		BundleDaemon.getInstance().post(new BundleDeliveredEvent(bundle, this));
 	};
 }

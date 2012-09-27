@@ -25,6 +25,7 @@ import java.util.Map;
 
 /**
  * Class for specifying source of the Bundle Event
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public enum event_source_t {

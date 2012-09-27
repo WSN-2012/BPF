@@ -92,17 +92,16 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 
 		thread_ = new Thread(this);
 
-		
-		/*Link generated_link = new Link(cl);
-		contact_ = new Contact(generated_link);
-		generated_link.set_contact(contact_);
-		generated_link.set_cl_info(params);
-		contact_.set_cl_info(this);*/
-	    contact_ = null;
+		/*
+		 * Link generated_link = new Link(cl); contact_ = new
+		 * Contact(generated_link); generated_link.set_contact(contact_);
+		 * generated_link.set_cl_info(params); contact_.set_cl_info(this);
+		 */
+		contact_ = null;
 		contact_up_ = false;
 		cmdqueue_ = new MsgBlockingQueue<CLMsg>(20);
 		cl_ = cl;
-		params_ = params; 
+		params_ = params;
 		active_connector_ = active_connector;
 		poll_timeout_ = -1;
 		contact_broken_ = false;
@@ -155,7 +154,8 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 			poll_timeout_ = 2 * params.keepalive_interval() * 1000;
 		}
 		if (contact_broken_) {
-			Logger.getInstance().debug(TAG, "contact_broken set during initialization");
+			Logger.getInstance().debug(TAG,
+					"contact_broken set during initialization");
 			return;
 		}
 
@@ -175,11 +175,14 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 
 		while (true) {
 			if (contact_broken_) {
-				Logger.getInstance().debug(TAG, "contact_broken set, exiting main loop");
+				Logger.getInstance().debug(TAG,
+						"contact_broken set, exiting main loop");
 				return;
 			}
 
-//			Logger.getInstance().debug(TAG, "CLConnection is still running in the main loop, cmdqueue_ size is " + cmdqueue_.size());
+			// Logger.getInstance().debug(TAG,
+			// "CLConnection is still running in the main loop, cmdqueue_ size is "
+			// + cmdqueue_.size());
 			// "check the command queue coming in from the bundle daemon
 			// if any arrive, we continue to the top of the loop to check
 			// contact_broken and then process any other commands before
@@ -203,7 +206,8 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 			// "check again here for contact broken since we don't want to
 			// poll if the socket's been closed" [DTN2]
 			if (contact_broken_) {
-				Logger.getInstance().debug(TAG, "contact_broken set, exiting main loop");
+				Logger.getInstance().debug(TAG,
+						"contact_broken set, exiting main loop");
 				return;
 			}
 
@@ -238,7 +242,8 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 
 		contact_broken_ = true;
 
-		Logger.getInstance().debug(TAG, "break_contact: " + reason.getCaption());
+		Logger.getInstance()
+				.debug(TAG, "break_contact: " + reason.getCaption());
 
 		if (reason != ContactEvent.reason_t.BROKEN) {
 			disconnect();
@@ -268,29 +273,33 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 		CLMsg msg;
 		try {
 			msg = cmdqueue_.take();
-	
-	
-		switch (msg.type_) {
-		case CLMSG_BUNDLES_QUEUED:
-			Logger.getInstance().debug(TAG, "processing CLMSG_BUNDLES_QUEUED");
-			handle_bundles_queued();
-			break;
 
-		case CLMSG_CANCEL_BUNDLE:
-			Logger.getInstance().debug(TAG, "processing CLMSG_CANCEL_BUNDLE");
-			handle_cancel_bundle(msg.bundle_);
-			break;
+			switch (msg.type_) {
+			case CLMSG_BUNDLES_QUEUED:
+				Logger.getInstance().debug(TAG,
+						"processing CLMSG_BUNDLES_QUEUED");
+				handle_bundles_queued();
+				break;
 
-		case CLMSG_BREAK_CONTACT:
-			Logger.getInstance().debug(TAG, "processing CLMSG_BREAK_CONTACT");
-			break_contact(ContactEvent.reason_t.USER);
-			break;
-		default:
-			Logger.getInstance().debug(TAG, "invalid CLMsg typecode " + msg.type_);
-		}
+			case CLMSG_CANCEL_BUNDLE:
+				Logger.getInstance().debug(TAG,
+						"processing CLMSG_CANCEL_BUNDLE");
+				handle_cancel_bundle(msg.bundle_);
+				break;
+
+			case CLMSG_BREAK_CONTACT:
+				Logger.getInstance().debug(TAG,
+						"processing CLMSG_BREAK_CONTACT");
+				break_contact(ContactEvent.reason_t.USER);
+				break;
+			default:
+				Logger.getInstance().debug(TAG,
+						"invalid CLMsg typecode " + msg.type_);
+			}
 
 		} catch (InterruptedException e) {
-			Logger.getInstance().error(TAG, "Interupt Exception in processs_command");
+			Logger.getInstance().error(TAG,
+					"Interupt Exception in processs_command");
 		}
 	}
 
@@ -331,7 +340,8 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 	boolean find_contact(EndpointID peer_eid) {
 
 		if (contact_ != null) {
-			Logger.getInstance().debug(TAG, "CLConnection.find_contact: contact already exists");
+			Logger.getInstance().debug(TAG,
+					"CLConnection.find_contact: contact already exists");
 			return true;
 		}
 
@@ -366,17 +376,20 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 
 		if (link == null || link.contact() != null) {
 			if (link != null) {
-				Logger.getInstance().warning(TAG, "in-use opportunistic link " + link);
+				Logger.getInstance().warning(TAG,
+						"in-use opportunistic link " + link);
 			}
 
 			link = cm.new_opportunistic_link(cl_, nexthop_, peer_eid);
 			if (link == null) {
-				Logger.getInstance().debug(TAG, "failed to create opportunistic link");
+				Logger.getInstance().debug(TAG,
+						"failed to create opportunistic link");
 				return false;
 			}
 
 			new_link = true;
-			Logger.getInstance().debug(TAG, "created new opportunistic link " + link);
+			Logger.getInstance().debug(TAG,
+					"created new opportunistic link " + link);
 		}
 
 		assert (link != null);
@@ -386,7 +399,8 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 			if (!new_link) {
 				assert (link.contact() == null);
 				link.set_nexthop(nexthop_);
-				Logger.getInstance().debug(TAG, "found idle opportunistic link " + link);
+				Logger.getInstance().debug(TAG,
+						"found idle opportunistic link " + link);
 			}
 
 			// The link should not be marked for deletion because the

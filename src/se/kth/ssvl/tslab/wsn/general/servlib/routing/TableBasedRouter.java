@@ -103,6 +103,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
  * This is the basic router mainly rely on the route entries in the RoutingTable
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public abstract class TableBasedRouter extends BundleRouter {
@@ -113,16 +114,13 @@ public abstract class TableBasedRouter extends BundleRouter {
 	private final static String TAG = "TableBasedRouter";
 
 	/**
-	 * Constructor 
+	 * Constructor
 	 */
 	protected TableBasedRouter() {
 		route_table_ = new RouteTable("TableBasedRouter");
 		reception_cache_ = new BundleInfoCache(1024);
-		reroute_timers_  = new HashMap<String, RerouteTimer>();
+		reroute_timers_ = new HashMap<String, RerouteTimer>();
 	}
-	
-	
-
 
 	/**
 	 * Dump the routing state.
@@ -134,7 +132,6 @@ public abstract class TableBasedRouter extends BundleRouter {
 		route_table_.dump(buf);
 
 	}
-
 
 	/**
 	 * "Add a route entry to the routing table." [DTN2]
@@ -176,17 +173,23 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		// "if the link is available and not open, open it" [DTN2]
 		if (link.isNotUnavailable() && (!link.isopen()) && (!link.isopening())) {
-			Logger.getInstance().debug(TAG, String.format(
-					"opening %s because a message is intended for it", link.name()));
+			Logger.getInstance().debug(
+					TAG,
+					String.format(
+							"opening %s because a message is intended for it",
+							link.name()));
 			actions_.open_link(link);
 		}
 
 		// "if the link is open and has space in the queue, then queue the
 		// bundle for transmission there" [DTN2]
 		if (link.isopen() && !link.queue_is_full()) {
-			Logger.getInstance().debug(TAG, String.format("queuing %d on %s", bundle.bundleid(), link.name()));
-			actions_.queue_bundle(bundle, link, route.action(), route
-					.custody_spec());
+			Logger.getInstance().debug(
+					TAG,
+					String.format("queuing %d on %s", bundle.bundleid(),
+							link.name()));
+			actions_.queue_bundle(bundle, link, route.action(),
+					route.custody_spec());
 			return true;
 		}
 
@@ -195,54 +198,73 @@ public abstract class TableBasedRouter extends BundleRouter {
 		DeferredList deferred = deferred_list(link);
 		if (!bundle.is_queued_on(deferred.list())) {
 			ForwardingInfo info = new ForwardingInfo(
-					ForwardingInfo.state_t.NONE, route.action(), link
-							.name_str(), 0xffffffff, link.remote_eid(), route
-							.custody_spec());
+					ForwardingInfo.state_t.NONE, route.action(),
+					link.name_str(), 0xffffffff, link.remote_eid(),
+					route.custody_spec());
 			deferred.add(bundle, info);
 		} else {
-			Logger.getInstance().warning(TAG, String.format(
-					"bundle %d already exists on deferred list of link %s",
-					bundle.bundleid(), link.name()));
+			Logger.getInstance()
+					.warning(
+							TAG,
+							String.format(
+									"bundle %d already exists on deferred list of link %s",
+									bundle.bundleid(), link.name()));
 		}
 
 		if (!link.isNotUnavailable()) {
-			Logger.getInstance().debug(TAG, String.format(
-					"can't forward bundle %d to %s because link not available",
-					bundle.bundleid(), link.name()));
+			Logger.getInstance()
+					.debug(TAG,
+							String.format(
+									"can't forward bundle %d to %s because link not available",
+									bundle.bundleid(), link.name()));
 		} else if (!link.isopen()) {
-			Logger.getInstance().debug(TAG, String.format(TAG,
-					"can't forward bundle %d to %s because link not open", bundle.bundleid(),
-					link.name()));
+			Logger.getInstance()
+					.debug(TAG,
+							String.format(
+									TAG,
+									"can't forward bundle %d to %s because link not open",
+									bundle.bundleid(), link.name()));
 		} else if (link.queue_is_full()) {
-			Logger.getInstance().debug(TAG, String.format(TAG,
-					"can't forward bundle %d to %s because link queue is full",
-					bundle.bundleid(), link.name()));
+			Logger.getInstance()
+					.debug(TAG,
+							String.format(
+									TAG,
+									"can't forward bundle %d to %s because link queue is full",
+									bundle.bundleid(), link.name()));
 		} else {
-			Logger.getInstance().debug(TAG, String.format(TAG, "can't forward %d to %s", bundle.bundleid(),
-					link.name()));
+			Logger.getInstance().debug(
+					TAG,
+					String.format(TAG, "can't forward %d to %s",
+							bundle.bundleid(), link.name()));
 		}
 
 		return false;
 	}
 
 	/**
-	 * "Check whether the Bundle should be forwarded to the give route or not" [DTN2]
-	 * @param bundle the Bundle to check
-	 * @param route the route to check 
+	 * "Check whether the Bundle should be forwarded to the give route or not"
+	 * [DTN2]
+	 * 
+	 * @param bundle
+	 *            the Bundle to check
+	 * @param route
+	 *            the route to check
 	 */
 	protected boolean should_fwd(final Bundle bundle, RouteEntry route) {
 
 		if (route == null)
 			return false;
 
-
 		EndpointID prevhop = reception_cache_.lookup(bundle);
 		if (prevhop != null) {
 			if (prevhop.equals(route.link().remote_eid())
 					&& !prevhop.equals(EndpointID.NULL_EID())) {
-				Logger.getInstance().debug(TAG, String.format("should_fwd bundle %d: "
-						+ "skip %s since bundle arrived from the same node",
-						bundle.bundleid(), route.link().name()));
+				Logger.getInstance()
+						.debug(TAG,
+								String.format(
+										"should_fwd bundle %d: "
+												+ "skip %s since bundle arrived from the same node",
+										bundle.bundleid(), route.link().name()));
 				return false;
 			}
 		}
@@ -258,23 +280,28 @@ public abstract class TableBasedRouter extends BundleRouter {
 	 * @param bundle
 	 *            the bundle to forward
 	 * 
-	 * @return "the number of links on which the bundle was queued
-	 *            (i.e. the number of matching route entries.)" [DTN2]
+	 * @return "the number of links on which the bundle was queued (i.e. the
+	 *         number of matching route entries.)" [DTN2]
 	 */
 	protected int route_bundle(Bundle bundle) {
 
 		RouteEntryVec matches = new RouteEntryVec();
 
-		Logger.getInstance().debug(TAG, String.format("route_bundle: checking bundle %d", bundle
-				.bundleid()));
+		Logger.getInstance().debug(
+				TAG,
+				String.format("route_bundle: checking bundle %d",
+						bundle.bundleid()));
 
 		// "check to see if forwarding is suppressed to all nodes" [DTN2]
 		if (bundle.fwdlog().get_count(EndpointIDPattern.WILDCARD_EID(),
 				ForwardingInfo.state_t.SUPPRESSED.getCode(),
 				ForwardingInfo.ANY_ACTION) > 0) {
-			Logger.getInstance().info(TAG, String.format("route_bundle: "
-					+ "ignoring bundle %d since forwarding is suppressed",
-					bundle.bundleid()));
+			Logger.getInstance()
+					.info(TAG,
+							String.format(
+									"route_bundle: "
+											+ "ignoring bundle %d since forwarding is suppressed",
+									bundle.bundleid()));
 			return 0;
 		}
 
@@ -285,25 +312,33 @@ public abstract class TableBasedRouter extends BundleRouter {
 		// override the way in which the sorting occurs" [DTN2]
 		sort_routes(matches);
 
-		Logger.getInstance().debug(TAG, String.format(
-				"route_bundle bundle id %d: checking %d route entry matches",
-				bundle.bundleid(), matches.size()));
+		Logger.getInstance()
+				.debug(TAG,
+						String.format(
+								"route_bundle bundle id %d: checking %d route entry matches",
+								bundle.bundleid(), matches.size()));
 
 		int count = 0;
 		Iterator<RouteEntry> itr = matches.iterator();
 		while (itr.hasNext()) {
 			RouteEntry route = itr.next();
-			Logger.getInstance().debug(TAG, String.format("checking route entry %s link %s (%s)",
-					route.toString(), route.link().name(), route.link()));
+			Logger.getInstance()
+					.debug(TAG,
+							String.format(
+									"checking route entry %s link %s (%s)",
+									route.toString(), route.link().name(),
+									route.link()));
 
 			if (!should_fwd(bundle, route)) {
 				continue;
 			}
 
 			if (deferred_list(route.link()).list().contains(bundle)) {
-				Logger.getInstance().debug(TAG, String.format("route_bundle bundle %d: "
-						+ "ignoring link %s since already deferred", bundle
-						.bundleid(), route.link().name()));
+				Logger.getInstance().debug(
+						TAG,
+						String.format("route_bundle bundle %d: "
+								+ "ignoring link %s since already deferred",
+								bundle.bundleid(), route.link().name()));
 				continue;
 			}
 
@@ -321,9 +356,11 @@ public abstract class TableBasedRouter extends BundleRouter {
 			++count;
 		}
 
-		Logger.getInstance().debug(TAG, String.format(
-				"route_bundle bundle id %d: forwarded on %d links", bundle
-						.bundleid(), count));
+		Logger.getInstance().debug(
+				TAG,
+				String.format(
+						"route_bundle bundle id %d: forwarded on %d links",
+						bundle.bundleid(), count));
 		return count;
 	}
 
@@ -343,30 +380,36 @@ public abstract class TableBasedRouter extends BundleRouter {
 	 * when it first arrives and the contact is brought up or when a bundle is
 	 * completed and it's no longer busy).
 	 * 
-	 * Loops through the bundle list and calls fwd_to_matching on all bundles." [DTN2]
+	 * Loops through the bundle list and calls fwd_to_matching on all bundles."
+	 * [DTN2]
 	 */
 	protected void check_next_hop(Link next_hop) {
 
 		// "if the link isn't open, there's nothing to do now" [DTN2]
 		if (!next_hop.isopen()) {
-			Logger.getInstance().debug(TAG, String.format(
-					"check_next_hop %s -> %s: link not open...", next_hop
-							.name(), next_hop.nexthop()));
+			Logger.getInstance().debug(
+					TAG,
+					String.format("check_next_hop %s -> %s: link not open...",
+							next_hop.name(), next_hop.nexthop()));
 			return;
 		}
 
 		// "if the link queue doesn't have space (based on the low water
 		// mark) don't do anything" [DTN2]
 		if (!next_hop.queue_has_space()) {
-			Logger.getInstance().debug(TAG, String.format(
-					"check_next_hop %s -> %s: no space in queue...", next_hop
-							.name(), next_hop.nexthop()));
+			Logger.getInstance().debug(
+					TAG,
+					String.format(
+							"check_next_hop %s -> %s: no space in queue...",
+							next_hop.name(), next_hop.nexthop()));
 			return;
 		}
 
-		Logger.getInstance().debug(TAG, String.format(
-				"check_next_hop %s -> %s: checking deferred bundle list...",
-				next_hop.name(), next_hop.nexthop()));
+		Logger.getInstance()
+				.debug(TAG,
+						String.format(
+								"check_next_hop %s -> %s: checking deferred bundle list...",
+								next_hop.name(), next_hop.nexthop()));
 
 		// "because the loop below will remove the current bundle from
 		// the deferred list, invalidating any iterators pointing to its
@@ -380,13 +423,10 @@ public abstract class TableBasedRouter extends BundleRouter {
 			Iterator<Bundle> iter = deferred.list().begin();
 			while (iter.hasNext()) {
 				if (next_hop.queue_is_full()) {
-					Log
-							.d(
-									TAG,
-									String
-											.format(
-													"check_next_hop %s: link queue is full, stopping loop",
-													next_hop.name()));
+					Logger.getInstance().debug(TAG,
+							String.format(
+									"check_next_hop %s: link queue is full, stopping loop",
+									next_hop.name()));
 					break;
 				}
 
@@ -401,53 +441,58 @@ public abstract class TableBasedRouter extends BundleRouter {
 				// fail, we leave it on the deferred list for now, relying on
 				// the transmitted handlers to clean up the state" [DTN2]
 				if (!this.should_fwd(bundle, next_hop, info.action())) {
-					Logger.getInstance().debug(TAG, String.format(
-							"check_next_hop: not forwarding to link %s",
-							next_hop.name()));
+					Logger.getInstance()
+							.debug(TAG,
+									String.format(
+											"check_next_hop: not forwarding to link %s",
+											next_hop.name()));
 					continue;
 				}
 
 				// "if the link is available and not open, open it" [DTN2]
 				if (next_hop.isNotUnavailable() && (!next_hop.isopen())
 						&& (!next_hop.isopening())) {
-					Log
-							.d(
-									TAG,
-									String
-											.format(
-													"check_next_hop: "
-															+ "opening %s because a message is intended for it",
-													next_hop.name()));
+					Logger.getInstance().debug(TAG,
+							String.format(
+									"check_next_hop: "
+											+ "opening %s because a message is intended for it",
+									next_hop.name()));
 					actions_.open_link(next_hop);
 				}
 
 				// "remove the bundle from the deferred list" [DTN2]
-				Logger.getInstance().debug(TAG, String.format("check_next_hop: sending bundle %d to %s",
-						bundle.bundleid(), next_hop.name()));
-				
+				Logger.getInstance().debug(
+						TAG,
+						String.format(
+								"check_next_hop: sending bundle %d to %s",
+								bundle.bundleid(), next_hop.name()));
+
 				iter.remove();
-				actions_.queue_bundle(bundle, next_hop, info.action(), info
-						.custody_spec());
-				
-				
+				actions_.queue_bundle(bundle, next_hop, info.action(),
+						info.custody_spec());
+
 			}
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG, "Table Based Router " + e.toString());
+			Logger.getInstance().error(TAG,
+					"Table Based Router " + e.toString());
 		} finally {
 			deferred.list().get_lock().unlock();
 		}
 	}
 
 	/**
-	 * "Go through all known bundles in the system and try to re-route them." [DTN2]
+	 * "Go through all known bundles in the system and try to re-route them."
+	 * [DTN2]
 	 */
 	protected void reroute_all_bundles() {
 
 		pending_bundles_.get_lock().lock();
 		try {
-			Logger.getInstance().debug(TAG, String.format(
-					"reroute_all_bundles... %d bundles on pending list",
-					pending_bundles_.size()));
+			Logger.getInstance()
+					.debug(TAG,
+							String.format(
+									"reroute_all_bundles... %d bundles on pending list",
+									pending_bundles_.size()));
 
 			ListIterator<Bundle> iter = pending_bundles_.begin();
 			while (iter.hasNext()) {
@@ -456,7 +501,8 @@ public abstract class TableBasedRouter extends BundleRouter {
 			}
 
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG, "TableBasedRouter: reroute_all_bundles " + e.toString());
+			Logger.getInstance().error(TAG,
+					"TableBasedRouter: reroute_all_bundles " + e.toString());
 		} finally {
 			pending_bundles_.get_lock().unlock();
 		}
@@ -484,8 +530,8 @@ public abstract class TableBasedRouter extends BundleRouter {
 		// the service part" [DTN2]
 		EndpointID eid = link.remote_eid();
 		if (config_.add_nexthop_routes() && !eid.equals(EndpointID.NULL_EID())) {
-			EndpointIDPattern eid_pattern = new EndpointIDPattern(link
-					.remote_eid());
+			EndpointIDPattern eid_pattern = new EndpointIDPattern(
+					link.remote_eid());
 
 			// "attempt to build a route pattern from link's remote_eid" [DTN2]
 			if (!eid_pattern.append_service_wildcard())
@@ -508,32 +554,31 @@ public abstract class TableBasedRouter extends BundleRouter {
 	@Override
 	public boolean can_delete_bundle(final Bundle bundle) {
 
-		Log
-				.d(
-						TAG,
-						String
-								.format(
-										"TableBasedRouter::can_delete_bundle: checking if we can delete %s",
-										bundle));
+		Logger.getInstance().debug(TAG,
+				String.format(
+						"TableBasedRouter::can_delete_bundle: checking if we can delete %s",
+						bundle));
 
 		// "check if we haven't yet done anything with this bundle" [DTN2]
 		if (bundle.fwdlog().get_count(
 				ForwardingInfo.state_t.TRANSMITTED.getCode()
 						| ForwardingInfo.state_t.DELIVERED.getCode(),
 				ForwardingInfo.ANY_ACTION) == 0) {
-			Logger.getInstance().debug(TAG, String.format(
-					"TableBasedRouter::can_delete_bundle(%d): "
-							+ "not yet transmitted or delivered", bundle
-							.bundleid()));
+			Logger.getInstance().debug(
+					TAG,
+					String.format("TableBasedRouter::can_delete_bundle(%d): "
+							+ "not yet transmitted or delivered",
+							bundle.bundleid()));
 			return false;
 		}
 
 		// check if we have local custody
 		if (bundle.local_custody()) {
-			Logger.getInstance().debug(TAG, String.format(
-					"TableBasedRouter::can_delete_bundle(%d): "
-							+ "not deleting because we have custody", bundle
-							.bundleid()));
+			Logger.getInstance().debug(
+					TAG,
+					String.format("TableBasedRouter::can_delete_bundle(%d): "
+							+ "not deleting because we have custody",
+							bundle.bundleid()));
 			return false;
 		}
 
@@ -546,7 +591,8 @@ public abstract class TableBasedRouter extends BundleRouter {
 	@Override
 	public void delete_bundle(final Bundle bundle) {
 
-		Logger.getInstance().debug(TAG, String.format("delete bundleid %d", bundle.bundleid()));
+		Logger.getInstance().debug(TAG,
+				String.format("delete bundleid %d", bundle.bundleid()));
 		remove_from_deferred(bundle, ForwardingInfo.ANY_ACTION);
 
 	}
@@ -579,13 +625,10 @@ public abstract class TableBasedRouter extends BundleRouter {
 				ForwardingInfo info = deferred.find(bundle);
 				if (info != null) {
 					if ((info.action().getCode() & actions) > 0) {
-						Log
-								.d(
-										TAG,
-										String
-												.format(
-														"removing bundle %s from link %s deferred list",
-														bundle, link));
+						Logger.getInstance().debug(TAG,
+								String.format(
+										"removing bundle %s from link %s deferred list",
+										bundle, link));
 						deferred.del(bundle);
 					}
 				}
@@ -597,20 +640,22 @@ public abstract class TableBasedRouter extends BundleRouter {
 	}
 
 	/**
-	 *  "Cache to check for duplicates and to implement a simple RPF check" [DTN2]
+	 * "Cache to check for duplicates and to implement a simple RPF check"
+	 * [DTN2]
 	 */
 	private BundleInfoCache reception_cache_;
 
 	/**
-	 *  "The routing table used in this router" [DTN2]
+	 * "The routing table used in this router" [DTN2]
 	 */
 	protected RouteTable route_table_;
 
-
 	/**
-	 *  "Timer class used to cancel transmission on down links after waiting for them to potentially reopen" [DTN2]
-	 *  @author Rerngvit Yanggratoke (rerngvit@kth.se)
-	 */ 
+	 * "Timer class used to cancel transmission on down links after waiting for them to potentially reopen"
+	 * [DTN2]
+	 * 
+	 * @author Rerngvit Yanggratoke (rerngvit@kth.se)
+	 */
 	static class RerouteTimer extends VirtualTimerTask {
 
 		/**
@@ -626,7 +671,6 @@ public abstract class TableBasedRouter extends BundleRouter {
 		protected TableBasedRouter router_;
 		protected Link link_;
 
-		
 		@Override
 		protected void timeout(Date now) {
 			router_.reroute_all_bundles();
@@ -635,7 +679,8 @@ public abstract class TableBasedRouter extends BundleRouter {
 	};
 
 	/**
-	 *  Helper function for rerouting
+	 * Helper function for rerouting
+	 * 
 	 * @param link
 	 */
 	void reroute_bundles(final Link link) {
@@ -645,20 +690,18 @@ public abstract class TableBasedRouter extends BundleRouter {
 		// "if the reroute timer fires, the link should be down and there
 		// should be at least one bundle queued on it." [DTN2]
 		if (link.state() != Link.state_t.UNAVAILABLE) {
-			Log
-					.w(
-							TAG,
-							String
-									.format(
-											"reroute timer fired but link %s state is %s, not UNAVAILABLE",
-											link, link.state().toString()));
+			Logger.getInstance().warning(TAG,
+					String.format(
+							"reroute timer fired but link %s state is %s, not UNAVAILABLE",
+							link, link.state().toString()));
 			return;
 		}
 
-		Logger.getInstance().debug(TAG, String.format(
-				"reroute timer fired -- cancelling %s bundles on link %s", link
-						.queue().size(), link.toString()));
-
+		Logger.getInstance()
+				.debug(TAG,
+						String.format(
+								"reroute timer fired -- cancelling %s bundles on link %s",
+								link.queue().size(), link.toString()));
 
 		link.queue().get_lock().lock();
 		try {
@@ -681,20 +724,22 @@ public abstract class TableBasedRouter extends BundleRouter {
 	private HashMap<String, RerouteTimer> reroute_timers_;
 
 	/**
-	 * "Per-link class used to store deferred transmission bundles
-	 * that helps cache route computations" [DTN2]
-	 */ 
+	 * "Per-link class used to store deferred transmission bundles that helps
+	 * cache route computations" [DTN2]
+	 */
 	public static class DeferredList implements RouterInfo {
 
 		private static final String TAG = "DeferredList";
+
 		public DeferredList(final Link link) {
 			list_ = new BundleList(link.name() + ":deferred");
-			info_ = new HashMap<Bundle,ForwardingInfo>();
+			info_ = new HashMap<Bundle, ForwardingInfo>();
 			count_ = 0;
 		}
 
 		/**
 		 * Getter for the bundle list
+		 * 
 		 * @return
 		 */
 		public BundleList list() {
@@ -703,68 +748,81 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		/**
 		 * "Accessor for the forwarding info associated with the" [DTN2]
-		 * @param bundle bundle, which must be on the list
+		 * 
+		 * @param bundle
+		 *            bundle, which must be on the list
 		 * @return
-		 */ 
-		 public final ForwardingInfo info(final Bundle bundle) {
-			 ForwardingInfo result = find(bundle);
-			 assert result!=null: "DeferredList: info, find(Bundle) is null";
-			 return result;
-		 }
+		 */
+		public final ForwardingInfo info(final Bundle bundle) {
+			ForwardingInfo result = find(bundle);
+			assert result != null : "DeferredList: info, find(Bundle) is null";
+			return result;
+		}
 
-		 /**
-		  * "Check if the bundle is on the list. If so, return its forwarding info
-		  * otherwise, return null if it can not find" [DTN2]
-		  */
+		/**
+		 * "Check if the bundle is on the list. If so, return its forwarding
+		 * info otherwise, return null if it can not find" [DTN2]
+		 */
 		public ForwardingInfo find(final Bundle bundle) {
-			ForwardingInfo info  = info_.get(bundle);
+			ForwardingInfo info = info_.get(bundle);
 			return info;
 		}
 
 		/**
 		 * "Add a new bundle/info pair to the deferred list" [DTN2]
+		 * 
 		 * @param bundle
 		 * @param info
 		 * @return
 		 */
 		boolean add(final Bundle bundle, final ForwardingInfo info) {
-			  if (list_.contains(bundle)) {
-			        Logger.getInstance().error(TAG, String.format("bundle %d already in deferred list!",
-			                bundle.bundleid()));
-			        return false;
-			    }
-			    
-			    Logger.getInstance().debug(TAG, String.format("adding bundle %d to deferred (list length %d)",
-			              bundle.bundleid(), count_));
+			if (list_.contains(bundle)) {
+				Logger.getInstance().error(
+						TAG,
+						String.format("bundle %d already in deferred list!",
+								bundle.bundleid()));
+				return false;
+			}
 
-			    count_++;
-			    list_.push_back(bundle);
+			Logger.getInstance().debug(
+					TAG,
+					String.format(
+							"adding bundle %d to deferred (list length %d)",
+							bundle.bundleid(), count_));
 
-			    info_.put(bundle, info);
+			count_++;
+			list_.push_back(bundle);
 
-			    return true;
+			info_.put(bundle, info);
+
+			return true;
 		}
 
 		/**
-		 * "Remove the bundle and its associated forwarding info from the list" [DTN2] 
+		 * "Remove the bundle and its associated forwarding info from the list"
+		 * [DTN2]
+		 * 
 		 * @param bundle
 		 * @return
-		 */ 
+		 */
 		boolean del(final Bundle bundle) {
-			if (! list_.erase(bundle,false)) {
-		        return false;
-		    }
-		    
-		    assert (count_ > 0) : "DeferredList::del count <= 0";
-		    count_--;
-		    
-		    Logger.getInstance().debug(TAG, String.format("removed bundle %d from deferred (length %d)",
-		              bundle.bundleid(), count_));
+			if (!list_.erase(bundle, false)) {
+				return false;
+			}
 
-		    ForwardingInfo removed_result = info_.remove(bundle);
-		    assert removed_result != null: "DeferredList::del failed to remove info map";
-		    
-		    return true;
+			assert (count_ > 0) : "DeferredList::del count <= 0";
+			count_--;
+
+			Logger.getInstance().debug(
+					TAG,
+					String.format(
+							"removed bundle %d from deferred (length %d)",
+							bundle.bundleid(), count_));
+
+			ForwardingInfo removed_result = info_.remove(bundle);
+			assert removed_result != null : "DeferredList::del failed to remove info map";
+
+			return true;
 		}
 
 		/**
@@ -781,61 +839,61 @@ public abstract class TableBasedRouter extends BundleRouter {
 		protected HashMap<Bundle, ForwardingInfo> info_;
 		private int count_;
 
-		
 		public void dump(StringBuffer buf) {
 			dump_stats(buf);
 
 		}
 	};
 
-	
 	/**
 	 * "Helper accessor to return the deferred queue for a link" [DTN2]
+	 * 
 	 * @param link
 	 * @return
 	 */
 	public DeferredList deferred_list(final Link link) {
 		DeferredList dq = (DeferredList) link.router_info();
-		assert dq!=null : "TableBasedRouter: deferred_list() deferedList is null";
-		
-		if (dq == null) dq = new DeferredList(link);
+		assert dq != null : "TableBasedRouter: deferred_list() deferedList is null";
+
+		if (dq == null)
+			dq = new DeferredList(link);
 		return dq;
 	}
 
-	
 	@Override
 	public void initialize(DTNConfiguration dtn_config) {
-	Iterator<RoutesSetting.RouteEntry> itr = dtn_config.routes_setting().route_entries().iterator();
-		
-		while( itr.hasNext())
-		{
+		Iterator<RoutesSetting.RouteEntry> itr = dtn_config.routes_setting()
+				.route_entries().iterator();
+
+		while (itr.hasNext()) {
 			RoutesSetting.RouteEntry rentry = itr.next();
-			
+
 			EndpointIDPattern pattern = new EndpointIDPattern(rentry.dest());
-			Link link  = ContactManager.getInstance().find_link(rentry.link_id());
-			route_table_.add_entry(new RouteEntry(pattern , link ));			
+			Link link = ContactManager.getInstance()
+					.find_link(rentry.link_id());
+			route_table_.add_entry(new RouteEntry(pattern, link));
 		}
 	}
 
-	
 	@Override
 	protected void handle_bundle_accept(BundleAcceptRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_cancel(BundleCancelRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_cancelled(BundleSendCancelledEvent event) {
 		Bundle bundle = event.bundle();
-		Logger.getInstance().debug(TAG, String.format("handle bundle cancelled: bundle %d", bundle.bundleid()));
+		Logger.getInstance().debug(
+				TAG,
+				String.format("handle bundle cancelled: bundle %d",
+						bundle.bundleid()));
 
 		// "if the bundle has expired, we don't want to reroute it." [DTN2]
 		if (!bundle.expired()) {
@@ -844,76 +902,69 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_delete(BundleDeleteRequest request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_delivered(BundleDeliveredEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_expired(BundleExpiredEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_free(BundleFreeEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_inject(BundleInjectRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_injected(BundleInjectedEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_query(BundleQueryRequest request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_queued_query(BundleQueuedQueryRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_queued_report(BundleQueuedReportEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_received(BundleReceivedEvent event) {
 		boolean should_route = true;
 
 		Bundle bundle = event.bundle();
-		Logger.getInstance().debug(TAG, String.format("handle bundle received: bundle %d", bundle.bundleid()));
+		Logger.getInstance().debug(
+				TAG,
+				String.format("handle bundle received: bundle %d",
+						bundle.bundleid()));
 
 		EndpointID remote_eid = EndpointID.NULL_EID();
 
@@ -922,7 +973,10 @@ public abstract class TableBasedRouter extends BundleRouter {
 		}
 
 		if (!reception_cache_.add_entry(bundle, remote_eid)) {
-			Logger.getInstance().info(TAG, String.format("ignoring duplicate bundle: bundle %d", bundle.bundleid()));
+			Logger.getInstance().info(
+					TAG,
+					String.format("ignoring duplicate bundle: bundle %d",
+							bundle.bundleid()));
 			BundleDaemon
 					.getInstance()
 					.post_at_head(
@@ -945,30 +999,31 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_report(BundleReportEvent request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_send(BundleSendRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_transmitted(BundleTransmittedEvent event) {
 		Bundle bundle = event.bundle();
-		Logger.getInstance().debug(TAG, String.format("handle bundle transmitted: bundle %d", bundle.bundleid()));
+		Logger.getInstance().debug(
+				TAG,
+				String.format("handle bundle transmitted: bundle %d",
+						bundle.bundleid()));
 
 		// "if the bundle has a deferred single-copy transmission for
-		// forwarding on any links, then remove the forwarding log entries" [DTN2]
-		remove_from_deferred(bundle, ForwardingInfo.action_t.FORWARD_ACTION
-				.getCode());
+		// forwarding on any links, then remove the forwarding log entries"
+		// [DTN2]
+		remove_from_deferred(bundle,
+				ForwardingInfo.action_t.FORWARD_ACTION.getCode());
 
 		// "check if the transmission means that we can send another bundle
 		// on the link" [DTN2]
@@ -976,43 +1031,37 @@ public abstract class TableBasedRouter extends BundleRouter {
 		check_next_hop(link);
 	}
 
-	
 	@Override
 	protected void handle_cla_parameters_query(CLAParametersQueryRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_cla_parameters_report(CLAParametersReportEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_cla_params_set(CLAParamsSetEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_cla_set_params(CLASetParamsRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_contact_attribute_changed(
 			ContactAttributeChangedEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_contact_down(ContactDownEvent event) {
 		Link link = event.contact().link();
@@ -1027,11 +1076,13 @@ public abstract class TableBasedRouter extends BundleRouter {
 		if (num_queued != 0) {
 			RerouteTimer reroute_timer = reroute_timers_.get(link.name());
 			if (reroute_timer == null) {
-				Logger.getInstance().debug(TAG, String.format(
-						"link %s went down with %d bundles queued, "
-								+ "scheduling reroute timer in %d seconds",
-						link.name(), num_queued, link.params()
-								.potential_downtime()));
+				Logger.getInstance()
+						.debug(TAG,
+								String.format(
+										"link %s went down with %d bundles queued, "
+												+ "scheduling reroute timer in %d seconds",
+										link.name(), num_queued, link.params()
+												.potential_downtime()));
 				RerouteTimer t = new RerouteTimer(this, link);
 				t.schedule_in(link.params().potential_downtime());
 
@@ -1041,21 +1092,18 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 	}
 
-	
 	@Override
 	protected void handle_contact_query(ContactQueryRequest request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_contact_report(ContactReportEvent request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_contact_up(ContactUpEvent event) {
 		Link link = event.contact().link();
@@ -1063,8 +1111,11 @@ public abstract class TableBasedRouter extends BundleRouter {
 		assert (!link.isdeleted()) : "TabledBasedRouter: handle_contact_up : link is deleted";
 
 		if (!link.isopen()) {
-			Logger.getInstance().error(TAG, String.format(
-					"contact up(link %s): event delivered but link not open", link.name()));
+			Logger.getInstance()
+(TAG,
+							String.format(
+									"contact up(link %s): event delivered but link not open",
+									link.name()));
 		}
 
 		add_nexthop_route(link);
@@ -1072,7 +1123,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		// "check if there's a pending reroute timer on the link, and if
 		// so, cancel it.
-		// 
+		//
 		// note that there's a possibility that a link just bounces
 		// between up and down states but can't ever really send a bundle
 		// (or part of one), which we don't handle here since we can't
@@ -1081,277 +1132,245 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		RerouteTimer reroute_timer = reroute_timers_.get(link.name());
 		if (reroute_timer != null) {
-			Logger.getInstance().debug(TAG, String.format(
-					"link %s reopened, cancelling reroute timer", link.name()));
+			Logger.getInstance().debug(
+					TAG,
+					String.format("link %s reopened, cancelling reroute timer",
+							link.name()));
 			reroute_timers_.remove(link.name());
 			reroute_timer.cancel();
 		}
 
 	}
 
-	
 	@Override
 	protected void handle_custody_signal(CustodySignalEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_custody_timeout(CustodyTimeoutEvent event) {
 		// "the bundle daemon should have recorded a new entry in the
-	    // forwarding log for the given link to note that custody transfer
-	    // timed out, and of course the bundle should still be in the
-	    // pending list.
-	    //
-	    // therefore, trying again to forward the bundle should match
-	    // either the previous link or any other route" [DTN2]
-	    route_bundle(event.bundle());
+		// forwarding log for the given link to note that custody transfer
+		// timed out, and of course the bundle should still be in the
+		// pending list.
+		//
+		// therefore, trying again to forward the bundle should match
+		// either the previous link or any other route" [DTN2]
+		route_bundle(event.bundle());
 
 	}
 
-	
 	@Override
 	protected void handle_eid_reachable_query(EIDReachableQueryRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_eid_reachable_report(EIDReachableReportEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_iface_attributes_query(
 			IfaceAttributesQueryRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_iface_attributes_report(
 			IfaceAttributesReportEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_link_attribute_changed(LinkAttributeChangedEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_link_attributes_query(LinkAttributesQueryRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_link_attributes_report(LinkAttributesReportEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_link_available(LinkAvailableEvent event) {
 		Link link = event.link();
-	    assert(link != null): "TableBasedRouter: handle_link_available: link is null";
-	    assert(!link.isdeleted()): "TableBasedRouter: handle_link_available: link is deleted";
+		assert (link != null) : "TableBasedRouter: handle_link_available: link is null";
+		assert (!link.isdeleted()) : "TableBasedRouter: handle_link_available: link is deleted";
 
-	    // "if it is a discovered link, we typically open it" [DTN2]
-	    if (config_.open_discovered_links() &&
-	        !link.isopen() &&
-	        link.type() == Link.link_type_t.OPPORTUNISTIC &&
-	        event.reason() == ContactEvent.reason_t.DISCOVERY)
-	    {
-	        actions_.open_link(link);
-	    }
-	    
-	    // "check if there's anything to be forwarded to the link" [DTN2]
-	    check_next_hop(link);
+		// "if it is a discovered link, we typically open it" [DTN2]
+		if (config_.open_discovered_links() && !link.isopen()
+				&& link.type() == Link.link_type_t.OPPORTUNISTIC
+				&& event.reason() == ContactEvent.reason_t.DISCOVERY) {
+			actions_.open_link(link);
+		}
+
+		// "check if there's anything to be forwarded to the link" [DTN2]
+		check_next_hop(link);
 
 	}
 
-
-	
 	@Override
 	protected void handle_link_created(LinkCreatedEvent event) {
 		Link link = event.link();
-		assert(link != null): "TableBasedRouter: handle_link_created: link is null";
-	    assert(!link.isdeleted()): "TableBasedRouter: handle_link_available: link is deleted";
+		assert (link != null) : "TableBasedRouter: handle_link_created: link is null";
+		assert (!link.isdeleted()) : "TableBasedRouter: handle_link_available: link is deleted";
 
-	    link.set_router_info(new DeferredList(link));
-	                          
-	    add_nexthop_route(link);
+		link.set_router_info(new DeferredList(link));
+
+		add_nexthop_route(link);
 
 	}
 
-	
 	@Override
 	protected void handle_link_delete(LinkDeleteRequest request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_link_deleted(LinkDeletedEvent event) {
 		Link link = event.link();
-		assert(link != null): "TableBasedRouter: handle_link_deleted: link is null";
-		   
+		assert (link != null) : "TableBasedRouter: handle_link_deleted: link is null";
 
-	    route_table_.del_entries_for_nexthop(link);
+		route_table_.del_entries_for_nexthop(link);
 
-	    RerouteTimer t  = reroute_timers_.get(link.name());
-	    if (t != null) {
-	        Logger.getInstance().debug(TAG, String.format("link %s deleted, cancelling reroute timer",
-	        		link.name()));
-	        reroute_timers_.remove(link.name());
-	        t.cancel();
-	    }
+		RerouteTimer t = reroute_timers_.get(link.name());
+		if (t != null) {
+			Logger.getInstance().debug(
+					TAG,
+					String.format("link %s deleted, cancelling reroute timer",
+							link.name()));
+			reroute_timers_.remove(link.name());
+			t.cancel();
+		}
 
 	}
 
-	
 	@Override
 	protected void handle_link_query(LinkQueryRequest request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_link_reconfigure(LinkReconfigureRequest request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_link_report(LinkReportEvent request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_link_state_change_request(LinkStateChangeRequest req) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_link_unavailable(LinkUnavailableEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_new_eid_reachable(NewEIDReachableEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_reassembly_completed(ReassemblyCompletedEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_registration_added(RegistrationAddedEvent event) {
-		 Registration reg = event.registration();
-		    
-	    if (reg == null || reg.session_flags() == 0) {
-	        return;
-	    }
+		Registration reg = event.registration();
+
+		if (reg == null || reg.session_flags() == 0) {
+			return;
+		}
 
 	}
 
-	
 	@Override
 	protected void handle_registration_delete(RegistrationDeleteRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_registration_expired(RegistrationExpiredEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_registration_removed(RegistrationRemovedEvent event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_route_add(RouteAddEvent event) {
 		add_route(event.entry());
 
 	}
 
-	
 	@Override
 	protected void handle_route_del(RouteDelEvent event) {
 		del_route(event.dest());
 	}
 
-	
 	@Override
 	protected void handle_route_query(RouteQueryRequest request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_route_report(RouteReportEvent request) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_set_link_defaults(SetLinkDefaultsRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_shutdown_request(ShutdownRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	protected void handle_status_request(StatusRequest event) {
-		//NOT IMPLEMENTED IN THIS ROUTER
+		// NOT IMPLEMENTED IN THIS ROUTER
 
 	}
 
-	
 	@Override
 	public void handle_event(BundleEvent event) {
 		dispatch_event(event);

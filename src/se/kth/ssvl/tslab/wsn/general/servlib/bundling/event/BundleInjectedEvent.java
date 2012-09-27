@@ -21,14 +21,15 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 
-
 /**
  * Event class after Bundle is injected
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class BundleInjectedEvent  extends BundleEvent {
+public class BundleInjectedEvent extends BundleEvent {
 	/**
 	 * main Constructor
+	 * 
 	 * @param bundle
 	 * @param request_id
 	 */
@@ -36,22 +37,22 @@ public class BundleInjectedEvent  extends BundleEvent {
 		super(event_type_t.BUNDLE_INJECTED);
 		bundle_ = bundle;
 		request_id_ = request_id;
-		
-		
+
 	}
 
 	/**
-	 *  The injected bundle
+	 * The injected bundle
 	 */
 	private Bundle bundle_;
 
 	/**
-	 *  Request ID from the inject request
+	 * Request ID from the inject request
 	 */
 	private String request_id_;
 
 	/**
 	 * Accessor for the injected bundle
+	 * 
 	 * @return the bundle_
 	 */
 	public Bundle bundle() {
@@ -60,7 +61,9 @@ public class BundleInjectedEvent  extends BundleEvent {
 
 	/**
 	 * Setter for the injected bundle
-	 * @param bundle the bundle_ to set
+	 * 
+	 * @param bundle
+	 *            the bundle_ to set
 	 */
 	public void set_bundle(Bundle bundle) {
 		bundle_ = bundle;
@@ -68,6 +71,7 @@ public class BundleInjectedEvent  extends BundleEvent {
 
 	/**
 	 * Accessor for the Request ID from the inject request
+	 * 
 	 * @return the request_id_
 	 */
 	public String request_id() {
@@ -76,7 +80,9 @@ public class BundleInjectedEvent  extends BundleEvent {
 
 	/**
 	 * Setter for the Request ID from the inject request
-	 * @param requestId the request_id_ to set
+	 * 
+	 * @param requestId
+	 *            the request_id_ to set
 	 */
 	public void set_request_id(String request_id) {
 		request_id_ = request_id;

@@ -30,12 +30,12 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
- * Internal registration for the dtnping application. 
+ * Internal registration for the dtnping application.
+ * 
  * @author Sharjeel Ahmed (sharjeel@kth.se)
  */
 
 public class PingRegistration extends Registration {
-
 
 	/**
 	 * SerialVersionID to Support Serializable.
@@ -53,38 +53,45 @@ public class PingRegistration extends Registration {
 	 * Constructor to initialize this class.
 	 */
 
-    public PingRegistration(final EndpointID eid){
-    	
-    	super(PING_REGID, new EndpointIDPattern(eid), Registration.failure_action_t.DEFER, 0,0,"");
-    	set_active(true);
-    }
+	public PingRegistration(final EndpointID eid) {
+
+		super(PING_REGID, new EndpointIDPattern(eid),
+				Registration.failure_action_t.DEFER, 0, 0, "");
+		set_active(true);
+	}
 
 	/**
 	 * Delivery bundle process forward the bundle to BundleDaemon
-	 * @param bundle Bundle to process.  
+	 * 
+	 * @param bundle
+	 *            Bundle to process.
 	 */
 
-    @Override
-	public void deliver_bundle(Bundle bundle){
-    	
-        int payload_len = bundle.payload().length();
-        
-        Logger.getInstance().debug(TAG, String.format("%d byte ping from %s",
-                  payload_len, bundle.source().str()));
-        
-        Bundle reply = new Bundle(location_t.MEMORY);
-        
-        reply.source().assign(endpoint_);
-        reply.dest().assign(bundle.source());
-        reply.replyto().assign(EndpointID.NULL_EID());
-        reply.custodian().assign(EndpointID.NULL_EID());
-        reply.set_expiration(bundle.expiration());
+	@Override
+	public void deliver_bundle(Bundle bundle) {
 
-        reply.payload().set_length(payload_len);
-        reply.payload().write_data(bundle.payload(), 0, payload_len, 0);
-        
-        BundleDaemon.getInstance().post_at_head(new BundleDeliveredEvent(bundle, this));
-        BundleDaemon.getInstance().post_at_head(new BundleReceivedEvent(reply, event_source_t.EVENTSRC_ADMIN));
-        	
-    }
+		int payload_len = bundle.payload().length();
+
+		Logger.getInstance().debug(
+				TAG,
+				String.format("%d byte ping from %s", payload_len, bundle
+						.source().str()));
+
+		Bundle reply = new Bundle(location_t.MEMORY);
+
+		reply.source().assign(endpoint_);
+		reply.dest().assign(bundle.source());
+		reply.replyto().assign(EndpointID.NULL_EID());
+		reply.custodian().assign(EndpointID.NULL_EID());
+		reply.set_expiration(bundle.expiration());
+
+		reply.payload().set_length(payload_len);
+		reply.payload().write_data(bundle.payload(), 0, payload_len, 0);
+
+		BundleDaemon.getInstance().post_at_head(
+				new BundleDeliveredEvent(bundle, this));
+		BundleDaemon.getInstance().post_at_head(
+				new BundleReceivedEvent(reply, event_source_t.EVENTSRC_ADMIN));
+
+	}
 }

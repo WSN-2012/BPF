@@ -29,65 +29,60 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
- 
 
 /**
  * A timer for retransmitting the bundle in custody of this node.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class CustodyTimer extends VirtualTimerTask implements Serializable{
+public class CustodyTimer extends VirtualTimerTask implements Serializable {
 	/**
 	 * String TAG for using with Android Logging system
 	 */
 	private final static String TAG = "CustodyTimer";
-    /**
+	/**
 	 * Serial version UID
 	 */
 	private static final long serialVersionUID = -7470636238119877716L;
 
 	/** Constructor */
-	public CustodyTimer(final Date xmit_time,
-                 final CustodyTimerSpec spec,
-                 Bundle bundle, final Link link)
-	{
-		bundle_  = bundle;
-		link_    = link;
-		
+	public CustodyTimer(final Date xmit_time, final CustodyTimerSpec spec,
+			Bundle bundle, final Link link) {
+		bundle_ = bundle;
+		link_ = link;
+
 		// All in seconds
 		int delay = spec.calculate_timeout(bundle);
 		Calendar xmit_calendar = Calendar.getInstance();
 		xmit_calendar.setTime(xmit_time);
-		
-		Calendar now_calendar  = Calendar.getInstance();
-		int delay_from_now   = (int)(TimeHelper.seconds_from_ref(xmit_calendar) -  TimeHelper.seconds_from_ref(now_calendar)
-		                          + delay);
-		
-		Logger.getInstance().info(TAG,
-				String.format("scheduling custody timer: xmit_time %s, " +
-				"delay from xmit_time %d secs, " +
-				"delay from now %d secs, " +
-	             " for bundle id %d",
-	             xmit_time.toString(), 
-	             delay,
-	             delay_from_now,
-	             bundle.bundleid()));
+
+		Calendar now_calendar = Calendar.getInstance();
+		int delay_from_now = (int) (TimeHelper.seconds_from_ref(xmit_calendar)
+				- TimeHelper.seconds_from_ref(now_calendar) + delay);
+
+		Logger.getInstance().info(
+				TAG,
+				String.format("scheduling custody timer: xmit_time %s, "
+						+ "delay from xmit_time %d secs, "
+						+ "delay from now %d secs, " + " for bundle id %d",
+						xmit_time.toString(), delay, delay_from_now,
+						bundle.bundleid()));
 		schedule_in(delay_from_now);
 	}
 
-   
+	/**
+	 * The bundle which the timers being responsible of
+	 */
+	private Bundle bundle_;
 
-    /**
-     *  The bundle which the timers being responsible of
-     */
-    private Bundle bundle_;
-
-    /**
-     *  The link for retransimitting
-     */
-    private Link link_;
+	/**
+	 * The link for retransimitting
+	 */
+	private Link link_;
 
 	/**
 	 * Getter for the Bundle
+	 * 
 	 * @return the bundle_
 	 */
 	public Bundle bundle() {
@@ -96,7 +91,9 @@ public class CustodyTimer extends VirtualTimerTask implements Serializable{
 
 	/**
 	 * Setter for the Bundle
-	 * @param bundle the bundle_ to set
+	 * 
+	 * @param bundle
+	 *            the bundle_ to set
 	 */
 	public void set_bundle(Bundle bundle) {
 		bundle_ = bundle;
@@ -104,6 +101,7 @@ public class CustodyTimer extends VirtualTimerTask implements Serializable{
 
 	/**
 	 * Getter for the link for retransmitting
+	 * 
 	 * @return the link_
 	 */
 	public Link link() {
@@ -112,19 +110,19 @@ public class CustodyTimer extends VirtualTimerTask implements Serializable{
 
 	/**
 	 * Setter for the link for retransmitting
-	 * @param link the link_ to set
+	 * 
+	 * @param link
+	 *            the link_ to set
 	 */
 	public void set_link(Link link) {
 		link_ = link;
 	}
 
-	
 	@Override
 	protected void timeout(Date now) {
 		Logger.getInstance().info(TAG, "CustodyTimer::timeout");
-		BundleDaemon.getInstance().post(new CustodyTimeoutEvent(bundle_, link_));
+		BundleDaemon.getInstance()
+				.post(new CustodyTimeoutEvent(bundle_, link_));
 	}
 
-	
 };
-

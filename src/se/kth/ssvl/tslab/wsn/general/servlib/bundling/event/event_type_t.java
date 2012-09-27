@@ -23,9 +23,9 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Type codes for events / requests.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public enum event_type_t {
@@ -163,4 +163,3 @@ public enum event_type_t {
 		return captionLookup.get(event);
 	}
 }
-

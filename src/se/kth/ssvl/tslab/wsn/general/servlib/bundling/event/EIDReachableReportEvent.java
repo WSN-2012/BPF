@@ -21,11 +21,13 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
 /**
  * Class for EIDReachable Report Event
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class EIDReachableReportEvent extends CLAQueryReport {
 	/**
 	 * main constructor
+	 * 
 	 * @param query_id
 	 * @param is_reachable
 	 */
@@ -36,12 +38,15 @@ public class EIDReachableReportEvent extends CLAQueryReport {
 	}
 
 	/**
-	 *  Flag indicating if the queried endpoint is reachable via the given interface
+	 * Flag indicating if the queried endpoint is reachable via the given
+	 * interface
 	 */
 	private boolean is_reachable_;
 
 	/**
-	 * Getter for the Flag indicating if the queried endpoint is reachable via the given interface
+	 * Getter for the Flag indicating if the queried endpoint is reachable via
+	 * the given interface
+	 * 
 	 * @return the is_reachable_
 	 */
 	public boolean is_reachable() {
@@ -49,11 +54,13 @@ public class EIDReachableReportEvent extends CLAQueryReport {
 	}
 
 	/**
-	 * Setter for the Flag indicating if the queried endpoint is reachable via the given interface
-	 * @param isReachable the is_reachable_ to set
+	 * Setter for the Flag indicating if the queried endpoint is reachable via
+	 * the given interface
+	 * 
+	 * @param isReachable
+	 *            the is_reachable_ to set
 	 */
 	public void set_is_reachable(boolean isReachable) {
 		is_reachable_ = isReachable;
 	}
 };
-

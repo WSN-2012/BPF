@@ -24,11 +24,13 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 
 /**
  * Request class for changing the state of the link, for example, open -> close.
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class LinkStateChangeRequest extends ContactEvent {
 	/**
-	 *  Shared type code for state_t with Link
+	 * Shared type code for state_t with Link
+	 * 
 	 * @param link
 	 * @param state
 	 * @param reason
@@ -44,27 +46,28 @@ public class LinkStateChangeRequest extends ContactEvent {
 	}
 
 	/**
-	 *  The link to be changed
+	 * The link to be changed
 	 */
 	private Link link_;
 
 	/**
-	 *  Requested state
+	 * Requested state
 	 */
 	private Link.state_t state_;
 
 	/**
-	 *  The active Contact when the request was made
+	 * The active Contact when the request was made
 	 */
 	private Contact contact_;
 
 	/**
-	 *  State when the request was made
+	 * State when the request was made
 	 */
 	private Link.state_t old_state_;
 
 	/**
 	 * Getter for the link to be changed
+	 * 
 	 * @return the link_
 	 */
 	public Link link() {
@@ -73,7 +76,9 @@ public class LinkStateChangeRequest extends ContactEvent {
 
 	/**
 	 * Setter for the link to be changed
-	 * @param link the link_ to set
+	 * 
+	 * @param link
+	 *            the link_ to set
 	 */
 	public void set_link(Link link) {
 		link_ = link;
@@ -81,6 +86,7 @@ public class LinkStateChangeRequest extends ContactEvent {
 
 	/**
 	 * Getter for the Requested state
+	 * 
 	 * @return the state_
 	 */
 	public Link.state_t state() {
@@ -89,7 +95,9 @@ public class LinkStateChangeRequest extends ContactEvent {
 
 	/**
 	 * Setter for the Requested state
-	 * @param state the state_ to set
+	 * 
+	 * @param state
+	 *            the state_ to set
 	 */
 	public void set_state(Link.state_t state) {
 		state_ = state;
@@ -97,6 +105,7 @@ public class LinkStateChangeRequest extends ContactEvent {
 
 	/**
 	 * Getter for the active Contact when the request was made
+	 * 
 	 * @return the contact_
 	 */
 	public Contact contact() {
@@ -105,7 +114,9 @@ public class LinkStateChangeRequest extends ContactEvent {
 
 	/**
 	 * Setter for the active Contact when the request was made
-	 * @param contact the contact_ to set
+	 * 
+	 * @param contact
+	 *            the contact_ to set
 	 */
 	public void set_contact(Contact contact) {
 		contact_ = contact;
@@ -113,6 +124,7 @@ public class LinkStateChangeRequest extends ContactEvent {
 
 	/**
 	 * Getter for the State when the request was made
+	 * 
 	 * @return the old_state_
 	 */
 	public Link.state_t old_state() {
@@ -121,7 +133,9 @@ public class LinkStateChangeRequest extends ContactEvent {
 
 	/**
 	 * Setter for the State when the request was made
-	 * @param oldState the old_state_ to set
+	 * 
+	 * @param oldState
+	 *            the old_state_ to set
 	 */
 	public void set_old_state(Link.state_t oldState) {
 		old_state_ = oldState;

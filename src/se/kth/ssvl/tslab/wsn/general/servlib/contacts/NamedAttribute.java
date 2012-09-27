@@ -84,7 +84,8 @@ public class NamedAttribute {
 		case ATTRIBUTE_TYPE_STRING:
 			return "string";
 		default:
-			Logger.getInstance().error(TAG, "Problem converting attribute_type to string");
+			Logger.getInstance().error(TAG,
+					"Problem converting attribute_type to string");
 			return null;
 		}
 	}
@@ -142,16 +143,20 @@ public class NamedAttribute {
 
 	public int int_val() {
 		if (type_ != attribute_type_t.ATTRIBUTE_TYPE_INTEGER) {
-			Logger.getInstance().debug(TAG, "NamedAttribute.int_val: invalid type"
-					+ type_to_str(type_));
+			Logger.getInstance()
+					.debug(TAG,
+							"NamedAttribute.int_val: invalid type"
+									+ type_to_str(type_));
 		}
 		return ival_;
 	}
 
 	public boolean bool_val() {
 		if (type_ != attribute_type_t.ATTRIBUTE_TYPE_BOOLEAN) {
-			Logger.getInstance().debug(TAG, "NamedAttribute.bool_val: invalid type"
-					+ type_to_str(type_));
+			Logger.getInstance().debug(
+					TAG,
+					"NamedAttribute.bool_val: invalid type"
+							+ type_to_str(type_));
 
 		}
 		return bval_;
@@ -159,8 +164,10 @@ public class NamedAttribute {
 
 	public String string_val() {
 		if (type_ != attribute_type_t.ATTRIBUTE_TYPE_STRING) {
-			Logger.getInstance().debug(TAG, "NamedAttribute.string_val: invalid type"
-					+ type_to_str(type_));
+			Logger.getInstance().debug(
+					TAG,
+					"NamedAttribute.string_val: invalid type"
+							+ type_to_str(type_));
 		}
 		return sval_;
 	}

@@ -22,14 +22,16 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol;
 
-
 /**
- * Event to check whether the Bundle would be accepted by the Bundle Daemon or not
+ * Event to check whether the Bundle would be accepted by the Bundle Daemon or
+ * not
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class BundleAcceptRequest  extends BundleEvent {
+public class BundleAcceptRequest extends BundleEvent {
 	/**
 	 * Constructor
+	 * 
 	 * @param bundle
 	 * @param source
 	 * @param result
@@ -45,7 +47,7 @@ public class BundleAcceptRequest  extends BundleEvent {
 	}
 
 	/**
-	 *  The bundle to be checked
+	 * The bundle to be checked
 	 */
 	private Bundle bundle_;
 
@@ -60,12 +62,13 @@ public class BundleAcceptRequest  extends BundleEvent {
 	private boolean[] result_;
 
 	/**
-	 * The pointer to the accepted or rejected reason 
+	 * The pointer to the accepted or rejected reason
 	 */
 	private BundleProtocol.status_report_reason_t[] reason_;
 
 	/**
 	 * Accessor for the bundle to be checked
+	 * 
 	 * @return the bundle_
 	 */
 	public Bundle bundle() {
@@ -74,7 +77,9 @@ public class BundleAcceptRequest  extends BundleEvent {
 
 	/**
 	 * Setter for the bundle to be checked
-	 * @param bundle the bundle_ to set
+	 * 
+	 * @param bundle
+	 *            the bundle_ to set
 	 */
 	public void set_bundle(Bundle bundle) {
 		bundle_ = bundle;
@@ -82,6 +87,7 @@ public class BundleAcceptRequest  extends BundleEvent {
 
 	/**
 	 * Accessor for the source of the event
+	 * 
 	 * @return the source_
 	 */
 	public event_source_t source() {
@@ -90,7 +96,9 @@ public class BundleAcceptRequest  extends BundleEvent {
 
 	/**
 	 * Setter for the source of the event
-	 * @param source the source_ to set
+	 * 
+	 * @param source
+	 *            the source_ to set
 	 */
 	public void set_source(event_source_t source) {
 		source_ = source;
@@ -98,6 +106,7 @@ public class BundleAcceptRequest  extends BundleEvent {
 
 	/**
 	 * Accessor for the result of Bundle Acceptance
+	 * 
 	 * @return the result_
 	 */
 	public boolean[] result() {
@@ -106,14 +115,17 @@ public class BundleAcceptRequest  extends BundleEvent {
 
 	/**
 	 * Setter for the result of Bundle Acceptance
-	 * @param result the result_ to set
+	 * 
+	 * @param result
+	 *            the result_ to set
 	 */
 	public void set_result(boolean[] result) {
 		result_ = result;
 	}
 
 	/**
-	 * Accessor for the accepted or rejected reason 
+	 * Accessor for the accepted or rejected reason
+	 * 
 	 * @return the reason_
 	 */
 	public BundleProtocol.status_report_reason_t[] reason() {
@@ -121,8 +133,10 @@ public class BundleAcceptRequest  extends BundleEvent {
 	}
 
 	/**
-	 * Setter for the accepted or rejected reason 
-	 * @param reason the reason_ to set
+	 * Setter for the accepted or rejected reason
+	 * 
+	 * @param reason
+	 *            the reason_ to set
 	 */
 	public void set_reason(BundleProtocol.status_report_reason_t[] reason) {
 		reason_ = reason;

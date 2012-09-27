@@ -193,7 +193,8 @@ public class ContactManager extends BundleEventHandler {
 
 			ConvergenceLayer cl = ConvergenceLayer.find_clayer(convl_type);
 			if (cl == null) {
-				Logger.getInstance().debug(TAG, "invalid convergence layer" + convl_type);
+				Logger.getInstance().debug(TAG,
+						"invalid convergence layer" + convl_type);
 
 			}
 
@@ -260,7 +261,7 @@ public class ContactManager extends BundleEventHandler {
 		try {
 			assert (link != null) : "ContactManager : add_new_link, link is null";
 			assert (!link.isdeleted()) : "ContactManager : add_new_link, link is deleted";
-	
+
 			Logger.getInstance().debug(TAG, "adding NEW link " + link.name());
 			if (has_link(link)) {
 				return false;
@@ -292,14 +293,15 @@ public class ContactManager extends BundleEventHandler {
 
 		if (!has_link(link)) {
 			String text = String.format(
-					"ContactManager.del_link: link %s does not exist", link
-							.name());
+					"ContactManager.del_link: link %s does not exist",
+					link.name());
 			Logger.getInstance().error(TAG, text);
 			return;
 		}
 		assert (!link.isdeleted()) : "ContactManager : del_link, Link is already deleted";
 
-		Logger.getInstance().debug(TAG, "ContactManager.del_link: deleting link %s" + link.name());
+		Logger.getInstance().debug(TAG,
+				"ContactManager.del_link: deleting link %s" + link.name());
 
 		if (!wait)
 			link.delete_link();
@@ -439,9 +441,7 @@ public class ContactManager extends BundleEventHandler {
 
 			Iterator<Link> iter = links_.iterator();
 
-			String text = String
-			.format(
-					"find_link_to: remote_eid",	remote_eid);
+			String text = String.format("find_link_to: remote_eid", remote_eid);
 
 			Logger.getInstance().debug(TAG, text);
 
@@ -450,9 +450,10 @@ public class ContactManager extends BundleEventHandler {
 
 			while (iter.hasNext()) {
 				Link element = iter.next();
-				
+
 				if (remote_eid.equals(element.remote_eid())) {
-					Logger.getInstance().debug(TAG, "find_link_to: matched link" + element);
+					Logger.getInstance().debug(TAG,
+							"find_link_to: matched link" + element);
 					assert (!element.isdeleted()) : "ContactManager : find_link_to, link is deleted";
 					return element;
 				}
@@ -510,8 +511,8 @@ public class ContactManager extends BundleEventHandler {
 
 			if (link.isdeleted()) {
 				String text = String.format(
-						"handle_link_created: link %s is being deleted", link
-								.name());
+						"handle_link_created: link %s is being deleted",
+						link.name());
 				Logger.getInstance().warning(TAG, text);
 				return;
 			}
@@ -519,8 +520,8 @@ public class ContactManager extends BundleEventHandler {
 			if (!has_link(link)) {
 
 				String text = String.format(
-						"handle_link_created: link %s does not exist", link
-								.name());
+						"handle_link_created: link %s does not exist",
+						link.name());
 				Logger.getInstance().error(TAG, text);
 				return;
 			}
@@ -547,16 +548,16 @@ public class ContactManager extends BundleEventHandler {
 
 			if (link.isdeleted()) {
 				String text = String.format(
-						"handle_link_available: link %s is being deleted", link
-								.name());
+						"handle_link_available: link %s is being deleted",
+						link.name());
 				Logger.getInstance().warning(TAG, text);
 				return;
 			}
 
 			if (!has_link(link)) {
 				String text = String.format(
-						"handle_link_available: link %s does not exist", link
-								.name());
+						"handle_link_available: link %s does not exist",
+						link.name());
 				Logger.getInstance().warning(TAG, text);
 				return;
 			}
@@ -590,8 +591,8 @@ public class ContactManager extends BundleEventHandler {
 
 			if (!has_link(link)) {
 				String text = String.format(
-						"handle_link_unavailable: link %s does not exist", link
-								.name());
+						"handle_link_unavailable: link %s does not exist",
+						link.name());
 				Logger.getInstance().warning(TAG, text);
 				return;
 			}
@@ -607,7 +608,8 @@ public class ContactManager extends BundleEventHandler {
 			// don't do anything for links that aren't ondemand or alwayson
 			if ((link.type() != Link.link_type_t.ONDEMAND)
 					&& (link.type() != Link.link_type_t.ALWAYSON)) {
-				Logger.getInstance().debug(TAG,
+				Logger.getInstance().debug(
+						TAG,
 						"handle_link_unavailable: ignoring link unavailable for link of type %s"
 								+ link.type_str());
 				return;
@@ -632,18 +634,16 @@ public class ContactManager extends BundleEventHandler {
 			availability_timers_.put(link, timer);
 			if (availability_timers_.containsValue(timer) == false) {
 				String text = String
-						.format(
-								"handle_link_unavailable: error inserting timer for link %s into table!",
+						.format("handle_link_unavailable: error inserting timer for link %s into table!",
 								link.name());
 				Logger.getInstance().error(TAG, text);
 				return;
 			}
 
 			String text = String
-					.format(
-							"link %s unavailable (%s): scheduling retry timer in %d seconds",
-							link.name(), String.valueOf(event.reason()), link
-									.retry_interval());
+					.format("link %s unavailable (%s): scheduling retry timer in %d seconds",
+							link.name(), String.valueOf(event.reason()),
+							link.retry_interval());
 			Logger.getInstance().debug(TAG, text);
 
 			timer.schedule_in(link.retry_interval());
@@ -670,8 +670,7 @@ public class ContactManager extends BundleEventHandler {
 
 			if (link.isdeleted()) {
 				String text = String
-						.format(
-								"handle_contact_up: link %s is being deleted, not marking its contact up",
+						.format("handle_contact_up: link %s is being deleted, not marking its contact up",
 								link.name());
 				Logger.getInstance().warning(TAG, text);
 				return;
@@ -679,8 +678,8 @@ public class ContactManager extends BundleEventHandler {
 
 			if (!has_link(link)) {
 				String text = String.format(
-						"handle_contact_up: link %s does not exist", link
-								.name());
+						"handle_contact_up: link %s does not exist",
+						link.name());
 				Logger.getInstance().warning(TAG, text);
 				return;
 			}
@@ -688,8 +687,7 @@ public class ContactManager extends BundleEventHandler {
 			if (link.type() == Link.link_type_t.ONDEMAND
 					|| link.type() == Link.link_type_t.ALWAYSON) {
 				String text = String
-						.format(
-								"handle_contact_up: resetting retry interval for link %s: %s -> %s",
+						.format("handle_contact_up: resetting retry interval for link %s: %s -> %s",
 								link.name(), link.retry_interval(), link
 										.params().min_retry_interval());
 				Logger.getInstance().debug(TAG, text);
@@ -718,8 +716,11 @@ public class ContactManager extends BundleEventHandler {
 
 		lock_.lock();
 		try {
-			if(remote_eid.str().equals(BundleDaemon.getInstance().local_eid().str())){
-				Logger.getInstance().debug(TAG,"Tried to create a new opportunistic link to self.  Return null");
+			if (remote_eid.str().equals(
+					BundleDaemon.getInstance().local_eid().str())) {
+				Logger.getInstance()
+						.debug(TAG,
+								"Tried to create a new opportunistic link to self.  Return null");
 				return null;
 			}
 
@@ -730,33 +731,32 @@ public class ContactManager extends BundleEventHandler {
 
 			// find a unique link name
 			String name;
-//
-//			if (link_name != null) {
-//				name = link_name;
-//
-//				while (find_link(name) != null) {
-//
-//					name = String
-//							.format("%s-%s", link_name, opportunistic_cnt_);
-//					opportunistic_cnt_++;
-//				}
-//			}
-//
-//			else {
+			//
+			// if (link_name != null) {
+			// name = link_name;
+			//
+			// while (find_link(name) != null) {
+			//
+			// name = String
+			// .format("%s-%s", link_name, opportunistic_cnt_);
+			// opportunistic_cnt_++;
+			// }
+			// }
+			//
+			// else {
 			do {
 
 				name = String.format("link-%d", opportunistic_cnt_);
 				opportunistic_cnt_++;
 
 			} while (find_link(name) != null);
-//			}
+			// }
 
 			Link link = Link.create_link(name, Link.link_type_t.OPPORTUNISTIC,
 					cl, nexthop);
 			if (link == null) {
-				Log
-						.w(TAG,
-								"new_opportunistic_link: unexpected error creating opportunistic link");
+				Logger.getInstance().warning(TAG,
+						"new_opportunistic_link: unexpected error creating opportunistic link");
 				return link;
 			}
 
@@ -766,7 +766,8 @@ public class ContactManager extends BundleEventHandler {
 
 			if (!add_new_link(new_link)) {
 				new_link.delete_link();
-				Logger.getInstance().error(TAG,
+				Logger.getInstance().error(
+						TAG,
 						"new_opportunistic_link: failed to add new opportunistic link %s"
 								+ new_link.name());
 				new_link = null;
@@ -840,20 +841,25 @@ public class ContactManager extends BundleEventHandler {
 		ContactManager cm_; // /< The contact manager object
 		Link link_; // /< The link in question
 
-		
 		@Override
 		protected void timeout(Date now) {
 
-			Logger.getInstance().debug(TAG, "Link availablity timer for link " + link_.name_
-					+ " fired, trying to open link");
+			Logger.getInstance().debug(
+					TAG,
+					"Link availablity timer for link " + link_.name_
+							+ " fired, trying to open link");
 			if (!link_.isopening() && !link_.isopen()) {
-				Logger.getInstance().debug(TAG, "Timer ask Contact Manager to reopen link "
-						+ link_.name_);
+				Logger.getInstance().debug(
+						TAG,
+						"Timer ask Contact Manager to reopen link "
+								+ link_.name_);
 				cm_.reopen_link(link_);
 
 			} else {
-				Logger.getInstance().debug(TAG, "Link " + link_.name_
-						+ " is already open or is openning");
+				Logger.getInstance().debug(
+						TAG,
+						"Link " + link_.name_
+								+ " is already open or is openning");
 			}
 
 		}
@@ -872,147 +878,126 @@ public class ContactManager extends BundleEventHandler {
 	protected Lock lock_;
 	protected Link link;
 
-	
 	@Override
 	protected void handle_bundle_accept(BundleAcceptRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_cancel(BundleCancelRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_cancelled(BundleSendCancelledEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_delete(BundleDeleteRequest request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_delivered(BundleDeliveredEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_expired(BundleExpiredEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_free(BundleFreeEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_inject(BundleInjectRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_injected(BundleInjectedEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_query(BundleQueryRequest request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_queued_query(BundleQueuedQueryRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_queued_report(BundleQueuedReportEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_received(BundleReceivedEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_report(BundleReportEvent request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_send(BundleSendRequest event) {
 		// NOT Implemented
 
 	}
 
-	
 	@Override
 	protected void handle_bundle_transmitted(BundleTransmittedEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_cla_parameters_query(CLAParametersQueryRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_cla_parameters_report(CLAParametersReportEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_cla_params_set(CLAParamsSetEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_cla_set_params(CLASetParamsRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_contact_attribute_changed(
 			ContactAttributeChangedEvent event) {
@@ -1020,56 +1005,48 @@ public class ContactManager extends BundleEventHandler {
 
 	}
 
-	
 	@Override
 	protected void handle_contact_down(ContactDownEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_contact_query(ContactQueryRequest request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_contact_report(ContactReportEvent request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_custody_signal(CustodySignalEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_custody_timeout(CustodyTimeoutEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_eid_reachable_query(EIDReachableQueryRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_eid_reachable_report(EIDReachableReportEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_iface_attributes_query(
 			IfaceAttributesQueryRequest event) {
@@ -1077,7 +1054,6 @@ public class ContactManager extends BundleEventHandler {
 
 	}
 
-	
 	@Override
 	protected void handle_iface_attributes_report(
 			IfaceAttributesReportEvent event) {
@@ -1085,160 +1061,138 @@ public class ContactManager extends BundleEventHandler {
 
 	}
 
-	
 	@Override
 	protected void handle_link_attribute_changed(LinkAttributeChangedEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_link_attributes_query(LinkAttributesQueryRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_link_attributes_report(LinkAttributesReportEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	// 
+	//
 	protected void handle_link_create(LinkCreateRequest request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_link_delete(LinkDeleteRequest request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_link_deleted(LinkDeletedEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_link_query(LinkQueryRequest request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_link_reconfigure(LinkReconfigureRequest request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_link_report(LinkReportEvent request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_link_state_change_request(LinkStateChangeRequest req) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_new_eid_reachable(NewEIDReachableEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_reassembly_completed(ReassemblyCompletedEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_registration_added(RegistrationAddedEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_registration_delete(RegistrationDeleteRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_registration_expired(RegistrationExpiredEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_registration_removed(RegistrationRemovedEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_route_add(RouteAddEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_route_del(RouteDelEvent event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_route_query(RouteQueryRequest request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_route_report(RouteReportEvent request) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_set_link_defaults(SetLinkDefaultsRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_shutdown_request(ShutdownRequest event) {
 		// TODO Auto-generated method stub
 
 	}
 
-	
 	@Override
 	protected void handle_status_request(StatusRequest event) {
 		// TODO Auto-generated method stub

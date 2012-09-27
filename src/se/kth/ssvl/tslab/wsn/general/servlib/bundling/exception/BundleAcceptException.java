@@ -23,18 +23,20 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol;
 
 /**
  * Event Acception for testing purpose
+ * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
 public class BundleAcceptException extends Exception {
 
 	/**
 	 * constructor
+	 * 
 	 * @param reason
 	 */
-	public BundleAcceptException(BundleProtocol.status_report_reason_t reason)
-	{
+	public BundleAcceptException(BundleProtocol.status_report_reason_t reason) {
 		reason_ = reason;
 	}
+
 	/**
 	 * Serializable UID to support Java Serializable
 	 */
@@ -43,15 +45,14 @@ public class BundleAcceptException extends Exception {
 	 * internal reason report
 	 */
 	private BundleProtocol.status_report_reason_t reason_;
-	
+
 	/**
 	 * Getter for the internal reason report
+	 * 
 	 * @return
 	 */
-	public BundleProtocol.status_report_reason_t get_reason()
-	{
+	public BundleProtocol.status_report_reason_t get_reason() {
 		return reason_;
 	}
-	
-	
+
 }

@@ -13,8 +13,8 @@ public class BundleOffer {
 		String st = String.format("Flags %x\n" + "Length %d\n"
 				+ "OfferCount %d\n" + "Reserve %d\n", flags, length,
 				offerCount, reserve);
-		
-		for(BundleOfferEntry e: entries)
+
+		for (BundleOfferEntry e : entries)
 			st += e.toString();
 
 		return st;

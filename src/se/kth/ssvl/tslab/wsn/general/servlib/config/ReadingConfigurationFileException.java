@@ -26,7 +26,7 @@ public class ReadingConfigurationFileException extends
 		DTNConfigurationException {
 
 	/**
-	 *  The serial version in the Java serializable
+	 * The serial version in the Java serializable
 	 */
 	private static final long serialVersionUID = -441907120727931589L;
 
