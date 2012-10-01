@@ -26,7 +26,6 @@ import se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleSpec;
 import se.kth.ssvl.tslab.wsn.general.applib.types.DTNEndpointID;
 import se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle;
 import se.kth.ssvl.tslab.wsn.general.applib.types.DTNRegistrationInfo;
-import se.kth.ssvl.tslab.wsn.general.apps.DTNAPIFailException;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
 /**

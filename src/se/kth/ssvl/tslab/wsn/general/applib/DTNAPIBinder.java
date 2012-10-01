@@ -29,8 +29,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import se.kth.ssvl.tslab.wsn.general.DTNService;
-
 import se.kth.ssvl.tslab.wsn.general.applib.DTNAPICode.dtn_api_status_report_code;
 import se.kth.ssvl.tslab.wsn.general.applib.DTNAPICode.dtn_bundle_delivery_opts_t;
 import se.kth.ssvl.tslab.wsn.general.applib.DTNAPICode.dtn_bundle_payload_location_t;
@@ -46,7 +44,6 @@ import se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle;
 import se.kth.ssvl.tslab.wsn.general.applib.types.DTNRegistrationInfo;
 import se.kth.ssvl.tslab.wsn.general.applib.types.DTNTime;
 import se.kth.ssvl.tslab.wsn.general.applications.ApplicationBlockProcessor;
-import se.kth.ssvl.tslab.wsn.general.apps.DTNAPIFailException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
@@ -73,8 +70,6 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import android.content.Context;
-import android.os.Binder;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
@@ -133,8 +128,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 
 		EndpointID eid = new EndpointID(BundleDaemon.getInstance().local_eid());
 		if (eid.append_service_tag(service) == false) {
-			Logger.getInstance()
-(TAG,
+			Logger.getInstance().error(TAG,
 							"DTNAPIBinder:dtn_build_local_eid error appending service tag");
 			return dtn_api_status_report_code.DTN_EINTERNAL;
 		}
@@ -591,8 +585,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 		} else if (b.source().subsume(BundleDaemon.getInstance().local_eid())) {
 			// Allow source EIDs that subsume the local eid
 		} else {
-			Logger.getInstance()
-(TAG,
+			Logger.getInstance().error(TAG,
 							String.format(
 									"this node is not a member of the bundle's source EID (%s)",
 									b.source().toString()));
@@ -893,8 +886,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 
 			switch (info) {
 			case UNKNOWN:
-				Logger.getInstance()
-	(TAG,
+				Logger.getInstance().error(TAG,
 								String.format(
 										"bundle destination %s in unknown scheme and "
 												+ "app did not assert singleton/multipoint",
@@ -948,8 +940,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 		} else if (b.source().subsume(BundleDaemon.getInstance().local_eid())) {
 			// Allow source EIDs that subsume the local eid
 		} else {
-			Logger.getInstance()
-(TAG,
+			Logger.getInstance().error(TAG,
 							String.format(
 									"this node is not a member of the bundle's source EID (%s)",
 									b.source().toString()));
@@ -1344,8 +1335,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 					}
 
 					if (!(reg instanceof APIRegistration)) {
-						Logger.getInstance()
-			(TAG,
+						Logger.getInstance().error(TAG,
 										String.format(
 												"registration %d is not an API registration!!",
 												regid));
