@@ -17,9 +17,9 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.types;
+package se.kth.ssvl.tslab.wsn.general.dtnapi.types;
 
-import se.kth.ssvl.tslab.wsn.general.DTNAPICode.dtn_status_report_reason_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_status_report_reason_t;
 
 /**
  * Class to represent BundleStatusReport to be accessed by the API

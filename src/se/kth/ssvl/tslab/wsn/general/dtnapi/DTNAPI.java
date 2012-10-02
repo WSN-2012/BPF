@@ -17,9 +17,9 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general;
+package se.kth.ssvl.tslab.wsn.general.dtnapi;
 
-import se.kth.ssvl.tslab.wsn.general.DTNAPICode.dtn_api_status_report_code;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_api_status_report_code;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.types.DTNBundleID;
 import se.kth.ssvl.tslab.wsn.general.types.DTNBundlePayload;

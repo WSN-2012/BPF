@@ -17,7 +17,7 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general;
+package se.kth.ssvl.tslab.wsn.general.dtnapi;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,20 +29,20 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import se.kth.ssvl.tslab.wsn.general.DTNAPICode.dtn_api_status_report_code;
-import se.kth.ssvl.tslab.wsn.general.DTNAPICode.dtn_bundle_delivery_opts_t;
-import se.kth.ssvl.tslab.wsn.general.DTNAPICode.dtn_bundle_payload_location_t;
-import se.kth.ssvl.tslab.wsn.general.DTNAPICode.dtn_reg_flags_t;
-import se.kth.ssvl.tslab.wsn.general.DTNAPICode.dtn_status_report_reason_t;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleID;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundlePayload;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleSpec;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleStatusReport;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleTimestamp;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNEndpointID;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNRegistrationInfo;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNTime;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleID;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundlePayload;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleSpec;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleStatusReport;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNEndpointID;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleTimestamp;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNHandle;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNRegistrationInfo;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNTime;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_api_status_report_code;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_bundle_delivery_opts_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_bundle_payload_location_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_reg_flags_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ApplicationBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
@@ -77,7 +77,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
  * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class DTNAPIBinder extends Binder implements DTNAPI {
+public class DTNAPIBinder implements DTNAPI {
 
 	/**
 	 * TAG String for Android logging system
@@ -114,7 +114,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_build_local_eid
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_build_local_eid
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_build_local_eid
 	 *      (se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNEndpointID,
 	 *      se.kth.ssvl.tslab.bytewalla.androiddtn.applib.types.DTNServiceTag)
@@ -158,7 +158,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_open
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_open
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_open
 	 */
 
 	public dtn_api_status_report_code dtn_open(DTNHandle handle) {
@@ -179,7 +179,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_close
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_close
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_close
 	 */
 
 	public dtn_api_status_report_code dtn_close(DTNHandle handle) {
@@ -203,7 +203,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_find_registration
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_find_registration
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_find_registration
 	 *      (se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNEndpointID,
 	 *      se.kth.ssvl.tslab.bytewalla.androiddtn.applib.types.DTNRegistrationID)
@@ -239,9 +239,9 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	 * 
 	 * An implementation of the DTNAPI's dtn_recv
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_recv(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_recv(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleSpec,
-	 *      se.kth.ssvl.tslab.wsn.general.DTNAPICode.
+	 *      se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.
 	 *      dtn_bundle_payload_location_t,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundlePayload, int)
 	 */
@@ -406,7 +406,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_register
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_register(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_register(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNRegistrationInfo,
 	 *      se.kth.ssvl.tslab.bytewalla.androiddtn.applib.types.DTNRegistrationID)
 	 */
@@ -472,7 +472,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_send
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_send(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_send(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
 	 *      se.kth.ssvl.tslab.bytewalla.androiddtn.applib.types.DTNRegistrationID,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleSpec,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundlePayload,
@@ -783,7 +783,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_send
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_send(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_send(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
 	 *      se.kth.ssvl.tslab.bytewalla.androiddtn.applib.types.DTNRegistrationID,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleSpec,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundlePayload,
@@ -805,7 +805,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_send
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_send(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_send(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
 	 *      se.kth.ssvl.tslab.bytewalla.androiddtn.applib.types.DTNRegistrationID,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleSpec,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundlePayload,
@@ -1138,7 +1138,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_unregister
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_unregister(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_unregister(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
 	 *      se.kth.ssvl.tslab.bytewalla.androiddtn.applib.types.DTNRegistrationID)
 	 */
 
@@ -1241,7 +1241,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_unregister
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_bind
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_bind
 	 */
 
 	public dtn_api_status_report_code dtn_bind(DTNHandle handle, int regid) {
@@ -1303,7 +1303,7 @@ public class DTNAPIBinder extends Binder implements DTNAPI {
 	/**
 	 * An implementation of the DTNAPI's dtn_unbind
 	 * 
-	 * @see se.kth.ssvl.tslab.wsn.general.DTNAPI#dtn_unbind
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_unbind
 	 */
 
 	public dtn_api_status_report_code dtn_unbind(DTNHandle handle, int regid) {

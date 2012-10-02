@@ -17,7 +17,7 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.types;
+package se.kth.ssvl.tslab.wsn.general.dtnapi.types;
 
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 

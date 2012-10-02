@@ -17,7 +17,7 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.types;
+package se.kth.ssvl.tslab.wsn.general.dtnapi.types;
 
 /**
  * The data structure to get result from the IBinder
