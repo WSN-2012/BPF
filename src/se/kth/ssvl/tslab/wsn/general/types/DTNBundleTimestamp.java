@@ -17,7 +17,7 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.applib.types;
+package se.kth.ssvl.tslab.wsn.general.types;
 
 /**
  * API type to represent DTNBundleTimestamp

@@ -17,7 +17,7 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.applib.types;
+package se.kth.ssvl.tslab.wsn.general.types;
 
 /**
  * This class represents DTNEndpointID to be used by the Application

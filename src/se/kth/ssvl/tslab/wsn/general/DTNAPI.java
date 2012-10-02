@@ -17,16 +17,16 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.applib;
+package se.kth.ssvl.tslab.wsn.general;
 
-import se.kth.ssvl.tslab.wsn.general.applib.DTNAPICode.dtn_api_status_report_code;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleID;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundlePayload;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleSpec;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNEndpointID;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle;
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNRegistrationInfo;
+import se.kth.ssvl.tslab.wsn.general.DTNAPICode.dtn_api_status_report_code;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
+import se.kth.ssvl.tslab.wsn.general.types.DTNBundleID;
+import se.kth.ssvl.tslab.wsn.general.types.DTNBundlePayload;
+import se.kth.ssvl.tslab.wsn.general.types.DTNBundleSpec;
+import se.kth.ssvl.tslab.wsn.general.types.DTNEndpointID;
+import se.kth.ssvl.tslab.wsn.general.types.DTNHandle;
+import se.kth.ssvl.tslab.wsn.general.types.DTNRegistrationInfo;
 
 /**
  * an API interface for BP application to communicate with the DTNService

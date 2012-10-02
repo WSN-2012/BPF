@@ -17,11 +17,11 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.applib.types;
+package se.kth.ssvl.tslab.wsn.general.types;
 
 import java.io.File;
 
-import se.kth.ssvl.tslab.wsn.general.applib.DTNAPICode.dtn_bundle_payload_location_t;
+import se.kth.ssvl.tslab.wsn.general.DTNAPICode.dtn_bundle_payload_location_t;
 
 /**
  * The class to represent DTNBundlePayload used in the API

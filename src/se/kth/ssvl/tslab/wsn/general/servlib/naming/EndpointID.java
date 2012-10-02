@@ -25,9 +25,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import se.kth.ssvl.tslab.wsn.general.applib.types.DTNEndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.types.DTNEndpointID;
 
 /**
  * This class represents EndpointID in the DTNSystem. It consists of unique URI

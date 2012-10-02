@@ -17,9 +17,9 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.applib.types;
+package se.kth.ssvl.tslab.wsn.general.types;
 
-import se.kth.ssvl.tslab.wsn.general.applib.DTNAPICode.dtn_bundle_priority_t;
+import se.kth.ssvl.tslab.wsn.general.DTNAPICode.dtn_bundle_priority_t;
 
 /**
  * The actual DTNBundle description according to the Bundle Protocol.

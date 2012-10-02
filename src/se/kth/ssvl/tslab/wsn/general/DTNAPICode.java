@@ -17,7 +17,7 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.applib;
+package se.kth.ssvl.tslab.wsn.general;
 
 import java.util.EnumSet;
 import java.util.HashMap;
