@@ -43,7 +43,7 @@ import se.kth.ssvl.tslab.wsn.general.applib.types.DTNEndpointID;
 import se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle;
 import se.kth.ssvl.tslab.wsn.general.applib.types.DTNRegistrationInfo;
 import se.kth.ssvl.tslab.wsn.general.applib.types.DTNTime;
-import se.kth.ssvl.tslab.wsn.general.applications.ApplicationBlockProcessor;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ApplicationBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;

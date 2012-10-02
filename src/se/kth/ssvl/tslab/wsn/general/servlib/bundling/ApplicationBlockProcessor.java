@@ -1,9 +1,5 @@
-package se.kth.ssvl.tslab.wsn.general.applications;
+package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfoVec;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockProcessor;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo.list_owner_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.block_flag_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.bundle_block_type_t;
