@@ -84,6 +84,7 @@ public class TestDataLogger {
 		upload_begin_log_maps_ = new HashMap<CLConnection, TestDataLog>();
 		download_begin_log_maps_ = new HashMap<CLConnection, TestDataLog>();
 
+		//TODO: Below line should call something outside the library
 		File dir = new File("/sdcard/" + TempPrefixName);
 		if (!dir.exists())
 			dir.mkdir();

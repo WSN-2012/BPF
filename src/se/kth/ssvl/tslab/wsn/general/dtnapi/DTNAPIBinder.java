@@ -332,18 +332,12 @@ public class DTNAPIBinder implements DTNAPI {
 
 		} else if (location == dtn_bundle_payload_location_t.DTN_PAYLOAD_FILE) {
 
-			Context context = DTNService.context();
-
-			String api_temp_dir_prefix = context.getResources().getString(
-					R.string.DTNAPITempFilePrefix);
-			File api_temp_dir = context.getDir(api_temp_dir_prefix,
-					Context.MODE_PRIVATE);
-
 			File payload_file = null;
 			try {
+				//TODO: Below line should be moved outside the library for creating the file
 				payload_file = File.createTempFile(
 						String.format("reg_%d_bundle_%d_payload_", regid,
-								b.bundleid()), ".payload.dat", api_temp_dir);
+								b.bundleid()), ".payload.dat", new File("api_temp")); 
 
 				b.payload().copy_to_file(payload_file);
 				dtn_payload.set_file(payload_file);
@@ -530,8 +524,7 @@ public class DTNAPIBinder implements DTNAPI {
 
 			switch (info) {
 			case UNKNOWN:
-				Logger.getInstance()
-	(TAG,
+				Logger.getInstance().error(TAG,
 								String.format(
 										"bundle destination %s in unknown scheme and "
 												+ "app did not assert singleton/multipoint",

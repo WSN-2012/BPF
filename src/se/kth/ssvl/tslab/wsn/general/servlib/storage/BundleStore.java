@@ -434,7 +434,7 @@ public class BundleStore {
 		}
 
 		public void remove() {
-			// TODO Auto-generated method stub
+			
 
 		}
 

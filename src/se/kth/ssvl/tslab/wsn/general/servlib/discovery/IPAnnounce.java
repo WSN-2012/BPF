@@ -91,7 +91,7 @@ public class IPAnnounce extends Announce {
 		try {
 			cl_addr_ = InetAddress.getByName("0.0.0.0");
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		cl_port_ = TCPConvergenceLayer.TCPCL_DEFAULT_PORT;

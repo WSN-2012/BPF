@@ -67,7 +67,7 @@ public class UDPListener extends CLInfo implements Runnable {
 			server_socket_ = new DatagramSocket(port);
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			Logger.getInstance().debug(TAG, "IOException " + e.getMessage());
 			e.printStackTrace();
 		}

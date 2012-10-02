@@ -166,7 +166,7 @@ public class StorageIterator<Type> implements Iterator<Integer> {
 	}
 
 	public void remove() {
-		// TODO Auto-generated method stub
+		
 
 	}
 

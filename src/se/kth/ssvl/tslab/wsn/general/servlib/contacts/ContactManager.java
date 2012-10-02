@@ -880,85 +880,85 @@ public class ContactManager extends BundleEventHandler {
 
 	@Override
 	protected void handle_bundle_accept(BundleAcceptRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_cancel(BundleCancelRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_cancelled(BundleSendCancelledEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_delete(BundleDeleteRequest request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_delivered(BundleDeliveredEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_expired(BundleExpiredEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_free(BundleFreeEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_inject(BundleInjectRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_injected(BundleInjectedEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_query(BundleQueryRequest request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_queued_query(BundleQueuedQueryRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_queued_report(BundleQueuedReportEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_received(BundleReceivedEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_bundle_report(BundleReportEvent request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -970,232 +970,232 @@ public class ContactManager extends BundleEventHandler {
 
 	@Override
 	protected void handle_bundle_transmitted(BundleTransmittedEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_cla_parameters_query(CLAParametersQueryRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_cla_parameters_report(CLAParametersReportEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_cla_params_set(CLAParamsSetEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_cla_set_params(CLASetParamsRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_contact_attribute_changed(
 			ContactAttributeChangedEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_contact_down(ContactDownEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_contact_query(ContactQueryRequest request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_contact_report(ContactReportEvent request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_custody_signal(CustodySignalEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_custody_timeout(CustodyTimeoutEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_eid_reachable_query(EIDReachableQueryRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_eid_reachable_report(EIDReachableReportEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_iface_attributes_query(
 			IfaceAttributesQueryRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_iface_attributes_report(
 			IfaceAttributesReportEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_link_attribute_changed(LinkAttributeChangedEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_link_attributes_query(LinkAttributesQueryRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_link_attributes_report(LinkAttributesReportEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	//
 	protected void handle_link_create(LinkCreateRequest request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_link_delete(LinkDeleteRequest request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_link_deleted(LinkDeletedEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_link_query(LinkQueryRequest request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_link_reconfigure(LinkReconfigureRequest request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_link_report(LinkReportEvent request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_link_state_change_request(LinkStateChangeRequest req) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_new_eid_reachable(NewEIDReachableEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_reassembly_completed(ReassemblyCompletedEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_registration_added(RegistrationAddedEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_registration_delete(RegistrationDeleteRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_registration_expired(RegistrationExpiredEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_registration_removed(RegistrationRemovedEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_route_add(RouteAddEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_route_del(RouteDelEvent event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_route_query(RouteQueryRequest request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_route_report(RouteReportEvent request) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_set_link_defaults(SetLinkDefaultsRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_shutdown_request(ShutdownRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	protected void handle_status_request(StatusRequest event) {
-		// TODO Auto-generated method stub
+		
 
 	}
 

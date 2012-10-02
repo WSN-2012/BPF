@@ -120,7 +120,6 @@ public class DiscoveryTable {
 				disc.start();
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

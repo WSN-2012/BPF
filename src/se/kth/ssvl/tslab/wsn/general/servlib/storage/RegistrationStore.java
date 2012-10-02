@@ -432,7 +432,7 @@ public class RegistrationStore {
 		}
 
 		public void remove() {
-			// TODO Auto-generated method stub
+			
 
 		}
 

@@ -68,7 +68,7 @@ public class TCPListener extends CLInfo implements Runnable {
 			server_socket_ = new ServerSocket(port);
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			Logger.getInstance().debug(TAG, "IOException " + e.getMessage());
 			e.printStackTrace();
 		}

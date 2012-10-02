@@ -66,7 +66,7 @@ public abstract class ProphetQueuing {
 								+ policy);
 				instance_ = (ProphetQueuing) myClass.newInstance();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				Logger.getInstance().error(TAG, "Wrong policy");
 				e.printStackTrace();
 			}
