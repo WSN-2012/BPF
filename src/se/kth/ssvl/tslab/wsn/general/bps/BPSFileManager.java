@@ -1,6 +1,7 @@
 package se.kth.ssvl.tslab.wsn.general.bps;
 
 import java.io.File;
+import java.io.IOException;
 
 public interface BPSFileManager {
 
@@ -28,6 +29,7 @@ public interface BPSFileManager {
 	 * @param prefix The prefix string to use when generating the file
 	 * @param suffix The suffix of the file generated
 	 * @return A file with the created temporary file. 
+	 * @throws IOException if the file could not be created
 	 */
-	public abstract File createTempFile(String prefix, String suffix);
+	public abstract File createTempFile(String prefix, String suffix) throws IOException;
 }
