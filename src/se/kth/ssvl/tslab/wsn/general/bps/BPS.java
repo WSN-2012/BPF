@@ -5,7 +5,7 @@ public class BPS {
 	/* ********* MEMBER VARIABLES ********** */
 	private static BPS instance;
 	
-	private BPSService service; 
+	private static BPSService service; 
 	
 	/* ********* INITIALIZATION AND CONSTRUCTOR********** */
 	/**
@@ -14,7 +14,7 @@ public class BPS {
 	 * @return The BPS singleton
 	 * @throws BPSException Throws and exception if BPS has not been initialized using init() method
 	 */
-	public BPS getInstance() throws BPSException {
+	public static BPS getInstance() throws BPSException {
 		if (instance == null) {
 			if (service == null) {
 				throw new BPSException("BPS was not initialized with a BPSService before being used");
@@ -34,19 +34,19 @@ public class BPS {
 	 * @param service The BPSService implementation.
 	 * @throws BPSException 
 	 */
-	public void init(BPSService service) throws BPSException {
-		if (service == null) {
+	public void init(BPSService _service) throws BPSException {
+		if (_service == null) {
 			throw new BPSException("BPSService cannot be null, we really need this guy to work!");
 		}
-		this.service = service;
+		instance = new BPS(_service);
 	}
 	
 	/**
 	 * Constructor for BPS, which is private since BPS is a singleton.
 	 * @param service The BPSService implementation that the BPS library will use for device-specific methods.
 	 */
-	private BPS(BPSService service) {
-		this.service = service;
+	private BPS(BPSService _service) {
+		service = _service;
 	}
 	
 	
