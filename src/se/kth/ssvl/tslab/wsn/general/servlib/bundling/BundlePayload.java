@@ -31,6 +31,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import se.kth.ssvl.tslab.wsn.general.bps.BPS;
+import se.kth.ssvl.tslab.wsn.general.bps.BPSException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHeldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundlePayloadWrongTypeException;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
@@ -156,14 +158,9 @@ public class BundlePayload implements Serializable {
 	 * @return
 	 */
 	public boolean move_data_to_api_temp_folder() {
-		Context context = DTNService.context();
-		String TempPrefixName = context.getResources().getString(
-				R.string.DTNAPITempFilePrefix);
-		File dir = DTNService.context().getDir(TempPrefixName,
-				Context.MODE_PRIVATE);
 		try {
-			File file = File.createTempFile("bundle_payload_for_api_bid"
-					+ bundleid_, ".dat", dir);
+			File file = BPS.getInstance().getBPSFileManager().createTempFile("bundle_payload_for_api_bid"
+					+ bundleid_, ".dat");
 			copy_to_file(file);
 
 			file_ = file;
@@ -171,8 +168,10 @@ public class BundlePayload implements Serializable {
 			return true;
 		} catch (IOException e) {
 			Logger.getInstance().error(TAG, "migrate IO Exception");
-			return false;
+		} catch (BPSException e) {
+			e.printStackTrace();
 		}
+		return false;
 	}
 
 	/**
@@ -407,11 +406,8 @@ public class BundlePayload implements Serializable {
 			// Transfer bytes from in to out
 			byte[] buf = new byte[1024];
 			int len;
-			int offset = 0;
 			while ((len = in.read(buf)) > 0) {
-
 				file_handle_.write(buf, 0, len);
-				offset += len;
 			}
 
 			unpin_file_handle(file_handle_);

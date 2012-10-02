@@ -25,6 +25,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
+import se.kth.ssvl.tslab.wsn.general.bps.BPS;
+import se.kth.ssvl.tslab.wsn.general.bps.BPSException;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
@@ -78,34 +80,13 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	 * @return The current IP address
 	 */
 	public static InetAddress getting_my_ip() {
-		/**
-		 * WifiManager
-		 */
-		WifiManager mWifi = (WifiManager) DTNService.context()
-				.getSystemService(Context.WIFI_SERVICE);
-
-		InetAddress local_addr_ = null;
-		DhcpInfo dhcp = mWifi.getDhcpInfo();
-		if (dhcp == null) {
-			Logger.getInstance().debug(TAG, "Could not get dhcp info");
-			return null;
-		}
-
-		short[] quads = new short[4];
-		byte[] quads2 = new byte[4];
-		for (int k = 0; k < 4; k++) {
-			quads[k] = (byte) ((dhcp.ipAddress >> k * 8) & 0xFF);
-			quads2[k] = (byte) quads[k];
-		}
 		try {
-			local_addr_ = InetAddress.getByAddress(quads2);
-
-		} catch (UnknownHostException e) {
-
-			Logger.getInstance().debug(TAG, "error getting_my_ip");
+			return BPS.getInstance().getBPSCommunication().getDeviceIP();
+		} catch (BPSException e) {
+			e.printStackTrace();
 		}
-
-		return local_addr_;
+		
+		return null;
 	}
 
 	/**

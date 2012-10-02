@@ -64,7 +64,8 @@ public class BundleTimestamp implements Serializable {
 	static {
 		Calendar ref_calendar = Calendar.getInstance();
 		// set year to 2000 , start date is 1900
-		ref_calendar.setTime(new Date(100, 0, 1));
+		ref_calendar.set(2000, 0, 1); // TODO: Might have broken this
+		ref_calendar.setTime(ref_calendar.getTime());
 		TIMEVAL_CONVERSION = ref_calendar.getTimeInMillis() / 1000;
 	}
 

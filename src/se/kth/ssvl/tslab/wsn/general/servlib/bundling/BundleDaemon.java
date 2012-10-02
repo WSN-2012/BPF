@@ -29,6 +29,8 @@ import java.util.ListIterator;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import se.kth.ssvl.tslab.wsn.general.bps.BPS;
+import se.kth.ssvl.tslab.wsn.general.bps.BPSException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.custody_signal_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleAcceptRequest;
@@ -1281,10 +1283,6 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 			Logger.getInstance().debug(TAG, " handle_bundle_cancel");
 
-			if (bundle == null) {
-				Logger.getInstance().error(TAG,
-						"bundle is null in handle cancel bundle");
-			}
 			actions_.cancel_bundle(bundle, link);
 		}
 
@@ -1624,7 +1622,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		switch (event.source()) {
 		case EVENTSRC_PEER:
 			stats_.received_bundles_++;
-			DTNManager.getInstance().notify_user("DTN Bundle Received",
+			BPS.getInstance().getBPSNotificationReceiver().notify("DTN Bundle Received",
 					"From " + bundle.source().toString());
 
 			break;
@@ -2087,8 +2085,13 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 								bundle.bundleid(), link.name()));
 		bundle.fwdlog().update(link, ForwardingInfo.state_t.TRANSMITTED);
 
-		DTNManager.getInstance().notify_user("DTN Bundle Transmitted",
-				"To " + bundle.dest().toString());
+		try {
+			BPS.getInstance().getBPSNotificationReceiver().notify("DTN Bundle Transmitted",
+					"To " + bundle.dest().toString());
+		} catch (BPSException e) {
+			e.printStackTrace();
+		}
+		
 		BundleStore.getImpt_sqlite_().incForwardedTimes(bundle.bundleid());
 
 		/*
