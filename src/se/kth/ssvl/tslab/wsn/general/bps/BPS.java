@@ -47,7 +47,41 @@ public class BPS {
 		this.service = service;
 	}
 	
-	/* Methods */
+	
+	/* Getter methods for the different BPS classes */
+	
+	/**
+	 * Gets the BPSCommunication object passed in from the BPSService.
+	 * @return The BPSCommunication object in the BPSService
+	 */
+	public BPSCommunication getBPSCommunication() {
+		return service.getBPSCommunication();
+	}
+	
+	/**
+	 * Gets the BPSFileManager object passed in from the BPSService.
+	 * @return The BPSFileManager object in the BPSService
+	 */
+	public BPSFileManager getBPSFileManager() {
+		return service.getBPSFileManager();
+	}
+	
+	/**
+	 * Gets the BPSLogger object passed in from the BPSService.
+	 * @return The BPSLogger object in the BPSService
+	 */
+	public BPSLogger getBPSLogger() {
+		return service.getBPSLogger();
+	}
+	
+	/**
+	 * Gets the BPSNotificationReceiver object passed in from the BPSService.
+	 * @return The BPSNotificationReceiver object in the BPSService
+	 */
+	public BPSNotificationReceiver getBPSNotificationReceiver() {
+		return service.getBPSNotificationReceiver();
+	}
+	
 	
 	
 }
