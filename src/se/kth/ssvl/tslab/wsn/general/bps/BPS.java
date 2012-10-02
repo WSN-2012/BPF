@@ -34,8 +34,12 @@ public class BPS {
 	 * The library will use the different classes as callbacks, since the 
 	 * 	implementation must be implemented outside the BPS library.  
 	 * @param service The BPSService implementation.
+	 * @throws BPSException 
 	 */
-	public void init(BPSService service) {
+	public void init(BPSService service) throws BPSException {
+		if (service == null) {
+			throw new BPSException("BPSService cannot be null, we really need this guy to work!");
+		}
 		this.service = service;
 	}
 	
