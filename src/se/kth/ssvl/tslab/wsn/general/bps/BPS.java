@@ -2,14 +2,12 @@ package se.kth.ssvl.tslab.wsn.general.bps;
 
 public class BPS {
 	
-	/* Member variables */
+	/* ********* MEMBER VARIABLES ********** */
 	private static BPS instance;
 	
 	private BPSService service; 
 	
-	
-	/* Initialization and constructor */
-	
+	/* ********* INITIALIZATION AND CONSTRUCTOR********** */
 	/**
 	 * This method will return an singleton instance of BPS, 
 	 * which is used as a main entry point to the library. Note: Must be called after init() method
@@ -52,8 +50,7 @@ public class BPS {
 	}
 	
 	
-	/* Getter methods for the different BPS classes */
-	
+	/* ********* GETTER METHODS FOR BPS CLASSES ********** */	
 	/**
 	 * Gets the BPSCommunication object passed in from the BPSService.
 	 * @return The BPSCommunication object in the BPSService
