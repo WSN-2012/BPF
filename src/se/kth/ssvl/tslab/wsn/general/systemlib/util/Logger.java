@@ -1,5 +1,7 @@
 package se.kth.ssvl.tslab.wsn.general.systemlib.util;
 
+import se.kth.ssvl.tslab.wsn.general.bps.BPSLogger;
+
 public class Logger {
 
 	/* Singleton instance */
@@ -9,7 +11,7 @@ public class Logger {
 	 * Logger callback interface, in order to handle the logging outside our
 	 * library
 	 */
-	private static LoggerInterface loggerInterface;
+	private static BPSLogger loggerInterface;
 
 	/* TAG for the logger */
 	private final static String TAG = "Logger";
@@ -31,11 +33,11 @@ public class Logger {
 	}
 
 	/* LoggerInterface getter/setter */
-	public static LoggerInterface getLoggerInterface() {
+	public static BPSLogger getLoggerInterface() {
 		return loggerInterface;
 	}
 
-	public static void setLoggerInterface(LoggerInterface loggerInterface) {
+	public static void setLoggerInterface(BPSLogger loggerInterface) {
 		Logger.loggerInterface = loggerInterface;
 	}
 

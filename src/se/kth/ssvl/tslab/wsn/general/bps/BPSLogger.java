@@ -1,6 +1,6 @@
-package se.kth.ssvl.tslab.wsn.general.systemlib.util;
+package se.kth.ssvl.tslab.wsn.general.bps;
 
-public interface LoggerInterface {
+public interface BPSLogger {
 
 	/**
 	 * Method to log messages classed as info
