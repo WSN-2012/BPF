@@ -36,7 +36,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.config.DiscoveriesSetting.address_f
 import se.kth.ssvl.tslab.wsn.general.servlib.config.InterfacesSetting.InterfaceEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.LinksSetting.LinkEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.RoutesSetting.RouteEntry;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.StorageSetting.storage_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link.link_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
@@ -466,14 +465,6 @@ public class DTNConfigurationParser {
 	 */
 	private static void process_storage_config(Element config_element,
 			DTNConfiguration config) throws InvalidDTNConfigurationException {
-		Attr type = config_element.getAttributeNode("type");
-		if (type.getValue().equals("sdcard"))
-			config.storage_setting().set_storage_type(storage_type_t.SDCard);
-		else if (type.getValue().equals("phone"))
-			config.storage_setting().set_storage_type(storage_type_t.PHONE);
-		else
-			throw new InvalidDTNConfigurationException(
-					"Storage type not known exception");
 
 		Attr quota = config_element.getAttributeNode("quota");
 		config.storage_setting().set_quota(Integer.parseInt(quota.getValue()));

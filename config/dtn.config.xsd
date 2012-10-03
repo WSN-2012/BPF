@@ -17,14 +17,6 @@
 
 
     <complexType name="StorageSetting">
-    	<attribute name="type" use="required">
-    		<simpleType>
-    			<restriction base="string">
-    				<enumeration value="phone"/>
-    				<enumeration value="sdcard"/>
-    			</restriction>
-    		</simpleType>
-    	</attribute>
     	<attribute name="quota" type="int">
     		<annotation>
     			<documentation>
@@ -32,7 +24,7 @@
     			</documentation>
     		</annotation>
     	</attribute>
-    	<attribute name="storage_path" type="string"/>
+    	<attribute name="storage_path" type="string" use="required"/>
     </complexType>
 
     <complexType name="Interface">

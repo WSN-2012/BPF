@@ -8,13 +8,11 @@
 
     <!--  Storage Section -->
     <!--  Setup your storage here -->
-    <!--  type can be phone or sdcard -->
     <!--
         quota is the space you will allow DTN to store bundles in the storage
         type you set, the unit is Megabytes
     -->
-    <tns:StorageSetting type="sdcard" quota="1"
-        storage_path="dtn" />
+    <tns:StorageSetting quota="1" storage_path="dtn" />
 
 
     <!--  Interfaces Section -->

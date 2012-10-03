@@ -31,33 +31,6 @@ import java.util.Map;
 public class StorageSetting {
 
 	/**
-	 * Storage Type of the DTN Bundles
-	 */
-	public static enum storage_type_t {
-		PHONE("phone"), SDCard("sdcard");
-
-		private static final Map<String, storage_type_t> lookupCaption = new HashMap<String, storage_type_t>();
-
-		static {
-			for (storage_type_t s : EnumSet.allOf(storage_type_t.class)) {
-
-				lookupCaption.put(s.getCaption(), s);
-			}
-		}
-
-		private String caption;
-
-		private storage_type_t(String caption) {
-
-			this.caption = caption;
-		}
-
-		public String getCaption() {
-			return caption;
-		}
-	}
-
-	/**
 	 * Relative storage path where to put DTNBundle data. If the storage type is
 	 * SDCard, it's relative to root of the SDCard ( normally "/sdcard" in
 	 * filesystem ). If the storage type is Phone, it's relative to the
@@ -65,33 +38,10 @@ public class StorageSetting {
 	 */
 	private String storage_path_;
 
-	private storage_type_t storage_type_;
-
 	/**
 	 * Quota of storage to consume, Unit is in MB
 	 */
 	private int quota;
-
-	/**
-	 * Accessor for the storage_type_t of this storage setting
-	 * 
-	 * @return the storage_type_
-	 * @see storage_type_t
-	 */
-	public storage_type_t storage_type() {
-		return storage_type_;
-	}
-
-	/**
-	 * Setter for the storage_type_t of this storage setting
-	 * 
-	 * @param storageType
-	 *            the storage_type_ to set
-	 * @see storage_type_t
-	 */
-	public void set_storage_type(storage_type_t storage_type) {
-		storage_type_ = storage_type;
-	}
 
 	/**
 	 * Accessor for the quota of storage to consume, Unit is in MB

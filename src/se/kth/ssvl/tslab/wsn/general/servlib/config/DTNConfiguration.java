@@ -19,7 +19,6 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.config;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.config.StorageSetting.storage_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.router_type_t;
 
 /**
@@ -54,7 +53,6 @@ public class DTNConfiguration {
 		if (default_dtn_config_ == null) {
 			default_dtn_config_ = new DTNConfiguration();
 			StorageSetting default_storage_setting_ = new StorageSetting();
-			default_storage_setting_.set_storage_type(storage_type_t.SDCard);
 			default_storage_setting_.set_storage_path("dth");
 			default_storage_setting_.set_quota(60);
 			default_storage_setting_.set_storage_path("dtn");
