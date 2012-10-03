@@ -31,7 +31,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDVector;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 
 /**
  * Class representing DTN protocol blocks.
@@ -374,9 +375,11 @@ public class BlockInfo implements Serializable {
 	 */
 	public void set_flags(int flags) {
 		if (type() == BundleProtocol.bundle_block_type_t.PRIMARY_BLOCK) {
-			Logger.getInstance()
+			BPF.getInstance()
+					.getBPFLogger()
 					.error(TAG,
 							"trying to set flags for primary block!!, Should not come here");
+
 			return;
 		}
 		BufferHelper.write_SDNV(contents_,

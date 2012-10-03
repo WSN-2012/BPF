@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Builder;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Class for a generic list of attributes/parameters, used for various
@@ -84,7 +84,7 @@ public class NamedAttribute {
 		case ATTRIBUTE_TYPE_STRING:
 			return "string";
 		default:
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"Problem converting attribute_type to string");
 			return null;
 		}
@@ -95,7 +95,7 @@ public class NamedAttribute {
 	 */
 
 	public NamedAttribute(String name, int v) {
-		Logger.getInstance().debug(TAG, "Creating NamedAttribute" + name);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Creating NamedAttribute" + name);
 		name_ = name;
 		type_ = attribute_type_t.ATTRIBUTE_TYPE_INTEGER;
 		ival_ = v;
@@ -104,7 +104,7 @@ public class NamedAttribute {
 	}
 
 	public NamedAttribute(String name, boolean v) {
-		Logger.getInstance().debug(TAG, "Creating NamedAttribute" + name);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Creating NamedAttribute" + name);
 		name_ = name;
 		type_ = attribute_type_t.ATTRIBUTE_TYPE_BOOLEAN;
 		ival_ = 0;
@@ -113,7 +113,7 @@ public class NamedAttribute {
 	}
 
 	public NamedAttribute(String name, String v) {
-		Logger.getInstance().debug(TAG, "Creating NamedAttribute" + name);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Creating NamedAttribute" + name);
 		name_ = name;
 		type_ = attribute_type_t.ATTRIBUTE_TYPE_STRING;
 		ival_ = 0;
@@ -122,7 +122,7 @@ public class NamedAttribute {
 	}
 
 	public NamedAttribute(Builder builder) {
-		Logger.getInstance().debug(TAG, "Creating UNKNOWN NamedAttribute");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Creating UNKNOWN NamedAttribute");
 		name_ = "";
 		type_ = attribute_type_t.ATTRIBUTE_TYPE_INVALID;
 		ival_ = 0;
@@ -143,7 +143,7 @@ public class NamedAttribute {
 
 	public int int_val() {
 		if (type_ != attribute_type_t.ATTRIBUTE_TYPE_INTEGER) {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							"NamedAttribute.int_val: invalid type"
 									+ type_to_str(type_));
@@ -153,7 +153,7 @@ public class NamedAttribute {
 
 	public boolean bool_val() {
 		if (type_ != attribute_type_t.ATTRIBUTE_TYPE_BOOLEAN) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"NamedAttribute.bool_val: invalid type"
 							+ type_to_str(type_));
@@ -164,7 +164,7 @@ public class NamedAttribute {
 
 	public String string_val() {
 		if (type_ != attribute_type_t.ATTRIBUTE_TYPE_STRING) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"NamedAttribute.string_val: invalid type"
 							+ type_to_str(type_));

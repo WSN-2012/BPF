@@ -32,7 +32,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Abstraction of neighbor discovery agent.
@@ -114,7 +114,7 @@ public abstract class Discovery {
 			disc = new IPDiscovery(name, port);
 		} else {
 			// not a recognized address family
-			Logger.getInstance().error(TAG, "unknown address family");
+			BPF.getInstance().getBPFLogger().error(TAG, "unknown address family");
 			disc = null;
 
 		}
@@ -166,26 +166,26 @@ public abstract class Discovery {
 	public boolean announce(String name, int argc, String ClType, int interval) {
 
 		if (list_.indexOf(name) != -1) {
-			Logger.getInstance().error(TAG, "discovery for name already exists");
+			BPF.getInstance().getBPFLogger().error(TAG, "discovery for name already exists");
 			return false;
 		}
 
 		if (argc < 1) {
-			Logger.getInstance().error(TAG, "cl type not specified");
+			BPF.getInstance().getBPFLogger().error(TAG, "cl type not specified");
 			return false;
 		}
 
 		String cltype = ClType;
 		ConvergenceLayer cl = ConvergenceLayer.find_clayer(cltype);
 		if (cl == null) {
-			Logger.getInstance().error(TAG, "invalid convergence layer type");
+			BPF.getInstance().getBPFLogger().error(TAG, "invalid convergence layer type");
 			return false;
 		}
 
 		Announce announce = Announce.create_announce(name, cl, argc, ClType,
 				interval);
 		if (announce == null) {
-			Logger.getInstance().error
+			BPF.getInstance().getBPFLogger().error
 		(TAG,
 					"no announce implemented for This type of convergence layer");
 			return false;
@@ -205,7 +205,7 @@ public abstract class Discovery {
 		Iterator<Announce> i = list_.iterator();
 
 		if (!find(name, i)) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"error removing announce,no such object");
 			return false;
 		}
@@ -234,7 +234,7 @@ public abstract class Discovery {
 
 		// ConvergenceLayer cl = ConvergenceLayer.find_clayer(cl_type);
 		// if (cl == null) {
-		// Logger.getInstance().error(TAG, "unknown convergence layer type");
+		// BPF.getInstance().getBPFLogger().error(TAG, "unknown convergence layer type");
 		// return;
 		// }
 
@@ -248,7 +248,7 @@ public abstract class Discovery {
 							: link.clayer(), cl_addr, remote_eid);
 
 			if (link == null) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"failed to create opportunistic link");
 				return;
 			}
@@ -262,7 +262,7 @@ public abstract class Discovery {
 			} else {
 				discoveries.remove(remote_eid.str());
 				discoveries.put(remote_eid.str(), cl_addr);
-				DTNManager.getInstance().notify_user("New peer discovered",
+				BPF.getInstance().getBPFNotificationReceiver().notify("New peer discovered",
 						remote_eid.str());
 			}
 

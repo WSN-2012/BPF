@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class is the implementation of SQLite. This class directly interact with
@@ -74,10 +74,10 @@ public class SQLiteImplementation {
 
 			init(table);
 
-			Logger.getInstance().debug(TAG, "Can open database");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Can open database");
 
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG, "SQLite Exception in Constructor");
+			BPF.getInstance().getBPFLogger().error(TAG, "SQLite Exception in Constructor");
 		}
 	}
 
@@ -95,10 +95,10 @@ public class SQLiteImplementation {
 
 	public int add(String table, ContentValues values) {
 		try {
-			Logger.getInstance().debug(TAG, "Adding Row");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Adding Row");
 			return (int) db.insert(table, null, values);
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"SQLite Exception while adding a row");
 			return -1;
 		}
@@ -118,7 +118,7 @@ public class SQLiteImplementation {
 		 * cv, "id = "+bundleid, null);
 		 */
 		// db.execSQL("UPDATE bundles Set forwarded_times = forwarded_times+1 WHERE id = "+bundleid);
-		Logger.getInstance().info(TAG, "bundle " + bundleid + " incremented");
+		BPF.getInstance().getBPFLogger().info(TAG, "bundle " + bundleid + " incremented");
 	}
 
 	/**
@@ -138,11 +138,11 @@ public class SQLiteImplementation {
 	public boolean update(String table, ContentValues values, String where,
 			String[] whereArgs) {
 		try {
-			Logger.getInstance().debug(TAG, "Updating Row");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Updating Row");
 			db.update(table, values, where, whereArgs);
 			return true;
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"SQLite Exception while updating a row");
 		}
 		return false;
@@ -182,15 +182,15 @@ public class SQLiteImplementation {
 					return result;
 				}
 			} else {
-				Logger.getInstance().debug(TAG, "Row not found!");
+				BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
 			}
 			cursor.close();
 		} catch (IndexOutOfBoundsException e) {
-			Logger.getInstance().error(TAG, "Id Already deleted");
+			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG, "Coundn't run the query");
+			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
 		} catch (Exception e) {
-			Logger.getInstance().error(TAG, "General Exception");
+			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
 		}
 		return -1;
 	}
@@ -221,20 +221,20 @@ public class SQLiteImplementation {
 				if (cursor.moveToFirst()) {
 					do {
 						list.add(cursor.getInt(idColumn));
-						Logger.getInstance().debug(TAG,
+						BPF.getInstance().getBPFLogger().debug(TAG,
 								"Found it@:" + cursor.getInt(idColumn));
 					} while (cursor.moveToNext());
 				}
 			} else {
-				Logger.getInstance().debug(TAG, "Row not found!");
+				BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
 			}
 			cursor.close();
 		} catch (IndexOutOfBoundsException e) {
-			Logger.getInstance().error(TAG, "Id Already deleted");
+			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG, "Coundn't run the query");
+			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
 		} catch (Exception e) {
-			Logger.getInstance().error(TAG, "General Exception");
+			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
 		}
 		return list;
 	}
@@ -259,19 +259,19 @@ public class SQLiteImplementation {
 			if (cursor != null) {
 				if (cursor.moveToFirst()) {
 					count = cursor.getInt(0);
-					Logger.getInstance().debug(TAG,
+					BPF.getInstance().getBPFLogger().debug(TAG,
 							"Records count @:" + cursor.getInt(0));
 				}
 			} else {
-				Logger.getInstance().debug(TAG, "Row not found!");
+				BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
 			}
 			cursor.close();
 		} catch (IndexOutOfBoundsException e) {
-			Logger.getInstance().error(TAG, "Id Already deleted");
+			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG, "Coundn't run the query");
+			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
 		} catch (Exception e) {
-			Logger.getInstance().error(TAG, "General Exception");
+			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
 		}
 		return count;
 	}
@@ -289,7 +289,7 @@ public class SQLiteImplementation {
 
 			Cursor cursor = db.query("bundles", null, null, null, null, null,
 					null, null);
-			Logger.getInstance().debug(TAG, "Reading Row");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Reading Row");
 
 			int idColumn = cursor.getColumnIndex("id");
 
@@ -297,23 +297,23 @@ public class SQLiteImplementation {
 				if (cursor.moveToFirst()) {
 					do {
 						list.add(cursor.getInt(idColumn));
-						Logger.getInstance().debug(TAG,
+						BPF.getInstance().getBPFLogger().debug(TAG,
 								"Found it@:" + cursor.getInt(idColumn));
 					} while (cursor.moveToNext());
 				}
 			} else {
-				Logger.getInstance().debug(TAG, "Row not found!");
+				BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
 				// return "Not Found";
 			}
 			cursor.close();
 		} catch (IndexOutOfBoundsException e) {
-			Logger.getInstance().error(TAG, "Id Already deleted");
+			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 			// return "Not Found";
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG, "Coundn't run the query");
+			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
 			// return "Not Found";
 		} catch (Exception e) {
-			Logger.getInstance().error(TAG, "General Exception");
+			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
 			// return "Not Found";
 		}
 
@@ -336,14 +336,14 @@ public class SQLiteImplementation {
 			int temp = db.delete(table, condition, null);
 
 			if (temp == 0) {
-				Logger.getInstance().debug(TAG, "Already Deleted");
+				BPF.getInstance().getBPFLogger().debug(TAG, "Already Deleted");
 				return false;
 			} else {
-				Logger.getInstance().debug(TAG, "Deleted");
+				BPF.getInstance().getBPFLogger().debug(TAG, "Deleted");
 				return true;
 			}
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG, "Coundn't delete");
+			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't delete");
 			return false;
 		}
 	}
@@ -362,11 +362,11 @@ public class SQLiteImplementation {
 
 			db.execSQL("DROP TABLE " + tableName);
 
-			Logger.getInstance().debug(TAG, "Table Deleted: " + tableName);
+			BPF.getInstance().getBPFLogger().debug(TAG, "Table Deleted: " + tableName);
 			return true;
 
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG, "Coundn't delete table");
+			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't delete table");
 			return false;
 		}
 	}
@@ -383,9 +383,9 @@ public class SQLiteImplementation {
 		try {
 			db.execSQL(create_table_query);
 
-			Logger.getInstance().debug("DB:", "Creating Table");
+			BPF.getInstance().getBPFLogger().debug("DB:", "Creating Table");
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG, "Coundn't open table");
+			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't open table");
 		}
 	}
 
@@ -401,10 +401,10 @@ public class SQLiteImplementation {
 		try {
 			db.execSQL(create_table_query);
 
-			Logger.getInstance().debug("DB:", "Creating Table");
+			BPF.getInstance().getBPFLogger().debug("DB:", "Creating Table");
 			return true;
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG, "Coundn't open table");
+			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't open table");
 		}
 		return false;
 	}
@@ -425,10 +425,10 @@ public class SQLiteImplementation {
 
 			Cursor cursor = db.query(table, null, condition, null, null, null,
 					null, null);
-			Logger.getInstance().debug(TAG, "Finding Row");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Finding Row");
 			if (cursor != null) {
 				cursor.moveToFirst();
-				Logger.getInstance().debug(TAG, "Found it");
+				BPF.getInstance().getBPFLogger().debug(TAG, "Found it");
 				cursor.close();
 				return true;
 			} else {
@@ -436,13 +436,13 @@ public class SQLiteImplementation {
 				return false;
 			}
 		} catch (IndexOutOfBoundsException e) {
-			Logger.getInstance().error(TAG, "Id Already deleted");
+			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 			return false;
 		} catch (SQLiteException e) {
-			Logger.getInstance().error(TAG, "Coundn't run the query");
+			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
 			return false;
 		} catch (Exception e) {
-			Logger.getInstance().error(TAG, "General Exception");
+			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
 			return false;
 		}
 	}

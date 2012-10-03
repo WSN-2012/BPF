@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.UDPConvergenceLayer.UDPLinkParams;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Helper class (and thread) that listens on a registered interface for new
@@ -68,7 +68,7 @@ public class UDPListener extends CLInfo implements Runnable {
 
 		} catch (IOException e) {
 			
-			Logger.getInstance().debug(TAG, "IOException " + e.getMessage());
+			BPF.getInstance().getBPFLogger().debug(TAG, "IOException " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -99,7 +99,7 @@ public class UDPListener extends CLInfo implements Runnable {
 		try {
 			server_socket_.close();
 		} catch (Exception e) {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Exception stopping server_socket: " + e.getMessage());
 		}
 		server_socket_ = null;
@@ -117,13 +117,13 @@ public class UDPListener extends CLInfo implements Runnable {
 
 		while (listening_) {
 			try {
-				Logger.getInstance().debug(TAG, "start accepting connection");
+				BPF.getInstance().getBPFLogger().debug(TAG, "start accepting connection");
 				// socket = server_socket_.accept();
 			} catch (Exception e) {
-				Logger.getInstance().debug(TAG, "IOException in accept");
+				BPF.getInstance().getBPFLogger().debug(TAG, "IOException in accept");
 				continue;
 			}
-			Logger.getInstance().debug(TAG, "Connection Accepted");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Connection Accepted");
 
 			UDPConnection udpconnection;
 
@@ -135,7 +135,7 @@ public class UDPListener extends CLInfo implements Runnable {
 				udpconnection.start();
 
 			} catch (OutOfMemoryError e) {
-				Logger.getInstance().debug(TAG, "Not enough resources");
+				BPF.getInstance().getBPFLogger().debug(TAG, "Not enough resources");
 			}
 
 		}

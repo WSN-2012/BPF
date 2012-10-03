@@ -27,7 +27,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Internal registration for the dtnping application.
@@ -72,7 +72,7 @@ public class PingRegistration extends Registration {
 
 		int payload_len = bundle.payload().length();
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("%d byte ping from %s", payload_len, bundle
 						.source().str()));

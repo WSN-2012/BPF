@@ -31,7 +31,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ReassemblyCompletedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Fragment Manger stores the state of all the partial bundles/fragmentary
@@ -107,7 +107,7 @@ public class FragmentManager {
 
 		// check for overallocated length
 		if ((offset + length) > fragment.orig_length()) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 							String.format(
 									"fragment length overrun: "
 											+ "orig_length %d frag_offset %d requested offset %d length %d",
@@ -188,7 +188,7 @@ public class FragmentManager {
 		}
 
 		if (block_length > max_length) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format(
 							"unable to create a fragment of length %s; minimum length "
@@ -232,7 +232,7 @@ public class FragmentManager {
 
 		}
 
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG,
 						String.format(
 								"created %s byte fragment bundle with %s bytes of payload",
@@ -311,7 +311,7 @@ public class FragmentManager {
 
 		} while (todo > 0);
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("proactively fragmenting "
 						+ "%s byte payload into %s %s byte fragments",
@@ -377,7 +377,7 @@ public class FragmentManager {
 
 		FragmentState iter = fragment_table_.get(hash_key);
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("processing bundle fragment id=%s hash=%s %s",
 						fragment.bundleid(), hash_key, fragment.is_fragment()));
@@ -392,7 +392,7 @@ public class FragmentManager {
 			fragment_table_.put(hash_key[0], state);
 		} else {
 			state = iter;
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"found reassembly state for key %s (%s fragments)",
@@ -405,7 +405,7 @@ public class FragmentManager {
 		// store the fragment data in the partially reassembled bundle file
 		int fraglen = fragment.payload().length();
 
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG,
 						String.format(
 								"write_data: length_=%s src_offset=%s dst_offset=%s len %s",
@@ -460,20 +460,20 @@ public class FragmentManager {
 		get_hash_key(bundle, hash_key);
 		state = fragment_table_.get(hash_key);
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format(
 						"checking for obsolete fragments id=%s hash=%s...",
 						bundle.bundleid(), hash_key[0]));
 
 		if (state == null) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 							String.format("no reassembly state for key %s",
 									hash_key[0]));
 			return;
 		}
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format(
 						"found reassembly state... deleting %d fragments",

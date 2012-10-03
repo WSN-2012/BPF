@@ -35,7 +35,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class extends BlockProcessor and is the implementation of the primary
@@ -110,7 +110,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 				- buf_block_content.remaining();
 		buf_block_content.position(0);
 
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				" primary_len: " + primary_len + " : len:" + len);
 
 		assert (primary_len == len) : TAG + ":  consume() primary!=len";
@@ -118,7 +118,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 		primary.set_version(buf_block_content.get());
 
 		if (primary.version() != BundleProtocol.CURRENT_VERSION) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("protocol version mismatch %s != %s",
 							primary.version, BundleProtocol.CURRENT_VERSION));
@@ -131,7 +131,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 			len -= read_sdnv(buf_block_content, primary.processing_flags());
 			len -= read_sdnv(buf_block_content, primary.block_length());
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("parsed primary block: version %s length %s",
 							primary.version(), block.data_length()));
@@ -164,7 +164,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 
 			len -= read_sdnv(buf_block_content, primary.creation_time());
 			if (primary.creation_time_value() > Integer.MAX_VALUE) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format(
 								"creation timestamp time is too large: %s",
@@ -174,7 +174,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 
 			len -= read_sdnv(buf_block_content, primary.creation_sequence());
 			if (primary.creation_sequence_value() > Integer.MAX_VALUE) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format(
 								"creation timestamp sequence is too large: %s",
@@ -184,7 +184,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 
 			len -= read_sdnv(buf_block_content, primary.lifetime());
 			if (primary.lifetime_value() > Integer.MAX_VALUE) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format("lifetime is too large: %s",
 								primary.lifetime));
@@ -206,7 +206,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 			 */
 			if (len < primary.dictionary_length_value()) {
 
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format(
 								"primary block advertised incorrect length %s",
@@ -220,7 +220,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 			 */
 			if (buf_block_content.get((int) (buf_block_content.position()
 					+ primary.dictionary_length_value() - 1)) != '\0') {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						"dictionary does not end with a NULL character! "
 								+ primary_len);
@@ -237,7 +237,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 
 			len -= primary.dictionary_length_value();
 
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							"Dict starting point :"
 									+ (primary_len - primary
@@ -246,7 +246,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 
 			dict.set_dict(dictionary, (int) primary.dictionary_length_value());
 
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							"Extract source :"
 									+ (primary_len - primary
@@ -256,19 +256,19 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 					.extract_eid(bundle.source(),
 							primary.source_scheme_offset(),
 							primary.source_ssp_offset())) {
-				Logger.getInstance().error(TAG, "Extract source fail:");
+				BPF.getInstance().getBPFLogger().error(TAG, "Extract source fail:");
 			} else {
 				block.eid_list().add(bundle.source());
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"Extract source :" + bundle.source().str());
 			}
 
 			if (!dict.extract_eid(bundle.dest(), primary.dest_scheme_offset(),
 					primary.dest_ssp_offset())) {
-				Logger.getInstance().error(TAG, "Extract dest fail:");
+				BPF.getInstance().getBPFLogger().error(TAG, "Extract dest fail:");
 			} else {
 				block.eid_list().add(bundle.dest());
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"Extract dest :" + bundle.dest().str());
 			}
 
@@ -276,20 +276,20 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 					primary.replyto_scheme_offset(),
 					primary.replyto_ssp_offset())) {
 
-				Logger.getInstance().error(TAG, "Extract reply fail :");
+				BPF.getInstance().getBPFLogger().error(TAG, "Extract reply fail :");
 			} else {
 				block.eid_list().add(bundle.replyto());
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"Extract reply :" + bundle.replyto().str());
 			}
 
 			if (!dict.extract_eid(bundle.custodian(),
 					primary.custodian_scheme_offset(),
 					primary.custodian_ssp_offset())) {
-				Logger.getInstance().error(TAG, "Extract custodian fail:");
+				BPF.getInstance().getBPFLogger().error(TAG, "Extract custodian fail:");
 			} else {
 				block.eid_list().add(bundle.custodian());
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"Extract custodian :" + bundle.custodian().str());
 			}
 
@@ -306,7 +306,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 
 				len -= read_sdnv(buf_block_content, sdnv_buf);
 				if (sdnv_buf[0] > Integer.MAX_VALUE) {
-					Logger.getInstance().error(
+					BPF.getInstance().getBPFLogger().error(
 							TAG,
 							String.format("fragment offset is too large: %s",
 									sdnv_buf));
@@ -319,7 +319,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 				len -= read_sdnv(buf_block_content, sdnv_buf);
 
 				if (sdnv_buf[0] > Integer.MAX_VALUE) {
-					Logger.getInstance().error(TAG,
+					BPF.getInstance().getBPFLogger().error(TAG,
 									String.format(
 											"fragment original length is too large: %s",
 											sdnv_buf));
@@ -328,7 +328,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 
 				bundle.set_orig_length(sdnv_buf[0]);
 
-				Logger.getInstance()
+				BPF.getInstance().getBPFLogger()
 						.debug(TAG,
 								String.format(
 										TAG,
@@ -337,7 +337,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 										bundle.orig_length()));
 			}
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"primary_len: " + primary_len + " : ln" + len
 							+ ": Consumed" + consumed);
@@ -384,7 +384,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 		eids_valid &= bundle.replyto().valid();
 
 		if (!eids_valid) {
-			Logger.getInstance().error(TAG, "bad value for one or more EIDs");
+			BPF.getInstance().getBPFLogger().error(TAG, "bad value for one or more EIDs");
 			deletion_reason[0] = status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 			return false;
 		}
@@ -393,26 +393,26 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 		// with a null source EID should not try to do. Check for these cases
 		// and reject the bundle if any is true.
 
-		Logger.getInstance().debug(TAG, "Going to check null eid");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Going to check null eid");
 		if (bundle.source().equals(EndpointID.NULL_EID())) {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG, "Inside of Going to check null eid");
 			if (bundle.receipt_requested() || bundle.app_acked_rcpt()) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 								"bundle with null source eid has requested a report; reject it");
 				deletion_reason[0] = status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 				return false;
 			}
 
 			if (bundle.custody_requested()) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 								"bundle with null source eid has requested custody transfer; reject it");
 				deletion_reason[0] = status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 				return false;
 			}
 
 			if (!bundle.do_not_fragment()) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						"bundle with null source eid has not set "
 								+ "'do-not-fragment' flag; reject it");
@@ -421,11 +421,11 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 			}
 		}
 
-		Logger.getInstance().debug(TAG, "Out of Going to check null eid");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Out of Going to check null eid");
 		// Admin bundles cannot request custody transfer.
 		if (bundle.is_admin()) {
 			if (bundle.custody_requested()) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"admin bundle requested custody transfer; reject it");
 				deletion_reason[0] = status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 				return false;
@@ -434,7 +434,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 			if (bundle.receive_rcpt() || bundle.custody_rcpt()
 					|| bundle.forward_rcpt() || bundle.delivery_rcpt()
 					|| bundle.deletion_rcpt() || bundle.app_acked_rcpt()) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"admin bundle has requested a report; reject it");
 				deletion_reason[0] = status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 				return false;
@@ -532,7 +532,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 		IByteBuffer buf = block.writable_contents();
 		int len = primary_len;
 
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				String.format("generating primary: length %s", primary_len));
 
 		// Stick the version number in the first byte.
@@ -555,14 +555,14 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 		len -= write_sdnv(primary.dictionary_length(), buf);
 
 		// Add the dictionary.
-		Logger.getInstance().debug(TAG, "Current Buf: " + buf.position());
-		Logger.getInstance().debug(TAG, "Dict length: " + dict.dict_length());
-		Logger.getInstance().debug(TAG, "Dict length: " + dict.dict_length());
+		BPF.getInstance().getBPFLogger().debug(TAG, "Current Buf: " + buf.position());
+		BPF.getInstance().getBPFLogger().debug(TAG, "Dict length: " + dict.dict_length());
+		BPF.getInstance().getBPFLogger().debug(TAG, "Dict length: " + dict.dict_length());
 		buf.put(dict.dict());
 		// memcpy(buf, dict->dict(), dict->length());
 		// buf += dict->length();
 		len -= dict.dict_length();
-		Logger.getInstance().debug(TAG, "Preparing len:" + len);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Preparing len:" + len);
 		/*
 		 * If the bundle is a fragment, stuff in SDNVs for the fragment offset
 		 * and original length.
@@ -570,10 +570,10 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 
 		if (bundle.is_fragment()) {
 			len -= write_sdnv(bundle.frag_offset(), buf);
-			Logger.getInstance().debug(TAG, "Preparing len:" + len);
+			BPF.getInstance().getBPFLogger().debug(TAG, "Preparing len:" + len);
 
 			len -= write_sdnv(bundle.orig_length(), buf);
-			Logger.getInstance().debug(TAG, "Preparing len:" + len);
+			BPF.getInstance().getBPFLogger().debug(TAG, "Preparing len:" + len);
 
 		}
 		/*
@@ -584,7 +584,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 
 		buf.position(0);
 		assert (len == 0) : TAG + ": len not ==0";
-		Logger.getInstance().error(TAG, "Current Len: " + len);
+		BPF.getInstance().getBPFLogger().error(TAG, "Current Len: " + len);
 	}
 
 	/**
@@ -978,7 +978,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 				+ SDNV.encoding_len(primary.block_length()) + primary
 				.block_length_value());
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				"get_primary_len: for bundleid = " + bundle.bundleid() + ": "
 						+ primary_len);

@@ -34,7 +34,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "IPDiscovery is the main thread in IP-based neighbor discovery, configured
@@ -158,7 +158,7 @@ public class IPDiscovery extends Discovery implements Runnable {
 	// InetAddress local_addr_ = null;
 	// DhcpInfo dhcp = mWifi.getDhcpInfo();
 	// if (dhcp == null) {
-	// Logger.getInstance().debug(TAG, "Could not get dhcp info");
+	// BPF.getInstance().getBPFLogger().debug(TAG, "Could not get dhcp info");
 	// }
 	//
 	// short[] quads = new short[4];
@@ -172,7 +172,7 @@ public class IPDiscovery extends Discovery implements Runnable {
 	//
 	// } catch (UnknownHostException e) {
 	//
-	// Logger.getInstance().debug(TAG, "error getting_my_ip");
+	// BPF.getInstance().getBPFLogger().debug(TAG, "error getting_my_ip");
 	// }
 	//
 	// return local_addr_;
@@ -189,7 +189,7 @@ public class IPDiscovery extends Discovery implements Runnable {
 	// BROADCAST = null;
 	// DhcpInfo dhcp = mWifi.getDhcpInfo();
 	// if (dhcp == null) {
-	// Logger.getInstance().debug(TAG, "Could not get dhcp info");
+	// BPF.getInstance().getBPFLogger().debug(TAG, "Could not get dhcp info");
 	// }
 	//
 	// int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
@@ -199,7 +199,7 @@ public class IPDiscovery extends Discovery implements Runnable {
 	// try {
 	// BROADCAST = InetAddress.getByAddress(quads);
 	// } catch (UnknownHostException e) {
-	// Logger.getInstance().debug(TAG, "Error calculating Broadcast address");
+	// BPF.getInstance().getBPFLogger().debug(TAG, "Error calculating Broadcast address");
 	// }
 	//
 	// return BROADCAST;
@@ -213,13 +213,13 @@ public class IPDiscovery extends Discovery implements Runnable {
 	protected boolean configure() {
 
 		if (thread_.isAlive()) {
-			Logger.getInstance().warning(TAG,
+			BPF.getInstance().getBPFLogger().warning(TAG,
 					"reconfiguration of IPDiscovery not supported");
 			return false;
 		}
 
 		if (port_ == 0) {
-			Logger.getInstance().error(TAG, "must specify port");
+			BPF.getInstance().getBPFLogger().error(TAG, "must specify port");
 			return false;
 		}
 
@@ -230,11 +230,11 @@ public class IPDiscovery extends Discovery implements Runnable {
 		// static IntAddress mcast_mask = 224.0.0.0" [DTN2];
 		//
 		// if (remote_addr_ == BROADCAST) {
-		// Logger.getInstance().debug(TAG,
+		// BPF.getInstance().getBPFLogger().debug(TAG,
 		// "configuring broadcast socket for remote address");
 		//
 		// } else if (!remote_addr_.isMulticastAddress()) {
-		// Logger.getInstance().debug(TAG,
+		// BPF.getInstance().getBPFLogger().debug(TAG,
 		// "configuring unicast socket for remote address");
 		// }
 
@@ -243,10 +243,10 @@ public class IPDiscovery extends Discovery implements Runnable {
 			socket_.setBroadcast(true);
 			socket_.setSoTimeout(TIMEOUT_MS);
 		} catch (IOException e) {
-			Logger.getInstance().error(TAG, "bind failed " + e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, "bind failed " + e.getMessage());
 		}
 
-		Logger.getInstance().debug(TAG, "starting thread");
+		BPF.getInstance().getBPFLogger().debug(TAG, "starting thread");
 
 		return true;
 
@@ -258,7 +258,7 @@ public class IPDiscovery extends Discovery implements Runnable {
 
 	public void run() {
 
-		Logger.getInstance().debug(TAG, "discovery thread running");
+		BPF.getInstance().getBPFLogger().debug(TAG, "discovery thread running");
 		IByteBuffer buf = new SerializableByteBuffer(1024);
 
 		while (true) {
@@ -277,7 +277,7 @@ public class IPDiscovery extends Discovery implements Runnable {
 
 					if (remaining == 0) {
 						try {
-							// Logger.getInstance().debug(TAG,
+							// BPF.getInstance().getBPFLogger().debug(TAG,
 							// "announce ready for sending");
 							hdr = announce.format_advertisement(buf, 1024);
 
@@ -305,13 +305,13 @@ public class IPDiscovery extends Discovery implements Runnable {
 							socket_.send(pack);
 							min_diff = announce.interval();
 						} catch (Exception e) {
-							Logger.getInstance().error(
+							BPF.getInstance().getBPFLogger().error(
 									TAG,
 									"error sending the packet "
 											+ e.getMessage());
 						}
 					} else {
-						// Logger.getInstance().debug(TAG,
+						// BPF.getInstance().getBPFLogger().debug(TAG,
 						// "Could not send discovery request");
 						if (remaining < min_diff) {
 							min_diff = announce.interval_remaining();
@@ -331,12 +331,12 @@ public class IPDiscovery extends Discovery implements Runnable {
 				DatagramPacket packet = new DatagramPacket(Rdata, Rdata.length);
 
 				socket_.receive(packet);
-				Logger.getInstance().debug("B4",
+				BPF.getInstance().getBPFLogger().debug("B4",
 						"Received beacon: " + packet.getAddress());
 
 				// String s = new String(packet.getData(), 0,
 				// packet.getLength());
-				// Logger.getInstance().debug(TAG, "Received response " + s);
+				// BPF.getInstance().getBPFLogger().debug(TAG, "Received response " + s);
 
 				EndpointID remote_eid = new EndpointID();
 				String nexthop = "";// For now
@@ -375,17 +375,17 @@ public class IPDiscovery extends Discovery implements Runnable {
 				BundleDaemon BD = BundleDaemon.getInstance();
 
 				if (remote_eid.equals(BD.local_eid())) {
-					// Logger.getInstance().debug(TAG,
+					// BPF.getInstance().getBPFLogger().debug(TAG,
 					// "ignoring beacon from self" + remote_eid);
 				} else {
 					// distribute to all beacons registered for this CL type
 					handle_neighbor_discovered(Type, nexthop, remote_eid);
 				}
 
-				Logger.getInstance().debug("B4", "beacon: " + remote_eid);
+				BPF.getInstance().getBPFLogger().debug("B4", "beacon: " + remote_eid);
 
 			} catch (Exception e) {
-				Logger.getInstance().info(TAG,
+				BPF.getInstance().getBPFLogger().info(TAG,
 						"Fail receiving the UDP datagram " + e.getMessage());
 			}
 

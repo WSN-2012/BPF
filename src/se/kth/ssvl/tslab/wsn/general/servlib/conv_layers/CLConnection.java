@@ -39,7 +39,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Helper class (and thread) that manages an established connection with a peer
@@ -154,20 +154,20 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 			poll_timeout_ = 2 * params.keepalive_interval() * 1000;
 		}
 		if (contact_broken_) {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"contact_broken set during initialization");
 			return;
 		}
 
 		if (active_connector_) {
-			Logger.getInstance().debug(TAG, "trying to connect");
+			BPF.getInstance().getBPFLogger().debug(TAG, "trying to connect");
 			try {
 				connect();
 			} catch (ConnectionException e) {
 				String text = String.format(
 						"connection attempt to %s:%s failed...",
 						params.remote_addr_, params.remote_port_);
-				Logger.getInstance().info(TAG, text);
+				BPF.getInstance().getBPFLogger().info(TAG, text);
 				break_contact(ContactEvent.reason_t.BROKEN);
 				return;
 			}
@@ -175,12 +175,12 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 
 		while (true) {
 			if (contact_broken_) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"contact_broken set, exiting main loop");
 				return;
 			}
 
-			// Logger.getInstance().debug(TAG,
+			// BPF.getInstance().getBPFLogger().debug(TAG,
 			// "CLConnection is still running in the main loop, cmdqueue_ size is "
 			// + cmdqueue_.size());
 			// "check the command queue coming in from the bundle daemon
@@ -206,7 +206,7 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 			// "check again here for contact broken since we don't want to
 			// poll if the socket's been closed" [DTN2]
 			if (contact_broken_) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"contact_broken set, exiting main loop");
 				return;
 			}
@@ -224,7 +224,7 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 	 */
 	public void contact_up() {
 
-		Logger.getInstance().debug(TAG, "contact_up");
+		BPF.getInstance().getBPFLogger().debug(TAG, "contact_up");
 		assert (contact_ != null) : "CLConnection : contact_up, contact_ is null";
 
 		assert (!contact_up_) : "CLConnection : contact_up, contact_up is already true";
@@ -242,7 +242,7 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 
 		contact_broken_ = true;
 
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG, "break_contact: " + reason.getCaption());
 
 		if (reason != ContactEvent.reason_t.BROKEN) {
@@ -269,36 +269,36 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 	 */
 	void process_command() {
 
-		Logger.getInstance().error(TAG, "receiving command from Bundle Daemon");
+		BPF.getInstance().getBPFLogger().error(TAG, "receiving command from Bundle Daemon");
 		CLMsg msg;
 		try {
 			msg = cmdqueue_.take();
 
 			switch (msg.type_) {
 			case CLMSG_BUNDLES_QUEUED:
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"processing CLMSG_BUNDLES_QUEUED");
 				handle_bundles_queued();
 				break;
 
 			case CLMSG_CANCEL_BUNDLE:
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"processing CLMSG_CANCEL_BUNDLE");
 				handle_cancel_bundle(msg.bundle_);
 				break;
 
 			case CLMSG_BREAK_CONTACT:
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"processing CLMSG_BREAK_CONTACT");
 				break_contact(ContactEvent.reason_t.USER);
 				break;
 			default:
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"invalid CLMsg typecode " + msg.type_);
 			}
 
 		} catch (InterruptedException e) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"Interupt Exception in processs_command");
 		}
 	}
@@ -314,7 +314,7 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 	 * Stop the CLConnection Thread.
 	 */
 	public void stop() {
-		Logger.getInstance().debug(TAG, "stopping thread in CLConnection");
+		BPF.getInstance().getBPFLogger().debug(TAG, "stopping thread in CLConnection");
 		if (thread_ != null) {
 			Thread moribund = thread_;
 			thread_ = null;
@@ -340,7 +340,7 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 	boolean find_contact(EndpointID peer_eid) {
 
 		if (contact_ != null) {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"CLConnection.find_contact: contact already exists");
 			return true;
 		}
@@ -376,19 +376,19 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 
 		if (link == null || link.contact() != null) {
 			if (link != null) {
-				Logger.getInstance().warning(TAG,
+				BPF.getInstance().getBPFLogger().warning(TAG,
 						"in-use opportunistic link " + link);
 			}
 
 			link = cm.new_opportunistic_link(cl_, nexthop_, peer_eid);
 			if (link == null) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"failed to create opportunistic link");
 				return false;
 			}
 
 			new_link = true;
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"created new opportunistic link " + link);
 		}
 
@@ -399,7 +399,7 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 			if (!new_link) {
 				assert (link.contact() == null);
 				link.set_nexthop(nexthop_);
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"found idle opportunistic link " + link);
 			}
 

@@ -1,6 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.Config;
@@ -67,7 +67,7 @@ public abstract class ProphetQueuing {
 				instance_ = (ProphetQueuing) myClass.newInstance();
 			} catch (Exception e) {
 				
-				Logger.getInstance().error(TAG, "Wrong policy");
+				BPF.getInstance().getBPFLogger().error(TAG, "Wrong policy");
 				e.printStackTrace();
 			}
 		}
@@ -86,7 +86,7 @@ public abstract class ProphetQueuing {
 	}
 
 	public void delete(int bundleid) {
-		Logger.getInstance().info(TAG, "Deleting bundle: " + bundleid);
+		BPF.getInstance().getBPFLogger().info(TAG, "Deleting bundle: " + bundleid);
 		bundleStore.del(bundleid);
 	}
 

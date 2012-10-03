@@ -99,7 +99,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This is the basic router mainly rely on the route entries in the RoutingTable
@@ -173,7 +173,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		// "if the link is available and not open, open it" [DTN2]
 		if (link.isNotUnavailable() && (!link.isopen()) && (!link.isopening())) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"opening %s because a message is intended for it",
@@ -184,7 +184,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 		// "if the link is open and has space in the queue, then queue the
 		// bundle for transmission there" [DTN2]
 		if (link.isopen() && !link.queue_is_full()) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("queuing %d on %s", bundle.bundleid(),
 							link.name()));
@@ -203,7 +203,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 					route.custody_spec());
 			deferred.add(bundle, info);
 		} else {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.warning(
 							TAG,
 							String.format(
@@ -212,27 +212,27 @@ public abstract class TableBasedRouter extends BundleRouter {
 		}
 
 		if (!link.isNotUnavailable()) {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							String.format(
 									"can't forward bundle %d to %s because link not available",
 									bundle.bundleid(), link.name()));
 		} else if (!link.isopen()) {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							String.format(
 									TAG,
 									"can't forward bundle %d to %s because link not open",
 									bundle.bundleid(), link.name()));
 		} else if (link.queue_is_full()) {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							String.format(
 									TAG,
 									"can't forward bundle %d to %s because link queue is full",
 									bundle.bundleid(), link.name()));
 		} else {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(TAG, "can't forward %d to %s",
 							bundle.bundleid(), link.name()));
@@ -259,7 +259,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 		if (prevhop != null) {
 			if (prevhop.equals(route.link().remote_eid())
 					&& !prevhop.equals(EndpointID.NULL_EID())) {
-				Logger.getInstance()
+				BPF.getInstance().getBPFLogger()
 						.debug(TAG,
 								String.format(
 										"should_fwd bundle %d: "
@@ -287,7 +287,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		RouteEntryVec matches = new RouteEntryVec();
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("route_bundle: checking bundle %d",
 						bundle.bundleid()));
@@ -296,7 +296,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 		if (bundle.fwdlog().get_count(EndpointIDPattern.WILDCARD_EID(),
 				ForwardingInfo.state_t.SUPPRESSED.getCode(),
 				ForwardingInfo.ANY_ACTION) > 0) {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.info(TAG,
 							String.format(
 									"route_bundle: "
@@ -312,7 +312,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 		// override the way in which the sorting occurs" [DTN2]
 		sort_routes(matches);
 
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG,
 						String.format(
 								"route_bundle bundle id %d: checking %d route entry matches",
@@ -322,7 +322,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 		Iterator<RouteEntry> itr = matches.iterator();
 		while (itr.hasNext()) {
 			RouteEntry route = itr.next();
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							String.format(
 									"checking route entry %s link %s (%s)",
@@ -334,7 +334,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 			}
 
 			if (deferred_list(route.link()).list().contains(bundle)) {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						String.format("route_bundle bundle %d: "
 								+ "ignoring link %s since already deferred",
@@ -356,7 +356,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 			++count;
 		}
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format(
 						"route_bundle bundle id %d: forwarded on %d links",
@@ -387,7 +387,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		// "if the link isn't open, there's nothing to do now" [DTN2]
 		if (!next_hop.isopen()) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("check_next_hop %s -> %s: link not open...",
 							next_hop.name(), next_hop.nexthop()));
@@ -397,7 +397,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 		// "if the link queue doesn't have space (based on the low water
 		// mark) don't do anything" [DTN2]
 		if (!next_hop.queue_has_space()) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"check_next_hop %s -> %s: no space in queue...",
@@ -405,7 +405,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 			return;
 		}
 
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG,
 						String.format(
 								"check_next_hop %s -> %s: checking deferred bundle list...",
@@ -423,7 +423,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 			Iterator<Bundle> iter = deferred.list().begin();
 			while (iter.hasNext()) {
 				if (next_hop.queue_is_full()) {
-					Logger.getInstance().debug(TAG,
+					BPF.getInstance().getBPFLogger().debug(TAG,
 							String.format(
 									"check_next_hop %s: link queue is full, stopping loop",
 									next_hop.name()));
@@ -441,7 +441,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 				// fail, we leave it on the deferred list for now, relying on
 				// the transmitted handlers to clean up the state" [DTN2]
 				if (!this.should_fwd(bundle, next_hop, info.action())) {
-					Logger.getInstance()
+					BPF.getInstance().getBPFLogger()
 							.debug(TAG,
 									String.format(
 											"check_next_hop: not forwarding to link %s",
@@ -452,7 +452,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 				// "if the link is available and not open, open it" [DTN2]
 				if (next_hop.isNotUnavailable() && (!next_hop.isopen())
 						&& (!next_hop.isopening())) {
-					Logger.getInstance().debug(TAG,
+					BPF.getInstance().getBPFLogger().debug(TAG,
 							String.format(
 									"check_next_hop: "
 											+ "opening %s because a message is intended for it",
@@ -461,7 +461,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 				}
 
 				// "remove the bundle from the deferred list" [DTN2]
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						String.format(
 								"check_next_hop: sending bundle %d to %s",
@@ -473,7 +473,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 			}
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"Table Based Router " + e.toString());
 		} finally {
 			deferred.list().get_lock().unlock();
@@ -488,7 +488,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		pending_bundles_.get_lock().lock();
 		try {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							String.format(
 									"reroute_all_bundles... %d bundles on pending list",
@@ -501,7 +501,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 			}
 
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"TableBasedRouter: reroute_all_bundles " + e.toString());
 		} finally {
 			pending_bundles_.get_lock().unlock();
@@ -554,7 +554,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 	@Override
 	public boolean can_delete_bundle(final Bundle bundle) {
 
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				String.format(
 						"TableBasedRouter::can_delete_bundle: checking if we can delete %s",
 						bundle));
@@ -564,7 +564,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 				ForwardingInfo.state_t.TRANSMITTED.getCode()
 						| ForwardingInfo.state_t.DELIVERED.getCode(),
 				ForwardingInfo.ANY_ACTION) == 0) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("TableBasedRouter::can_delete_bundle(%d): "
 							+ "not yet transmitted or delivered",
@@ -574,7 +574,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		// check if we have local custody
 		if (bundle.local_custody()) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("TableBasedRouter::can_delete_bundle(%d): "
 							+ "not deleting because we have custody",
@@ -591,7 +591,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 	@Override
 	public void delete_bundle(final Bundle bundle) {
 
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				String.format("delete bundleid %d", bundle.bundleid()));
 		remove_from_deferred(bundle, ForwardingInfo.ANY_ACTION);
 
@@ -625,7 +625,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 				ForwardingInfo info = deferred.find(bundle);
 				if (info != null) {
 					if ((info.action().getCode() & actions) > 0) {
-						Logger.getInstance().debug(TAG,
+						BPF.getInstance().getBPFLogger().debug(TAG,
 								String.format(
 										"removing bundle %s from link %s deferred list",
 										bundle, link));
@@ -690,14 +690,14 @@ public abstract class TableBasedRouter extends BundleRouter {
 		// "if the reroute timer fires, the link should be down and there
 		// should be at least one bundle queued on it." [DTN2]
 		if (link.state() != Link.state_t.UNAVAILABLE) {
-			Logger.getInstance().warning(TAG,
+			BPF.getInstance().getBPFLogger().warning(TAG,
 					String.format(
 							"reroute timer fired but link %s state is %s, not UNAVAILABLE",
 							link, link.state().toString()));
 			return;
 		}
 
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG,
 						String.format(
 								"reroute timer fired -- cancelling %s bundles on link %s",
@@ -777,14 +777,14 @@ public abstract class TableBasedRouter extends BundleRouter {
 		 */
 		boolean add(final Bundle bundle, final ForwardingInfo info) {
 			if (list_.contains(bundle)) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format("bundle %d already in deferred list!",
 								bundle.bundleid()));
 				return false;
 			}
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"adding bundle %d to deferred (list length %d)",
@@ -813,7 +813,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 			assert (count_ > 0) : "DeferredList::del count <= 0";
 			count_--;
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"removed bundle %d from deferred (length %d)",
@@ -890,7 +890,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 	@Override
 	protected void handle_bundle_cancelled(BundleSendCancelledEvent event) {
 		Bundle bundle = event.bundle();
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("handle bundle cancelled: bundle %d",
 						bundle.bundleid()));
@@ -961,7 +961,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 		boolean should_route = true;
 
 		Bundle bundle = event.bundle();
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("handle bundle received: bundle %d",
 						bundle.bundleid()));
@@ -973,7 +973,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 		}
 
 		if (!reception_cache_.add_entry(bundle, remote_eid)) {
-			Logger.getInstance().info(
+			BPF.getInstance().getBPFLogger().info(
 					TAG,
 					String.format("ignoring duplicate bundle: bundle %d",
 							bundle.bundleid()));
@@ -1014,7 +1014,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 	@Override
 	protected void handle_bundle_transmitted(BundleTransmittedEvent event) {
 		Bundle bundle = event.bundle();
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("handle bundle transmitted: bundle %d",
 						bundle.bundleid()));
@@ -1076,7 +1076,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 		if (num_queued != 0) {
 			RerouteTimer reroute_timer = reroute_timers_.get(link.name());
 			if (reroute_timer == null) {
-				Logger.getInstance()
+				BPF.getInstance().getBPFLogger()
 						.debug(TAG,
 								String.format(
 										"link %s went down with %d bundles queued, "
@@ -1111,7 +1111,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 		assert (!link.isdeleted()) : "TabledBasedRouter: handle_contact_up : link is deleted";
 
 		if (!link.isopen()) {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger().debug
 (TAG,
 							String.format(
 									"contact up(link %s): event delivered but link not open",
@@ -1132,7 +1132,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		RerouteTimer reroute_timer = reroute_timers_.get(link.name());
 		if (reroute_timer != null) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("link %s reopened, cancelling reroute timer",
 							link.name()));
@@ -1250,7 +1250,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 
 		RerouteTimer t = reroute_timers_.get(link.name());
 		if (t != null) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("link %s deleted, cancelling reroute timer",
 							link.name()));

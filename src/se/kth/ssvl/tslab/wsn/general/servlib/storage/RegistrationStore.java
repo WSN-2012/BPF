@@ -23,12 +23,11 @@ package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 import java.util.Iterator;
 import java.util.List;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.StorageSetting.storage_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.RegistrationList;
 import se.kth.ssvl.tslab.wsn.general.systemlib.storage.StorageIterator;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
  * The class for registration storage is simply an instantiation of the
@@ -110,7 +109,7 @@ public class RegistrationStore {
 
 		config_ = config;
 
-		Logger.getInstance().debug(TAG, "Going to init");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Going to init");
 		if (!init_) {
 			impt_sqlite_ = new SQLiteImplementation(context,
 					Table_CREATE_Registration);

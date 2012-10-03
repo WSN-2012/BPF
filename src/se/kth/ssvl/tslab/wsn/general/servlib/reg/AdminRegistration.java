@@ -29,7 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.CustodySignalEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class is for internal registration. It receives all the administrative
@@ -78,11 +78,11 @@ public class AdminRegistration extends Registration {
 
 		bundle.payload().read_data(0, payload_len, payload_buf);
 
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				String.format("got %d byte bundle", payload_len));
 
 		if (payload_len == 0) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("admin registration got 0 byte %d",
 							bundle.bundleid()));
@@ -92,7 +92,7 @@ public class AdminRegistration extends Registration {
 		}
 
 		if (!bundle.is_admin()) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("non-admin %d sent to local eid",
 							bundle.bundleid()));
@@ -106,7 +106,7 @@ public class AdminRegistration extends Registration {
 		switch (admin_record_type_t.get(typecode)) {
 
 		case ADMIN_STATUS_REPORT: {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"status report %d received at admin registration",
@@ -115,7 +115,7 @@ public class AdminRegistration extends Registration {
 		}
 
 		case ADMIN_CUSTODY_SIGNAL: {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("ADMIN_CUSTODY_SIGNAL %d received",
 							bundle.bundleid()));
@@ -128,7 +128,7 @@ public class AdminRegistration extends Registration {
 					payload_len);
 
 			if (!ok) {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						String.format("malformed custody signal %d",
 								bundle.bundleid()));
@@ -141,7 +141,7 @@ public class AdminRegistration extends Registration {
 		}
 
 		case ADMIN_ANNOUNCE: {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("ADMIN_ANNOUNCE from %d", bundle.source()
 							.str()));
@@ -149,7 +149,7 @@ public class AdminRegistration extends Registration {
 		}
 
 		default:
-			Logger.getInstance().warning(
+			BPF.getInstance().getBPFLogger().warning(
 					TAG,
 					String.format("unexpected admin bundle with type %s %s",
 							typecode, bundle.bundleid()));

@@ -26,7 +26,7 @@ import java.net.ServerSocket;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * The UDP Convergence Layer.
@@ -85,18 +85,18 @@ public class UDPConvergenceLayer extends StreamConvergenceLayer implements
 	 */
 	@Override
 	public boolean interface_up(Interface iface) {
-		Logger.getInstance().debug(TAG, "adding interface " + iface.name());
+		BPF.getInstance().getBPFLogger().debug(TAG, "adding interface " + iface.name());
 		InetAddress local_addr_ = getting_my_ip();
 
 		// check that the local interface / port are valid
 		if (local_addr_ == null) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"invalid local address setting of null");
 			return false;
 		}
 
 		if (local_port == 0) {
-			Logger.getInstance().error(TAG, "invalid local port setting of 0");
+			BPF.getInstance().getBPFLogger().error(TAG, "invalid local port setting of 0");
 			return false;
 		}
 		//
@@ -106,7 +106,7 @@ public class UDPConvergenceLayer extends StreamConvergenceLayer implements
 
 		if (!listen_.isBound()) {
 
-			Logger.getInstance().warning(TAG, "listener in not bound");
+			BPF.getInstance().getBPFLogger().warning(TAG, "listener in not bound");
 		}
 
 		iface.set_cl_info(listen_);

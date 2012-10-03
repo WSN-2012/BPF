@@ -32,7 +32,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDVector;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 
 /**
  * Base Class for the Block Processing unit. This unit mainly converting from
@@ -346,12 +347,14 @@ public class BlockProcessor implements Serializable {
 		len -= tocopy;
 		consumed += tocopy;
 
-		Logger.getInstance().debug(
-				TAG,
-				String.format("BlockProcessor type %s "
-						+ "consumed %d/%d , result is (%s)", block_type(),
-						consumed, block.full_length(), block.type(),
-						block.complete() ? "complete" : "not complete"));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format("BlockProcessor type %s "
+								+ "consumed %d/%d , result is (%s)",
+								block_type(), consumed, block.full_length(),
+								block.type(), block.complete() ? "complete"
+										: "not complete"));
 
 		return consumed;
 	}
@@ -383,7 +386,9 @@ public class BlockProcessor implements Serializable {
 				&& block.type() != BundleProtocol.bundle_block_type_t.PRIMARY_BLOCK
 				&& (block.flags() & BundleProtocol.block_flag_t.BLOCK_FLAG_REPORT_ONERROR
 						.getCode()) > 0) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
 							String.format(
 									"invalid block flag %s for received admin bundle",
 									BundleProtocol.block_flag_t.BLOCK_FLAG_REPORT_ONERROR));
@@ -666,10 +671,12 @@ public class BlockProcessor implements Serializable {
 			return len;
 		}
 		if (block_len[0] > Integer.MAX_VALUE) {
-			Logger.getInstance().error(
-					TAG,
-					String.format("overflow in SDNV value for block type %s",
-							block.type().toString()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							String.format(
+									"overflow in SDNV value for block type %s",
+									block.type().toString()));
 			return -1;
 		}
 
@@ -685,14 +692,17 @@ public class BlockProcessor implements Serializable {
 
 		block.set_eid_list(eid_list);
 
-		Logger.getInstance().debug(
-				TAG,
-				String.format("BlockProcessor type %s "
-						+ "consumed preamble %d/%d for block: "
-						+ "data_offset %d data_length %d eid_ref_count %d",
-						block_type().toString(), buf_offset + prev_consumed,
-						block.full_length(), block.data_offset(),
-						block.data_length(), eid_ref_count[0]));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format(
+								"BlockProcessor type %s "
+										+ "consumed preamble %d/%d for block: "
+										+ "data_offset %d data_length %d eid_ref_count %d",
+								block_type().toString(), buf_offset
+										+ prev_consumed, block.full_length(),
+								block.data_offset(), block.data_length(),
+								eid_ref_count[0]));
 
 		assert (buf_offset > prev_consumed) : "BlockProcessor, consume_preamble";
 
@@ -772,13 +782,16 @@ public class BlockProcessor implements Serializable {
 		block.set_data_offset(offset);
 		block.complete_ = true;
 
-		Logger.getInstance().debug(
-				TAG,
-				String.format("BlockProcessor type %s "
-						+ "generated preamble for block type %s flags %x "
-						+ "data_offset %d data_length %d eid_count %d",
-						block_type(), block.type(), block.flags(),
-						block.data_offset(), block.data_length(), eid_count));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format(
+								"BlockProcessor type %s "
+										+ "generated preamble for block type %s flags %x "
+										+ "data_offset %d data_length %d eid_count %d",
+								block_type(), block.type(), block.flags(),
+								block.data_offset(), block.data_length(),
+								eid_count));
 
 	}
 

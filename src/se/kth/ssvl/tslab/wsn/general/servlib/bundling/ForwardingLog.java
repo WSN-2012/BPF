@@ -29,7 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to keep the log of where and when the bundles have been forward. This
@@ -224,7 +224,7 @@ public class ForwardingLog extends ArrayList<ForwardingInfo> implements
 		lock_.lock();
 
 		try {
-			Logger.getInstance().debug(TAG, "Log size: " + log_.size());
+			BPF.getInstance().getBPFLogger().debug(TAG, "Log size: " + log_.size());
 
 			for (int i = 0; i < log_.size(); i++) {
 

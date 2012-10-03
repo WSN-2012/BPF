@@ -95,7 +95,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "A contact manager class. Maintains topological information and connectivity
@@ -178,22 +178,22 @@ public class ContactManager extends BundleEventHandler {
 
 			LinkEntry element = i.next();
 			String id_ = element.id();
-			Logger.getInstance().debug(TAG, id_);
+			BPF.getInstance().getBPFLogger().debug(TAG, id_);
 			String dest_ = element.des();
-			Logger.getInstance().debug(TAG, dest_);
+			BPF.getInstance().getBPFLogger().debug(TAG, dest_);
 
 			Link.link_type_t type_ = element.type();
-			Logger.getInstance().debug(TAG, String.valueOf(type_));
+			BPF.getInstance().getBPFLogger().debug(TAG, String.valueOf(type_));
 			String convl_type = element.conv_layer_type().getCaption();
 
 			if (type_ == Link.link_type_t.LINK_INVALID) {
-				Logger.getInstance().debug(TAG, "invalid link type" + type_);
+				BPF.getInstance().getBPFLogger().debug(TAG, "invalid link type" + type_);
 
 			}
 
 			ConvergenceLayer cl = ConvergenceLayer.find_clayer(convl_type);
 			if (cl == null) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"invalid convergence layer" + convl_type);
 
 			}
@@ -204,7 +204,7 @@ public class ContactManager extends BundleEventHandler {
 			link = Link.create_link(id_, type_, cl, dest_);
 
 			if (link == null) {
-				Logger.getInstance().debug(TAG, "invalid link option");
+				BPF.getInstance().getBPFLogger().debug(TAG, "invalid link option");
 
 			}
 
@@ -217,7 +217,7 @@ public class ContactManager extends BundleEventHandler {
 				link.delete_link();
 				String text = String.format(
 						"link name %s already exists, use different name", id_);
-				Logger.getInstance().debug(TAG, text);
+				BPF.getInstance().getBPFLogger().debug(TAG, text);
 			}
 
 		}
@@ -262,7 +262,7 @@ public class ContactManager extends BundleEventHandler {
 			assert (link != null) : "ContactManager : add_new_link, link is null";
 			assert (!link.isdeleted()) : "ContactManager : add_new_link, link is deleted";
 
-			Logger.getInstance().debug(TAG, "adding NEW link " + link.name());
+			BPF.getInstance().getBPFLogger().debug(TAG, "adding NEW link " + link.name());
 			if (has_link(link)) {
 				return false;
 			}
@@ -270,7 +270,7 @@ public class ContactManager extends BundleEventHandler {
 
 			if (!link.is_create_pending()) {
 
-				Logger.getInstance().debug(TAG, "posting LinkCreatedEvent");
+				BPF.getInstance().getBPFLogger().debug(TAG, "posting LinkCreatedEvent");
 				BundleDaemon BD = BundleDaemon.getInstance();
 				BD.post_at_head(new LinkCreatedEvent(link,
 						ContactEvent.reason_t.USER));
@@ -295,12 +295,12 @@ public class ContactManager extends BundleEventHandler {
 			String text = String.format(
 					"ContactManager.del_link: link %s does not exist",
 					link.name());
-			Logger.getInstance().error(TAG, text);
+			BPF.getInstance().getBPFLogger().error(TAG, text);
 			return;
 		}
 		assert (!link.isdeleted()) : "ContactManager : del_link, Link is already deleted";
 
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"ContactManager.del_link: deleting link %s" + link.name());
 
 		if (!wait)
@@ -443,7 +443,7 @@ public class ContactManager extends BundleEventHandler {
 
 			String text = String.format("find_link_to: remote_eid", remote_eid);
 
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			// make sure some sane criteria was specified
 			assert ((remote_eid != EndpointID.NULL_EID()));
@@ -452,14 +452,14 @@ public class ContactManager extends BundleEventHandler {
 				Link element = iter.next();
 
 				if (remote_eid.equals(element.remote_eid())) {
-					Logger.getInstance().debug(TAG,
+					BPF.getInstance().getBPFLogger().debug(TAG,
 							"find_link_to: matched link" + element);
 					assert (!element.isdeleted()) : "ContactManager : find_link_to, link is deleted";
 					return element;
 				}
 			}
 
-			Logger.getInstance().debug(TAG, "find_link_to, no match");
+			BPF.getInstance().getBPFLogger().debug(TAG, "find_link_to, no match");
 			return null;
 
 		} finally {
@@ -513,7 +513,7 @@ public class ContactManager extends BundleEventHandler {
 				String text = String.format(
 						"handle_link_created: link %s is being deleted",
 						link.name());
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 				return;
 			}
 
@@ -522,7 +522,7 @@ public class ContactManager extends BundleEventHandler {
 				String text = String.format(
 						"handle_link_created: link %s does not exist",
 						link.name());
-				Logger.getInstance().error(TAG, text);
+				BPF.getInstance().getBPFLogger().error(TAG, text);
 				return;
 			}
 
@@ -550,7 +550,7 @@ public class ContactManager extends BundleEventHandler {
 				String text = String.format(
 						"handle_link_available: link %s is being deleted",
 						link.name());
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 				return;
 			}
 
@@ -558,7 +558,7 @@ public class ContactManager extends BundleEventHandler {
 				String text = String.format(
 						"handle_link_available: link %s does not exist",
 						link.name());
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 				return;
 			}
 
@@ -582,7 +582,7 @@ public class ContactManager extends BundleEventHandler {
 	@Override
 	public void handle_link_unavailable(LinkUnavailableEvent event) {
 
-		Logger.getInstance().debug(TAG, "handling link unavailable event");
+		BPF.getInstance().getBPFLogger().debug(TAG, "handling link unavailable event");
 		lock_.lock();
 		try {
 
@@ -593,7 +593,7 @@ public class ContactManager extends BundleEventHandler {
 				String text = String.format(
 						"handle_link_unavailable: link %s does not exist",
 						link.name());
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 				return;
 			}
 
@@ -601,14 +601,14 @@ public class ContactManager extends BundleEventHandler {
 				String text = String.format(
 						"handle_link_unavailable: link %s is being deleted",
 						link.name());
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 				return;
 			}
 
 			// don't do anything for links that aren't ondemand or alwayson
 			if ((link.type() != Link.link_type_t.ONDEMAND)
 					&& (link.type() != Link.link_type_t.ALWAYSON)) {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						"handle_link_unavailable: ignoring link unavailable for link of type %s"
 								+ link.type_str());
@@ -636,7 +636,7 @@ public class ContactManager extends BundleEventHandler {
 				String text = String
 						.format("handle_link_unavailable: error inserting timer for link %s into table!",
 								link.name());
-				Logger.getInstance().error(TAG, text);
+				BPF.getInstance().getBPFLogger().error(TAG, text);
 				return;
 			}
 
@@ -644,7 +644,7 @@ public class ContactManager extends BundleEventHandler {
 					.format("link %s unavailable (%s): scheduling retry timer in %d seconds",
 							link.name(), String.valueOf(event.reason()),
 							link.retry_interval());
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			timer.schedule_in(link.retry_interval());
 
@@ -672,7 +672,7 @@ public class ContactManager extends BundleEventHandler {
 				String text = String
 						.format("handle_contact_up: link %s is being deleted, not marking its contact up",
 								link.name());
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 				return;
 			}
 
@@ -680,7 +680,7 @@ public class ContactManager extends BundleEventHandler {
 				String text = String.format(
 						"handle_contact_up: link %s does not exist",
 						link.name());
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 				return;
 			}
 
@@ -690,7 +690,7 @@ public class ContactManager extends BundleEventHandler {
 						.format("handle_contact_up: resetting retry interval for link %s: %s -> %s",
 								link.name(), link.retry_interval(), link
 										.params().min_retry_interval());
-				Logger.getInstance().debug(TAG, text);
+				BPF.getInstance().getBPFLogger().debug(TAG, text);
 				link.set_retry_interval(link.params().min_retry_interval());
 			}
 
@@ -718,7 +718,7 @@ public class ContactManager extends BundleEventHandler {
 		try {
 			if (remote_eid.str().equals(
 					BundleDaemon.getInstance().local_eid().str())) {
-				Logger.getInstance()
+				BPF.getInstance().getBPFLogger()
 						.debug(TAG,
 								"Tried to create a new opportunistic link to self.  Return null");
 				return null;
@@ -727,7 +727,7 @@ public class ContactManager extends BundleEventHandler {
 			String text = String.format(
 					"new_opportunistic_link: cl %s nexthop %s remote_eid %s",
 					cl.name(), nexthop, remote_eid);
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			// find a unique link name
 			String name;
@@ -755,7 +755,7 @@ public class ContactManager extends BundleEventHandler {
 			Link link = Link.create_link(name, Link.link_type_t.OPPORTUNISTIC,
 					cl, nexthop);
 			if (link == null) {
-				Logger.getInstance().warning(TAG,
+				BPF.getInstance().getBPFLogger().warning(TAG,
 						"new_opportunistic_link: unexpected error creating opportunistic link");
 				return link;
 			}
@@ -766,7 +766,7 @@ public class ContactManager extends BundleEventHandler {
 
 			if (!add_new_link(new_link)) {
 				new_link.delete_link();
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						"new_opportunistic_link: failed to add new opportunistic link %s"
 								+ new_link.name());
@@ -793,14 +793,14 @@ public class ContactManager extends BundleEventHandler {
 		try {
 			assert (link != null) : "ContactManager : reopen_link, link is null";
 
-			Logger.getInstance().debug(TAG, "reopen link" + link.name());
+			BPF.getInstance().getBPFLogger().debug(TAG, "reopen link" + link.name());
 
 			availability_timers_.remove(link);
 
 			if (!has_link(link)) {
 				String text = String.format(
 						"reopen_link: link %s does not exist", link.name());
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 				return;
 			}
 			assert (!link.isdeleted()) : "Link : reopen_link, link is deleted";
@@ -816,7 +816,7 @@ public class ContactManager extends BundleEventHandler {
 						"availability timer fired for link %s but state is %s",
 						link.name(), Link.state_to_str(link.state()));
 
-				Logger.getInstance().error(TAG, text);
+				BPF.getInstance().getBPFLogger().error(TAG, text);
 			}
 		} finally {
 			lock_.unlock();
@@ -844,19 +844,19 @@ public class ContactManager extends BundleEventHandler {
 		@Override
 		protected void timeout(Date now) {
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"Link availablity timer for link " + link_.name_
 							+ " fired, trying to open link");
 			if (!link_.isopening() && !link_.isopen()) {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						"Timer ask Contact Manager to reopen link "
 								+ link_.name_);
 				cm_.reopen_link(link_);
 
 			} else {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						"Link " + link_.name_
 								+ " is already open or is openning");

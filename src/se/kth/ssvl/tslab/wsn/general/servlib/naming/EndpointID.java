@@ -26,7 +26,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.types.DTNEndpointID;
 
 /**
@@ -143,7 +143,7 @@ public class EndpointID implements Serializable {
 		try {
 			return assign(new String(array, "US-ASCII"));
 		} catch (UnsupportedEncodingException e) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"EndpointID:assign, unsupportedEncoding Exception");
 			return false;
 		}
@@ -164,7 +164,7 @@ public class EndpointID implements Serializable {
 			try {
 				return assign(new String(temp, "US-ASCII"));
 			} catch (UnsupportedEncodingException e) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"EndpointID:assign unsupportedEncoding Exception");
 				return false;
 			}
@@ -295,7 +295,7 @@ public class EndpointID implements Serializable {
 
 		// rebuild the string
 		if (!validate()) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					"EndpointID::append_service_tag: "
 							+ "failed to format appended URI");
@@ -322,7 +322,7 @@ public class EndpointID implements Serializable {
 		try {
 			uri_ = scheme_.append_service_wildcard(uri_);
 		} catch (InvalidURIException e) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					"EndpointID::append_service_wildcard: "
 							+ "invalid URL Exception");
@@ -334,7 +334,7 @@ public class EndpointID implements Serializable {
 
 		// rebuild the string
 		if (!validate()) {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.error(TAG,
 							"EndpointID::append_service_wildcard: failed to format appended URI");
 			return false;
@@ -355,7 +355,7 @@ public class EndpointID implements Serializable {
 		try {
 			uri_ = scheme_.remove_service_tag(uri_);
 		} catch (InvalidURIException e) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					"EndpointID::remove_service_tag: "
 							+ "invalid URL Exception");
@@ -367,7 +367,7 @@ public class EndpointID implements Serializable {
 
 		// rebuild the string
 		if (!validate()) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					"EndpointID::remove_service_tag: "
 							+ "failed to format reduced URI");
@@ -391,7 +391,7 @@ public class EndpointID implements Serializable {
 	 */
 	public final singleton_info_t is_singleton() {
 		if (!known_scheme()) {
-			Logger.getInstance().warning(
+			BPF.getInstance().getBPFLogger().warning(
 					TAG,
 					"returning is_singleton_default= " + is_singleton_default_
 							+ " for unknown scheme");
@@ -549,20 +549,20 @@ public class EndpointID implements Serializable {
 		try {
 
 			if (!is_able_to_create_URI(uri_.toString())) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"EndpointID::validate: invalid URI");
 				return false;
 			}
 
 			if (scheme_str().length() > MAX_EID_PART_LENGTH) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"scheme name is too large > " + MAX_EID_PART_LENGTH);
 				valid_ = false;
 				return false;
 			}
 
 			if (ssp().length() > MAX_EID_PART_LENGTH) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"ssp is too large (>" + MAX_EID_PART_LENGTH);
 				valid_ = false;
 				return false;
@@ -577,7 +577,7 @@ public class EndpointID implements Serializable {
 				valid_ = false;
 
 		} catch (NullPointerException e) {
-			Logger.getInstance().error(TAG, "EndpointID:validate() fail");
+			BPF.getInstance().getBPFLogger().error(TAG, "EndpointID:validate() fail");
 		}
 		return valid_;
 	}

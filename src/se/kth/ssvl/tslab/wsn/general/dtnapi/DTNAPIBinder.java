@@ -70,7 +70,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * An DTNAPI implementation using Android Binder
@@ -128,12 +128,12 @@ public class DTNAPIBinder implements DTNAPI {
 
 		EndpointID eid = new EndpointID(BundleDaemon.getInstance().local_eid());
 		if (eid.append_service_tag(service) == false) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 							"DTNAPIBinder:dtn_build_local_eid error appending service tag");
 			return dtn_api_status_report_code.DTN_EINTERNAL;
 		}
 
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Set EID response to " + eid.toString() + " success");
 		return dtn_api_status_report_code.DTN_SUCCESS;
 	}
@@ -314,7 +314,7 @@ public class DTNAPIBinder implements DTNAPI {
 		dtn_payload.set_length(payload_len);
 		if (location == dtn_bundle_payload_location_t.DTN_PAYLOAD_MEM
 				&& payload_len > DTN_MAX_BUNDLE_MEM) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"app requested memory delivery but payload is too big (%d bytes)... "
@@ -343,12 +343,12 @@ public class DTNAPIBinder implements DTNAPI {
 				dtn_payload.set_file(payload_file);
 
 			} catch (IOException e) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"Create payload file fail with " + e.getMessage());
 			}
 
 		} else {
-			Logger.getInstance().error("payload location %s not understood",
+			BPF.getInstance().getBPFLogger().error("payload location %s not understood",
 					location.toString());
 			return dtn_api_status_report_code.DTN_EINVAL;
 		}
@@ -412,7 +412,7 @@ public class DTNAPIBinder implements DTNAPI {
 		EndpointID endpoint = new EndpointID(reginfo.endpoint().uri());
 
 		if (!endpoint.valid()) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("invalid endpoint id in register: '%s'",
 							reginfo.endpoint().uri()));
@@ -428,7 +428,7 @@ public class DTNAPIBinder implements DTNAPI {
 
 		int other_flags = reginfo.flags() & ~0x1f;
 		if (other_flags != 0) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("invalid registration flags %s",
 							reginfo.flags()));
@@ -524,7 +524,7 @@ public class DTNAPIBinder implements DTNAPI {
 
 			switch (info) {
 			case UNKNOWN:
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 								String.format(
 										"bundle destination %s in unknown scheme and "
 												+ "app did not assert singleton/multipoint",
@@ -548,7 +548,7 @@ public class DTNAPIBinder implements DTNAPI {
 		case COS_EXPEDITED:
 			break;
 		default:
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("invalid priority level %s", spec.priority()
 							.toString()));
@@ -565,7 +565,7 @@ public class DTNAPIBinder implements DTNAPI {
 			// or
 			// custody transfer, and must not be fragmented.
 			if (spec.dopts() > 0) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						"bundle with null source EID requested reports and/or "
 								+ "custody transfer");
@@ -578,7 +578,7 @@ public class DTNAPIBinder implements DTNAPI {
 		} else if (b.source().subsume(BundleDaemon.getInstance().local_eid())) {
 			// Allow source EIDs that subsume the local eid
 		} else {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 							String.format(
 									"this node is not a member of the bundle's source EID (%s)",
 									b.source().toString()));
@@ -619,7 +619,7 @@ public class DTNAPIBinder implements DTNAPI {
 		// validate the bundle metadata
 		StringBuffer error_string_buf = new StringBuffer();
 		if (!b.validate(error_string_buf)) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("bundle validation failed: %s",
 							error_string_buf.toString()));
@@ -637,7 +637,7 @@ public class DTNAPIBinder implements DTNAPI {
 
 		case DTN_PAYLOAD_FILE:
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"dtn_send, getting payload from file name %s",
@@ -646,7 +646,7 @@ public class DTNAPIBinder implements DTNAPI {
 			File payload_file = dtn_payload.file();
 
 			if (!payload_file.exists()) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format("payload file %s does not exist!",
 								dtn_payload.file().getAbsoluteFile()));
@@ -657,7 +657,7 @@ public class DTNAPIBinder implements DTNAPI {
 			break;
 
 		default:
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("payload.location of %d unknown", dtn_payload
 							.location().toString()));
@@ -678,7 +678,7 @@ public class DTNAPIBinder implements DTNAPI {
 						reason), notifier_, -1, true);
 
 		if (!result[0]) {
-			Logger.getInstance().info(
+			BPF.getInstance().getBPFLogger().info(
 					TAG,
 					String.format("DTN_SEND bundle not accepted: reason %s",
 							reason[0].toString()));
@@ -726,22 +726,22 @@ public class DTNAPIBinder implements DTNAPI {
 				}
 
 			} catch (FileNotFoundException e) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format("payload file %s can't be opened: %s",
 								dtn_payload.file().getAbsoluteFile(),
 								e.getMessage()));
 			} catch (SecurityException e) {
-				Logger.getInstance().error(TAG, e.getMessage());
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			} catch (IOException e) {
-				Logger.getInstance().error(TAG, e.getMessage());
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			} catch (Exception e) {
-				Logger.getInstance().error(TAG, e.getMessage());
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			} finally {
 				try {
 					in.close();
 				} catch (IOException e) {
-					Logger.getInstance().error(TAG, e.getMessage());
+					BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 				}
 
 			}
@@ -758,8 +758,7 @@ public class DTNAPIBinder implements DTNAPI {
 		dtn_bundle_id.set_frag_offset(0);
 		dtn_bundle_id.set_orig_length(0);
 
-		Logger.getInstance()
-				.info(TAG,
+		BPF.getInstance().getBPFLogger().info(TAG,
 						String.format(
 								"DTN_SEND bundle %d, with payload type %s, payload length %d bytes",
 								b.bundleid(),
@@ -879,7 +878,7 @@ public class DTNAPIBinder implements DTNAPI {
 
 			switch (info) {
 			case UNKNOWN:
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 								String.format(
 										"bundle destination %s in unknown scheme and "
 												+ "app did not assert singleton/multipoint",
@@ -903,7 +902,7 @@ public class DTNAPIBinder implements DTNAPI {
 		case COS_EXPEDITED:
 			break;
 		default:
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("invalid priority level %s", spec.priority()
 							.toString()));
@@ -920,7 +919,7 @@ public class DTNAPIBinder implements DTNAPI {
 			// or
 			// custody transfer, and must not be fragmented.
 			if (spec.dopts() > 0) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						"bundle with null source EID requested reports and/or "
 								+ "custody transfer");
@@ -933,7 +932,7 @@ public class DTNAPIBinder implements DTNAPI {
 		} else if (b.source().subsume(BundleDaemon.getInstance().local_eid())) {
 			// Allow source EIDs that subsume the local eid
 		} else {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 							String.format(
 									"this node is not a member of the bundle's source EID (%s)",
 									b.source().toString()));
@@ -974,7 +973,7 @@ public class DTNAPIBinder implements DTNAPI {
 		// validate the bundle metadata
 		StringBuffer error_string_buf = new StringBuffer();
 		if (!b.validate(error_string_buf)) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("bundle validation failed: %s",
 							error_string_buf.toString()));
@@ -992,7 +991,7 @@ public class DTNAPIBinder implements DTNAPI {
 
 		case DTN_PAYLOAD_FILE:
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"dtn_send, getting payload from file name %s",
@@ -1001,7 +1000,7 @@ public class DTNAPIBinder implements DTNAPI {
 			File payload_file = dtn_payload.file();
 
 			if (!payload_file.exists()) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format("payload file %s does not exist!",
 								dtn_payload.file().getAbsoluteFile()));
@@ -1012,7 +1011,7 @@ public class DTNAPIBinder implements DTNAPI {
 			break;
 
 		default:
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("payload.location of %d unknown", dtn_payload
 							.location().toString()));
@@ -1033,7 +1032,7 @@ public class DTNAPIBinder implements DTNAPI {
 						reason), notifier_, -1, true);
 
 		if (!result[0]) {
-			Logger.getInstance().info(
+			BPF.getInstance().getBPFLogger().info(
 					TAG,
 					String.format("DTN_SEND bundle not accepted: reason %s",
 							reason[0].toString()));
@@ -1081,22 +1080,22 @@ public class DTNAPIBinder implements DTNAPI {
 				}
 
 			} catch (FileNotFoundException e) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format("payload file %s can't be opened: %s",
 								dtn_payload.file().getAbsoluteFile(),
 								e.getMessage()));
 			} catch (SecurityException e) {
-				Logger.getInstance().error(TAG, e.getMessage());
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			} catch (IOException e) {
-				Logger.getInstance().error(TAG, e.getMessage());
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			} catch (Exception e) {
-				Logger.getInstance().error(TAG, e.getMessage());
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			} finally {
 				try {
 					in.close();
 				} catch (IOException e) {
-					Logger.getInstance().error(TAG, e.getMessage());
+					BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 				}
 
 			}
@@ -1113,8 +1112,7 @@ public class DTNAPIBinder implements DTNAPI {
 		dtn_bundle_id.set_frag_offset(0);
 		dtn_bundle_id.set_orig_length(0);
 
-		Logger.getInstance()
-				.info(TAG,
+		BPF.getInstance().getBPFLogger().info(TAG,
 						String.format(
 								"DTN_SEND bundle %d, with payload type %s, payload length %d bytes",
 								b.bundleid(),
@@ -1243,13 +1241,13 @@ public class DTNAPIBinder implements DTNAPI {
 		Registration reg = regtable.get(regid);
 
 		if (reg == null) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					String.format("can't find registration %d", regid));
 			return dtn_api_status_report_code.DTN_ENOTFOUND;
 		}
 
 		if (!(reg instanceof APIRegistration)) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format(
 							"registration %d is not an API registration!!",
@@ -1285,8 +1283,7 @@ public class DTNAPIBinder implements DTNAPI {
 		}
 		api_reg.set_active(true);
 
-		Logger.getInstance()
-				.info(TAG,
+		BPF.getInstance().getBPFLogger().info(TAG,
 						String.format("DTN_BIND: bound to registration %d",
 								reg.regid()));
 
@@ -1320,7 +1317,7 @@ public class DTNAPIBinder implements DTNAPI {
 					Registration reg = regtable.get(regid);
 
 					if (reg == null) {
-						Logger.getInstance().error(
+						BPF.getInstance().getBPFLogger().error(
 								TAG,
 								String.format("can't find registration %d",
 										regid));
@@ -1328,7 +1325,7 @@ public class DTNAPIBinder implements DTNAPI {
 					}
 
 					if (!(reg instanceof APIRegistration)) {
-						Logger.getInstance().error(TAG,
+						BPF.getInstance().getBPFLogger().error(TAG,
 										String.format(
 												"registration %d is not an API registration!!",
 												regid));
@@ -1338,7 +1335,7 @@ public class DTNAPIBinder implements DTNAPI {
 					api_reg.set_active(false);
 
 					bindings_.remove(handle);
-					Logger.getInstance().info(
+					BPF.getInstance().getBPFLogger().info(
 							TAG,
 							String.format(
 									"DTN_UNBIND: unbound from registration %d",
@@ -1351,7 +1348,7 @@ public class DTNAPIBinder implements DTNAPI {
 		} finally {
 			handle.get_lock().unlock();
 		}
-		Logger.getInstance().error(
+		BPF.getInstance().getBPFLogger().error(
 				TAG,
 				String.format("registration %d not bound to this api client",
 						regid));

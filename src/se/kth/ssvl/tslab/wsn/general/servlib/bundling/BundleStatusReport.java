@@ -29,7 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.status_repo
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to read and write Bundle Status Report in the Bundle payload.
@@ -658,7 +658,7 @@ public class BundleStatusReport {
 
 		int payload_len = bundle.payload().length();
 		if (payload_len > 16384) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format(
 							"status report length %d too big to be parsed!!",

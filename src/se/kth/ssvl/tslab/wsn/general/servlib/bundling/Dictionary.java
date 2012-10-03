@@ -25,7 +25,7 @@ import java.io.Serializable;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Data structure to handle dictionary data as defined in bundle protocol
@@ -97,9 +97,9 @@ public class Dictionary implements Serializable {
 	 */
 
 	public void set_dict(final IByteBuffer buff, int length) {
-		Logger.getInstance().debug(TAG, "set dict lent" + length);
+		BPF.getInstance().getBPFLogger().debug(TAG, "set dict lent" + length);
 		dict_ = new byte[length];
-		Logger.getInstance().debug(TAG, "set dict position" + buff.position());
+		BPF.getInstance().getBPFLogger().debug(TAG, "set dict position" + buff.position());
 		buff.mark();
 		buff.get(dict_);
 		buff.reset();
@@ -290,13 +290,13 @@ public class Dictionary implements Serializable {
 
 		// If there's nothing in the dictionary, return
 		if (dict_length_ == 0) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"cannot extract eid from zero-length dictionary");
 			return false;
 		}
 
 		if (scheme_offset >= (dict_length_ - 1)) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format(
 							"illegal offset for scheme dictionary offset: "
@@ -306,7 +306,7 @@ public class Dictionary implements Serializable {
 		}
 
 		if (ssp_offset >= (dict_length_ - 1)) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("illegal offset for ssp dictionary offset: "
 							+ "offset %d, total length %s", ssp_offset,
@@ -346,7 +346,7 @@ public class Dictionary implements Serializable {
 
 	public String get_value(int offset_val) {
 		int offset[] = new int[1];
-		Logger.getInstance().debug(TAG, "Get : " + offset_val);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Get : " + offset_val);
 		offset[0] = offset_val;
 
 		byte[] separator = new byte[1];

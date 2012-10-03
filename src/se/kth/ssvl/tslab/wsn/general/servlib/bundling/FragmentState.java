@@ -24,7 +24,7 @@ import java.util.ListIterator;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNotHoldByCurrentThread;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to store the fragments of a bundle and keep their state.
@@ -119,7 +119,7 @@ public class FragmentState {
 
 				if (f_origlen != total_len) {
 
-					Logger.getInstance().error("FragmentState",
+					BPF.getInstance().getBPFLogger().error("FragmentState",
 									String.format(
 											"check_completed: error fragment orig len %d != total %d",
 											f_origlen, total_len));
@@ -131,7 +131,7 @@ public class FragmentState {
 					/*
 					 * fragment is adjacent to the bytes so far bbbbbbbbbb fff
 					 */
-					Logger.getInstance()
+					BPF.getInstance().getBPFLogger()
 							.debug(TAG,
 									String.format(
 											"check_completed fragment %d/%d: "
@@ -146,7 +146,7 @@ public class FragmentState {
 					/*
 					 * there's a gap bbbbbbb ffff
 					 */
-					Logger.getInstance()
+					BPF.getInstance().getBPFLogger()
 							.debug(TAG,
 									String.format(
 											"check_completed fragment %d/%d: "
@@ -162,7 +162,7 @@ public class FragmentState {
 					/*
 					 * fragment is completely redundant, skip bbbbbbbbbb fffff
 					 */
-					Logger.getInstance()
+					BPF.getInstance().getBPFLogger()
 							.debug(TAG,
 									String.format(
 											"check_completed fragment %d/%d: "
@@ -178,7 +178,7 @@ public class FragmentState {
 					 * there's some overlap, so reduce f_len accordingly
 					 * bbbbbbbbbb fffffff
 					 */
-					Logger.getInstance()
+					BPF.getInstance().getBPFLogger()
 							.debug(TAG,
 									String.format(
 											"check_completed fragment %d/%d: "
@@ -194,16 +194,16 @@ public class FragmentState {
 
 				else {
 					// all cases should be covered above
-					Logger.getInstance().error(TAG, "NOT REACHABLE");
+					BPF.getInstance().getBPFLogger().error(TAG, "NOT REACHABLE");
 				}
 			}
 
 			if (done_up_to == total_len) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"check_completed reassembly complete!");
 				return true;
 			} else {
-				Logger.getInstance()
+				BPF.getInstance().getBPFLogger()
 						.debug(TAG,
 								String.format(
 										"check_completed reassembly not done (got %d/%d)",

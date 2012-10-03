@@ -20,7 +20,7 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.naming;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to represent group of EndpointID. For example, dtn://host1.dtn/*,
@@ -96,14 +96,14 @@ public class EndpointIDPattern extends EndpointID {
 		if (eid != null) {
 
 			if (eid.uri() == null) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"eid is not null but eid.uri() is null ");
 				return false;
 			}
 
 			// only match valid eids
 			if (!EndpointID.is_valid_URI(eid.uri().toString())) {
-				Logger.getInstance().warning(
+				BPF.getInstance().getBPFLogger().warning(
 						TAG,
 						"match error: eid " + uri_.toString()
 								+ " not a valid uri");
@@ -120,7 +120,7 @@ public class EndpointIDPattern extends EndpointID {
 			return eid.str().trim()
 					.startsWith(this.toString().trim().replaceAll("\\*", ""));
 		} else {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"eid is not null but eid.uri() is null ");
 			return false;
 		}

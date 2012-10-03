@@ -29,7 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Helper class that 1) formats outbound beacons to advertise this CL instance
@@ -113,14 +113,14 @@ public class IPAnnounce extends Announce {
 
 		// validate convergence layer details
 		if (type_.compareTo("tcp") != 0) {
-			Logger.getInstance().error(TAG, "cl type not supported");
+			BPF.getInstance().getBPFLogger().error(TAG, "cl type not supported");
 			return false;
 		}
 
 		interval_ = interval;
 
 		if (interval_ == 0) {
-			Logger.getInstance().error(TAG, "interval must be greater than 0");
+			BPF.getInstance().getBPFLogger().error(TAG, "interval must be greater than 0");
 			return false;
 		}
 

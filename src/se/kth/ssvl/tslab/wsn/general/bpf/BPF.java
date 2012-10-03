@@ -14,10 +14,10 @@ public class BPF {
 	 * @return The BPF singleton
 	 * @throws BPFException Throws and exception if BPF has not been initialized using init() method
 	 */
-	public static BPF getInstance() throws BPFException {
+	public static BPF getInstance() {
 		if (instance == null) {
 			if (service == null) {
-				throw new BPFException("BPF was not initialized with a BPFService before being used");
+				return null;
 			}
 			instance = new BPF(service);
 		}

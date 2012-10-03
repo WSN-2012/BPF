@@ -48,7 +48,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Stream connection class.
@@ -90,7 +90,7 @@ public abstract class Connection extends CLConnection {
 	 * Increasing the counter for uploading bundles
 	 */
 	protected void handle_bundle_begin_upload(Bundle bundle) {
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				"handle begin upload, uploading number is "
 						+ ContactManager.getInstance()
@@ -109,7 +109,7 @@ public abstract class Connection extends CLConnection {
 	 */
 	protected void handle_bundle_uploading_terminated_unfinished(Bundle bundle) {
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				"handle uploading terminated unfinished, uploading number is "
 						+ ContactManager.getInstance()
@@ -136,7 +136,7 @@ public abstract class Connection extends CLConnection {
 	 */
 	protected void handle_bundle_end_upload(InFlightBundle inflight) {
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				"handle end upload, uploading number is "
 						+ ContactManager.getInstance()
@@ -156,7 +156,7 @@ public abstract class Connection extends CLConnection {
 	 */
 	protected void handle_bundle_begin_download() {
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				"handle begin download, before handle downloading number is "
 						+ ContactManager.getInstance()
@@ -175,7 +175,7 @@ public abstract class Connection extends CLConnection {
 	 */
 	protected void handle_bundle_downloading_terminated_unfinished(Bundle bundle) {
 
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"handle downloading terminated unfinished, before handle  downloading number is "
 						+ ContactManager.getInstance()
 								.number_downloading_bundles());
@@ -194,7 +194,7 @@ public abstract class Connection extends CLConnection {
 	 */
 	protected void handle_bundle_end_download(IncomingBundle incoming) {
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				"handle downloading end, before handle downloading number is "
 						+ ContactManager.getInstance()
@@ -285,7 +285,7 @@ public abstract class Connection extends CLConnection {
 		// are bundles that should be put in flight, we simply log a debug
 		// message here. the point of the message is to kick the thread
 		// out of poll() which forces the main loop to check the queue" [DTN2].
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				"handle_bundles_queued: %d bundles on link queue"
 						+ contact_.link().bundles_queued());
@@ -315,7 +315,7 @@ public abstract class Connection extends CLConnection {
 							String text = String
 									.format("handle_cancel_bundle: bundle %s already in flight, can't cancel send",
 											bundle.bundleid());
-							Logger.getInstance().debug(TAG, text);
+							BPF.getInstance().getBPFLogger().debug(TAG, text);
 							return;
 						}
 						current_inflight_ = null;
@@ -324,7 +324,7 @@ public abstract class Connection extends CLConnection {
 					String text = String
 							.format("handle_cancel_bundle: bundle %s not yet in flight, cancelling send",
 									bundle.bundleid());
-					Logger.getInstance().debug(TAG, text);
+					BPF.getInstance().getBPFLogger().debug(TAG, text);
 					inflight_.remove(iter);
 					BundleDaemon Daemon = BundleDaemon.getInstance();
 					Daemon.post(new BundleSendCancelledEvent(bundle, contact_
@@ -335,7 +335,7 @@ public abstract class Connection extends CLConnection {
 					String text = String
 							.format("handle_cancel_bundle: bundle %s already in flight, can't cancel send",
 									bundle.bundleid());
-					Logger.getInstance().debug(TAG, text);
+					BPF.getInstance().getBPFLogger().debug(TAG, text);
 					return;
 				}
 			}
@@ -345,7 +345,7 @@ public abstract class Connection extends CLConnection {
 		 * "handle_cancel_bundle: can't find bundle %d in the in flight list",
 		 * bundle.bundleid());
 		 */
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.warning(TAG,
 						"handle_cancel_bundle: can't find bundle %d in the in flight list");
 	}
@@ -353,7 +353,7 @@ public abstract class Connection extends CLConnection {
 	@Override
 	public void break_contact(ContactEvent.reason_t reason) {
 
-		Logger.getInstance().error(TAG,
+		BPF.getInstance().getBPFLogger().error(TAG,
 				"Breaking contact with reason " + reason.toString());
 		// "it's possible that we can end up calling break_contact multiple
 		// times, if for example we have an error when sending out the
@@ -407,13 +407,13 @@ public abstract class Connection extends CLConnection {
 		case RECONNECT:
 		case TIMEOUT:
 		case DISCOVERY:
-			Logger.getInstance().debug(TAG, "NOTREACHED");
+			BPF.getInstance().getBPFLogger().debug(TAG, "NOTREACHED");
 			break;
 		}
 
 		if (send_shutdown && sendbuf_.position() == 0
 				&& send_segment_todo_ == 0) {
-			Logger.getInstance().debug(TAG, "break_contact: sending shutdown");
+			BPF.getInstance().getBPFLogger().debug(TAG, "break_contact: sending shutdown");
 			byte typecode = (byte) msg_type_t.SHUTDOWN.getCode();
 
 			if (shutdown_reason != shutdown_reason_t.SHUTDOWN_NO_REASON
@@ -422,7 +422,7 @@ public abstract class Connection extends CLConnection {
 				typecode |= shutdown_flags_t.SHUTDOWN_HAS_REASON.getCode();
 			}
 
-			Logger.getInstance().error(TAG, "Sending shutdown CL Msg");
+			BPF.getInstance().getBPFLogger().error(TAG, "Sending shutdown CL Msg");
 			sendbuf_.put(typecode);
 
 			send_data();
@@ -451,7 +451,7 @@ public abstract class Connection extends CLConnection {
 	 */
 	protected void initiate_contact() {
 
-		Logger.getInstance().debug(TAG, "initiate_contact called");
+		BPF.getInstance().getBPFLogger().debug(TAG, "initiate_contact called");
 
 		// format the contact header
 		ContactHeader contacthdr = new ContactHeader();
@@ -482,7 +482,7 @@ public abstract class Connection extends CLConnection {
 
 			String text = String.format("send buffer too short: %s < needed 8",
 					sendbuf_.remaining());
-			Logger.getInstance().warning(TAG, text);
+			BPF.getInstance().getBPFLogger().warning(TAG, text);
 
 			IByteBuffer reserved_sendbuffer = BufferHelper.reserve(sendbuf_,
 					(sendbuf_.position() + 8));
@@ -504,7 +504,7 @@ public abstract class Connection extends CLConnection {
 			String text = String.format(
 					"send buffer too short: %s < needed %s",
 					sendbuf_.remaining(), sdnv_len + local_eid_len);
-			Logger.getInstance().warning(TAG, text);
+			BPF.getInstance().getBPFLogger().warning(TAG, text);
 
 			IByteBuffer reserved_sendbuffer = BufferHelper.reserve(sendbuf_,
 					(sendbuf_.position() + sdnv_len + local_eid_len));
@@ -541,8 +541,8 @@ public abstract class Connection extends CLConnection {
 		String text = String.format(
 				"processing up to %s bytes from receive buffer",
 				recvbuf_.position());
-		Logger.getInstance().debug(TAG, text);
-		Logger.getInstance().debug("B4", "received bytes in buffer..");
+		BPF.getInstance().getBPFLogger().debug(TAG, text);
+		BPF.getInstance().getBPFLogger().debug("B4", "received bytes in buffer..");
 
 		// "all data (keepalives included) should be noted since the last
 		// reception time is used to determine when to generate new
@@ -565,7 +565,7 @@ public abstract class Connection extends CLConnection {
 		// then fall through to handle the rest of the buffer"[DTN2].
 		if (recv_segment_todo_ != 0) {
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"there is some leftover segment to do with length "
 							+ recv_segment_todo_);
@@ -598,7 +598,7 @@ public abstract class Connection extends CLConnection {
 		// byte yet since there's a possibility that we need to read more
 		// from the remote side to handle the whole message"[DTN2].
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				"falling down to recvbuf_ processing with position "
 						+ recvbuf_.position());
@@ -615,7 +615,7 @@ public abstract class Connection extends CLConnection {
 			String text1 = String
 					.format("recvbuf has %s full bytes, dispatching to handler routine",
 							recvbuf_.position());
-			Logger.getInstance().debug(TAG, text1);
+			BPF.getInstance().getBPFLogger().debug(TAG, text1);
 			boolean ok = false;
 
 			msg_type_t msg_type = msg_type_t.get(type);
@@ -643,7 +643,7 @@ public abstract class Connection extends CLConnection {
 				String text2 = String.format(
 						"invalid CL message type code 0x%s (flags 0x%s)", type,
 						flags);
-				Logger.getInstance().error(TAG, text2);
+				BPF.getInstance().getBPFLogger().error(TAG, text2);
 				break_contact(ContactEvent.reason_t.CL_ERROR);
 				return;
 			}
@@ -651,7 +651,7 @@ public abstract class Connection extends CLConnection {
 			// message, make sure there's space to receive more
 			if (!ok) {
 
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"try to process but the data is not enough or not possible to process");
 				break_contact(reason_t.BROKEN);
 				return;
@@ -685,7 +685,7 @@ public abstract class Connection extends CLConnection {
 			// middle of a segment, triggering a poll timeout, so make
 			// sure not to send a keepalive in this case
 			if (send_segment_todo_ != 0) {
-				Logger.getInstance().debug(TAG, "break contact");
+				BPF.getInstance().getBPFLogger().debug(TAG, "break contact");
 				return;
 			}
 
@@ -711,7 +711,7 @@ public abstract class Connection extends CLConnection {
 			if (Math.min(elapsed, elapsed2) > ((params.keepalive_interval() * 1000) - 500)) {
 
 				if (send_segment_todo_ != 0) {
-					Logger.getInstance().debug(TAG,
+					BPF.getInstance().getBPFLogger().debug(TAG,
 							"not issuing keepalive in the middle of a segment");
 					return;
 				}
@@ -727,14 +727,14 @@ public abstract class Connection extends CLConnection {
 	 */
 	private void note_data_rcvd() {
 
-		Logger.getInstance().debug(TAG, "noting data_rcvd");
+		BPF.getInstance().getBPFLogger().debug(TAG, "noting data_rcvd");
 		data_rcvd_ = System.currentTimeMillis();
 
 	}
 
 	private void note_data_sent() {
 
-		Logger.getInstance().debug(TAG, "noting data_sent");
+		BPF.getInstance().getBPFLogger().debug(TAG, "noting data_sent");
 		data_sent_ = System.currentTimeMillis();
 
 	}
@@ -771,7 +771,7 @@ public abstract class Connection extends CLConnection {
 				String text = String
 						.format("send_pending_acks: no space for ack in buffer (need %d, have %d)",
 								encoding_len, sendbuf_.remaining());
-				Logger.getInstance().debug(TAG, text);
+				BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 				// send the data for trying to clear space
 				send_data();
@@ -812,7 +812,7 @@ public abstract class Connection extends CLConnection {
 			String text = String.format(
 					"send_pending_acks: acked all %d bytes of bundle %s",
 					incoming.total_length(), incoming.bundle().bundleid());
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			BundleDaemon.getInstance().post(
 					new BundleReceivedEvent(incoming.bundle(),
@@ -823,7 +823,7 @@ public abstract class Connection extends CLConnection {
 			incoming_.remove(0);
 
 		} else {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					String.format(
 							"send_pending_acks: still need to send acks or haven't get total length-- acked %d , total length %d",
 							incoming.acked_length(), incoming.total_length()));
@@ -859,7 +859,7 @@ public abstract class Connection extends CLConnection {
 		String text = String.format(
 				"trying to find xmit blocks for bundle id:%s on link %s",
 				bundle.bundleid(), link.name());
-		Logger.getInstance().debug(TAG, text);
+		BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 		sendbuf_.rewind();
 
@@ -897,7 +897,7 @@ public abstract class Connection extends CLConnection {
 			String text = String
 					.format("send_next_segment: already sent all %d bytes, finishing bundle",
 							bytes_sent);
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 			return finish_bundle(inflight);
 		}
 
@@ -914,7 +914,7 @@ public abstract class Connection extends CLConnection {
 			flags |= data_segment_flags_t.BUNDLE_END.getCode();
 			segment_len = inflight.total_length() - bytes_sent;
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"Sending last segment flag now is " + flags
 							+ ", last segment len is " + segment_len);
@@ -928,14 +928,14 @@ public abstract class Connection extends CLConnection {
 			String text = String
 					.format("send_next_segment: not enough space for segment header [need %d, have %d]",
 							1 + sdnv_len, sendbuf_.remaining());
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 			return false;
 		}
 
 		String text = String
 				.format("send_next_segment: starting %d byte segment [block byte range %d..%d]",
 						segment_len, bytes_sent, bytes_sent + segment_len);
-		Logger.getInstance().debug(TAG, text);
+		BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 		byte bp = (byte) ((msg_type_t.DATA_SEGMENT.getCode() & 0xF0) | (flags & 0x0F));
 		sendbuf_.put(bp);
@@ -971,7 +971,7 @@ public abstract class Connection extends CLConnection {
 			assert (ret == send_len);
 
 			if (ret != send_len) {
-				Logger.getInstance().error(TAG, "produce error");
+				BPF.getInstance().getBPFLogger().error(TAG, "produce error");
 				return false;
 			}
 			sendbuf_.position(sendbuf_.position() + send_len);
@@ -984,7 +984,7 @@ public abstract class Connection extends CLConnection {
 							send_len, send_segment_todo_, bytes_sent,
 							send_segment_todo_ - send_len, inflight.sent_data()
 									.size());
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			send_segment_todo_ -= send_len;
 
@@ -1000,7 +1000,7 @@ public abstract class Connection extends CLConnection {
 				String text1 = String
 						.format("send_data_todo done, returning more to send (send_segment_todo_==%s) since test_write_delay is non-zero",
 								send_segment_todo_);
-				Logger.getInstance().debug(TAG, text1);
+				BPF.getInstance().getBPFLogger().debug(TAG, text1);
 				return true;
 			}
 		}
@@ -1033,7 +1033,7 @@ public abstract class Connection extends CLConnection {
 			String text = String
 					.format("check_completed: bundle %s still waiting for finish_bundle",
 							inflight.bundle().bundleid());
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 			return;
 		}
 
@@ -1044,7 +1044,7 @@ public abstract class Connection extends CLConnection {
 						.format("check_completed: bundle %d fail because only acked %d/%d",
 								inflight.bundle().bundleid(), acked_len,
 								inflight.total_length());
-				Logger.getInstance().error(TAG, text);
+				BPF.getInstance().getBPFLogger().error(TAG, text);
 				return;
 			}
 		}
@@ -1052,7 +1052,7 @@ public abstract class Connection extends CLConnection {
 		String text = String.format(
 				"check_completed: bundle %d transmission complete", inflight
 						.bundle().bundleid());
-		Logger.getInstance().debug(TAG, text);
+		BPF.getInstance().getBPFLogger().debug(TAG, text);
 		assert (inflight == inflight_.get(0));
 
 		handle_bundle_end_upload(inflight);
@@ -1083,7 +1083,7 @@ public abstract class Connection extends CLConnection {
 			String text = String
 					.format("send_keepalive: send buffer has %s bytes queued, suppressing keepalive",
 							sendbuf_.position());
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 			return;
 		}
 		assert (sendbuf_.remaining() > 0) : "Connection : send_keepalive, sendbuf_is full";
@@ -1110,7 +1110,7 @@ public abstract class Connection extends CLConnection {
 	 */
 	private void handle_contact_initiation() {
 
-		Logger.getInstance().debug(TAG, "handle_contact_initiation: called");
+		BPF.getInstance().getBPFLogger().debug(TAG, "handle_contact_initiation: called");
 		// the position of the buffer is the num bytes received now
 		int received_length = recvbuf_.position();
 		int last_position = recvbuf_.position();
@@ -1129,7 +1129,7 @@ public abstract class Connection extends CLConnection {
 				String text = String
 						.format("handle_contact_initiation: not enough data received (need > %s, got %s)",
 								len_needed, received_length);
-				Logger.getInstance().debug(TAG, text);
+				BPF.getInstance().getBPFLogger().debug(TAG, text);
 				return;
 			}
 
@@ -1139,7 +1139,7 @@ public abstract class Connection extends CLConnection {
 				String text = String
 						.format("remote sent magic number 0x%.8x, expected 0x%.8x  -- disconnecting.",
 								magic, ConvergenceLayer.MAGIC);
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 				break_contact(ContactEvent.reason_t.MAGIC_NUMBER);
 				return;
 			}
@@ -1153,7 +1153,7 @@ public abstract class Connection extends CLConnection {
 				String text = String
 						.format("handle_contact_initiation (missing for full header magic version, flags, keepalive_interval ): not enough data received (need > %s, got %s)",
 								len_needed, recvbuf_.position());
-				Logger.getInstance().debug(TAG, text);
+				BPF.getInstance().getBPFLogger().debug(TAG, text);
 				return;
 			}
 
@@ -1167,7 +1167,7 @@ public abstract class Connection extends CLConnection {
 				String text = String
 						.format("handle_contact_initiation (missing for EID length field ): not enough data received (need > %s, got %s)",
 								len_needed, recvbuf_.position());
-				Logger.getInstance().debug(TAG, text);
+				BPF.getInstance().getBPFLogger().debug(TAG, text);
 				return;
 			}
 
@@ -1176,7 +1176,7 @@ public abstract class Connection extends CLConnection {
 				String text = String
 						.format("handle_contact_initiation ( missing for EID): not enough data received (need > %s, got %s)",
 								len_needed, recvbuf_.position());
-				Logger.getInstance().debug(TAG, text);
+				BPF.getInstance().getBPFLogger().debug(TAG, text);
 				return;
 			}
 
@@ -1204,7 +1204,7 @@ public abstract class Connection extends CLConnection {
 				String text = String
 						.format("remote sent version %s, expected version %s -- disconnecting.",
 								contacthdr.version, cl_version);
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 				break_contact(ContactEvent.reason_t.CL_VERSION);
 				return;
 			}
@@ -1256,16 +1256,16 @@ public abstract class Connection extends CLConnection {
 				String text = String.format(
 						"protocol error: invalid endpoint id '%s' (len %s)",
 						peer_eid, peer_eid_len);
-				Logger.getInstance().error(TAG, text);
+				BPF.getInstance().getBPFLogger().error(TAG, text);
 				break_contact(ContactEvent.reason_t.PEER_EID);
 				return;
 			}
-			// Logger.getInstance().debug("B4",
+			// BPF.getInstance().getBPFLogger().debug("B4",
 			// String.format("peer eid: '%s' (len %s)",peer_eid, peer_eid_len));
 
 			if (!find_contact(peer_eid)) {
 				assert (contact_ == null);
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						String.format(
 								"handle_contact_initiation: failed to find contact for peer eid %s ",
 								peer_eid));
@@ -1286,7 +1286,7 @@ public abstract class Connection extends CLConnection {
 						.format("handle_contact_initiation: remote eid mismatch: link remote eid was set to %s but peer eid is %s",
 								link.remote_eid(), peer_eid);
 				link.set_remote_eid(peer_eid);
-				Logger.getInstance().warning(TAG, text);
+				BPF.getInstance().getBPFLogger().warning(TAG, text);
 			}
 
 			/*
@@ -1320,11 +1320,11 @@ public abstract class Connection extends CLConnection {
 					incoming = incoming_.back();
 
 					if (incoming.rcvd_data().isEmpty()) {
-						Logger.getInstance().debug(TAG,
+						BPF.getInstance().getBPFLogger().debug(TAG,
 								"found empty incoming bundle for BUNDLE_START");
 						create_new_incoming = false;
 					} else if (incoming.total_length() == 0) {
-						Logger.getInstance()
+						BPF.getInstance().getBPFLogger()
 								.error(TAG,
 										"protocol error: got BUNDLE_START before bundle completed");
 						break_contact(ContactEvent.reason_t.CL_ERROR);
@@ -1333,7 +1333,7 @@ public abstract class Connection extends CLConnection {
 				}
 
 				if (create_new_incoming) {
-					Logger.getInstance().debug(TAG,
+					BPF.getInstance().getBPFLogger().debug(TAG,
 							"got BUNDLE_START segment, creating new IncomingBundle");
 					IncomingBundle incoming2 = new IncomingBundle(new Bundle(
 							BundlePayload.location_t.DISK));
@@ -1347,7 +1347,7 @@ public abstract class Connection extends CLConnection {
 				handle_bundle_begin_download();
 
 			} else if (incoming_.isEmpty()) {
-				Logger.getInstance()
+				BPF.getInstance().getBPFLogger()
 						.error(TAG,
 								"protocol error: first data segment doesn't have BUNDLE_START flag set");
 				break_contact(ContactEvent.reason_t.CL_ERROR);
@@ -1368,7 +1368,7 @@ public abstract class Connection extends CLConnection {
 			int[] segment_len = new int[1];
 			int sdnv_len = SDNV.decode(recvbuf_, bp, segment_len);
 			if (sdnv_len < 0) {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						"handle_data_segment: too few bytes in buffer for sdnv "
 								+ last_position);
@@ -1379,7 +1379,7 @@ public abstract class Connection extends CLConnection {
 			consumed_len += sdnv_len;
 
 			if (segment_len[0] == 0) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"protocol error -- zero length segment");
 				break_contact(ContactEvent.reason_t.CL_ERROR);
 				return false;
@@ -1389,7 +1389,7 @@ public abstract class Connection extends CLConnection {
 			String text = String
 					.format("handle_data_segment: got segment of length %d at offset %d ",
 							segment_len[0], segment_offset);
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			// "if this is the last segment for the bundle, we calculate and
 			// store the total length in the IncomingBundle structure so
@@ -1398,7 +1398,7 @@ public abstract class Connection extends CLConnection {
 				incoming.set_total_length(incoming.rcvd_data().size()
 						+ segment_len[0]);
 
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						"got BUNDLE_END: total length "
 								+ incoming.total_length());
@@ -1452,14 +1452,14 @@ public abstract class Connection extends CLConnection {
 			String text = String
 					.format("handle_data_todo: reading todo segment %s/%s at offset %s",
 							chunk_len, recv_segment_todo_, rcvd_offset);
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			boolean[] last = new boolean[1];
 
 			int cc = BundleProtocol.consume(incoming.bundle(), recvbuf_,
 					chunk_len, last);
 			if (cc < 0 || cc != chunk_len) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"protocol error parsing bundle data segment");
 				break_contact(ContactEvent.reason_t.CL_ERROR);
 				return false;
@@ -1484,7 +1484,7 @@ public abstract class Connection extends CLConnection {
 
 	private boolean handle_ack_segment(byte flags) {
 
-		Logger.getInstance().debug(TAG, "handling ack segment");
+		BPF.getInstance().getBPFLogger().debug(TAG, "handling ack segment");
 
 		int last_position = recvbuf_.position();
 		int consumed_len = 0;
@@ -1500,7 +1500,7 @@ public abstract class Connection extends CLConnection {
 			int sdnv_len = SDNV.decode(recvbuf_, acked_len);
 
 			if (sdnv_len < 0) {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						"handle_ack_segment: too few bytes for sdnv "
 								+ recvbuf_.position());
@@ -1516,7 +1516,7 @@ public abstract class Connection extends CLConnection {
 			// recvbuf_.position(1 + sdnv_len);
 
 			if (inflight_.isEmpty()) {
-				Logger.getInstance()
+				BPF.getInstance().getBPFLogger()
 						.error(TAG,
 								"protocol error: got ack segment with no inflight bundle");
 				break_contact(ContactEvent.reason_t.CL_ERROR);
@@ -1527,7 +1527,7 @@ public abstract class Connection extends CLConnection {
 
 			int ack_begin = inflight.ack_data().size();
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"received ack segment with ack_len " + acked_len[0]
 							+ ", ack begin is " + ack_begin
@@ -1536,7 +1536,7 @@ public abstract class Connection extends CLConnection {
 
 			inflight.ack_data().set(acked_len[0] - 1);
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("receving ACK for bundle %d until byte %d",
 							inflight.bundle().bundleid(), inflight.ack_data()
@@ -1550,7 +1550,7 @@ public abstract class Connection extends CLConnection {
 						.format("handle_ack_segment: got final ack for %d byte range -- acked_len %d, ack_data %d",
 								acked_len[0] - ack_begin, acked_len[0],
 								inflight.ack_data().size());
-				Logger.getInstance().debug(TAG, text);
+				BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 				inflight.set_transmit_event_posted(true);
 
@@ -1567,7 +1567,7 @@ public abstract class Connection extends CLConnection {
 						.format("handle_ack_segment: got acked_len %d (%d byte range) -- ack_data %d",
 								acked_len[0], acked_len[0] - ack_begin,
 								inflight.ack_data().size());
-				Logger.getInstance().debug(TAG, text);
+				BPF.getInstance().getBPFLogger().debug(TAG, text);
 			}
 
 			return true;
@@ -1585,15 +1585,15 @@ public abstract class Connection extends CLConnection {
 
 	private boolean handle_refuse_bundle(byte flags) {
 
-		Logger.getInstance().debug(TAG, "got refuse_bundle message");
-		Logger.getInstance().error(TAG, "REFUSE_BUNDLE not implemented");
+		BPF.getInstance().getBPFLogger().debug(TAG, "got refuse_bundle message");
+		BPF.getInstance().getBPFLogger().error(TAG, "REFUSE_BUNDLE not implemented");
 		break_contact(ContactEvent.reason_t.CL_ERROR);
 		return true;
 	}
 
 	private boolean handle_keepalive(byte flags) {
 
-		Logger.getInstance().debug(TAG, "got keepalive message");
+		BPF.getInstance().getBPFLogger().debug(TAG, "got keepalive message");
 
 		BufferHelper.move_data_back_to_beginning(recvbuf_, 1);
 		recvbuf_.rewind();
@@ -1606,7 +1606,7 @@ public abstract class Connection extends CLConnection {
 		int recv_len = recvbuf_.position();
 		int last_position = recvbuf_.position();
 
-		Logger.getInstance().debug(TAG, "got SHUTDOWN byte");
+		BPF.getInstance().getBPFLogger().debug(TAG, "got SHUTDOWN byte");
 		int shutdown_len = 1;
 		int handled_len = 0;
 		boolean has_reason = false;
@@ -1648,7 +1648,7 @@ public abstract class Connection extends CLConnection {
 			String text = String.format(
 					"got %s/%s bytes for shutdown data... waiting for more",
 					recvbuf_.position(), shutdown_len);
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 			return false;
 		}
 
@@ -1676,7 +1676,7 @@ public abstract class Connection extends CLConnection {
 				reason = shutdown_reason_t.SHUTDOWN_BUSY;
 				break;
 			default:
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"invalid shutdown reason code 0x" + recvbuf_.get(0));
 			}
 
@@ -1698,7 +1698,7 @@ public abstract class Connection extends CLConnection {
 				has_reason, has_delay,
 
 				delay[0]);
-		Logger.getInstance().info(TAG, text);
+		BPF.getInstance().getBPFLogger().info(TAG, text);
 
 		break_contact(ContactEvent.reason_t.SHUTDOWN);
 
@@ -1725,7 +1725,7 @@ public abstract class Connection extends CLConnection {
 		String text = String.format(
 				"check_completed: rcvd %s / %s (formatted length %s)",
 				rcvd_len, incoming.total_length(), formatted_len);
-		Logger.getInstance().debug(TAG, text);
+		BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 		if (rcvd_len < incoming.total_length()) {
 			return;
@@ -1736,7 +1736,7 @@ public abstract class Connection extends CLConnection {
 			String text1 = String
 					.format("protocol error: received too much data -- got %s, total length %s",
 							rcvd_len, incoming.total_length());
-			Logger.getInstance().error(TAG, text1);
+			BPF.getInstance().getBPFLogger().error(TAG, text1);
 
 			// "we pretend that we got nothing so the cleanup code in
 			// ConnectionCL::close_contact doesn't try to post a received
@@ -1752,7 +1752,7 @@ public abstract class Connection extends CLConnection {
 			String text3 = String
 					.format("protocol error: CL total length %s doesn't match bundle protocol total %s",
 							incoming.total_length(), formatted_len);
-			Logger.getInstance().error(TAG, text3);
+			BPF.getInstance().getBPFLogger().error(TAG, text3);
 
 			incoming.rcvd_data().clear();
 			break_contact(ContactEvent.reason_t.CL_ERROR);

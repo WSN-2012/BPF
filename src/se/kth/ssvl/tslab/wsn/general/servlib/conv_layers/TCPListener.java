@@ -25,7 +25,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer.TCPLinkParams;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Helper class (and thread) that listens on a registered interface for new
@@ -69,7 +69,7 @@ public class TCPListener extends CLInfo implements Runnable {
 
 		} catch (IOException e) {
 			
-			Logger.getInstance().debug(TAG, "IOException " + e.getMessage());
+			BPF.getInstance().getBPFLogger().debug(TAG, "IOException " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -100,7 +100,7 @@ public class TCPListener extends CLInfo implements Runnable {
 		try {
 			server_socket_.close();
 		} catch (IOException e) {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"IOException stopping server_socket: " + e.getMessage());
 		}
 		server_socket_ = null;
@@ -118,13 +118,13 @@ public class TCPListener extends CLInfo implements Runnable {
 
 		while (listening_) {
 			try {
-				Logger.getInstance().debug(TAG, "start accepting connection");
+				BPF.getInstance().getBPFLogger().debug(TAG, "start accepting connection");
 				socket = server_socket_.accept();
 			} catch (IOException e) {
-				Logger.getInstance().debug(TAG, "IOException in accept");
+				BPF.getInstance().getBPFLogger().debug(TAG, "IOException in accept");
 				continue;
 			}
-			Logger.getInstance().debug(TAG, "Connection Accepted");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Connection Accepted");
 
 			TCPConnection tcpconnection;
 
@@ -136,7 +136,7 @@ public class TCPListener extends CLInfo implements Runnable {
 				tcpconnection.start();
 
 			} catch (OutOfMemoryError e) {
-				Logger.getInstance().debug(TAG, "Not enough resources");
+				BPF.getInstance().getBPFLogger().debug(TAG, "Not enough resources");
 			}
 
 		}

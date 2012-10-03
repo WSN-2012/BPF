@@ -27,7 +27,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * API for the Registration.
@@ -83,7 +83,7 @@ public class APIRegistration extends Registration {
 	public void deliver_bundle(Bundle bundle) {
 
 		if (!active() && (failure_action_ == failure_action_t.DROP)) {
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							String.format(
 									"deliver_bundle: "
@@ -95,14 +95,14 @@ public class APIRegistration extends Registration {
 		if (!active() && (failure_action_ == failure_action_t.EXEC)) {
 			// this sure seems like a security hole, but what can you
 			// do -- it's in the spec
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							String.format(
 									"deliver_bundle: running script '%s' for registration %s (%s)",
 									script_, regid_, endpoint_.str()));
 		}
 
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG,
 						String.format(
 								"deliver_bundle: queuing bundle id %d for %s delivery to %s",
@@ -116,7 +116,7 @@ public class APIRegistration extends Registration {
 				BundleDaemon.getInstance().post(
 						new BundleDeliveredEvent(bundle, this));
 			} catch (IllegalStateException e) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"Bundle List add fail because Illegal state exception");
 			}
 		}

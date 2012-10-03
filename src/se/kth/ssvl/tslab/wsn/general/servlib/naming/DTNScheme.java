@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.regex.Pattern;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This is the default scheme for the DTN network. The pattern for the scheme is
@@ -150,7 +150,7 @@ public class DTNScheme extends Scheme implements Serializable {
 		// But, this is not valid: dtn://endpoint.com/tag/nested
 
 		if (!EndpointID.is_able_to_create_URI(uri.toString())) {
-			Logger.getInstance().debug(TAG, "DTNScheme::validate: invalid URI");
+			BPF.getInstance().getBPFLogger().debug(TAG, "DTNScheme::validate: invalid URI");
 			return false;
 		}
 
@@ -203,7 +203,7 @@ public class DTNScheme extends Scheme implements Serializable {
 					.toString());
 			return matchResult;
 		} catch (Exception e) {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"DTNScheme::match: Pattern Exception");
 			return false;
 		}
@@ -302,12 +302,12 @@ public class DTNScheme extends Scheme implements Serializable {
 	public EndpointID.singleton_info_t is_singleton(final URI uri) {
 
 		if (uri.toString().contains("*")) {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"URI host contains a wildcard, so is MULTINODE");
 			return EndpointID.singleton_info_t.MULTINODE;
 		}
 
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"URI host contains a wildcard, so is SINGLETON");
 		return EndpointID.singleton_info_t.SINGLETON;
 	}

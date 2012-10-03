@@ -26,7 +26,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.StringVector;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to represent routing table in the router. It hold route entries and can
@@ -56,7 +56,7 @@ public class RouteTable {
 	public boolean add_entry(RouteEntry entry) {
 		lock_.lock();
 		try {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					String.format(" add_route %s", entry.toString()));
 			route_table_.add(entry);
 			return true;
@@ -77,13 +77,13 @@ public class RouteTable {
 				RouteEntry entry = iter.next();
 				if (entry.dest_pattern().equals(dest)
 						&& entry.link().equals(next_hop)) {
-					Logger.getInstance().debug(TAG,
+					BPF.getInstance().getBPFLogger().debug(TAG,
 							String.format("del_entry %s", entry.toString()));
 					iter.remove();
 					return true;
 				}
 			}
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("del_entry %s -> %s: no match!", dest.uri()
 							.toString(), next_hop.name()));
@@ -180,7 +180,7 @@ public class RouteTable {
 		try {
 			boolean[] loop = new boolean[1];
 			loop[0] = false;
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("get_matching %s (link %s)...", eid.uri()
 							.toString(), next_hop != null ? next_hop.name()
@@ -190,7 +190,7 @@ public class RouteTable {
 
 			int ret = get_matching_helper(eid, next_hop, entry_vec, loop, 0);
 			if (loop[0]) {
-				Logger.getInstance()
+				BPF.getInstance().getBPFLogger()
 						.warning(
 								TAG,
 								String.format(
@@ -334,7 +334,7 @@ public class RouteTable {
 			while (iter.hasNext()) {
 				RouteEntry entry = iter.next();
 
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						String.format("check entry %s", entry.toString()));
 
 				if (!entry.dest_pattern().match(eid))
@@ -358,14 +358,14 @@ public class RouteTable {
 				else if (next_hop == null || entry.link().equals(next_hop)) {
 					// "Adding entry only when we can know the link" [DTN2]
 					if (!entry_vec.contains(entry)) {
-						Logger.getInstance().debug(
+						BPF.getInstance().getBPFLogger().debug(
 								TAG,
 								String.format("match entry %s",
 										entry.toString()));
 						entry_vec.add(entry);
 						++count;
 					} else {
-						Logger.getInstance()
+						BPF.getInstance().getBPFLogger()
 								.debug(TAG,
 										String.format(
 												"entry %s already in matches... ignoring",
@@ -376,7 +376,7 @@ public class RouteTable {
 
 			}
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"get_matching %s done (level %d), %d match(es)",

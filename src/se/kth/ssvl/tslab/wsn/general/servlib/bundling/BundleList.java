@@ -31,7 +31,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHel
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class for Bundles list having locking function for using in Multi-thread
@@ -150,11 +150,11 @@ public class BundleList implements Serializable {
 			add_bundle(bundle, 0);
 			return true;
 		} catch (BundleLockNotHeldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		} catch (InterruptedException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		} finally {
 			bundle.get_lock().unlock();
 			lock_.unlock();
@@ -173,13 +173,13 @@ public class BundleList implements Serializable {
 			add_bundle(bundle, list_.size());
 
 		} catch (BundleLockNotHeldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (InterruptedException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} finally {
 			bundle.get_lock().unlock();
@@ -301,13 +301,13 @@ public class BundleList implements Serializable {
 			Collections.sort(this.list_, sort_comparator);
 			return true;
 		} catch (BundleLockNotHeldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (InterruptedException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} finally {
 			bundle.get_lock().unlock();
@@ -340,11 +340,11 @@ public class BundleList implements Serializable {
 			int random_position = (int) (Math.random() * this.size());
 			add_bundle(bundle, random_position);
 		} catch (BundleLockNotHeldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		} catch (InterruptedException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		} finally {
 			lock_.unlock();
 
@@ -371,7 +371,7 @@ public class BundleList implements Serializable {
 
 			return ret;
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return null;
 		} finally {
 			lock_.unlock();
@@ -395,7 +395,7 @@ public class BundleList implements Serializable {
 
 			return ret;
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return null;
 		} finally {
 			lock_.unlock();
@@ -432,7 +432,7 @@ public class BundleList implements Serializable {
 			return true;
 
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} finally {
 			bundle.get_lock().unlock();
@@ -634,7 +634,7 @@ public class BundleList implements Serializable {
 			throw new BundleLockNotHeldByCurrentThread();
 
 		if (b.is_queued_on(this)) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("ERROR in add bundle: "
 							+ "bundle id %d already on list [%s]",
@@ -647,7 +647,7 @@ public class BundleList implements Serializable {
 
 		b.mappings().add(this);
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format(
 						"bundle id %d is added to list [%s] , the size become",
@@ -683,14 +683,14 @@ public class BundleList implements Serializable {
 
 		try {
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"bundle id %d del_bundle: deleting mapping [%s]",
 							b.bundleid(), name_));
 
 			if (!b.mappings().contains(this)) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format("ERROR in del bundle: "
 								+ "bundle id %d has no mapping for list [%s]",
@@ -707,7 +707,7 @@ public class BundleList implements Serializable {
 
 			return b;
 		} catch (BundleLockNotHeldByCurrentThread e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return null;
 
 		} finally {

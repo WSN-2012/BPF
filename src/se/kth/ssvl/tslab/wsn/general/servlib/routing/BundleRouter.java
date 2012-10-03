@@ -39,7 +39,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetRegistration
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * The BundleRouter is responsible for making routing decision. It will contact
@@ -123,7 +123,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 			router = new ProphetBundleRouter();
 			router.name_ = "prophet bundle router";
 		} else {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("Unknow router Type %s with code %d",
 							type.getCaption(), type.getCode()));
@@ -319,7 +319,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 	 * Display storage information
 	 */
 	public void displayStorage(Bundle bundle, BundleStore bs) {
-		Logger.getInstance().info(TAG, String.format(
+		BPF.getInstance().getBPFLogger().info(TAG, String.format(
 				"cur size %d + bundle size %d bytes / quota %d bytes",
 				GlobalStorage.getInstance().get_total_size(), bundle.payload()
 						.length(), bs.quota()));
@@ -339,7 +339,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 		if (bs.quota() != 0
 				&& (GlobalStorage.getInstance().get_total_size()
 						+ bundle.payload().length() > bs.quota())) {
-			Logger.getInstance().info(TAG,
+			BPF.getInstance().getBPFLogger().info(TAG,
 					String.format(
 							"accept_bundle: rejecting bundle %d since "
 									+ "cur size %d + bundle size %d bytes > quota %d bytes",
@@ -362,7 +362,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 	public boolean can_delete_bundle(Bundle bundle) {
 		int num_mapping = bundle.num_mappings();
 		if (num_mapping > 1) {
-			Logger.getInstance().debug(TAG, "can_delete_bundle(" + bundle
+			BPF.getInstance().getBPFLogger().debug(TAG, "can_delete_bundle(" + bundle
 					+ "): not deleting because " + " bundle has " + num_mapping);
 			return false;
 
@@ -405,7 +405,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 		if (info != null) {
 			if (info.state() == ForwardingInfo.state_t.TRANSMITTED
 					|| info.state() == ForwardingInfo.state_t.QUEUED) {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						String.format("should_fwd bundle %d: "
 								+ "skip %s due to forwarding log entry %s",
@@ -424,7 +424,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 					ForwardingInfo.ANY_ACTION);
 
 			if (count > 0) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						String.format(
 								"should_fwd bundle %d: "
 										+ "skip %s since already sent or queued %d times for remote eid %s",
@@ -441,7 +441,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 					ForwardingInfo.ANY_ACTION);
 
 			if (count > 0) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						String.format(
 								"should_fwd bundle %d: "
 										+ "skip %s since transmission suppressed to remote eid %s",
@@ -462,14 +462,14 @@ public abstract class BundleRouter extends BundleEventHandler {
 					action.getCode());
 
 			if (count > 0) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						String.format(
 								"should_fwd bundle %d: "
 										+ "skip %s since already transmitted or queued (count %d)",
 								bundle.bundleid(), link.name(), count));
 				return false;
 			} else {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						String.format("should_fwd bundle %d: "
 								+ "link %s ok since transmission count=%d",
@@ -481,7 +481,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 
 		String info_string = info != null ? info.state().toString() : "no info";
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("should_fwd bundle %d: "
 						+ "match %s: forwarding log entry %s",

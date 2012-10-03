@@ -26,7 +26,7 @@ import java.util.Date;
 
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to represent DTNTime according to the protocol. The DTNTime consists of
@@ -233,7 +233,7 @@ public class DTNTime implements Serializable {
 	 */
 	public static boolean check_local_clock() {
 		if ((System.currentTimeMillis() / 1000) < TIMEVAL_CONVERSION) {
-			Logger.getInstance().error(TAG, "invalid clock setting");
+			BPF.getInstance().getBPFLogger().error(TAG, "invalid clock setting");
 			return false;
 		} else
 			return true;

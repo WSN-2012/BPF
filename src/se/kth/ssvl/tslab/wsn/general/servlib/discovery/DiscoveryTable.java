@@ -26,7 +26,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.DiscoveriesSetting.AnnounceEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.DiscoveriesSetting.DiscoveryEntry;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class represents a table where the Discoveries instance are stored.
@@ -69,11 +69,11 @@ public class DiscoveryTable {
 
 			DiscoveryEntry element = i.next();
 			String name_id = element.id();
-			Logger.getInstance().debug(TAG, name_id);
+			BPF.getInstance().getBPFLogger().debug(TAG, name_id);
 			String afamily = element.address_family().getCaption();
-			Logger.getInstance().debug(TAG, afamily);
+			BPF.getInstance().getBPFLogger().debug(TAG, afamily);
 			int port = element.port();
-			Logger.getInstance().debug(TAG, "" + port);
+			BPF.getInstance().getBPFLogger().debug(TAG, "" + port);
 			add(name_id, afamily, (short) port);
 
 		}
@@ -90,9 +90,9 @@ public class DiscoveryTable {
 
 				AnnounceEntry element = it.next();
 				String AnnounceID = element.interface_id();
-				Logger.getInstance().debug(TAG, AnnounceID);
+				BPF.getInstance().getBPFLogger().debug(TAG, AnnounceID);
 				String DiscoveryID = element.discovery_id();
-				Logger.getInstance().debug(TAG, DiscoveryID);
+				BPF.getInstance().getBPFLogger().debug(TAG, DiscoveryID);
 				int interval = element.interval();
 				String ClType = element.conv_layer_type().getCaption();
 				int code;
@@ -109,12 +109,12 @@ public class DiscoveryTable {
 					String text = String
 							.format("error adding announce %s to %s: no such discovery agent",
 									AnnounceID, DiscoveryID);
-					Logger.getInstance().debug(TAG, text);
+					BPF.getInstance().getBPFLogger().debug(TAG, text);
 					return;
 				}
 
 				if (!disc.announce(AnnounceID, code, ClType, interval)) {
-					Logger.getInstance().debug(TAG,
+					BPF.getInstance().getBPFLogger().debug(TAG,
 							"Error creting the Announce" + AnnounceID);
 				}
 				disc.start();
@@ -133,7 +133,7 @@ public class DiscoveryTable {
 
 		Discovery disc = find(name, iter);
 		if (disc != null) {
-			Logger.getInstance().error(TAG, "agent exists with that name");
+			BPF.getInstance().getBPFLogger().error(TAG, "agent exists with that name");
 			return false;
 		}
 
@@ -143,7 +143,7 @@ public class DiscoveryTable {
 			return false;
 		}
 
-		Logger.getInstance().info(TAG, "adding discovery agent" + name);
+		BPF.getInstance().getBPFLogger().info(TAG, "adding discovery agent" + name);
 
 		dlist_.add(disc);
 		return true;
@@ -153,12 +153,12 @@ public class DiscoveryTable {
 
 		Iterator<Discovery> iter = dlist_.iterator();
 
-		Logger.getInstance().info(TAG, "removing discovery agent" + name);
+		BPF.getInstance().getBPFLogger().info(TAG, "removing discovery agent" + name);
 
 		Discovery disc = find(name, iter);
 
 		if (disc == null) {
-			Logger.getInstance().error(TAG, "error removing agent" + name);
+			BPF.getInstance().getBPFLogger().error(TAG, "error removing agent" + name);
 			return false;
 		}
 

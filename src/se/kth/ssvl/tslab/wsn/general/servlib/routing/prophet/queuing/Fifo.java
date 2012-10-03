@@ -1,6 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
@@ -20,7 +20,7 @@ public class Fifo extends ProphetQueuing {
 				"id Asc", null);
 		int fieldColumn = cursor.getColumnIndex("id");
 		if (cursor == null) {
-			Logger.getInstance().debug(TAG, "Row not found!");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
 			return -1;
 		}
 

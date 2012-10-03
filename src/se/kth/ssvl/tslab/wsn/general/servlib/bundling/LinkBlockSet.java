@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * A set of BlockInfoVecs, one for each outgoing link.
@@ -77,7 +77,7 @@ public class LinkBlockSet implements Serializable {
 		lock_.lock();
 		try {
 			if (map_.get(link) != null) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"Blocks already exist for the given link");
 				return null;
 			}
@@ -119,7 +119,7 @@ public class LinkBlockSet implements Serializable {
 			BlockInfoVec result = map_.remove(link);
 
 			if (result == null) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 								"delete_block when there are not blocks for the given link");
 				return false;
 			}

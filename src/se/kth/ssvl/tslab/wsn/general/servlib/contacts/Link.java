@@ -37,7 +37,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.RouterInfo;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Abstraction for a DTN link, i.e. a one way communication channel to a next
@@ -116,7 +116,7 @@ public class Link implements Serializable {
 	 */
 	public Link(ConvergenceLayer cl) {
 		String name = "generated_link_" + TimeHelper.current_seconds_from_ref();
-		Logger.getInstance().debug(TAG, "Link" + name);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Link" + name);
 		type_ = link_type_t.OPPORTUNISTIC;
 		state_ = Link.state_t.UNAVAILABLE;
 		deleted_ = false;
@@ -219,7 +219,7 @@ public class Link implements Serializable {
 		case OPPORTUNISTIC:
 			return "OPPORTUNISTIC";
 		default:
-			Logger.getInstance().error(TAG, "Bogus link_type_t");
+			BPF.getInstance().getBPFLogger().error(TAG, "Bogus link_type_t");
 			return null;
 
 		}
@@ -320,7 +320,7 @@ public class Link implements Serializable {
 		case CLOSED:
 			return "CLOSED";
 		default:
-			Logger.getInstance().error(TAG, "Bogus state_t");
+			BPF.getInstance().getBPFLogger().error(TAG, "Bogus state_t");
 			return null;
 		}
 
@@ -349,7 +349,7 @@ public class Link implements Serializable {
 			link = new OpportunisticLink(name, cl, nexthop);
 			break;
 		default:
-			Logger.getInstance().debug(TAG, "bogus type of the link" + name);
+			BPF.getInstance().getBPFLogger().debug(TAG, "bogus type of the link" + name);
 			link = null;
 
 		}
@@ -360,7 +360,7 @@ public class Link implements Serializable {
 			return link;
 		}
 
-		Logger.getInstance().info(TAG, "new link created");
+		BPF.getInstance().getBPFLogger().info(TAG, "new link created");
 
 		// "now dispatch to the subclass for any initial state events that
 		// need to be posted. this needs to be done after all the above is
@@ -378,7 +378,7 @@ public class Link implements Serializable {
 	public Link(String name, link_type_t type, ConvergenceLayer cl,
 			String nexthop) {
 
-		Logger.getInstance().debug(TAG, "Link" + name);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Link" + name);
 		type_ = type;
 		state_ = Link.state_t.UNAVAILABLE;
 		deleted_ = false;
@@ -389,7 +389,7 @@ public class Link implements Serializable {
 		try {
 			dest_ip_ = InetAddress.getByName(parameters[0].replace("/", ""));
 		} catch (IOException e) {
-			Logger.getInstance().debug(TAG, "IOException getting dest_ip");
+			BPF.getInstance().getBPFLogger().debug(TAG, "IOException getting dest_ip");
 		}
 		remote_port_ = (short) Integer.parseInt(parameters[1]);
 		name_ = name;
@@ -442,7 +442,7 @@ public class Link implements Serializable {
 		lock_.lock();
 		try {
 			if (isdeleted()) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"cannot reconfigure deleted link" + name());
 				return false;
 			}
@@ -461,7 +461,7 @@ public class Link implements Serializable {
 		lock_.lock();
 		try {
 			if (isdeleted()) {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						"reconfigure_link: cannot reconfigure deleted link"
 								+ name());
@@ -586,16 +586,14 @@ public class Link implements Serializable {
 			break; // any old state is valid
 
 		case AVAILABLE:
-			assert (state_ == state_t.OPEN || state_ == state_t.UNAVAILABLE) : Logger
-					.getInstance().debug(
+			assert (state_ == state_t.OPEN || state_ == state_t.UNAVAILABLE) : BPF.getInstance().getBPFLogger().debug(
 							TAG,
 							"The state of the Link can not be changed to"
 									+ state_to_str(new_state));
 			break;
 
 		case OPENING:
-			assert (state_ == state_t.AVAILABLE || state_ == state_t.UNAVAILABLE) : Logger
-					.getInstance().debug(
+			assert (state_ == state_t.AVAILABLE || state_ == state_t.UNAVAILABLE) : BPF.getInstance().getBPFLogger().debug(
 							TAG,
 							"The state of the Link can not be changed to"
 									+ state_to_str(new_state));
@@ -605,15 +603,14 @@ public class Link implements Serializable {
 			/*
 			 * for opportunisticlinks
 			 */
-			assert (state_ == state_t.OPENING || state_ == state_t.UNAVAILABLE) : Logger
-					.getInstance().debug(
+			assert (state_ == state_t.OPENING || state_ == state_t.UNAVAILABLE) : BPF.getInstance().getBPFLogger().debug(
 							TAG,
 							"The state of the Link can not be changed to"
 									+ state_to_str(new_state));
 			break;
 
 		default:
-			Logger.getInstance().error(TAG, "Not Reached");
+			BPF.getInstance().getBPFLogger().error(TAG, "Not Reached");
 		}
 
 		state_ = new_state;
@@ -813,14 +810,14 @@ public class Link implements Serializable {
 				String text = String
 						.format("add_to_queue: bundle id %d already in queue for link %s",
 								bundle.bundleid(), name_str());
-				Logger.getInstance().error(TAG, text);
+				BPF.getInstance().getBPFLogger().error(TAG, text);
 				return false;
 			}
 
 			String text = String.format(
 					"adding bundle %d to queue (length %d)", bundle.bundleid(),
 					bundles_queued_);
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			bundles_queued_++;
 			bytes_queued_ += total_len;
@@ -854,12 +851,12 @@ public class Link implements Serializable {
 				String text = String.format(
 						"del_from_queue: %s bytes_queued %s < total_len %s",
 						bundle, bytes_queued_, total_len);
-				Logger.getInstance().error(TAG, text);
+				BPF.getInstance().getBPFLogger().error(TAG, text);
 			}
 
 			String text = String.format("removed %s from queue (length %s)",
 					bundle, bundles_queued_);
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			return true;
 		} finally {
@@ -875,14 +872,14 @@ public class Link implements Serializable {
 				String text = String.format(
 						"bundle %s already in flight for link %s", bundle,
 						name_str());
-				Logger.getInstance().error(TAG, text);
+				BPF.getInstance().getBPFLogger().error(TAG, text);
 				return false;
 			}
 
 			String text = String.format(
 					"adding %s to in flight list for link %s", bundle,
 					name_str());
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			inflight_.push_back(bundle);
 
@@ -918,13 +915,13 @@ public class Link implements Serializable {
 				String text = String
 						.format("del_from_inflight: %s bytes_inflight %s < total_len %s",
 								bundle, bytes_inflight_, total_len);
-				Logger.getInstance().error(TAG, text);
+				BPF.getInstance().getBPFLogger().error(TAG, text);
 			}
 
 			String text = String.format(
 					"removed %s from inflight list (length %s)", bundle,
 					bundles_inflight_);
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 			return true;
 		} finally {
@@ -956,7 +953,7 @@ public class Link implements Serializable {
 		try {
 
 			if (isdeleted()) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"Link.dump: cannot dump deleted link %s" + name());
 				return;
 			}
@@ -1231,7 +1228,7 @@ public class Link implements Serializable {
 		lock_.lock();
 
 		if (isdeleted()) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"Link.dump_stats: cannot dump stats for deleted link %s"
 							+ name());
@@ -1327,7 +1324,7 @@ public class Link implements Serializable {
 			String text = String.format(
 					"Link.open: in state %s: expected state AVAILABLE",
 					state_to_str(state()));
-			Logger.getInstance().error(TAG, text);
+			BPF.getInstance().getBPFLogger().error(TAG, text);
 			return;
 		}
 
@@ -1344,7 +1341,7 @@ public class Link implements Serializable {
 
 		String text = String.format("Link.open: %s new contact %s", this,
 				contact_);
-		Logger.getInstance().debug(TAG, text);
+		BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 	}
 
@@ -1353,11 +1350,11 @@ public class Link implements Serializable {
 	 */
 	public void close() {
 
-		Logger.getInstance().debug(TAG, "Closing the link");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Closing the link");
 
 		// we should always be open, therefore we must have a contact
 		if (contact_ == null) {
-			Logger.getInstance().error(TAG, "Link.close with no contact");
+			BPF.getInstance().getBPFLogger().error(TAG, "Link.close with no contact");
 			return;
 		}
 
@@ -1370,7 +1367,7 @@ public class Link implements Serializable {
 		// object eventually" [DTN2].
 		contact_ = null;
 
-		Logger.getInstance().debug(TAG, "Link.close complete");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Link.close complete");
 
 	}
 

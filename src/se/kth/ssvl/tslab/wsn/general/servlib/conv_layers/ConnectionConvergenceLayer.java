@@ -31,7 +31,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "All convergence layers that maintain a connection (i.e. a TCP socket) to
@@ -95,7 +95,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 
 		String text = String.format("adding %s link %s", link.type_str(),
 				link.nexthop());
-		Logger.getInstance().debug(TAG, text);
+		BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 		// "Create a new parameters structure, parse the options, and store
 		// them in the link's cl info slot" [DTN2].
@@ -108,7 +108,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 		parse_nexthop(link, params);
 
 		if (!finish_init_link(link, params)) {
-			Logger.getInstance().error(TAG, "error in finish_init_link");
+			BPF.getInstance().getBPFLogger().error(TAG, "error in finish_init_link");
 			return false;
 		}
 
@@ -124,13 +124,13 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 		assert (link != null) : "ConnectionConvergenceLayer : delete_link, link is null";
 		assert (!link.isdeleted());
 
-		Logger.getInstance().debug(TAG, "deleting link " + link.name());
+		BPF.getInstance().getBPFLogger().debug(TAG, "deleting link " + link.name());
 
 		if (link.isopen() || link.isopening()) {
 			String text = String.format(
 					"link %s open, deleting link state when contact closed",
 					link.name());
-			Logger.getInstance().debug(TAG, text);
+			BPF.getInstance().getBPFLogger().debug(TAG, text);
 			return;
 		}
 
@@ -182,7 +182,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 				String text = String.format(
 						"resizing link %s send buffer from %s -> %s", link,
 						conn.sendbuf_.capacity(), params.sendbuf_len());
-				Logger.getInstance().info(TAG, text);
+				BPF.getInstance().getBPFLogger().info(TAG, text);
 
 				IByteBuffer reserved_sendbuf = BufferHelper.reserve(
 						conn.sendbuf_, params.sendbuf_len());
@@ -195,7 +195,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 				String text = String.format(
 						"resizing link %s recv buffer from %s -> %s", link,
 						conn.recvbuf_.capacity(), params.recvbuf_len());
-				Logger.getInstance().info(TAG, text);
+				BPF.getInstance().getBPFLogger().info(TAG, text);
 
 				IByteBuffer reserved_recvbuf = BufferHelper.reserve(
 						conn.recvbuf_, params.recvbuf_len());
@@ -215,7 +215,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 		assert (!link.isdeleted()) : "ConnectionConvergenceLayer: open_contact, link is deleted";
 		assert (link.cl_info() != null) : "ConnectionConvergenceLayer: open_contact, cl_info is null";
 
-		Logger.getInstance().debug(TAG, "opening contact on link " + link);
+		BPF.getInstance().getBPFLogger().debug(TAG, "opening contact on link " + link);
 
 		LinkParams params = (LinkParams) link.cl_info();
 		assert (params != null);
@@ -226,7 +226,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 		try {
 			conn = new_connection(link, params);
 		} catch (OutOfMemoryError e) {
-			Logger.getInstance().debug(TAG, "Not Enough resources");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Not Enough resources");
 			return false;
 		}
 		conn.set_contact(contact);
@@ -239,7 +239,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 	@Override
 	public boolean close_contact(Contact contact) {
 
-		Logger.getInstance().info(TAG, "close_contact " + contact);
+		BPF.getInstance().getBPFLogger().info(TAG, "close_contact " + contact);
 
 		Link link = contact.link();
 		assert (link != null) : "ConnectionConvergenceLayer : close_contact, link is null";
@@ -256,18 +256,18 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 						.put(conn.new CLMsg(
 								CLConnection.clmsg_t.CLMSG_BREAK_CONTACT));
 			} catch (InterruptedException e) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"InteruptedException in close_contact command");
 			}
 		}
 
 		while (conn.isAlive()) {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"waiting for connection thread to stop...");
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				Logger.getInstance().debug(TAG, "InterruptedException");
+				BPF.getInstance().getBPFLogger().debug(TAG, "InterruptedException");
 			}
 
 		}
@@ -293,7 +293,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 						inflight.total_length())
 						|| !link.add_to_queue(inflight.bundle(),
 								inflight.total_length())) {
-					Logger.getInstance().warning(
+					BPF.getInstance().getBPFLogger().warning(
 							TAG,
 							"inflight queue mismatch for bundle "
 									+ inflight.bundle().bundleid());
@@ -334,7 +334,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 							.format("partial arrival of bundle: got %d bytes [hdr %d payload %s]",
 									rcvd_len, header_block_length, incoming
 											.bundle().payload().length());
-					Logger.getInstance().debug(TAG, text);
+					BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 					BundleDaemon Daemon = BundleDaemon.getInstance();
 					Daemon.post(new BundleReceivedEvent(incoming.bundle(),
@@ -366,7 +366,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 
 		String text = String.format("bundle_queued: queued %s on %s", bundle,
 				link);
-		Logger.getInstance().debug(TAG, text);
+		BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 		if (!link.isopen()) {
 			return;
@@ -391,7 +391,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 					conn.new CLMsg(CLConnection.clmsg_t.CLMSG_BUNDLES_QUEUED));
 
 		} catch (InterruptedException e) {
-			Logger.getInstance().error(TAG, "Interupt in bundle queue command");
+			BPF.getInstance().getBPFLogger().error(TAG, "Interupt in bundle queue command");
 		}
 
 	}
@@ -400,12 +400,12 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 	public void cancel_bundle(Link link, Bundle bundle) {
 
 		if (bundle == null) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"bundle is null when cancel_bundle is called");
 
 		}
 
-		Logger.getInstance().debug(TAG, "cancel_bundle, bundle is " + bundle);
+		BPF.getInstance().getBPFLogger().debug(TAG, "cancel_bundle, bundle is " + bundle);
 
 		assert (!link.isdeleted()) : "ConnectionConvergenceLayer : cancel_bundle, link is deleted";
 
@@ -415,7 +415,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 			String text = String.format(
 					"cancel_bundle %s is not on link %s inflight queue",
 					bundle, link);
-			Logger.getInstance().warning(TAG, text);
+			BPF.getInstance().getBPFLogger().warning(TAG, text);
 			return;
 		}
 
@@ -432,7 +432,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 			 */
 			String text = String.format(
 					"cancel_bundle %s but link %s isn't open!!", bundle, link);
-			Logger.getInstance().warning(TAG, text);
+			BPF.getInstance().getBPFLogger().warning(TAG, text);
 			BundleDaemon Daemon = BundleDaemon.getInstance();
 			Daemon.post(new BundleSendCancelledEvent(bundle, link));
 			return;
@@ -445,7 +445,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 		assert (contact.link() == link);
 		String text = String.format("cancel_bundle: cancelling %s on %s",
 				bundle, link);
-		Logger.getInstance().debug(TAG, text);
+		BPF.getInstance().getBPFLogger().debug(TAG, text);
 
 		try {
 			conn.cmdqueue().put(
@@ -453,7 +453,7 @@ public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {
 							bundle));
 		} catch (InterruptedException e) {
 
-			Logger.getInstance().error(TAG, "Cancel bundle command");
+			BPF.getInstance().getBPFLogger().error(TAG, "Cancel bundle command");
 		}
 
 	}

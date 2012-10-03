@@ -20,7 +20,7 @@
 package se.kth.ssvl.tslab.wsn.general.systemlib.util;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Helper routine for managing and manipulating Byte Buffer
@@ -131,11 +131,11 @@ public class BufferHelper {
 
 		try {
 			src.position(src_offset);
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					"BufferHelper",
 					"src p: " + src.position() + " len: " + len + " : src"
 							+ src.capacity());
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					"BufferHelper",
 					"des p: " + dest.position() + " len: " + len + " : src"
 							+ dest.capacity());
@@ -163,11 +163,11 @@ public class BufferHelper {
 
 		try {
 			src.position(src_offset);
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					"BufferHelper",
 					"src p: " + src.position() + " len: " + len + " : src"
 							+ src.capacity());
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					"BufferHelper",
 					"des p: " + dest.position() + " len: " + len + " : src"
 							+ dest.capacity());
@@ -195,11 +195,11 @@ public class BufferHelper {
 
 		try {
 			src.position(src_offset);
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					"BufferHelper",
 					"src p: " + src.position() + " len: " + len + " : src"
 							+ src.capacity());
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					"BufferHelper",
 					"des p: " + dest.position() + " len: " + len + " : src"
 							+ dest.capacity());
@@ -227,11 +227,11 @@ public class BufferHelper {
 
 		try {
 			src.position(src_offset);
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					"BufferHelper",
 					"src p: " + src.position() + " len: " + len + " : src"
 							+ src.capacity());
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					"BufferHelper",
 					"des p: " + dest.position() + " len: " + len + " : src"
 							+ dest.capacity());

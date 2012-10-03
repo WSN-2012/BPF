@@ -29,7 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.status_repo
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class extends BlockProcessor and is the implementation of the payload
@@ -90,7 +90,7 @@ public class PayloadBlockProcessor extends BlockProcessor implements
 			buf.position(buf.position() + cc);
 			len -= cc;
 			consumed += cc;
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"in len: " + len + " : cc" + cc + " "
 							+ bundle.payload().length());
@@ -98,7 +98,7 @@ public class PayloadBlockProcessor extends BlockProcessor implements
 					+ "consume() bundle payload length is not 0";
 		}
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				"out len: " + len + " : cc" + consumed + " "
 						+ bundle.payload().length());
@@ -153,7 +153,7 @@ public class PayloadBlockProcessor extends BlockProcessor implements
 
 		consumed += tocopy;
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("consumed %s/%s (%s)", consumed, block
 						.full_length(), block.complete() ? "complete"
@@ -231,7 +231,7 @@ public class PayloadBlockProcessor extends BlockProcessor implements
 					// If the bundle should not be fragmented and the payload
 					// block is not complete, we must discard the bundle.
 					|| bundle.do_not_fragment()) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"payload incomplete and cannot be fragmented");
 				deletion_reason[0] = status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 				return false;

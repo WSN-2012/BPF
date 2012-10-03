@@ -27,7 +27,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.config.InterfacesSetting.InterfaceE
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * The list of interfaces
@@ -70,11 +70,11 @@ public class InterfaceTable {
 			InterfaceEntry element = i.next();
 
 			String conv_layer_type_ = element.conv_layer_type().getCaption();
-			Logger.getInstance().debug(TAG, conv_layer_type_);
+			BPF.getInstance().getBPFLogger().debug(TAG, conv_layer_type_);
 			String id = element.id();
-			Logger.getInstance().debug(TAG, id);
+			BPF.getInstance().getBPFLogger().debug(TAG, id);
 			short local_port = element.local_port();
-			Logger.getInstance().debug(TAG, "" + local_port);
+			BPF.getInstance().getBPFLogger().debug(TAG, "" + local_port);
 			boolean fixed_local_port_ = element.fixed_local_port();
 
 			if (!fixed_local_port_) {
@@ -85,14 +85,14 @@ public class InterfaceTable {
 			ConvergenceLayer cl = ConvergenceLayer
 					.find_clayer(conv_layer_type_);
 			if (cl != null) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"can't find convergence layer for" + id);
 
 			}
 			cl.set_local_port(local_port);
 
 			if (!InterfaceTable.getInstance().add(id, cl, conv_layer_type_)) {
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"error adding interface %s" + id);
 			}
 
@@ -121,16 +121,16 @@ public class InterfaceTable {
 
 		if (find(name, iter)) {
 			String text = String.format("Interface %s already exists", name);
-			Logger.getInstance().error(TAG, text);
+			BPF.getInstance().getBPFLogger().error(TAG, text);
 			return false;
 		}
 
 		String text = String.format("adding interface " + name, proto);
-		Logger.getInstance().info(TAG, text);
+		BPF.getInstance().getBPFLogger().info(TAG, text);
 
 		Interface iface = new Interface(name, proto, cl);
 		if (!cl.interface_up(iface)) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"convergence layer error adding interface" + name);
 			return false;
 		}
@@ -148,16 +148,16 @@ public class InterfaceTable {
 		Iterator<Interface> iter = iflist_.iterator();
 		Interface iface;
 
-		Logger.getInstance().info(TAG, "removing interfaces");
+		BPF.getInstance().getBPFLogger().info(TAG, "removing interfaces");
 
 		while (iter.hasNext()) {
 			iface = iter.next();
 			iter.remove();
 			if (iface.clayer().interface_down(iface)) {
-				Logger.getInstance().info(TAG,
+				BPF.getInstance().getBPFLogger().info(TAG,
 						"shutdown interface " + iface.name());
 			} else {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"error deleting interfaces from the convergence layer");
 
 			}

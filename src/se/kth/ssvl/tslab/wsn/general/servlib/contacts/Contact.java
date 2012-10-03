@@ -24,8 +24,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.CLInfo;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
 
 /**
  * "Encapsulation of an active connection to a next-hop DTN contact. This is
@@ -61,7 +61,7 @@ public class Contact implements Serializable {
 	 */
 	public Contact(Link link) {
 
-		Logger.getInstance().debug(TAG, "" + link.name());
+		BPF.getInstance().getBPFLogger().debug(TAG, "" + link.name());
 
 		cl_info_ = null;
 		start_time_ = Calendar.getInstance().getTime();
@@ -69,7 +69,7 @@ public class Contact implements Serializable {
 		bps_ = 0;
 		latency_ = 0;
 		link_ = link;
-		Logger.getInstance().info(TAG, "new contact" + this);
+		BPF.getInstance().getBPFLogger().info(TAG, "new contact" + this);
 	}
 
 	/**

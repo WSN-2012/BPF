@@ -23,7 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.StorageSetting.storage_type_t;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * GlobalStorage class is implemented as Singleton to keep the total application
@@ -91,10 +91,10 @@ public class GlobalStorage {
 		// Total bundles size will be calculated in BundleStorge and added here
 		// total_size_ += impt_storage_.get_directory_size(path_storage);
 		total_size_ += impt_storage_.get_directory_size(path_registration);
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Total Size of DTN Folder:" + total_size_);
 		total_size_ += impt_storage_.get_file_size(path_database);
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Total Size of DTN Folder:" + total_size_);
 
 		return true;

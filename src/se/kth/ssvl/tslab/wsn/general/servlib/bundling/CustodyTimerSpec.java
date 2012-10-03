@@ -21,7 +21,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 
 import java.io.Serializable;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class specify timeout according to parameters. The parameters include
@@ -82,7 +82,7 @@ public class CustodyTimerSpec implements Serializable {
 			timeout = Math.min(timeout, max_);
 		}
 
-		Logger.getInstance().error(
+		BPF.getInstance().getBPFLogger().error(
 				TAG,
 				String.format("calculate_timeout: "
 						+ "min %d, lifetime_pct %d,"

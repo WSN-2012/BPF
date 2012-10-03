@@ -25,7 +25,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class is for Registration testing purpose to take the log of bundle's
@@ -68,7 +68,7 @@ public class LoggingRegistration extends Registration {
 		StringBuffer buf = new StringBuffer();
 		b.format_verbose(buf);
 
-		Logger.getInstance().debug(TAG, buf.toString());
+		BPF.getInstance().getBPFLogger().debug(TAG, buf.toString());
 
 		BundleDaemon.getInstance().post(new BundleDeliveredEvent(b, this));
 	}

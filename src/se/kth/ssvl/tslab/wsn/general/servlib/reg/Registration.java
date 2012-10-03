@@ -37,7 +37,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Registration class represents "registration' application that includes
@@ -209,7 +209,7 @@ public abstract class Registration implements Serializable {
 	 */
 	public boolean deliver_if_not_duplicate(Bundle bundle) {
 		if (!delivery_cache_.add_entry(bundle, EndpointID.NULL_EID())) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format(
 							"suppressing duplicate delivery of bundle %s",
@@ -225,7 +225,7 @@ public abstract class Registration implements Serializable {
 			bundle.payload().move_data_to_api_temp_folder();
 		}
 
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				String.format("delivering bundle %s", bundle.bundleid()));
 		deliver_bundle(bundle);
 

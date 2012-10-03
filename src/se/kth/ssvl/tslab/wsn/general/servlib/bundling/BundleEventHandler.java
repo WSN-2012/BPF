@@ -76,7 +76,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.RouteReportEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.SetLinkDefaultsRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ShutdownRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.StatusRequest;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Abstract class for handling various Bundle Events.
@@ -97,7 +97,7 @@ public abstract class BundleEventHandler {
 	 * routine according to the event's type code.
 	 */
 	protected void dispatch_event(BundleEvent e) {
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("dispatching event (%s) %s", e.toString(), e
 						.type().getCaption()));
@@ -328,7 +328,7 @@ public abstract class BundleEventHandler {
 			break;
 
 		default:
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("unimplemented event type %s, code = ", e
 							.type().getCaption(), e.type().getCode())

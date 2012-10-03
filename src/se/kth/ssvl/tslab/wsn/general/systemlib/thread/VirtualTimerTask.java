@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.TimerTask;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * VirtualTimerTask for adding more complex constructor than Android TimerTask.
@@ -104,7 +104,7 @@ public abstract class VirtualTimerTask implements Serializable {
 		TimerTask timer_task = DTNService.timer_tasks_map().get(this);
 
 		if (timer_task == null)
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"Virtual Timer Task for this is not exist");
 
 		return timer_task;

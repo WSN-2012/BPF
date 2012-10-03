@@ -2,7 +2,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 public class Mofo extends ProphetQueuing {
 
@@ -19,7 +19,7 @@ public class Mofo extends ProphetQueuing {
 		int forwardColumn = cursor.getColumnIndex("forwarded_times");
 		int fieldColumn = cursor.getColumnIndex("id");
 		if (cursor == null) {
-			Logger.getInstance().debug(TAG, "Row not found!");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
 			return -1;
 		}
 
@@ -27,7 +27,7 @@ public class Mofo extends ProphetQueuing {
 			return -1;
 		}
 
-		Logger.getInstance().info("Queuing",
+		BPF.getInstance().getBPFLogger().info("Queuing",
 				"Deleting bundle ft: " + cursor.getInt(forwardColumn));
 		int result = cursor.getInt(fieldColumn);
 		cursor.close();

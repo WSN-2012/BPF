@@ -37,7 +37,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer.TCPLinkParams;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Helper class (and thread) that manages an established connection with a peer
@@ -132,7 +132,7 @@ public class TCPConnection extends Connection {
 			try {
 				initialize_channels_and_streams();
 			} catch (IOException e) {
-				Logger.getInstance().info(
+				BPF.getInstance().getBPFLogger().info(
 						TAG,
 						"receiving connection from remote side and fail with "
 								+ e.getMessage());
@@ -147,7 +147,7 @@ public class TCPConnection extends Connection {
 		// cache the remote addr and port in the fields in the socket
 		TCPLinkParams params = (TCPLinkParams) (params_);
 		assert (params != null);
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				"connect: connecting to " + params.remote_addr_
 						+ params.remote_port_);
@@ -174,7 +174,7 @@ public class TCPConnection extends Connection {
 		try {
 			socket_.setSoTimeout(SOCKET_TIMEOUT * 1000);
 		} catch (SocketException e1) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"Socket exception in set socket timeout");
 		}
 
@@ -189,7 +189,7 @@ public class TCPConnection extends Connection {
 			socket_.close();
 			// stop();
 		} catch (IOException e) {
-			Logger.getInstance().debug(TAG, "IOException in disconnect");
+			BPF.getInstance().getBPFLogger().debug(TAG, "IOException in disconnect");
 		}
 	}
 
@@ -201,7 +201,7 @@ public class TCPConnection extends Connection {
 	void handle_poll_activity(int timeout) {
 
 		if (!socket_.isConnected()) {
-			Logger.getInstance().debug(TAG, "Socket is not connected");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Socket is not connected");
 			break_contact(ContactEvent.reason_t.BROKEN);
 		}
 
@@ -216,7 +216,7 @@ public class TCPConnection extends Connection {
 			// check that there's something to read
 			if (num_to_read_ > 0) {
 
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"before reading position is " + recvbuf_.position());
 
 				java.nio.ByteBuffer temp_java_nio_buf = java.nio.ByteBuffer
@@ -236,13 +236,13 @@ public class TCPConnection extends Connection {
 
 					);
 
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"buffer position now is " + recvbuf_.position());
 
 				process_data();
 
 				if (recvbuf_.remaining() == 0) {
-					Logger.getInstance().error(TAG,
+					BPF.getInstance().getBPFLogger().error(TAG,
 							"after process_data left no space in recvbuf!!");
 
 				}
@@ -250,7 +250,7 @@ public class TCPConnection extends Connection {
 			}
 
 		} catch (IOException e) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					"IOException, in reading data from the read_stream_:"
 							+ e.getMessage());
@@ -292,13 +292,13 @@ public class TCPConnection extends Connection {
 		@Override
 		protected void timeout(Date now) {
 
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.error(TAG,
 							"write socket timeout timer fire, closing the write_channel");
 			try {
 				write_channel_.close();
 			} catch (IOException e) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						"IOException write socket timeout timer close write channel :"
 								+ e.getMessage());
@@ -315,7 +315,7 @@ public class TCPConnection extends Connection {
 		sendbuf_.rewind();
 		try {
 
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Going to write " + last_position + " bytes to the stream");
 			java.nio.ByteBuffer temp = java.nio.ByteBuffer
 					.allocate(last_position);
@@ -324,7 +324,7 @@ public class TCPConnection extends Connection {
 			WriteSocketTimeoutTimer write_socket_timeout_timer = new WriteSocketTimeoutTimer(
 					write_channel_);
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"scheduling write_timeout_task in " + SOCKET_TIMEOUT
 							+ " seconds");
@@ -333,7 +333,7 @@ public class TCPConnection extends Connection {
 				write_socket_timeout_timer.schedule_in(SOCKET_TIMEOUT);
 
 			} catch (IllegalStateException e) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 						"write socket timer stop when it shouldn't be stopped");
 			}
 			write_channel_.write(temp);
@@ -354,13 +354,13 @@ public class TCPConnection extends Connection {
 								+ last_position);
 
 		} catch (AsynchronousCloseException e) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"another thread close the channel because of the timeout");
 			break_contact(reason_t.CL_ERROR);
 			sendbuf_.position(last_position);
 		} catch (IOException e) {
 
-			Logger.getInstance().error(TAG, "writting broken pipe");
+			BPF.getInstance().getBPFLogger().error(TAG, "writting broken pipe");
 			break_contact(reason_t.CL_ERROR);
 			sendbuf_.position(last_position);
 		}

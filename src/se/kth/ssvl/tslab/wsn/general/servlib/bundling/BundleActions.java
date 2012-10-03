@@ -29,7 +29,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNotHoldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 
 /**
  * Helper class for Bundle daemon and router to execute particular actions
@@ -58,10 +59,12 @@ public class BundleActions {
 	public void open_link(Link link) {
 		assert (link != null) : "BundleAction:open_link, link is null";
 		if (link.isdeleted()) {
-			Logger.getInstance().debug(
-					TAG,
-					String.format("BundleActions::open_link: "
-							+ "cannot open deleted link %s", link.name()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.debug(TAG,
+							String.format("BundleActions::open_link: "
+									+ "cannot open deleted link %s",
+									link.name()));
 			return;
 		}
 
@@ -69,26 +72,31 @@ public class BundleActions {
 		try {
 
 			if (link.isopen() || link.contact() != null) {
-				Logger.getInstance().error(
-						TAG,
-						String.format("not opening link %s since already open",
-								link.name()));
+				BPF.getInstance()
+						.getBPFLogger()
+						.error(TAG,
+								String.format(
+										"not opening link %s since already open",
+										link.name()));
 				return;
 			}
 
 			if (!link.isNotUnavailable()) {
-				Logger.getInstance().error(
-						TAG,
-						String.format(
-								"not opening link %s since not available",
-								link.name()));
+				BPF.getInstance()
+						.getBPFLogger()
+						.error(TAG,
+								String.format(
+										"not opening link %s since not available",
+										link.name()));
 				return;
 			}
 
-			Logger.getInstance().debug(
-					TAG,
-					String.format("BundleActions::open_link: opening link %s",
-							link.name()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.debug(TAG,
+							String.format(
+									"BundleActions::open_link: opening link %s",
+									link.name()));
 
 			link.open();
 		} finally {
@@ -104,17 +112,20 @@ public class BundleActions {
 		assert (link != null) : "BundleActions:close_link link is null";
 
 		if (!link.isopen() && !link.isopening()) {
-			Logger.getInstance().error(
-					TAG,
-					String.format("not closing link %s since not open",
-							link.name()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							String.format("not closing link %s since not open",
+									link.name()));
 			return;
 		}
 
-		Logger.getInstance().debug(
-				TAG,
-				String.format("BundleActions::close_link: closing link %s",
-						link.name()));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format(
+								"BundleActions::close_link: closing link %s",
+								link.name()));
 
 		link.close();
 		assert (link.contact() == null) : "BundleActions:close_link contact is null";
@@ -141,29 +152,35 @@ public class BundleActions {
 
 		assert (link != null) : "BundleDaemon:queue_bundle, link is null";
 		if (link.isdeleted()) {
-			Logger.getInstance().warning(
-					TAG,
-					String.format("BundleActions::queue_bundle: "
-							+ "failed to send bundle id %d on link %s",
-							bundle.bundleid(), link.name()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.warning(
+							TAG,
+							String.format("BundleActions::queue_bundle: "
+									+ "failed to send bundle id %d on link %s",
+									bundle.bundleid(), link.name()));
 			return false;
 		}
 
-		Logger.getInstance()
+		BPF.getInstance()
+				.getBPFLogger()
 				.debug(TAG,
 						String.format(
 								"trying to find xmit blocks for bundle id:%d on link %s",
 								bundle.bundleid(), link.name()));
 
 		if (bundle.xmit_link_block_set().find_blocks(link) != null) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
 							String.format("BundleActions::queue_bundle: "
 									+ "link not ready to handle bundle (block vector already exists), "
 									+ "dropping send request"));
 			return false;
 		}
 
-		Logger.getInstance()
+		BPF.getInstance()
+				.getBPFLogger()
 				.debug(TAG,
 						String.format(
 								"trying to create xmit blocks for bundle id:%d on link %s",
@@ -171,25 +188,31 @@ public class BundleActions {
 		BlockInfoVec blocks = BundleProtocol.prepare_blocks(bundle, link);
 		int total_len = BundleProtocol.generate_blocks(bundle, blocks, link);
 
-		Logger.getInstance().debug(
-				TAG,
-				String.format(
-						"queue bundle id %d on %s link %s (%s) (total len %d)",
-						bundle.bundleid(), link.type_str(), link.name(),
-						link.nexthop(), total_len));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format(
+								"queue bundle id %d on %s link %s (%s) (total len %d)",
+								bundle.bundleid(), link.type_str(),
+								link.name(), link.nexthop(), total_len));
 
 		ForwardingInfo.state_t state = bundle.fwdlog().get_latest_entry(link);
 		if (state == ForwardingInfo.state_t.QUEUED) {
-			Logger.getInstance().error(
-					TAG,
-					String.format("queue bundle id %d on %s link %s (%s): "
-							+ "already queued or in flight", bundle.bundleid(),
-							link.type_str(), link.name(), link.nexthop()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							String.format(
+									"queue bundle id %d on %s link %s (%s): "
+											+ "already queued or in flight",
+									bundle.bundleid(), link.type_str(),
+									link.name(), link.nexthop()));
 			return false;
 		}
 
 		if ((link.params().mtu() != 0) && (total_len > link.params().mtu())) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
 							String.format(
 									"queue bundle id %d on %s link %s (%s): length %d > mtu %d, generating fragmentations",
 									bundle.bundleid(), link.type_str(),
@@ -218,7 +241,9 @@ public class BundleActions {
 
 					return false;
 				} catch (BundleListLockNotHoldByCurrentThread e) {
-					Logger.getInstance().error(TAG,
+					BPF.getInstance()
+							.getBPFLogger()
+							.error(TAG,
 									"Bundle Action queue bundle, fragments bundle list not locked");
 				} finally {
 					fragment_list.get_lock().unlock();
@@ -231,7 +256,9 @@ public class BundleActions {
 		// "Make sure that the bundle isn't unexpectedly already on the
 		// queue or in flight on the link" [DTN2]
 		if (link.queue().contains(bundle)) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
 							String.format(
 									"queue bundle id %d on link %s: already queued on link",
 									bundle.bundleid(), link.name()));
@@ -239,34 +266,42 @@ public class BundleActions {
 		}
 
 		if (link.inflight().contains(bundle)) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
 							String.format(
 									"queue bundle id %d  on link %s: already in flight on link",
 									bundle.bundleid(), link.name()));
 			return false;
 		}
 
-		Logger.getInstance().debug(
-				TAG,
-				String.format("adding QUEUED forward log entry for %s link %s "
-						+ "with nexthop %s and remote eid %s to bundle id %d",
-						link.type_str(), link.name(), link.nexthop(), link
-								.remote_eid().toString(), bundle.bundleid()));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format(
+								"adding QUEUED forward log entry for %s link %s "
+										+ "with nexthop %s and remote eid %s to bundle id %d",
+								link.type_str(), link.name(), link.nexthop(),
+								link.remote_eid().toString(), bundle.bundleid()));
 
 		bundle.fwdlog().add_entry(link, action, ForwardingInfo.state_t.QUEUED,
 				custody_timer_spec);
 
-		Logger.getInstance().debug(
-				TAG,
-				String.format(
-						"adding bundle id %d to link %s's queue (length %d)",
-						bundle.bundleid(), link.name(), link.bundles_queued()));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format(
+								"adding bundle id %d to link %s's queue (length %d)",
+								bundle.bundleid(), link.name(),
+								link.bundles_queued()));
 
 		if (!link.add_to_queue(bundle, total_len)) {
-			Logger.getInstance().error(
-					TAG,
-					String.format("error adding bundle id %d to link %s queue",
-							bundle.bundleid(), link.name()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							String.format(
+									"error adding bundle id %d to link %s queue",
+									bundle.bundleid(), link.name()));
 			return false;
 		}
 
@@ -288,23 +323,27 @@ public class BundleActions {
 	 */
 	public void cancel_bundle(Bundle bundle, final Link link) {
 
-		Logger.getInstance().debug(TAG, "cancel bundle, bundle is " + bundle);
+		BPF.getInstance().getBPFLogger()
+				.debug(TAG, "cancel bundle, bundle is " + bundle);
 
 		if (bundle == null)
-			Logger.getInstance().error(TAG,
-					"bundle receive in bundle action is null");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "bundle receive in bundle action is null");
 
 		assert (link != null);
 		if (link.isdeleted()) {
-			Logger.getInstance().debug(
-					TAG,
-					String.format("BundleActions::cancel_bundle: "
-							+ "cannot cancel bundle on deleted link %s",
-							link.name()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.debug(TAG,
+							String.format(
+									"BundleActions::cancel_bundle: "
+											+ "cannot cancel bundle on deleted link %s",
+									link.name()));
 			return;
 		}
 
-		Logger.getInstance()
+		BPF.getInstance()
+				.getBPFLogger()
 				.debug(TAG,
 						String.format(
 								"BundleActions::cancel_bundle: cancelling bundle id %d on link %s",
@@ -321,7 +360,8 @@ public class BundleActions {
 
 		BlockInfoVec blocks = bundle.xmit_link_block_set().find_blocks(link);
 		if (blocks == null) {
-			Logger.getInstance()
+			BPF.getInstance()
+					.getBPFLogger()
 					.warning(
 							TAG,
 							String.format(
@@ -340,7 +380,8 @@ public class BundleActions {
 		} else if (link.inflight().contains(bundle)) {
 			link.clayer().cancel_bundle(link, bundle);
 		} else {
-			Logger.getInstance()
+			BPF.getInstance()
+					.getBPFLogger()
 					.warning(
 							TAG,
 							String.format(
@@ -365,8 +406,8 @@ public class BundleActions {
 				store_update(bundle);
 			}
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			Logger.getInstance().error(TAG,
-					"update_bundles lock not hold for list");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "update_bundles lock not hold for list");
 		} finally {
 			list.get_lock().unlock();
 		}
@@ -384,8 +425,10 @@ public class BundleActions {
 	 *            the new bundle
 	 */
 	public void inject_bundle(Bundle bundle) {
-		Logger.getInstance().debug(TAG,
-				String.format("inject bundle id %d", bundle.bundleid()));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format("inject bundle id %d", bundle.bundleid()));
 		BundleDaemon.getInstance().pending_bundles().push_back(bundle);
 		store_add(bundle);
 	}
@@ -405,19 +448,21 @@ public class BundleActions {
 	public boolean delete_bundle(Bundle bundle,
 			BundleProtocol.status_report_reason_t reason, boolean log_on_error) {
 
-		Logger.getInstance().debug(
-				TAG,
-				String.format(
-						"attempting to delete bundle id %d from data store",
-						bundle.bundleid()));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format(
+								"attempting to delete bundle id %d from data store",
+								bundle.bundleid()));
 		boolean del = BundleDaemon.getInstance().delete_bundle(bundle, reason);
 
 		if (log_on_error && !del) {
-			Logger.getInstance().error(
-					TAG,
-					String.format(
-							"Failed to delete bundle id %d from data store",
-							bundle));
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							String.format(
+									"Failed to delete bundle id %d from data store",
+									bundle));
 		}
 		return del;
 	}
@@ -426,16 +471,19 @@ public class BundleActions {
 	 * "Add the given bundle to the data store." [DTN2]
 	 */
 	protected void store_add(Bundle bundle) {
-		Logger.getInstance().debug(
-				TAG,
-				String.format("adding bundle %d to data store",
-						bundle.bundleid()));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format("adding bundle %d to data store",
+								bundle.bundleid()));
 		boolean added = BundleStore.getInstance().add(bundle);
 		if (!added) {
-			Logger.getInstance().error(
-					TAG,
-					String.format("error adding bundle %d to data store!!",
-							bundle.bundleid()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							String.format(
+									"error adding bundle %d to data store!!",
+									bundle.bundleid()));
 		}
 	}
 
@@ -444,16 +492,19 @@ public class BundleActions {
 	 * or header fields have been modified." [DTN2]
 	 */
 	protected void store_update(Bundle bundle) {
-		Logger.getInstance().debug(
-				TAG,
-				String.format("updating bundle %d in data store",
-						bundle.bundleid()));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format("updating bundle %d in data store",
+								bundle.bundleid()));
 		boolean updated = BundleStore.getInstance().update(bundle);
 		if (!updated) {
-			Logger.getInstance().error(
-					TAG,
-					String.format("error updating bundle %d in data store!!",
-							bundle.bundleid()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							String.format(
+									"error updating bundle %d in data store!!",
+									bundle.bundleid()));
 		}
 	}
 
@@ -461,16 +512,19 @@ public class BundleActions {
 	 * "Remove the given bundle from the data store." [DTN2]
 	 */
 	protected void store_del(Bundle bundle) {
-		Logger.getInstance().debug(
-				TAG,
-				String.format("removing bundle %d from data store",
-						bundle.bundleid()));
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						String.format("removing bundle %d from data store",
+								bundle.bundleid()));
 		boolean removed = BundleStore.getInstance().del(bundle);
 		if (!removed) {
-			Logger.getInstance().error(
-					TAG,
-					String.format("error removing bundle %d from data store!!",
-							bundle.bundleid()));
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							String.format(
+									"error removing bundle %d from data store!!",
+									bundle.bundleid()));
 		}
 	}
 

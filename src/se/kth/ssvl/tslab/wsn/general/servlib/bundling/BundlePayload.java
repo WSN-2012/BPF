@@ -39,7 +39,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class is created separately from DTN Bundle for supporting different
@@ -167,7 +167,7 @@ public class BundlePayload implements Serializable {
 
 			return true;
 		} catch (IOException e) {
-			Logger.getInstance().error(TAG, "migrate IO Exception");
+			BPF.getInstance().getBPFLogger().error(TAG, "migrate IO Exception");
 		} catch (BPFException e) {
 			e.printStackTrace();
 		}
@@ -205,11 +205,11 @@ public class BundlePayload implements Serializable {
 			case NODATA:
 			}
 		} catch (FileNotFoundException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		} catch (BundlePayloadWrongTypeException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		} catch (IOException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		} finally {
 			lock_.unlock();
 		}
@@ -297,7 +297,7 @@ public class BundlePayload implements Serializable {
 			int dst_offset) {
 		lock_.lock();
 		try {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("write_data: length_=%d src_offset=%d "
 							+ "dst_offset=%d len %d", length_, src_offset,
@@ -364,17 +364,17 @@ public class BundlePayload implements Serializable {
 			} while (left > 0);
 		} catch (FileNotFoundException e) {
 
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (IOException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} finally {
 			try {
 				out.close();
 
 			} catch (IOException e) {
-				Logger.getInstance().error(TAG, e.getMessage());
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			}
 
 			lock_.unlock();
@@ -414,20 +414,20 @@ public class BundlePayload implements Serializable {
 
 		} catch (FileNotFoundException e) {
 
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (BundlePayloadWrongTypeException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (IOException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} finally {
 			try {
 				in.close();
 
 			} catch (IOException e) {
-				Logger.getInstance().error(TAG, e.getMessage());
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 				lock_.unlock();
 				return false;
 			}
@@ -468,13 +468,13 @@ public class BundlePayload implements Serializable {
 				throw new BundlePayloadWrongTypeException();
 			}
 		} catch (FileNotFoundException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (BundlePayloadWrongTypeException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (IOException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} finally {
 			lock_.unlock();
@@ -524,13 +524,13 @@ public class BundlePayload implements Serializable {
 			}
 			return true;
 		} catch (FileNotFoundException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (BundlePayloadWrongTypeException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} catch (IOException e) {
-			Logger.getInstance().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		} finally {
 			buf.reset();
@@ -602,9 +602,9 @@ public class BundlePayload implements Serializable {
 				unpin_file_handle(file_handle_);
 			} catch (BundlePayloadWrongTypeException e) {
 
-				Logger.getInstance().error(TAG, e.getMessage());
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			} catch (IOException e) {
-				Logger.getInstance().error(TAG, e.getMessage());
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			} finally {
 				bp.reset();
 			}

@@ -29,7 +29,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class is the implementation of Storage. This class directly interact
@@ -66,17 +66,17 @@ public class StorageImplementation<Type> {
 	public boolean add_object(Type object, String filename) {
 		try {
 
-			Logger.getInstance().debug(TAG, "Going to open a file:" + filename);
+			BPF.getInstance().getBPFLogger().debug(TAG, "Going to open a file:" + filename);
 
 			File f = new File(dir_, filename);
 			if (!f.exists()) {
 				f.createNewFile();
 			}
 
-			Logger.getInstance().debug(TAG, "File Open:" + filename);
+			BPF.getInstance().getBPFLogger().debug(TAG, "File Open:" + filename);
 			OutputStream out = new FileOutputStream(f);// Context..openFileOutput("test.txt");
 
-			Logger.getInstance().debug(TAG, "Writing in file:" + filename);
+			BPF.getInstance().getBPFLogger().debug(TAG, "Writing in file:" + filename);
 			ObjectOutputStream objStream = new ObjectOutputStream(out);
 			objStream.writeObject(object);
 
@@ -86,11 +86,11 @@ public class StorageImplementation<Type> {
 			out.flush();
 			out.close();
 
-			Logger.getInstance().debug(TAG, "File Written" + filename);
+			BPF.getInstance().getBPFLogger().debug(TAG, "File Written" + filename);
 
 			return true;
 		} catch (Throwable t) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"Writing in file " + filename + ":" + t.toString());
 			return false;
 		}
@@ -120,10 +120,10 @@ public class StorageImplementation<Type> {
 				return object;
 			}
 		} catch (java.io.FileNotFoundException e) {
-			Logger.getInstance().debug(TAG, "Get Object:" + e.toString());
+			BPF.getInstance().getBPFLogger().debug(TAG, "Get Object:" + e.toString());
 			// that's OK, we probably haven't created it yet
 		} catch (Throwable t) {
-			Logger.getInstance().error(TAG, "Unable to read file");
+			BPF.getInstance().getBPFLogger().error(TAG, "Unable to read file");
 		}
 		return null;
 	}
@@ -145,7 +145,7 @@ public class StorageImplementation<Type> {
 				file.createNewFile();
 				return true;
 			} catch (IOException e) {
-				Logger.getInstance().error(TAG, e.toString());
+				BPF.getInstance().getBPFLogger().error(TAG, e.toString());
 			}
 		}
 
@@ -180,11 +180,11 @@ public class StorageImplementation<Type> {
 
 			if (f.exists()) {
 				f.delete();
-				Logger.getInstance().debug(TAG, "File deleted");
+				BPF.getInstance().getBPFLogger().debug(TAG, "File deleted");
 			}
 			return true;
 		} catch (Throwable t) {
-			Logger.getInstance().error(TAG, "Unable to delete file");
+			BPF.getInstance().getBPFLogger().error(TAG, "Unable to delete file");
 			return false;
 		}
 	}
@@ -209,7 +209,7 @@ public class StorageImplementation<Type> {
 			}
 			return true;
 		} catch (Throwable t) {
-			Logger.getInstance().error(TAG, "Unable to delete file");
+			BPF.getInstance().getBPFLogger().error(TAG, "Unable to delete file");
 			return false;
 		}
 	}
@@ -229,7 +229,7 @@ public class StorageImplementation<Type> {
 				return true;
 			}
 		} catch (Throwable t) {
-			Logger.getInstance().error(TAG, "There is no bundle");
+			BPF.getInstance().getBPFLogger().error(TAG, "There is no bundle");
 		}
 		return false;
 	}
@@ -248,18 +248,18 @@ public class StorageImplementation<Type> {
 			File dir = new File(path);
 			if (!dir.isDirectory()) {
 				if (dir.mkdirs()) {
-					Logger.getInstance().debug(TAG,
+					BPF.getInstance().getBPFLogger().debug(TAG,
 							"Dir Created:" + dir.getAbsolutePath());
 					return true;
 				}
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"Dir Not Created:" + dir.getAbsolutePath());
 				return false;
 			}
 			dir_ = dir;
 			return true;
 		} catch (Throwable t) {
-			Logger.getInstance().error(TAG, "Unable to Create DIR");
+			BPF.getInstance().getBPFLogger().error(TAG, "Unable to Create DIR");
 		}
 		return false;
 	}
@@ -276,10 +276,10 @@ public class StorageImplementation<Type> {
 
 		File dir = new File(path);
 		if (dir.exists()) {
-			Logger.getInstance().error(TAG, "Size Found");
+			BPF.getInstance().getBPFLogger().error(TAG, "Size Found");
 			return dir.length();
 		}
-		Logger.getInstance().error(TAG, "Size Not Found");
+		BPF.getInstance().getBPFLogger().error(TAG, "Size Not Found");
 		return 0;
 	}
 

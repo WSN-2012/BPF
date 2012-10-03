@@ -31,7 +31,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Set;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 
 /**
  * Class to represent DTN Bundle
@@ -1171,8 +1172,8 @@ public class Bundle implements Serializable {
 		source_ = new EndpointID();
 		xmit_link_block_set_ = new LinkBlockSet(lock_);
 
-		Logger.getInstance().debug(TAG,
-				String.format("Bundle::init bundle id %d", id));
+		BPF.getInstance().getBPFLogger()
+				.debug(TAG, String.format("Bundle::init bundle id %d", id));
 	}
 
 	/**

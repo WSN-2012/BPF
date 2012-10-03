@@ -44,7 +44,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetNeighbor.Pro
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetNeighbor.ProphetNeighborSendState;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This is a non-abstract version of TableBasedRouter.
@@ -204,12 +204,12 @@ public class ProphetBundleRouter extends TableBasedRouter {
 
 		// Prophet Control bundle
 		if (!bundle.payload().read_data(0, bundle.payload().length(), buf)) {
-			Logger.getInstance().error(TAG, "Erruor reading prophet bundle");
+			BPF.getInstance().getBPFLogger().error(TAG, "Erruor reading prophet bundle");
 			return;
 		}
 
-		// Logger.getInstance().debug(TAG, toString(buf.array()));
-		Logger.getInstance().debug(TAG,
+		// BPF.getInstance().getBPFLogger().debug(TAG, toString(buf.array()));
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Bundle with length " + bundle.payload().length());
 
 		ProphetBundle hdr = parseProphetBundle(buf);
@@ -217,7 +217,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 
 		String remote_eid = bundle.source().str().split("/prophet")[0];
 		if (remote_eid == null) {
-			Logger.getInstance().error("TAG",
+			BPF.getInstance().getBPFLogger().error("TAG",
 					"Bundle recv : remote_eid == null");
 			return;
 		}
@@ -234,7 +234,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 			neighbors.put(remote_eid, pn);
 		}
 		pn.recvTansactionId = hdr.trans_id;
-		Logger.getInstance().debug(TAG, hdr.toString());
+		BPF.getInstance().getBPFLogger().debug(TAG, hdr.toString());
 
 		/* First byte is type */
 		switch (hdr.type) {
@@ -257,7 +257,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 			handleBundleResponse(buf, pn, hdr);
 			break;
 		default:
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("Unknown Prophet control(%x) from %s",
 							hdr.type, pn.remote_eid()));
@@ -279,13 +279,13 @@ public class ProphetBundleRouter extends TableBasedRouter {
 
 	private void handleError(IByteBuffer buf, ProphetNeighbor controller,
 			ProphetBundle hdr) {
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Received ERROR from " + controller.remote_eid());
 	}
 
 	private void handleHello(IByteBuffer buf, ProphetNeighbor pn,
 			ProphetBundle hdr) {
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("Received HELLO(%s) from %s ",
 						hdr.hello.function.getCaption(), pn.remote_eid()));
@@ -320,7 +320,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 	}
 
 	private void handleRIBDictionary(ProphetNeighbor pn, ProphetBundle hdr) {
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Received RIBDictionary from " + pn.remote_eid());
 		notify("Received RIBDictionary",
 				String.format("From %s", pn.remote_eid()));
@@ -328,7 +328,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 	}
 
 	private void handleRIBInformationBase(ProphetNeighbor pn, ProphetBundle hdr) {
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Received RIBInformationBase from " + pn.remote_eid());
 		notify("Received RIBInformationBase",
 				String.format("From %s", pn.remote_eid()));
@@ -362,7 +362,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 			 * pn.P_() is P_(A-B) P is P_(B-C)
 			 */
 			p.update_transitivity(pn.P_(), P);
-			Logger.getInstance().info(TAG,
+			BPF.getInstance().getBPFLogger().info(TAG,
 					"transitivity updated " + p.P_() + " from " + p);
 
 			/* my propbability is less than this */
@@ -370,12 +370,12 @@ public class ProphetBundleRouter extends TableBasedRouter {
 				EndpointIDPattern nepnp = new EndpointIDPattern(neid + "/*");
 
 				route_table_.add_entry(new RouteEntry(nepnp, pneid));
-				Logger.getInstance().info(
+				BPF.getInstance().getBPFLogger().info(
 						TAG,
 						"Added route " + pn.remote_eid() + " - " + p.P_() + " "
 								+ neid + " - " + P);
 			} else {
-				Logger.getInstance().info(
+				BPF.getInstance().getBPFLogger().info(
 						TAG,
 						"Skipped route " + pn.remote_eid() + " - " + p.P_()
 								+ " " + neid + " - " + P);
@@ -391,7 +391,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 		IByteBuffer buf = createProphetBundle(pn);
 		createBundleOfferTLV(buf, pn);
 		sendMsg(adjustLenAndReturnArray(buf), pn);
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				String.format("send Bundle offer %s", pn.remote_eid()));
 		notify(String.format("send Bundle offer"),
 				String.format("To %s", pn.remote_eid()));
@@ -403,7 +403,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 
 	private void handleBundleOffer(IByteBuffer buf, ProphetNeighbor pn,
 			ProphetBundle hdr) {
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Received BundleOffer from " + pn.remote_eid());
 		pn.bundleOffer = hdr.bundleOffer;
 		sendBundleResponse(pn);
@@ -418,7 +418,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 		BundleResponseTLV.createTLV(buf, pn.bundleOffer.entries);
 
 		sendMsg(adjustLenAndReturnArray(buf), pn);
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				String.format("send Bundle Response %s", pn.remote_eid()));
 		notify(String.format("send Bundle Response"),
 				String.format("To %s", pn.remote_eid()));
@@ -570,7 +570,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 	 */
 	private void handleBundleResponse(IByteBuffer buf, ProphetNeighbor pn,
 			ProphetBundle hdr) {
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Received Bundle Response from " + pn.remote_eid());
 		reroute_all_bundles();
 	}
@@ -581,7 +581,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 		IByteBuffer buf = createProphetBundle(pn);
 		ErrorTLV.createTLV(buf, new byte[2]);
 		sendMsg(adjustLenAndReturnArray(buf), pn);
-		Logger.getInstance().debug(TAG, "send Error " + pn.remote_eid());
+		BPF.getInstance().getBPFLogger().debug(TAG, "send Error " + pn.remote_eid());
 	}
 
 	/* send the hello */
@@ -590,7 +590,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 		HelloTLV.createTLV(buf, helloFun);
 
 		sendMsg(adjustLenAndReturnArray(buf), pn);
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("send Hello(%s) %s", helloFun.getCaption(),
 						pn.remote_eid()));
@@ -614,7 +614,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 		bundle.set_priority(priority_values_t.COS_EXPEDITED);
 		bundle.payload().set_data(payload);
 
-		Logger.getInstance().debug(TAG, toString(payload));
+		BPF.getInstance().getBPFLogger().debug(TAG, toString(payload));
 		// BundleDaemon.getInstance().post_at_head(new
 		// BundleReceivedEvent(bundle, event_source_t.EVENTSRC_ADMIN));
 		route_bundle(bundle);
@@ -658,7 +658,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 		IByteBuffer buf = createProphetBundle(pn);
 		RIBDictionaryTLV.createTLV(buf, neighbors);
 		sendMsg(adjustLenAndReturnArray(buf), pn);
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG, "Send RIBDictionary " + pn.remote_eid());
 		notify("send RIBDictionary", String.format("To %s", pn.remote_eid()));
 	}
@@ -668,7 +668,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 		IByteBuffer buf = createProphetBundle(pn);
 		ribInfo.createTLV(buf, neighbors);
 		sendMsg(adjustLenAndReturnArray(buf), pn);
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"send RIBInformation " + pn.remote_eid());
 		notify("send RIBInformationBase",
 				String.format("To %s", pn.remote_eid()));
@@ -687,7 +687,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 	// super.handle_bundle_transmitted(event);
 	//
 	// if (eid.endsWith("/prophet")) {
-	// Logger.getInstance().info(TAG, "########Prophet Bundle Transmitted");
+	// BPF.getInstance().getBPFLogger().info(TAG, "########Prophet Bundle Transmitted");
 	// ProphetNeighbor pn = neighbors.get(eid.split("/prophet")[0]);
 	// sendNext(pn);
 	// }
@@ -702,14 +702,14 @@ public class ProphetBundleRouter extends TableBasedRouter {
 		String remote_eid = event.contact().link().remote_eid().str();
 
 		if (remote_eid.equals(localEid())) {
-			Logger.getInstance().debug(TAG, "Link ID is equal self");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Link ID is equal self");
 			return;
 		}
 		// Add new contact.
 		if ((pn = neighbors.get(remote_eid)) == null) {
 			pn = new ProphetNeighbor(remote_eid);
 			neighbors.put(pn.remote_eid(), pn);
-			Logger.getInstance().debug(TAG, "New neighbor " + pn.remote_eid());
+			BPF.getInstance().getBPFLogger().debug(TAG, "New neighbor " + pn.remote_eid());
 		}
 
 		sendNext(pn);
@@ -758,7 +758,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 			buf.putShort((short) 0);
 
 			int offerCount = 0;
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"No of pending bundles " + pending_bundles_.size());
 			while (bundles.hasNext()) {
 				Bundle b = bundles.next();
@@ -767,7 +767,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 					continue;
 				}
 
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						b.bundleid() + " is offered to " + b.dest());
 				// ID
 				SDNV.encode(b.bundleid(), buf, 2);

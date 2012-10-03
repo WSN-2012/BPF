@@ -28,7 +28,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class is implemented as Singleton to store Registrations in memory.
@@ -106,7 +106,7 @@ public class RegistrationTable {
 			}
 		}
 
-		Logger.getInstance().debug(TAG, "Clean up API Temp Folder Success");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Clean up API Temp Folder Success");
 
 	}
 
@@ -135,20 +135,20 @@ public class RegistrationTable {
 			Registration api_reg = reg;
 
 			if (api_reg == null) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 								String.format(
 										"non-api registration %s passed to registration store",
 										reg.regid()));
 				return false;
 			}
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("adding registration %s/%s", reg.regid(), reg
 							.endpoint().str()));
 
 			if (!RegistrationStore.getInstance().add(api_reg)) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 								String.format(
 										"error adding registration %d/%s: error in persistent store",
 										reg.regid(), reg.endpoint().str()));
@@ -210,14 +210,14 @@ public class RegistrationTable {
 		lock_.lock();
 
 		try {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					String.format("removing registration %s", regid));
 
 			reg = find(regid);
 			reg.free_payload();
 
 			if (reg == null) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 								String.format(
 										"error removing registration %s: no matching registration",
 										regid));
@@ -226,7 +226,7 @@ public class RegistrationTable {
 
 			if (regid > Registration.MAX_RESERVED_REGID) {
 				if (!RegistrationStore.getInstance().del(reg)) {
-					Logger.getInstance()
+					BPF.getInstance().getBPFLogger()
 							.debug(TAG,
 									String.format(
 											"error removing registration %s: error in persistent store",
@@ -254,7 +254,7 @@ public class RegistrationTable {
 		lock_.lock();
 
 		try {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("updating registration %s/%s", reg.regid(),
 							reg.endpoint().str()));
@@ -262,7 +262,7 @@ public class RegistrationTable {
 			Registration api_reg = reg;
 
 			if (api_reg == null) {
-				Logger.getInstance()
+				BPF.getInstance().getBPFLogger()
 						.debug(TAG,
 								String.format(
 										"non-api registration %s passed to registration store",
@@ -271,7 +271,7 @@ public class RegistrationTable {
 			}
 
 			if (!RegistrationStore.getInstance().update(api_reg)) {
-				Logger.getInstance().error(TAG,
+				BPF.getInstance().getBPFLogger().error(TAG,
 								String.format(
 										"error updating registration %s/%s: error in persistent store",
 										reg.regid(), reg.endpoint().str()));
@@ -304,7 +304,7 @@ public class RegistrationTable {
 		try {
 			Registration reg;
 
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					String.format("get_matching %s", eid.str()));
 
 			for (int i = 0; i < reglist_.size(); i++) {
@@ -316,7 +316,7 @@ public class RegistrationTable {
 				}
 			}
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("get_matching %s: returned %d matches",
 							eid.str(), count));
@@ -360,7 +360,7 @@ public class RegistrationTable {
 
 			String dump = String.format("id: %s, eid: %s", reg.regid(), reg
 					.endpoint().str());
-			Logger.getInstance().debug(TAG, dump);
+			BPF.getInstance().getBPFLogger().debug(TAG, dump);
 			buf.append(dump);
 		}
 	}
@@ -386,8 +386,8 @@ public class RegistrationTable {
 		for (int i = 0; i < reglist_.size(); i++) {
 			reg = reglist_.get(i);
 
-			Logger.getInstance().debug("TAG", ": " + reglist_.size());
-			Logger.getInstance().debug("TAG", "id: " + reg.regid());
+			BPF.getInstance().getBPFLogger().debug("TAG", ": " + reglist_.size());
+			BPF.getInstance().getBPFLogger().debug("TAG", "id: " + reg.regid());
 
 			if (reg.regid() == regid) {
 				return reg;

@@ -25,7 +25,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.admin_recor
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to read and write custody signal in the Bundle payload.
@@ -210,7 +210,7 @@ public class CustodySignal {
 
 		bundle.source().assign(source_eid);
 		if (orig_bundle.custodian().equals(EndpointID.NULL_EID())) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 							String.format(
 									"create_custody_signal(for bundle id %d): "
 											+ "custody signal cannot be generated due to custodian is  null eid",

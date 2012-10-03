@@ -7,7 +7,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 public class ProphetRegistration extends Registration {
 
@@ -27,7 +27,7 @@ public class ProphetRegistration extends Registration {
 
 	@Override
 	public void deliver_bundle(Bundle bundle) {
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Prophet bundle from " + bundle.source());
 		router_.deliver_bundle(bundle);
 		BundleDaemon.getInstance().post_at_head(

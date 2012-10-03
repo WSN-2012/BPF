@@ -28,7 +28,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.CustodyTimeoutEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * A timer for retransmitting the bundle in custody of this node.
@@ -60,7 +60,7 @@ public class CustodyTimer extends VirtualTimerTask implements Serializable {
 		int delay_from_now = (int) (TimeHelper.seconds_from_ref(xmit_calendar)
 				- TimeHelper.seconds_from_ref(now_calendar) + delay);
 
-		Logger.getInstance().info(
+		BPF.getInstance().getBPFLogger().info(
 				TAG,
 				String.format("scheduling custody timer: xmit_time %s, "
 						+ "delay from xmit_time %d secs, "
@@ -120,7 +120,7 @@ public class CustodyTimer extends VirtualTimerTask implements Serializable {
 
 	@Override
 	protected void timeout(Date now) {
-		Logger.getInstance().info(TAG, "CustodyTimer::timeout");
+		BPF.getInstance().getBPFLogger().info(TAG, "CustodyTimer::timeout");
 		BundleDaemon.getInstance()
 				.post(new CustodyTimeoutEvent(bundle_, link_));
 	}

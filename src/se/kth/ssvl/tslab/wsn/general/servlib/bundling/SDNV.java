@@ -22,7 +22,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to handle parsing and formatting of self describing numeric values
@@ -169,7 +169,7 @@ public class SDNV {
 
 		do {
 			if (len == 0) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						"Buffer too short Current V: " + len + " : val_len:"
 								+ val_len);
@@ -200,7 +200,7 @@ public class SDNV {
 		 */
 		if ((val_len > MAX_LENGTH) || // ToDo
 				((val_len == MAX_LENGTH) && (start.get() != 0x81))) {
-			Logger.getInstance().error("SDNV", "overflow value in sdnv!!!");
+			BPF.getInstance().getBPFLogger().error("SDNV", "overflow value in sdnv!!!");
 			return -1;
 		}
 

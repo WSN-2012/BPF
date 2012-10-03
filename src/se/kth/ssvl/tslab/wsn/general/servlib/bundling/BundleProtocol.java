@@ -29,7 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * The main class for converting a Java object from/to binary representation.
@@ -163,7 +163,7 @@ public class BundleProtocol {
 			}
 
 		} else {
-			Logger.getInstance().debug(TAG, "adding primary and payload block");
+			BPF.getInstance().getBPFLogger().debug(TAG, "adding primary and payload block");
 			BlockProcessor bp = find_processor(BundleProtocol.bundle_block_type_t.PRIMARY_BLOCK);
 			bp.prepare(bundle, xmit_blocks, null, link,
 					BlockInfo.list_owner_t.LIST_NONE);
@@ -213,7 +213,7 @@ public class BundleProtocol {
 
 			iter.owner().generate(bundle, blocks, iter, link, last);
 
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							String.format(
 									"generated block (owner %s type %s) "
@@ -324,7 +324,7 @@ public class BundleProtocol {
 		// "advance past any blocks that are skipped by the given offset."[DTN2]
 		while (offset >= current_block.full_length()) {
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"BundleProtocol::produce skipping block type %s "
@@ -343,7 +343,7 @@ public class BundleProtocol {
 			// but later on it will be the full content of the block
 			int remainder = current_block.full_length() - offset;
 			int tocopy = Math.min(len, remainder);
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"BundleProtocol::produce copying %d/%d bytes from "
@@ -391,7 +391,7 @@ public class BundleProtocol {
 
 		}
 
-		Logger.getInstance().debug(
+		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format("BundleProtocol::produce complete: "
 						+ "produced %d bytes, bundle id %d, status is  %s",
@@ -427,7 +427,7 @@ public class BundleProtocol {
 		// create a BlockInfo struct for the primary block without knowing
 		// the typecode or the length" [DTN2]
 		if (recv_blocks.isEmpty()) {
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					"consume: got first block... "
 							+ "creating primary block info");
@@ -437,7 +437,7 @@ public class BundleProtocol {
 
 		// "loop as long as there is data left to process" [DTN2]
 		while (len != 0) {
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					String.format("consume: %d bytes left to process", len));
 			BlockInfo info = recv_blocks.back();
 
@@ -452,7 +452,7 @@ public class BundleProtocol {
 						.get(bundle_block_type_byte);
 				data.reset();
 				info = recv_blocks.append_block(find_processor(type), null);
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						String.format("consume: previous block complete, "
 								+ "created new BlockInfo type %s", info.owner()
@@ -461,7 +461,7 @@ public class BundleProtocol {
 
 			// "now we know that the block isn't complete, so we tell it to
 			// consume a chunk of data" [DTN2]
-			Logger.getInstance()
+			BPF.getInstance().getBPFLogger()
 					.debug(TAG,
 							String.format(
 									"consume: block processor %s type %s incomplete, "
@@ -471,7 +471,7 @@ public class BundleProtocol {
 
 			int cc = info.owner().consume(bundle, info, data, len);
 			if (cc < 0) {
-				Logger.getInstance().error(
+				BPF.getInstance().getBPFLogger().error(
 						TAG,
 						String.format(
 								"consume: protocol error handling block %s",
@@ -485,7 +485,7 @@ public class BundleProtocol {
 			len -= cc;
 			data.position(data.position() + cc);
 
-			Logger.getInstance().debug(
+			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format(
 							"consume: consumed %d bytes of block type %s (%s)",
@@ -505,7 +505,7 @@ public class BundleProtocol {
 			}
 		}
 
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG,
 						String.format(
 								"bundle id %d consume completed, %d/%d bytes consumed %s",
@@ -580,7 +580,7 @@ public class BundleProtocol {
 		// "a bundle must include at least two blocks (primary and payload)"
 		// [DTN2]
 		if (recv_blocks.size() < 2) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"bundle fails to contain at least two blocks");
 			deletion_reason[0] = BundleProtocol.status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 			return false;
@@ -588,7 +588,7 @@ public class BundleProtocol {
 
 		// "the first block of a bundle must be a primary block" [DTN2]
 		if (recv_blocks.front().type() != BundleProtocol.bundle_block_type_t.PRIMARY_BLOCK) {
-			Logger.getInstance().error(TAG,
+			BPF.getInstance().getBPFLogger().error(TAG,
 					"bundle fails to contain a primary block");
 			deletion_reason[0] = BundleProtocol.status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 			return false;
@@ -605,17 +605,17 @@ public class BundleProtocol {
 				// "either the block is not the last one and something went
 				// badly wrong, or it is the last block present" [DTN2]
 				if (i != last_block_index) {
-					Logger.getInstance().error(TAG,
+					BPF.getInstance().getBPFLogger().error(TAG,
 							"bundle block too short for the preamble");
 					deletion_reason[0] = BundleProtocol.status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 					return false;
 				}
 				// "this is the last block, so drop it" [DTN2]
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"forgetting preamble-starved last block");
 				recv_blocks.remove(current_block);
 				if (recv_blocks.size() < 2) {
-					Logger.getInstance().error(TAG,
+					BPF.getInstance().getBPFLogger().error(TAG,
 							"bundle fails to contain at least two blocks");
 					deletion_reason[0] = BundleProtocol.status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 					return false;
@@ -643,12 +643,12 @@ public class BundleProtocol {
 			if (i == last_block_index) {
 				if (!current_block.last_block()) {
 					if (!bundle.fragmented_incoming()) {
-						Logger.getInstance().error(TAG,
+						BPF.getInstance().getBPFLogger().error(TAG,
 								"bundle's last block not flagged");
 						deletion_reason[0] = BundleProtocol.status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 						return false;
 					} else {
-						Logger.getInstance().debug(
+						BPF.getInstance().getBPFLogger().debug(
 								TAG,
 								"bundle's last block not flagged, but "
 										+ "it is a reactive fragment");
@@ -656,7 +656,7 @@ public class BundleProtocol {
 				}
 			} else {
 				if (current_block.last_block()) {
-					Logger.getInstance().error(TAG,
+					BPF.getInstance().getBPFLogger().error(TAG,
 							"bundle block incorrectly flagged as last");
 					deletion_reason[0] = BundleProtocol.status_report_reason_t.REASON_BLOCK_UNINTELLIGIBLE;
 					return false;
@@ -667,7 +667,7 @@ public class BundleProtocol {
 
 		// "a bundle must contain one, and only one, primary block" [DTN2]
 		if (primary_blocks != 1) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("bundle contains %d primary blocks",
 							primary_blocks));
@@ -677,7 +677,7 @@ public class BundleProtocol {
 
 		// "a bundle must not contain more than one payload block" [DTN2]
 		if (payload_blocks > 1) {
-			Logger.getInstance().error(
+			BPF.getInstance().getBPFLogger().error(
 					TAG,
 					String.format("bundle contains %d payload blocks",
 							payload_blocks));

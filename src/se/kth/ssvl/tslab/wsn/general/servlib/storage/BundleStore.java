@@ -28,12 +28,11 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundlePayload;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.StorageSetting.storage_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing;
 import se.kth.ssvl.tslab.wsn.general.systemlib.storage.StorageIterator;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class is implemented as Singleton to store bundles. This class generates
@@ -93,30 +92,23 @@ public class BundleStore {
 	 * @return returns true on success
 	 */
 
-	public boolean init(Context context, DTNConfiguration config) {
+	public boolean init(DTNConfiguration config) {
 
 		config_ = config;
 
-		Logger.getInstance().debug(TAG, "Going to init");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Going to init");
 
 		if (!init_) {
-			impt_sqlite_ = new SQLiteImplementation(context,
-					Table_CREATE_BUNDLES);
-			impt_storage_ = new StorageImplementation<Bundle>(context);
+			impt_sqlite_ = new SQLiteImplementation(Table_CREATE_BUNDLES);
+			impt_storage_ = new StorageImplementation<Bundle>();
 			init_ = true;
 			saved_bundles_ = new HashMap<Integer, Long>();
 		}
 		String app_folder = "/" + config_.storage_setting().storage_path();
 
-		Logger.getInstance().debug(TAG, "Current Path: " + path_);
-		if (config.storage_setting().storage_type() == storage_type_t.PHONE) {
-			path_ = context.getFilesDir().getAbsolutePath().concat(app_folder)
-					.concat("/storage");
-		} else {
-			path_ = Environment.getExternalStorageDirectory().getAbsolutePath()
-					.concat(app_folder).concat("/storage");
-		}
-		Logger.getInstance().debug(TAG, "Current Path: " + path_);
+		path_ = app_folder.concat("/storage");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Current Path: " + path_);
+		
 		impt_storage_.create_dir(path_);
 
 		String condition = " type = " + location_t.DISK.getCode();
@@ -124,7 +116,7 @@ public class BundleStore {
 		field[0] = "count(id)";
 		bundle_count_ = impt_sqlite_.get_count(table, condition, field);
 
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG, "Total Valid Bundles: " + bundle_count_);
 
 		return true;
@@ -154,7 +146,7 @@ public class BundleStore {
 		try {
 
 			if (bundle.payload().location() == BundlePayload.location_t.DISK) {
-				Logger.getInstance().debug(
+				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						"Going to add bundle in database with eids"
 								+ bundle.source().uri());
@@ -191,7 +183,7 @@ public class BundleStore {
 				}
 			}
 		} catch (Exception e) {
-			Logger.getInstance().error(TAG, e.toString());
+			BPF.getInstance().getBPFLogger().error(TAG, e.toString());
 			return false;
 		}
 		return false;
@@ -209,12 +201,12 @@ public class BundleStore {
 
 		try {
 			String filename = bundleFileName + bundleid;
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Going to get bundle in database : " + bundleid);
 			Bundle bundle = impt_storage_.get_object(filename);
 			return bundle;
 		} catch (Exception e) {
-			Logger.getInstance().error(TAG, e.toString());
+			BPF.getInstance().getBPFLogger().error(TAG, e.toString());
 		}
 		return null;
 	}
@@ -239,7 +231,7 @@ public class BundleStore {
 				&& bundle.payload().location() == BundlePayload.location_t.DISK) {
 
 			int bundleid = bundle.bundleid();
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Going to update bundle in database : " + bundleid);
 			ContentValues values = new ContentValues();
 			values.put("type", bundle.payload().location().getCode());
@@ -254,16 +246,16 @@ public class BundleStore {
 					bundle_size += bundle.durable_size();
 					saved_bundles_.put(bundle.bundleid(), bundle_size);
 					global_storage_.add_total_size(bundle_size);
-					Logger.getInstance().debug(
+					BPF.getInstance().getBPFLogger().debug(
 							TAG,
 							"Added size : " + bundle.durable_size() + " to "
 									+ global_storage_.get_total_size());
 				}
 				String bundle_filname = bundleFileName + bundle.durable_key();
 
-				Logger.getInstance().error(TAG, "Updating One by One");
+				BPF.getInstance().getBPFLogger().error(TAG, "Updating One by One");
 				// Testing functions
-				Logger.getInstance().error(TAG, "Updating Object");
+				BPF.getInstance().getBPFLogger().error(TAG, "Updating Object");
 				boolean result = impt_storage_.add_object(bundle,
 						bundle_filname);
 
@@ -284,7 +276,7 @@ public class BundleStore {
 	public boolean del(Bundle bundle) {
 		if (bundle.payload().location() == BundlePayload.location_t.DISK) {
 			String condition = "id = " + bundle.durable_key();
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Going to Del bundle in database: " + bundle.durable_key());
 			if (impt_sqlite_.delete_record(table, condition)) {
 				String filename = bundleFileName + bundle.durable_key();
@@ -294,7 +286,7 @@ public class BundleStore {
 					long bundle_size = saved_bundles_.get(bundle.bundleid());
 					saved_bundles_.remove(bundle.bundleid());
 					global_storage_.remove_total_size(bundle_size);
-					Logger.getInstance().debug(TAG,
+					BPF.getInstance().getBPFLogger().debug(TAG,
 							"deleteing size : " + bundle_size);
 				}
 				if (impt_storage_.delete_file(filename)
@@ -317,20 +309,20 @@ public class BundleStore {
 
 	public boolean del(int bundleid) {
 		String condition = "id = " + bundleid;
-		Logger.getInstance().debug(TAG,
+		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Going to Del bundle in database:" + bundleid);
 		if (impt_sqlite_.delete_record(table, condition)) {
 			if (saved_bundles_.containsKey(bundleid)) {
 				long bundle_size = saved_bundles_.get(bundleid);
 				saved_bundles_.remove(bundleid);
 				global_storage_.remove_total_size(bundle_size);
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"deleteing size : " + bundle_size);
 			}
 
 			String filename = bundleFileName + bundleid;
 			String filename_payload = payloadFileName + bundleid;
-			Logger.getInstance().debug(TAG,
+			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Going to Del bundle on disk:" + bundleid);
 			bundle_count_ -= 1;
 			impt_storage_.delete_file(filename);
@@ -351,7 +343,7 @@ public class BundleStore {
 		values.put("type", -1);
 
 		int result = impt_sqlite_.add(table, values);
-		Logger.getInstance().debug(TAG, "Returing new id:" + result);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Returing new id:" + result);
 		return result;
 	}
 
@@ -491,7 +483,7 @@ public class BundleStore {
 	 */
 
 	public boolean reset_storage() {
-		Logger.getInstance().debug(TAG, "Going to delete Files");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Going to delete Files");
 		if (!impt_storage_.delete_dir(path_)) {
 			return false;
 		}
@@ -556,16 +548,16 @@ public class BundleStore {
 			count++;
 			id = iterator.next();
 			b = get(id);
-			Logger.getInstance().debug(TAG, "Validating Bundles: " + id);
+			BPF.getInstance().getBPFLogger().debug(TAG, "Validating Bundles: " + id);
 			if (b == null) {
 				// delete id
-				Logger.getInstance().debug(TAG,
+				BPF.getInstance().getBPFLogger().debug(TAG,
 						"Validating Bundles deleting(bundle is null): " + id);
 				this.del(id);
 			} else {
 				if (b.source().valid()) {
 					if (b.dest().valid()) {
-						Logger.getInstance().debug(TAG,
+						BPF.getInstance().getBPFLogger().debug(TAG,
 								"Source and dest EIDs validated: " + id);
 						long bundle_size = impt_storage_
 								.get_file_size_with_name(bundleFileName
@@ -574,11 +566,11 @@ public class BundleStore {
 						saved_bundles_.put(b.bundleid(), bundle_size);
 						global_storage_.add_total_size(bundle_size);
 					} else {
-						Logger.getInstance().debug(TAG,
+						BPF.getInstance().getBPFLogger().debug(TAG,
 								"Only Source EID validated: " + id);
 					}
 				} else {
-					Logger.getInstance()
+					BPF.getInstance().getBPFLogger()
 							.debug(TAG, "EIDs not validated: " + id);
 				}
 
@@ -595,7 +587,7 @@ public class BundleStore {
 		field[0] = "count(id)";
 		bundle_count_ = impt_sqlite_.get_count(table, condition, field);
 
-		Logger.getInstance()
+		BPF.getInstance().getBPFLogger()
 				.debug(TAG, "Total Valid Bundles: " + bundle_count_);
 	}
 

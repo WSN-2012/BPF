@@ -24,8 +24,10 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Another shared-implementation convergence layer class for use with reliable,
@@ -271,7 +273,7 @@ public abstract class StreamConvergenceLayer extends ConnectionConvergenceLayer 
 		case SHUTDOWN_BUSY:
 			return "node is busy";
 		}
-		Logger.getInstance().debug(TAG, "Not Reached");
+		BPF.getInstance().getBPFLogger().debug(TAG, "Not Reached");
 		return "NOTREACHED";
 	}
 

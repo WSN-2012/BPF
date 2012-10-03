@@ -19,7 +19,7 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.config;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
@@ -56,7 +56,7 @@ public class RoutesSetting {
 	 *            the queuing_policy to set
 	 */
 	public void setQueuing_policy(String queuing_policy) {
-		Logger.getInstance().info("queuing", "-" + queuing_policy + "-");
+		BPF.getInstance().getBPFLogger().info("queuing", "-" + queuing_policy + "-");
 		this.queuing_policy = queuing_policy;
 	}
 

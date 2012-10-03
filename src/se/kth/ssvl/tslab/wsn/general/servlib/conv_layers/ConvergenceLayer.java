@@ -30,7 +30,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeVector;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * The abstract interface for a convergence layer
@@ -50,7 +50,7 @@ public abstract class ConvergenceLayer {
 	 */
 	public boolean set_cla_parameters(AttributeVector params) {
 
-		Logger.getInstance().debug(TAG, "set cla parameters");
+		BPF.getInstance().getBPFLogger().debug(TAG, "set cla parameters");
 		BundleDaemon Daemon = BundleDaemon.getInstance();
 		Daemon.post(new CLAParamsSetEvent(this, ""));
 		return true;
