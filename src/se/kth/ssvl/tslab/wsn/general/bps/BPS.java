@@ -60,14 +60,6 @@ public class BPS {
 	}
 	
 	/**
-	 * Gets the BPSFileManager object passed in from the BPSService.
-	 * @return The BPSFileManager object in the BPSService
-	 */
-	public BPSFileManager getBPSFileManager() {
-		return service.getBPSFileManager();
-	}
-	
-	/**
 	 * Gets the BPSLogger object passed in from the BPSService.
 	 * @return The BPSLogger object in the BPSService
 	 */
