@@ -8,12 +8,21 @@
 	<property name="classes.dir" value="${build.dir}/classes"/>
 	<property name="jar.dir" value="${build.dir}/jar"/>
 	<property name="config.dir" value="config" />
+	<property name="lib.dir" value="lib" />
 
 	<!-- Proprties FILES -->
 	<property name="jar.file" value="${jar.dir}/${ant.project.name}.jar" />
 	
 	<!-- Properties Manifest -->
 	<property name="main-class" value=""/> <!-- TODO: Add the main -->
+
+
+	<!-- ******************* FILESETS ************************ -->
+	<path id="lib-classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
 	
 	
 	<!-- ******************* TARGETS ************************ -->
@@ -30,7 +39,9 @@
 
     <target name="compile" depends="prepare">
         <javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}"
-			debug="on" debuglevel="lines,vars,source" />
+			debug="on" debuglevel="lines,vars,source">
+			<classpath refid="lib-classpath"/>
+		</javac>
     </target>
 
 	<target name="jar" depends="compile">
