@@ -25,8 +25,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
-import se.kth.ssvl.tslab.wsn.general.bps.BPS;
-import se.kth.ssvl.tslab.wsn.general.bps.BPSException;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Logger;
@@ -81,8 +81,8 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	 */
 	public static InetAddress getting_my_ip() {
 		try {
-			return BPS.getInstance().getBPSCommunication().getDeviceIP();
-		} catch (BPSException e) {
+			return BPF.getInstance().getBPFCommunication().getDeviceIP();
+		} catch (BPFException e) {
 			e.printStackTrace();
 		}
 		

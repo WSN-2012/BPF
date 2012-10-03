@@ -1,4 +1,4 @@
 WSN-General
 ===========
 
-A general BPS library to be used in any device.
+A general BPF library to be used in any device.

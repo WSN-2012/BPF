@@ -29,8 +29,8 @@ import java.util.ListIterator;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import se.kth.ssvl.tslab.wsn.general.bps.BPS;
-import se.kth.ssvl.tslab.wsn.general.bps.BPSException;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.custody_signal_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleAcceptRequest;
@@ -1622,7 +1622,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		switch (event.source()) {
 		case EVENTSRC_PEER:
 			stats_.received_bundles_++;
-			BPS.getInstance().getBPSNotificationReceiver().notify("DTN Bundle Received",
+			BPF.getInstance().getBPFNotificationReceiver().notify("DTN Bundle Received",
 					"From " + bundle.source().toString());
 
 			break;
@@ -2086,9 +2086,9 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		bundle.fwdlog().update(link, ForwardingInfo.state_t.TRANSMITTED);
 
 		try {
-			BPS.getInstance().getBPSNotificationReceiver().notify("DTN Bundle Transmitted",
+			BPF.getInstance().getBPFNotificationReceiver().notify("DTN Bundle Transmitted",
 					"To " + bundle.dest().toString());
-		} catch (BPSException e) {
+		} catch (BPFException e) {
 			e.printStackTrace();
 		}
 		

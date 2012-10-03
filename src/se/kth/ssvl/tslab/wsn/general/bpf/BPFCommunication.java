@@ -1,8 +1,8 @@
-package se.kth.ssvl.tslab.wsn.general.bps;
+package se.kth.ssvl.tslab.wsn.general.bpf;
 
 import java.net.InetAddress;
 
-public interface BPSCommunication {
+public interface BPFCommunication {
 
 	/**
 	 * This method should get the ip-address that the device has.

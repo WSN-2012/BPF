@@ -31,8 +31,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import se.kth.ssvl.tslab.wsn.general.bps.BPS;
-import se.kth.ssvl.tslab.wsn.general.bps.BPSException;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHeldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundlePayloadWrongTypeException;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
@@ -159,7 +159,7 @@ public class BundlePayload implements Serializable {
 	 */
 	public boolean move_data_to_api_temp_folder() {
 		try {
-			File file = BPS.getInstance().getBPSFileManager().createTempFile("bundle_payload_for_api_bid"
+			File file = BPF.getInstance().getBPFFileManager().createTempFile("bundle_payload_for_api_bid"
 					+ bundleid_, ".dat");
 			copy_to_file(file);
 
@@ -168,7 +168,7 @@ public class BundlePayload implements Serializable {
 			return true;
 		} catch (IOException e) {
 			Logger.getInstance().error(TAG, "migrate IO Exception");
-		} catch (BPSException e) {
+		} catch (BPFException e) {
 			e.printStackTrace();
 		}
 		return false;
