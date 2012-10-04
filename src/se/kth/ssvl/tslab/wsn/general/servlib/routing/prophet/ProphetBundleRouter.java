@@ -398,7 +398,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 	}
 
 	private void notify(String s1, String s2) {
-		DTNManager.getInstance().notify_user(s1, s2);
+		BPF.getInstance().getBPFNotificationReceiver().notify(s1, s2);
 	}
 
 	private void handleBundleOffer(IByteBuffer buf, ProphetNeighbor pn,

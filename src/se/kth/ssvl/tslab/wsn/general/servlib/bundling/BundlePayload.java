@@ -159,6 +159,7 @@ public class BundlePayload implements Serializable {
 	 */
 	public boolean move_data_to_api_temp_folder() {
 		try {
+			//TODO: Below line needs to be updated.
 			File file = BPF.getInstance().getBPFFileManager().createTempFile("bundle_payload_for_api_bid"
 					+ bundleid_, ".dat");
 			copy_to_file(file);

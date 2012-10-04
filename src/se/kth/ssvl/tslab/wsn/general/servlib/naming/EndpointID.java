@@ -27,7 +27,7 @@ import java.net.URISyntaxException;
 
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.types.DTNEndpointID;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNEndpointID;
 
 /**
  * This class represents EndpointID in the DTNSystem. It consists of unique URI
