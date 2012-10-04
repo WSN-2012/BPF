@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+
 public class FileManager {
 	
 	/**
@@ -11,14 +13,21 @@ public class FileManager {
 	 */
 	private File dir;
 	
+	/**
+	 * The tag for the logger
+	 */
+	private String TAG;
+	
 	
 	/**
 	 * The constructor will create a class which can be used by any object to manage its files.
 	 * @param subDir The directory to operate within, which is a subdir to the root path configured in the configuration.
+	 * @param tag The tag for the logger when the FileManager is used. Preferably something like: YouClass-FileManager
 	 * @throws FileNotFoundException Constructor will throw this when the directory wasn't able to be created. 
 	 */
-	public FileManager(String subDir) throws FileNotFoundException {
+	public FileManager(String subDir, String tag) throws FileNotFoundException {
 		dir = new File(subDir);
+		TAG = tag;
 		
 		if (!dir.exists()) {
 			if (!dir.mkdir()) {
@@ -36,10 +45,12 @@ public class FileManager {
 		File f = new File(dir, filename);
 		try {
 			if (f.createNewFile()) {
+				BPF.getInstance().getBPFLogger().debug(TAG, "Successfully created file :" + f.getAbsolutePath()); //TODO: Check that this is returning the filename as well
 				return f;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			BPF.getInstance().getBPFLogger().error(TAG, e.toString());
 		}
 		return null;
 	}
