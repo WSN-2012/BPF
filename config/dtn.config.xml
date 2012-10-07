@@ -45,6 +45,11 @@
         <tns:Announce interface_id="tcp0" discovery_id="ipdisc0"
             conv_layer_type="tcp"></tns:Announce>
     </tns:DiscoveriesSetting>
+    
+    <tns:Security>
+        <tns:Keystore path="path/to/keystore" password="keystore_password"></tns:KeystorePath>
+        <tns:Mode use_security="true" use_pcb="true" use_pib="false"></tns:Mode>
+    </tns:Security>
 
 </tns:DTNConfiguration>
 	  
