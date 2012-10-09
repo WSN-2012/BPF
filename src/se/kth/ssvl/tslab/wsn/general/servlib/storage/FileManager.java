@@ -38,22 +38,38 @@ public class FileManager {
 
 	/**
 	 * This method will create a file within this instance's directory. (passed in the constructor)
-	 * @param filename The filename of the file created.
+	 * @param fileName The filename of the file created.
 	 * @return The file that will be created. If there was an error or if the file exists, the method will return null
 	 */
-	public File createFile(String filename) {
-		File f = new File(dir, filename);
+	public File createFile(String fileName) {
+		File f = new File(dir, fileName);
 		try {
 			if (f.createNewFile()) {
 				BPF.getInstance().getBPFLogger().debug(TAG, "Successfully created file :" + f.getAbsolutePath()); //TODO: Check that this is returning the filename as well
 				return f;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
 			BPF.getInstance().getBPFLogger().error(TAG, e.toString());
 		}
 		return null;
 	}
+	
+	/**
+	 * Create a temporary file.
+	 * @param prefix The prefix of the filename
+	 * @param suffix The suffix of the filename
+	 * @return
+	 */
+	public File createTempFile(String prefix, String suffix) {
+		try {
+			return File.createTempFile(prefix, suffix, dir);
+		} catch (IOException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, e.toString());
+		}
+		return null;
+	}
+	
+	
 	
 	
 }

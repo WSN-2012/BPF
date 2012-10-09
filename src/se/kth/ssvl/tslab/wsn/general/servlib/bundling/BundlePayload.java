@@ -36,6 +36,7 @@ import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHeldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundlePayloadWrongTypeException;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.FileManager;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
@@ -63,6 +64,11 @@ public class BundlePayload implements Serializable {
 	 */
 	private static final int DEFAULT_DATA_BUFFER_SIZE = 200;
 	private int bundleid_;
+	
+	/**
+	 * FileManager used to manage the file creation etc.
+	 */
+	private FileManager fileManager;
 
 	public BundlePayload(Lock lock) {
 
@@ -115,7 +121,14 @@ public class BundlePayload implements Serializable {
 		if (location_ == location_t.DISK)
 			// Only when the location is DISK
 			file_ = BundleStore.getInstance().get_payload_file(bundleid);
-
+		
+		// Init the fileManager
+		try {
+			fileManager = new FileManager("api_temp", TAG);
+		} catch (FileNotFoundException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, "Couldn't init the FileManager in BundlePayload, directory not created");
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -158,19 +171,12 @@ public class BundlePayload implements Serializable {
 	 * @return
 	 */
 	public boolean move_data_to_api_temp_folder() {
-		try {
-			//TODO: Below line needs to be updated.
-			File file = BPF.getInstance().getBPFFileManager().createTempFile("bundle_payload_for_api_bid"
-					+ bundleid_, ".dat");
-			copy_to_file(file);
-
+		File file = fileManager.createTempFile("bundle_payload_for_api_bid"
+				+ bundleid_, ".dat");
+		
+		if (copy_to_file(file)) { //TODO: Check that this is working as we want
 			file_ = file;
-
 			return true;
-		} catch (IOException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "migrate IO Exception");
-		} catch (BPFException e) {
-			e.printStackTrace();
 		}
 		return false;
 	}
