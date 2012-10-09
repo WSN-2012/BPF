@@ -20,7 +20,7 @@ public class FileManager {
 	
 	
 	/**
-	 * The constructor will create a class which can be used by any object to manage its files.
+	 * The constructor will create a class which can be used by any object to manage its files. The dir used will be created if it doesn't exist.
 	 * @param subDir The directory to operate within, which is a subdir to the root path configured in the configuration.
 	 * @param tag The tag for the logger when the FileManager is used. Preferably something like: YouClass-FileManager
 	 * @throws FileNotFoundException Constructor will throw this when the directory wasn't able to be created. 
@@ -44,9 +44,15 @@ public class FileManager {
 	public File createFile(String fileName) {
 		File f = new File(dir, fileName);
 		try {
-			if (f.createNewFile()) {
-				BPF.getInstance().getBPFLogger().debug(TAG, "Successfully created file :" + f.getAbsolutePath()); //TODO: Check that this is returning the filename as well
+			if (f.exists()) {
 				return f;
+			} else {
+				if (f.createNewFile()) {
+					BPF.getInstance().getBPFLogger().debug(TAG, "Successfully created file :" + f.getAbsolutePath()); //TODO: Check that this is returning the filename as well
+					return f;
+				} else {
+					BPF.getInstance().getBPFLogger().error(TAG, "Error creating the file: " + fileName);
+				}
 			}
 		} catch (IOException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, e.toString());
@@ -58,18 +64,17 @@ public class FileManager {
 	 * Create a temporary file.
 	 * @param prefix The prefix of the filename
 	 * @param suffix The suffix of the filename
-	 * @return
+	 * @return Returns a File object if it was successful 
 	 */
 	public File createTempFile(String prefix, String suffix) {
 		try {
+			BPF.getInstance().getBPFLogger().debug(TAG, "Creating temporary file: " + prefix + suffix);
 			return File.createTempFile(prefix, suffix, dir);
 		} catch (IOException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, e.toString());
 		}
 		return null;
 	}
-	
-	
 	
 	
 }
