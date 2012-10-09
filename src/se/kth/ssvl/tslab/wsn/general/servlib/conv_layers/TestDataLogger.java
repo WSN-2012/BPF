@@ -92,6 +92,7 @@ public class TestDataLogger {
 		try {
 			fileManager = new FileManager("test_data", TAG);
 			
+			// TODO: Check that below filecreation works the way we want
 			upload_test_data_file_ = fileManager.createFile("upload.log"); 
 			download_test_data_file_ = fileManager.createFile("download.log");
 
