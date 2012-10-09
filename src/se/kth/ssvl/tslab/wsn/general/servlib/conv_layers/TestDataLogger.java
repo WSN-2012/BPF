@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.FileManager;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
@@ -74,6 +75,11 @@ public class TestDataLogger {
 	 * the downloaded size so far in bytes
 	 */
 	private long downloaded_size_ = 0;
+	
+	/**
+	 * 
+	 */
+	private FileManager fileManager;
 
 	/**
 	 * Initialize function to create objects
@@ -83,18 +89,11 @@ public class TestDataLogger {
 		upload_begin_log_maps_ = new HashMap<CLConnection, TestDataLog>();
 		download_begin_log_maps_ = new HashMap<CLConnection, TestDataLog>();
 
-		// TODO: Below line should call something outside the library
-		File dir = new File("/sdcard/" + TempPrefixName);
-		if (!dir.exists())
-			dir.mkdir();
 		try {
-			upload_test_data_file_ = new File(dir, "upload.log");
-			if (!upload_test_data_file_.exists())
-				upload_test_data_file_.createNewFile();
-
-			download_test_data_file_ = new File(dir, "download.log");
-			if (!download_test_data_file_.exists())
-				download_test_data_file_.createNewFile();
+			fileManager = new FileManager("test_data", TAG);
+			
+			upload_test_data_file_ = fileManager.createFile("upload.log"); 
+			download_test_data_file_ = fileManager.createFile("download.log");
 
 			uploaded_size_ = 0;
 			downloaded_size_ = 0;
@@ -102,6 +101,7 @@ public class TestDataLogger {
 		} catch (IOException e) {
 			BPF.getInstance().getBPFLogger()
 					.error(TAG, "TestDataLogger initialization fail");
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		}
 	}
 
