@@ -55,10 +55,10 @@ public class KeySteward
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 
 		//path to the key store file
-	    String kspath = "/home/fabio/KTH/CSD/keystores/gateway_keystore.jks"; //TODO: read from config file
+	    String kspath = Security.getInstance().ks_path();
 		
 		//password to access the key store
-	    char[]  password = "keystore".toCharArray(); //TODO: read from config file
+	    char[] password = Security.getInstance().ks_password().toCharArray();
 	    
 	    FileInputStream fis = null;
 	    try {
@@ -145,12 +145,12 @@ public class KeySteward
 		String my_alias=local_eid.toString();
 		
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-
+    
 		//path to the key store file
-	    String kspath = "/home/fabio/KTH/CSD/keystores/server_keystore.jks"; //TODO: read from config file
+	    String kspath = Security.getInstance().ks_path();
 		
 		//password to access the key store
-	    char[]  password = "keystore".toCharArray(); //TODO: read from config file
+	    char[] password = Security.getInstance().ks_password().toCharArray();
 	    
 	    FileInputStream fis = null;
 	    try {
