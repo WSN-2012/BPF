@@ -39,6 +39,7 @@ public class DTNConfiguration {
 	 * Constructor
 	 */
 	public DTNConfiguration() {
+		security_setting_ = new SecuritySetting();
 		storage_setting_ = new StorageSetting();
 		interfaces_setting_ = new InterfacesSetting();
 		links_setting_ = new LinksSetting();
@@ -69,6 +70,11 @@ public class DTNConfiguration {
 	}
 
 	/**
+	 * internal security setting object
+	 */
+	private SecuritySetting security_setting_;
+	
+	/**
 	 * internal storage setting object
 	 */
 	private StorageSetting storage_setting_;
@@ -93,6 +99,25 @@ public class DTNConfiguration {
 	 */
 	private DiscoveriesSetting discoveries_setting_;
 
+	/**
+	 * Accessor for the SecuritySetting of this DTNConfiguration
+	 * 
+	 * @return the security_setting_
+	 */
+	public SecuritySetting security_setting() {
+		return security_setting_;
+	}
+	
+	/**
+	 * Setter for the SecuritySetting of this DTNConfiguration
+	 * 
+	 * @param SecuritySetting
+	 *            the security_setting_ to set
+	 */
+	public void set_security_setting(SecuritySetting security_setting) {
+		security_setting_ = security_setting;
+	}
+	
 	/**
 	 * Accessor for the StorageSetting of this DTNConfiguration
 	 * 

@@ -78,6 +78,11 @@ public class DTNConfigurationParser {
 	 * The TAG name to parse for the DiscoveriesSetting element
 	 */
 	private final static String DiscoveriesSettingTagName = "tns:DiscoveriesSetting";
+	
+	/**
+	 * The TAG name to parse for the SecuritySetting element
+	 */
+	private final static String SecuritySettingTagName = "tns:SecuritySetting";
 
 	/**
 	 * The TAG name to parse for the Link element
@@ -179,6 +184,11 @@ public class DTNConfigurationParser {
 
 		else if (config_element.getTagName().equals(DiscoveriesSettingTagName)) {
 			process_discoveries_config(config_element, config);
+			return;
+		}
+		
+		else if (config_element.getTagName().equals(SecuritySettingTagName)) {
+			process_security_config(config_element, config);
 			return;
 		}
 
@@ -471,6 +481,33 @@ public class DTNConfigurationParser {
 
 		Attr storage_path = config_element.getAttributeNode("storage_path");
 		config.storage_setting().set_storage_path(storage_path.getValue());
+
+		return;
+	}
+	
+	/**
+	 * Routine to process config related to security settings
+	 * 
+	 * @param config_element
+	 *            the input element received
+	 * @param config
+	 *            the configuration file we will put output on
+	 * @throws InvalidDTNConfigurationException
+	 */
+	private static void process_security_config(Element config_element,
+			DTNConfiguration config) throws InvalidDTNConfigurationException {
+
+		Attr ks_path = config_element.getAttributeNode("ks_path");
+		config.security_setting().set_ks_path(ks_path.getValue());
+
+		Attr ks_password = config_element.getAttributeNode("ks_password");
+		config.security_setting().set_ks_password(ks_password.getValue());
+		
+		Attr use_pcb = config_element.getAttributeNode("use_pcb");
+		config.security_setting().set_use_pcb(use_pcb.getValue());
+		
+		Attr use_pib = config_element.getAttributeNode("use_pib");
+		config.security_setting().set_use_pib(use_pib.getValue());
 
 		return;
 	}

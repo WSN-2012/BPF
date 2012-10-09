@@ -46,10 +46,12 @@
             conv_layer_type="tcp"></tns:Announce>
     </tns:DiscoveriesSetting>
     
-    <tns:Security>
-        <tns:Keystore path="path/to/keystore" password="keystore_password"></tns:KeystorePath>
-        <tns:Mode use_security="true" use_pcb="true" use_pib="false"></tns:Mode>
-    </tns:Security>
+    <!-- Security Settings -->
+    <!-- ks_path: the path to the keystore -->
+    <!-- ks_password: password to access the keystore -->
+    <!-- use_pcb [true|false]: Payload Confidentiality Block for confidentiality and integrity -->
+    <!-- use_pib [true|false]: Payload Integrity Block for integrity and authenticity -->
+    <tns:SecuritySetting ks_path="path/to/keystore" ks_password="password" use_pcb="true" use_pib="false"></tns:SecuritySetting>
 
 </tns:DTNConfiguration>
 	  
