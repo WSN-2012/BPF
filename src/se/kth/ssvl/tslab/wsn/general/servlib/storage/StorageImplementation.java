@@ -22,6 +22,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,13 +46,22 @@ public class StorageImplementation<Type> {
 	 * TAG for Android Logging
 	 */
 	public static String TAG = "StorageImplementation";
+	
+	/**
+	 * The fileManager that is used to manage files
+	 */
+	private FileManager fileManager;
 
 	/**
 	 * Construct
 	 * 
 	 */
-	StorageImplementation() {
-
+	public StorageImplementation(String subDir) {
+		try {
+			fileManager = new FileManager(subDir, TAG);
+		} catch (FileNotFoundException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, "Coulnd't init StorageImplementation since the subdir used couldn't be created");
+		}
 	}
 
 	/**
@@ -68,10 +78,7 @@ public class StorageImplementation<Type> {
 
 			BPF.getInstance().getBPFLogger().debug(TAG, "Going to open a file:" + filename);
 
-			File f = new File(dir_, filename);
-			if (!f.exists()) {
-				f.createNewFile();
-			}
+			File f = fileManager.createFile(filename); //TODO: Check that this method is working correctly.
 
 			BPF.getInstance().getBPFLogger().debug(TAG, "File Open:" + filename);
 			OutputStream out = new FileOutputStream(f);// Context..openFileOutput("test.txt");
@@ -108,11 +115,13 @@ public class StorageImplementation<Type> {
 	public Type get_object(String filename) {
 
 		Type object = null;
+		ObjectInputStream objStream = null;
+		InputStream in = null;
 		try {
-			File f = new File(dir_, filename);
-			InputStream in = new FileInputStream(f);
+			File f = fileManager.createFile(filename);
+			in = new FileInputStream(f);
 
-			ObjectInputStream objStream = new ObjectInputStream(in);
+			objStream = new ObjectInputStream(in);
 			if (in != null) {
 				object = (Type) objStream.readObject();
 				objStream.close();
@@ -125,6 +134,19 @@ public class StorageImplementation<Type> {
 		} catch (Throwable t) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Unable to read file");
 		}
+		
+		// Something went wrong, try to close the streams before returning
+		try {
+			if (objStream != null) {
+				objStream.close();
+			}
+			if (in != null) {
+				in.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 
@@ -137,18 +159,11 @@ public class StorageImplementation<Type> {
 	 */
 
 	public boolean create_file(String filename) {
-
-		File file = new File(dir_, filename);
-
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-				return true;
-			} catch (IOException e) {
-				BPF.getInstance().getBPFLogger().error(TAG, e.toString());
-			}
+		File f = fileManager.createFile(filename);
+		
+		if (f != null) {
+			return true;
 		}
-
 		return false;
 	}
 
@@ -161,9 +176,7 @@ public class StorageImplementation<Type> {
 	 */
 
 	public File get_file(String filename) {
-		File file = new File(dir_, filename);
-
-		return file;
+		return fileManager.getFile(filename);
 	}
 
 	/**
@@ -175,18 +188,7 @@ public class StorageImplementation<Type> {
 	 */
 
 	public boolean delete_file(String filename) {
-		try {
-			File f = new File(dir_, filename);
-
-			if (f.exists()) {
-				f.delete();
-				BPF.getInstance().getBPFLogger().debug(TAG, "File deleted");
-			}
-			return true;
-		} catch (Throwable t) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Unable to delete file");
-			return false;
-		}
+		return fileManager.deleteFile(filename);
 	}
 
 	/**
@@ -340,10 +342,5 @@ public class StorageImplementation<Type> {
 		return result;
 	}
 
-	/**
-	 * Current working directory
-	 */
-
-	private File dir_;
 
 }
