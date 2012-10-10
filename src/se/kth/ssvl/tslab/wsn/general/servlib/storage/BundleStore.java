@@ -233,7 +233,7 @@ public class BundleStore {
 			if (impt_sqlite_.update(table, values, condition, null)) {
 				if (!saved_bundles_.containsKey(bundle.bundleid())) {
 					long bundle_size = impt_storage_
-							.get_file_size_with_name(bundleFileName
+							.get_file_size(bundleFileName
 									+ bundle.durable_key());
 					bundle_size += bundle.durable_size();
 					saved_bundles_.put(bundle.bundleid(), bundle_size);
@@ -552,7 +552,7 @@ public class BundleStore {
 						BPF.getInstance().getBPFLogger().debug(TAG,
 								"Source and dest EIDs validated: " + id);
 						long bundle_size = impt_storage_
-								.get_file_size_with_name(bundleFileName
+								.get_file_size(bundleFileName
 										+ b.durable_key());
 						bundle_size += b.durable_size();
 						saved_bundles_.put(b.bundleid(), bundle_size);

@@ -219,18 +219,6 @@ public class StorageImplementation<Type> {
 	}
 
 	/**
-	 * Get total size of path.
-	 * 
-	 * @param path
-	 *            Path to check the total size
-	 * @return Total size of path.
-	 */
-
-	public long get_data_total_size() {
-		return fileManager.getSize();
-	}
-
-	/**
 	 * Get the total size of directory including all the sub files.
 	 * 
 	 * @param path
@@ -238,36 +226,8 @@ public class StorageImplementation<Type> {
 	 * @return Total size of directory.
 	 */
 
-	public long get_directory_size(String path) {
-		long result = 0;
-
-		File dir = new File(path);
-
-		if (dir.exists()) {
-			File[] files = dir.listFiles();
-			for (int i = 0; i < files.length; i++) {
-				result += files[i].length();
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Get the total size of file
-	 * 
-	 * @param path
-	 *            File path to check the total size
-	 * @return Total size of file
-	 */
-
-	public long get_file_size(String path) {
-		long result = 0;
-
-		File dir = new File(path);
-		if (dir.exists()) {
-			result = dir.length();
-		}
-		return result;
+	public long get_directory_size() {
+		return fileManager.getSize();
 	}
 
 	/**
@@ -278,13 +238,8 @@ public class StorageImplementation<Type> {
 	 * @return Total size of file
 	 */
 
-	public long get_file_size_with_name(String filename) {
-		long result = 0;
-		File f = new File(dir_, filename);
-		if (f.exists()) {
-			result = f.length();
-		}
-		return result;
+	public long get_file_size(String filename) {
+		return fileManager.getFileSize(filename);
 	}
 
 

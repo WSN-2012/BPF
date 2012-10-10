@@ -169,18 +169,40 @@ public class FileManager {
 	 *         If there was an error it will return 0.
 	 */
 	public long getSize() {
+		long result = 0;
 		if (dir.exists()) {
+			File[] files = dir.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				result += files[i].length();
+			}
+
 			BPF.getInstance()
 					.getBPFLogger()
 					.debug(TAG,
-							"Size is " + dir.length() + " for " + dir.getName());
-			return dir.length();
+							"Total size of " + dir.getName() + " is "
+									+ dir.length() + " bytes");
+			return result;
 		}
 		BPF.getInstance()
 				.getBPFLogger()
 				.error(TAG,
 						"Size Not found for " + dir.getName()
 								+ " (-- SHOULD NOT REACH THIS POINT --)");
+		return 0;
+	}
+	
+	/**
+	 * Gets the size of a file stored in the subdir of this FileManager
+	 * @param fileName The filename of the file to look up the size of.
+	 * @return The size of the file if it exists otherwise 0
+	 */
+	public long getFileSize(String fileName) {
+		File f = new File(dir, fileName);
+		
+		if (f.exists()) {
+			return f.length();
+		}
+		
 		return 0;
 	}
 
