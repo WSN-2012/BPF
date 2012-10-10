@@ -277,7 +277,7 @@ public class RegistrationStore {
 
 		if (impt_sqlite_.drop_table(table)) {
 
-			if (!impt_storage_.delete_dir(path_)) {
+			if (!impt_storage_.delete_files_in_dir(path_)) {
 				return false;
 			}
 

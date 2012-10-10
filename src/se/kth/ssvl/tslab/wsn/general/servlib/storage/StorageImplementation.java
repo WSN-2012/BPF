@@ -199,21 +199,8 @@ public class StorageImplementation<Type> {
 	 * @return True if deleted successfully else false.
 	 */
 
-	public boolean delete_dir(String path) {
-		try {
-			File dir = new File(path);
-
-			if (dir.exists()) {
-				File[] files = dir.listFiles();
-				for (int i = 0; i < files.length; i++) {
-					files[i].delete();
-				}
-			}
-			return true;
-		} catch (Throwable t) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Unable to delete file");
-			return false;
-		}
+	public boolean delete_files_in_dir() {		
+		return fileManager.deleteFiles();
 	}
 
 	/**
@@ -225,43 +212,8 @@ public class StorageImplementation<Type> {
 	 */
 
 	public boolean is_bundle_file(String filename) {
-		try {
-			File f = new File(dir_, filename);
-			if (f.exists()) {
-				return true;
-			}
-		} catch (Throwable t) {
-			BPF.getInstance().getBPFLogger().error(TAG, "There is no bundle");
-		}
-		return false;
-	}
-
-	/**
-	 * Create application path. If current path doesn't exist then make
-	 * directories.
-	 * 
-	 * @param path
-	 *            Create the current file.
-	 * @return True if path successfully created
-	 */
-
-	public boolean create_dir(String path) {
-		try {
-			File dir = new File(path);
-			if (!dir.isDirectory()) {
-				if (dir.mkdirs()) {
-					BPF.getInstance().getBPFLogger().debug(TAG,
-							"Dir Created:" + dir.getAbsolutePath());
-					return true;
-				}
-				BPF.getInstance().getBPFLogger().debug(TAG,
-						"Dir Not Created:" + dir.getAbsolutePath());
-				return false;
-			}
-			dir_ = dir;
+		if (fileManager.getFile(filename) != null) {
 			return true;
-		} catch (Throwable t) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Unable to Create DIR");
 		}
 		return false;
 	}
@@ -274,15 +226,8 @@ public class StorageImplementation<Type> {
 	 * @return Total size of path.
 	 */
 
-	public long get_data_total_size(String path) {
-
-		File dir = new File(path);
-		if (dir.exists()) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Size Found");
-			return dir.length();
-		}
-		BPF.getInstance().getBPFLogger().error(TAG, "Size Not Found");
-		return 0;
+	public long get_data_total_size() {
+		return fileManager.getSize();
 	}
 
 	/**

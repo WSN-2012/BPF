@@ -93,23 +93,15 @@ public class BundleStore {
 	 */
 
 	public boolean init(DTNConfiguration config) {
-
 		config_ = config;
-
-		BPF.getInstance().getBPFLogger().debug(TAG, "Going to init");
-
+		
+		BPF.getInstance().getBPFLogger().debug(TAG, "Initializing bundle store");
 		if (!init_) {
 			impt_sqlite_ = new SQLiteImplementation(Table_CREATE_BUNDLES);
-			impt_storage_ = new StorageImplementation<Bundle>();
+			impt_storage_ = new StorageImplementation<Bundle>("storage");
 			init_ = true;
 			saved_bundles_ = new HashMap<Integer, Long>();
 		}
-		String app_folder = "/" + config_.storage_setting().storage_path();
-
-		path_ = app_folder.concat("/storage");
-		BPF.getInstance().getBPFLogger().debug(TAG, "Current Path: " + path_);
-		
-		impt_storage_.create_dir(path_);
 
 		String condition = " type = " + location_t.DISK.getCode();
 		String[] field = new String[1];
@@ -484,7 +476,7 @@ public class BundleStore {
 
 	public boolean reset_storage() {
 		BPF.getInstance().getBPFLogger().debug(TAG, "Going to delete Files");
-		if (!impt_storage_.delete_dir(path_)) {
+		if (!impt_storage_.delete_files_in_dir()) {
 			return false;
 		}
 
@@ -648,11 +640,6 @@ public class BundleStore {
 	 * init_ to make sure in init() it only makes SQLiteImplementation only once
 	 */
 	private static boolean init_ = false;
-
-	/**
-	 * Storage path of bundle folder
-	 */
-	private static String path_;
 
 	/**
 	 * HashMap to store bundle id and bundle size of stored bundles.

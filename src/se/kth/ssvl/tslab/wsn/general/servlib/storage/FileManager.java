@@ -34,7 +34,7 @@ public class FileManager {
 	 */
 	public FileManager(String subDir, String tag) throws FileNotFoundException {
 		dir = new File(subDir);
-		TAG = tag;
+		TAG = tag + "/" + dir.getName();
 
 		if (!dir.exists()) {
 			if (!dir.mkdir()) {
@@ -106,31 +106,82 @@ public class FileManager {
 
 	/**
 	 * Get an existing file.
-	 * @param fileName The name of the file to get
+	 * 
+	 * @param fileName
+	 *            The name of the file to get
 	 * @return Returns the file or null if the files doesn't exist.
 	 */
 	public File getFile(String fileName) {
 		File f = new File(dir, fileName);
-		
+
 		if (f.exists()) {
 			return f;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Deletes a file if it exists
-	 * @param fileName The name of the file to delete
-	 * @return Returns true if the file existed and was successfully deleted otherwise false
+	 * 
+	 * @param fileName
+	 *            The name of the file to delete
+	 * @return Returns true if the file existed and was successfully deleted
+	 *         otherwise false
 	 */
 	public boolean deleteFile(String fileName) {
 		File f = new File(dir, fileName);
-		
+
 		if (f.exists()) {
 			return f.delete();
 		}
 		return false;
 	}
-	
+
+	/**
+	 * This method will delete all files within the subdir of this FileManager.
+	 * 
+	 * @return Returns true if all files were deleted successfully, or otherwise
+	 *         false.
+	 */
+	public boolean deleteFiles() {
+		try {
+			if (dir.exists()) {
+				File[] files = dir.listFiles();
+				for (int i = 0; i < files.length; i++) {
+					files[i].delete();
+				}
+			}
+			return true;
+		} catch (Exception e) {
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							"Unable to delete files in subdir: "
+									+ dir.getName());
+		}
+		return false;
+	}
+
+	/**
+	 * Get the size of the directory handled by this FileManager
+	 * 
+	 * @return The size in bytes of the directory handled by this FileManager.
+	 *         If there was an error it will return 0.
+	 */
+	public long getSize() {
+		if (dir.exists()) {
+			BPF.getInstance()
+					.getBPFLogger()
+					.debug(TAG,
+							"Size is " + dir.length() + " for " + dir.getName());
+			return dir.length();
+		}
+		BPF.getInstance()
+				.getBPFLogger()
+				.error(TAG,
+						"Size Not found for " + dir.getName()
+								+ " (-- SHOULD NOT REACH THIS POINT --)");
+		return 0;
+	}
 
 }
