@@ -19,6 +19,8 @@
  */
 package se.kth.ssvl.tslab.wsn.general.systemlib.util;
 
+import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
+import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
@@ -57,6 +59,32 @@ public class BufferHelper {
 		return buf;
 	}
 
+	//same as reserve, but rewinds the source after using it. 
+		public static IByteBuffer reserve_and_rewind(IByteBuffer buf, int length)
+		{
+			if ((buf.capacity()) < (length+buf.position()))
+	        {
+	        	// allocate new ByteBuffer and copy the old data to that size
+		        IByteBuffer new_buf = new SerializableByteBuffer(length+buf.position());
+		        
+		        int old_position =  buf.position();
+		        int old_capacity = buf.capacity();
+		        
+		        
+		        byte[] temp =   new byte[old_capacity];
+		        buf.rewind();
+		        buf.get(temp);
+		        
+		        new_buf.rewind();
+		        new_buf.put(temp);
+		        
+		        new_buf.position(old_position);
+		        buf.position(old_position);
+		        return new_buf;
+	        }
+			return buf;
+		}
+	
 	/**
 	 * Shared routine to try consume SDNV if it's possible to consume the SDNV
 	 * length will be return else, -1 will be returned This for handle the case

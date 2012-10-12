@@ -106,6 +106,8 @@ public interface IByteBuffer {
 	 * input byte_array and moving position to the end after that
 	 */
 	public void get(byte[] byte_array);
+	
+	public void get(byte[] byte_array, int cant) ;
 
 	/**
 	 * Put byte into the ByteBuffer in the current position and move the

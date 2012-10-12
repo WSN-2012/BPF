@@ -110,6 +110,15 @@ public class SerializableByteBuffer implements Serializable, IByteBuffer {
 		}
 
 	}
+	
+	@Override
+	public void get(byte[] byte_array, int cant) 
+	{
+		for (int i = 0; i < cant; i++) {
+			byte_array[i] = backing_array_[position_++];
+		}
+
+	}
 
 	public void put(byte b) {
 		backing_array_[position_] = b;
