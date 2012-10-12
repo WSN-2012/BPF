@@ -56,10 +56,10 @@ public class KeySteward
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 
 		//path to the key store file
-	    String kspath = DTNConfiguration.getInstance().security_settings().ks_path();
+	    String kspath = BPF.getInstance().getConfig().security_setting().ks_path();
 		
 		//password to access the key store
-	    char[] password = DTNConfiguration.getInstance().security_settings().ks_password().toCharArray();
+	    char[] password = BPF.getInstance().getConfig().security_setting().ks_password().toCharArray();
 	    
 	    FileInputStream fis = null;
 	    try {
@@ -148,10 +148,10 @@ public class KeySteward
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
     
 		//path to the key store file
-	    String kspath = DTNConfiguration.getInstance().security_settings().ks_path();
+	    String kspath = BPF.getInstance().getConfig().security_setting().ks_path();
 		
 		//password to access the key store
-	    char[] password = DTNConfiguration.getInstance().security_settings().ks_password().toCharArray();
+	    char[] password = BPF.getInstance().getConfig().security_setting().ks_password().toCharArray();
 	    
 	    FileInputStream fis = null;
 	    try {
