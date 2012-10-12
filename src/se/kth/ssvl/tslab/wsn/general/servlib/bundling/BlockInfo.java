@@ -33,6 +33,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
+import se.kth.ssvl.tslab.wsn.general.servlib.security.BP_Local_CS;
 
 /**
  * Class representing DTN protocol blocks.
@@ -78,9 +79,18 @@ public class BlockInfo implements Serializable {
 		data_offset_ = 0;
 		complete_ = false;
 		reloaded_ = false;
-
+		locals_ = new BP_Local_CS();
 	}
 
+	public BP_Local locals() {
+		return locals_;
+	}
+	
+	public void set_locals(BP_Local l)
+	{
+		locals_=l;
+	}
+	
 	/**
 	 * Getter for the storage array
 	 * 
@@ -429,4 +439,5 @@ public class BlockInfo implements Serializable {
 	 */
 	protected boolean reloaded_;
 
+	protected BP_Local locals_;
 };
