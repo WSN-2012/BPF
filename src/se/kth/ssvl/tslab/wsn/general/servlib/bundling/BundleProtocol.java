@@ -526,16 +526,16 @@ public class BundleProtocol {
 	 * "Bundle Status Report "Reason Code" flags" [DTN2]
 	 */
 	public static enum status_report_reason_t {
-		REASON_NO_ADDTL_INFO("no additional information", (byte) 0x00), REASON_LIFETIME_EXPIRED(
-				"lifetime expired", (byte) 0x01), REASON_FORWARDED_UNIDIR_LINK(
-				"forwarded over unidirectional link", (byte) 0x02), REASON_TRANSMISSION_CANCELLED(
-				"transmission cancelled", (byte) 0x03), REASON_DEPLETED_STORAGE(
-				"depleted storage", (byte) 0x04), REASON_ENDPOINT_ID_UNINTELLIGIBLE(
-				"endpoint id unintelligible", (byte) 0x05), REASON_NO_ROUTE_TO_DEST(
-				"no known route to destination", (byte) 0x06), REASON_NO_TIMELY_CONTACT(
-				"no timely contact", (byte) 0x07), REASON_BLOCK_UNINTELLIGIBLE(
-				"block unintelligible", (byte) 0x08),
-
+		REASON_NO_ADDTL_INFO("no additional information",(byte)0x00), 
+		REASON_LIFETIME_EXPIRED("lifetime expired", (byte)0x01), 
+		REASON_FORWARDED_UNIDIR_LINK("forwarded over unidirectional link", (byte)0x02), 
+		REASON_TRANSMISSION_CANCELLED("transmission cancelled", (byte)0x03),
+		REASON_DEPLETED_STORAGE("depleted storage", (byte)0x04),
+		REASON_ENDPOINT_ID_UNINTELLIGIBLE("endpoint id unintelligible", (byte)0x05),
+		REASON_NO_ROUTE_TO_DEST("no known route to destination", (byte)0x06), 
+		REASON_NO_TIMELY_CONTACT("no timely contact", (byte)0x07), 
+		REASON_BLOCK_UNINTELLIGIBLE("block unintelligible", (byte)0x08), 
+		REASON_SECURITY_FAILED("REASON_SECURITY_FAILED", (byte)0x09)
 		;
 
 		private static final Map<Byte, status_report_reason_t> lookupCode = new HashMap<Byte, status_report_reason_t>();

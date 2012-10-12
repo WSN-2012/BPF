@@ -717,7 +717,7 @@ public class BlockProcessor implements Serializable {
 	 * "Generate the standard preamble for the given block type, flags, EID-list
 	 * and content length." [DTN2]
 	 */
-	protected void generate_preamble(BlockInfoVec xmit_blocks, BlockInfo block,
+	public void generate_preamble(BlockInfoVec xmit_blocks, BlockInfo block,
 			BundleProtocol.bundle_block_type_t type, int flags, int data_length) {
 
 		// "First calculate the size require for EID List by using ptr buffer"

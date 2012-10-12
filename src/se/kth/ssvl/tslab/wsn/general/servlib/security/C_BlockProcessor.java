@@ -1,5 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.security;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfoVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockProcessor;
@@ -95,7 +96,7 @@ public class C_BlockProcessor extends BlockProcessor
 			return true;
 
 		type = block.type();
-		Log.d(TAG, String.format( "C_BlockProcessor.reload block type %d", type));
+		BPF.getInstance().getBPFLogger().debug(TAG, "C_BlockProcessor.reload block type " + type);
 
 		Ciphersuite.parse(block);
 		locals = (BP_Local_CS)(block.locals());
@@ -142,8 +143,7 @@ public class C_BlockProcessor extends BlockProcessor
 			return false;
 		}    
 
-		Log.d(TAG, String.format( "C_BlockProcessor.validate()  ciphersuite %d",
-				locals.owner_cs_num()));
+		BPF.getInstance().getBPFLogger().debug(TAG, "C_BlockProcessor.validate()  ciphersuite " + locals.owner_cs_num());
 
 		if ( Ciphersuite.destination_is_local_node(bundle, block) )
 		{  //yes - this is ours 
@@ -156,7 +156,7 @@ public class C_BlockProcessor extends BlockProcessor
 			} 
 			else 
 			{
-				Log.e(TAG, String.format("block failed security validation C_BlockProcessor"));
+				BPF.getInstance().getBPFLogger().error(TAG, "block failed security validation C_BlockProcessor");
 				deletion_reason[0] = BundleProtocol.status_report_reason_t.REASON_SECURITY_FAILED;
 				return false;
 			}
@@ -200,8 +200,7 @@ public class C_BlockProcessor extends BlockProcessor
 			xmit_blocks.add(new BlockInfo(this, source));
 			BlockInfo bp = (xmit_blocks.back());
 			bp.set_eid_list(source.eid_list());
-			Log.d(TAG, String.format( "C_BlockProcessor.prepare() - forward received block len %d",
-					source.full_length()));
+			BPF.getInstance().getBPFLogger().debug(TAG, "C_BlockProcessor.prepare() - forward received block len " + source.full_length());
 
 			if(Ciphersuite.CS_FAIL_IF_NULL(source.locals())) // CS_FAIL_IF_NULL
 			{
@@ -237,20 +236,17 @@ public class C_BlockProcessor extends BlockProcessor
 				assert(source_locals.security_src().length() > 0 );
 				cs_flags |= Ciphersuite.ciphersuite_flags_t.CS_BLOCK_HAS_SOURCE.getCode();
 				locals.set_security_src(source_locals.security_src());
-				Log.d(TAG, String.format( "C_BlockProcessor.prepare() add security_src EID %s", 
-						source_locals.security_src()));
+				BPF.getInstance().getBPFLogger().debug(TAG, "C_BlockProcessor.prepare() add security_src EID " + source_locals.security_src());
 			}
 
 			if ( (source_locals.cs_flags() & Ciphersuite.ciphersuite_flags_t.CS_BLOCK_HAS_DEST.getCode())>0 ) {
 				assert(source_locals.security_dest().length() > 0 );
 				cs_flags |= Ciphersuite.ciphersuite_flags_t.CS_BLOCK_HAS_DEST.getCode();
 				locals.set_security_dest(source_locals.security_dest());
-				Log.d(TAG, String.format( "C_BlockProcessor.prepare() add security_dest EID %s",
-						source_locals.security_dest()));
+				BPF.getInstance().getBPFLogger().debug(TAG, "C_BlockProcessor.prepare() add security_dest EID " + source_locals.security_dest());
 			}
 			locals.set_cs_flags(cs_flags);
-			Log.d(TAG, String.format( "C_BlockProcessor.prepare() - inserted block eid_list_count %d",
-					bp.eid_list().size()));
+			BPF.getInstance().getBPFLogger().debug(TAG, "C_BlockProcessor.prepare() - inserted block eid_list_count " + bp.eid_list().size());
 			result = BP_SUCCESS;
 		} 
 		else 
@@ -269,8 +265,7 @@ public class C_BlockProcessor extends BlockProcessor
 				if ( p != null ) {
 					result = p.prepare(bundle, xmit_blocks, source, link, list);
 				} else {
-					Log.e(TAG, String.format( "C_BlockProcessor.prepare() - ciphersuite %d is missing",
-							source_locals.owner_cs_num()));
+					BPF.getInstance().getBPFLogger().error(TAG, "C_BlockProcessor.prepare() - ciphersuite " + source_locals.owner_cs_num() + " is missing");
 				}
 			}  // no msg if "source" is null, as BundleProtocol calls all BPs that way once
 		}
@@ -290,7 +285,7 @@ public class C_BlockProcessor extends BlockProcessor
 	{
 		Ciphersuite    p = null;
 		int             result = BP_FAIL;
-		Log.d(TAG, String.format( "C_BlockProcessor.generate()"));
+		BPF.getInstance().getBPFLogger().debug(TAG, "C_BlockProcessor.generate()");
 		BP_Local_CS    locals = (BP_Local_CS)(block.locals());
 
 		if (locals==null) //CS_fail if null
@@ -337,7 +332,7 @@ public class C_BlockProcessor extends BlockProcessor
 	{
 		Ciphersuite    p = null;
 		int             result = BP_FAIL;
-		Log.d(TAG, String.format( "C_BlockProcessor.finalize()"));
+		BPF.getInstance().getBPFLogger().debug(TAG, "C_BlockProcessor.finalize()");
 
 		BP_Local_CS    locals = (BP_Local_CS)(block.locals());
 
