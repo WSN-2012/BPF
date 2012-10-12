@@ -30,6 +30,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.servlib.security.Security;
 
 /**
  * The main class for converting a Java object from/to binary representation.
@@ -187,6 +188,11 @@ public class BundleProtocol {
 
 		}
 
+		
+		//Now prepare security blocks
+		BPF.getInstance().getBPFLogger().debug(TAG, "Now preparing security blocks...");
+		Security.prepare_out_blocks(bundle, link, xmit_blocks);
+		
 		return xmit_blocks;
 	}
 

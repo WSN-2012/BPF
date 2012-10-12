@@ -61,7 +61,7 @@ public class Security {
 	}
 	
 	//This method will be called from BundleProtocol.prepare_blocks()
-	public void prepare_out_blocks(Bundle bundle, Link link, BlockInfoVec xmit_blocks){
+	public static void prepare_out_blocks(Bundle bundle, Link link, BlockInfoVec xmit_blocks){
 		int err = 0;
 		
 		//Do we have to use PCB?

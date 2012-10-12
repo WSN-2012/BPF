@@ -174,7 +174,7 @@ public class SPD
 		if (err!=0)
 			BPF.getInstance().getBPFLogger().error(TAG, "SPD.prepare_out_blocks(): ERROR WHILE EXECUTING *****************************");
 		else
-			BPF.getInstance().getBPFLogger().debug(TAG, "SPD.prepare_out_blocks() done");	
+			BPF.getInstance().getBPFLogger().debug(TAG, "SPD.prepare_out_blocks() done");
 	}
 
 	/**
