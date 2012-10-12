@@ -34,6 +34,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
+import org.bouncycastle.crypto.modes.GCMBlockCipher;
 
 /**
  * Base Class for the Block Processing unit. This unit mainly converting from
@@ -242,11 +243,11 @@ public class BlockProcessor implements Serializable {
 			this.len_ = len;
 		}
 
-		public OpaqueContext context() {
+		public GCMBlockCipher context() {
 			return context_;
 		}
 
-		public void set_context(OpaqueContext context) {
+		public void set_context(GCMBlockCipher context) {
 			this.context_ = context;
 		}
 
@@ -255,7 +256,7 @@ public class BlockProcessor implements Serializable {
 		private BlockInfo target_block_;
 		private IByteBuffer buf_;
 		private int len_;
-		private OpaqueContext context_;
+		private GCMBlockCipher context_;
 	}
 
 	/**
@@ -497,7 +498,7 @@ public class BlockProcessor implements Serializable {
 	 */
 	public boolean mutate(mutate_func func, Bundle bundle,
 			final BlockInfo caller_block, BlockInfo target_block, int offset,
-			int len, OpaqueContext context) {
+			int len, GCMBlockCipher context) {
 
 		assert (offset < target_block.contents().position()) : "BlockProcessor,mutate: Target Block position is less than the offset";
 		assert (target_block.contents().position() >= offset + len) : "BlockProcessor,mutate: the position is longer than the to be processed data";
