@@ -23,7 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.config;
  * The exception related to reading configuration file
  */
 public class ReadingConfigurationFileException extends
-		DTNConfigurationException {
+		ConfigurationException {
 
 	/**
 	 * The serial version in the Java serializable

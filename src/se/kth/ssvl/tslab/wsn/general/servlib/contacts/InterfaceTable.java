@@ -22,7 +22,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.contacts;
 
 import java.util.Iterator;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.InterfacesSetting.InterfaceEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer;
@@ -58,7 +58,7 @@ public class InterfaceTable {
 	 * Parsing the interface's parameters specified in the configuration file
 	 * (config). Create he interfaces and add them to the InterfaceTable.
 	 */
-	public static void init(DTNConfiguration config) {
+	public static void init(Configuration config) {
 
 		List<InterfaceEntry> EntriesList = config.interfaces_setting()
 				.interface_entries();

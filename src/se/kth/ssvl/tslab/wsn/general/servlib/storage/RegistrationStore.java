@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.RegistrationList;
 import se.kth.ssvl.tslab.wsn.general.systemlib.storage.StorageIterator;
@@ -105,7 +105,7 @@ public class RegistrationStore {
 	 * @return returns true on success
 	 */
 
-	public boolean init(Context context, DTNConfiguration config) {
+	public boolean init(Context context, Configuration config) {
 
 		config_ = config;
 
@@ -456,7 +456,7 @@ public class RegistrationStore {
 	/**
 	 * DTNConfiguration to stores the application configurations,
 	 */
-	private DTNConfiguration config_;
+	private Configuration config_;
 
 	/**
 	 * init_ to make sure in init() it only makes SQLiteImplementation only once

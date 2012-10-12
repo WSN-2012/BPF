@@ -21,7 +21,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
@@ -67,7 +67,7 @@ public class GlobalStorage {
 	 * @return returns true on success
 	 */
 
-	public boolean init(Context context, DTNConfiguration config) {
+	public boolean init(Context context, Configuration config) {
 		config_ = config;
 
 		impt_storage_ = new StorageImplementation<Bundle>(context);
@@ -160,7 +160,7 @@ public class GlobalStorage {
 	/**
 	 * DTNConfiguration to stores the application configurations,
 	 */
-	private DTNConfiguration config_;
+	private Configuration config_;
 
 	/**
 	 * StorageImplementation object to use with bundle

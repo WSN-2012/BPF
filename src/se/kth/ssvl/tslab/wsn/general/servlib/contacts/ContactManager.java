@@ -86,7 +86,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.RouteReportEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.SetLinkDefaultsRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ShutdownRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.StatusRequest;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.LinksSetting.LinkEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link.Params;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
@@ -168,7 +168,7 @@ public class ContactManager extends BundleEventHandler {
 	 * Parsing the link's parameters specified in the configuration file
 	 * (config). Create the links and add them to the Contact Manager.
 	 */
-	public void init(DTNConfiguration config) {
+	public void init(Configuration config) {
 
 		List<LinkEntry> EntriesList = config.links_setting().link_entries();
 		Iterator<LinkEntry> i = EntriesList.iterator();

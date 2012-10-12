@@ -26,12 +26,12 @@ package se.kth.ssvl.tslab.wsn.general.servlib.config;
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  * 
  */
-public class DTNConfiguration {
+public class Configuration {
 
 	/**
 	 * Constructor
 	 */
-	public DTNConfiguration() {
+	public Configuration() {
 		security_setting_ = new SecuritySetting();
 		storage_setting_ = new StorageSetting();
 		interfaces_setting_ = new InterfacesSetting();

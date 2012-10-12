@@ -2,7 +2,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.Config;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
@@ -48,7 +48,7 @@ public abstract class ProphetQueuing {
 	 * Initialization function called by the DTNServer upon, the start service
 	 * is requested
 	 */
-	public static void init(DTNConfiguration dtn) {
+	public static void init(Configuration dtn) {
 		setPolicy(dtn.routes_setting().getQueuing_policy());
 	}
 

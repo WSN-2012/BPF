@@ -1,6 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class BPF {
@@ -58,7 +58,7 @@ public class BPF {
 	 * Gets the configurations object
 	 * @return The Configurations object filled with configuration parameters
 	 */
-	public DTNConfiguration getConfig() {
+	public Configuration getConfig() {
 		throw new NotImplementedException();
 	}
 	

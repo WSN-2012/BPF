@@ -22,7 +22,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.discovery;
 
 import java.util.Iterator;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.DiscoveriesSetting.AnnounceEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.DiscoveriesSetting.DiscoveryEntry;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
@@ -52,14 +52,14 @@ public class DiscoveryTable {
 		return instance_;
 	}
 
-	private DTNConfiguration config_;
+	private Configuration config_;
 
 	/**
 	 * Parse, at a boot time, all the parameters needed to create discoveries
 	 * instances. This parameter are parsed from the configuration file. The
 	 * discoveries instances are stored in the table.
 	 */
-	public void init(DTNConfiguration config) {
+	public void init(Configuration config) {
 		config_ = config;
 		List<DiscoveryEntry> discovery_entries = config.discoveries_setting()
 				.discovery_entries();
