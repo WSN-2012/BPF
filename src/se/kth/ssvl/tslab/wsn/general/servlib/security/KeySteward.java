@@ -21,6 +21,7 @@ import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
@@ -55,10 +56,10 @@ public class KeySteward
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 
 		//path to the key store file
-	    String kspath = Security.getInstance().ks_path();
+	    String kspath = DTNConfiguration.getInstance().security_settings().ks_path();
 		
 		//password to access the key store
-	    char[] password = Security.getInstance().ks_password().toCharArray();
+	    char[] password = DTNConfiguration.getInstance().security_settings().ks_password().toCharArray();
 	    
 	    FileInputStream fis = null;
 	    try {
@@ -147,10 +148,10 @@ public class KeySteward
 		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
     
 		//path to the key store file
-	    String kspath = Security.getInstance().ks_path();
+	    String kspath = DTNConfiguration.getInstance().security_settings().ks_path();
 		
 		//password to access the key store
-	    char[] password = Security.getInstance().ks_password().toCharArray();
+	    char[] password = DTNConfiguration.getInstance().security_settings().ks_password().toCharArray();
 	    
 	    FileInputStream fis = null;
 	    try {

@@ -1080,7 +1080,6 @@ public class Ciphersuite_C3 extends Ciphersuite
 							switch (block_info.type())
 							{
 							case PRIMARY_BLOCK:
-							case BUNDLE_AUTHENTICATION_BLOCK:
 
 								continue; //go to next for iteration
 
@@ -1209,13 +1208,13 @@ public class Ciphersuite_C3 extends Ciphersuite
 				continue;
 
 			}
-
+/*
 			if (  block_aux.type() == BundleProtocol.bundle_block_type_t.PAYLOAD_SECURITY_BLOCK ) 
 			{
 				need_correlator = true;     // yes - we need a correlator
 				break;
 			}
-
+*/
 			if (  block_aux.type() == BundleProtocol.bundle_block_type_t.CONFIDENTIALITY_BLOCK ) 
 			{
 				target_locals = (BP_Local_CS)(block_aux.locals());
@@ -1619,21 +1618,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 			if (!process_blocks)
 				//if ( (iter) <= block ) 
 			{
-				if ( iter.type() == BundleProtocol.bundle_block_type_t.PAYLOAD_SECURITY_BLOCK ) 
-				{
-					BPF.getInstance().getBPFLogger().debug(TAG, "finalize()  we got a security block.skiping");
-					//add correlator to exclude-list
-					target_locals = (BP_Local_CS)(iter.locals());
-
-					if (target_locals==null)//FAIL_IF_NULL
-					{ 
-						if ( locals !=  null )
-							locals.set_proc_flag (proc_flags_t.CS_BLOCK_PROCESSING_FAILED_DO_NOT_SEND.getCode());
-						return BP_FAIL;
-					}    	             
-					correlator_list.add(target_locals.correlator());
-				} 
-				else if (iter.type() == BundleProtocol.bundle_block_type_t.CONFIDENTIALITY_BLOCK ) 
+				if (iter.type() == BundleProtocol.bundle_block_type_t.CONFIDENTIALITY_BLOCK ) 
 				{
 					BPF.getInstance().getBPFLogger().debug(TAG, "finalize()  we got a confidentialiity block.skiping");
 					target_locals = (BP_Local_CS)(iter.locals());
@@ -1649,6 +1634,23 @@ public class Ciphersuite_C3 extends Ciphersuite
 						correlator_list.add(target_locals.correlator());
 					}
 				}
+				
+				/*
+				else if ( iter.type() == BundleProtocol.bundle_block_type_t.PAYLOAD_SECURITY_BLOCK ) 
+				{
+					BPF.getInstance().getBPFLogger().debug(TAG, "finalize()  we got a security block.skiping");
+					//add correlator to exclude-list
+					target_locals = (BP_Local_CS)(iter.locals());
+
+					if (target_locals==null)//FAIL_IF_NULL
+					{ 
+						if ( locals !=  null )
+							locals.set_proc_flag (proc_flags_t.CS_BLOCK_PROCESSING_FAILED_DO_NOT_SEND.getCode());
+						return BP_FAIL;
+					}    	             
+					correlator_list.add(target_locals.correlator());
+				}
+				*/
 
 				if (iter==block)
 				{
@@ -1662,7 +1664,6 @@ public class Ciphersuite_C3 extends Ciphersuite
 			switch ( iter.type() ) 
 			{
 
-			case PAYLOAD_SECURITY_BLOCK:
 			case CONFIDENTIALITY_BLOCK:
 
 				//sd. For each PIB or PCB to be protected, the entire original block is
