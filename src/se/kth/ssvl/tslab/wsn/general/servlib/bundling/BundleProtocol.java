@@ -706,10 +706,10 @@ public class BundleProtocol {
 	 */
 	public static enum bundle_block_type_t {
 		PRIMARY_BLOCK((byte) 0), // /< "INTERNAL ONLY -- NOT IN SPEC" [DTN2]
-		PAYLOAD_BLOCK((byte) 1), UNKNOWN_BLOCK((byte) 90), // /<
-															// "INTERNAL ONLY -- NOT IN SPEC"
-															// [DTN2]
-		APPLICATION_BLOCK((byte) 200);
+		PAYLOAD_BLOCK((byte) 1),
+		UNKNOWN_BLOCK((byte) 90),// "INTERNAL ONLY -- NOT IN SPEC"
+		APPLICATION_BLOCK((byte) 200),
+		CONFIDENTIALITY_BLOCK((byte) 4); //defined in RFC6257, PCB type 0x04
 
 		private static final Map<Byte, bundle_block_type_t> lookup = new HashMap<Byte, bundle_block_type_t>();
 
