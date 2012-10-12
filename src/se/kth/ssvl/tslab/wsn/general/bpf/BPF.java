@@ -1,5 +1,8 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 public class BPF {
 	
 	/* ********* MEMBER VARIABLES ********** */
@@ -50,7 +53,17 @@ public class BPF {
 	}
 	
 	
-	/* ********* GETTER METHODS FOR BPF CLASSES ********** */	
+	/* ********* GETTER METHODS FOR BPF CLASSES ************** */
+	/**
+	 * Gets the configurations object
+	 * @return The Configurations object filled with configuration parameters
+	 */
+	public DTNConfiguration getConfig() {
+		throw new NotImplementedException();
+	}
+	
+	
+	/* ********* GETTER METHODS FOR BPF API CLASSES ********** */	
 	/**
 	 * Gets the BPFCommunication object passed in from the BPFService.
 	 * @return The BPFCommunication object in the BPFService

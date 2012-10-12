@@ -19,8 +19,6 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.config;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.router_type_t;
-
 /**
  * Class represents DTNConfiguration that user can setup in the configuration
  * user interface
@@ -29,11 +27,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.router_type_t;
  * 
  */
 public class DTNConfiguration {
-
-	/**
-	 * The stored default configuration for testing purpose
-	 */
-	private static DTNConfiguration default_dtn_config_;
 
 	/**
 	 * Constructor
@@ -45,28 +38,6 @@ public class DTNConfiguration {
 		links_setting_ = new LinksSetting();
 		routes_setting_ = new RoutesSetting();
 		discoveries_setting_ = new DiscoveriesSetting();
-	}
-
-	/**
-	 * Return default setting of DTN Setting for testing purpose
-	 */
-	public static DTNConfiguration default_dtn_config() {
-		if (default_dtn_config_ == null) {
-			default_dtn_config_ = new DTNConfiguration();
-			StorageSetting default_storage_setting_ = new StorageSetting();
-			default_storage_setting_.set_storage_path("dth");
-			default_storage_setting_.set_quota(60);
-			default_storage_setting_.set_storage_path("dtn");
-			default_dtn_config_.set_storage_setting(default_storage_setting_);
-
-			RoutesSetting default_routes_setting = new RoutesSetting();
-			default_routes_setting.set_local_eid("dtn://android.bytewalla.dtn");
-			default_routes_setting
-					.set_router_type(router_type_t.PROPHET_BUNDLE_ROUTER);
-			default_dtn_config_.set_routes_setting(default_routes_setting);
-		}
-
-		return default_dtn_config_;
 	}
 
 	/**

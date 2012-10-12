@@ -107,8 +107,8 @@ public class DTNConfigurationParser {
 	/**
 	 * The TAG name to parse for the Announce element
 	 */
-	private final static String AnnounceTagName = "tns:Announce";
-
+	private final static String AnnounceTagName = "tns:Announce";	
+	
 	/**
 	 * Main routine for parsing XML Configuration file input stream
 	 * 
@@ -473,6 +473,7 @@ public class DTNConfigurationParser {
 	 *            the configuration file we will put output on
 	 * @throws InvalidDTNConfigurationException
 	 */
+	//TODO: Throw exception if not needed values are found in the config
 	private static void process_storage_config(Element config_element,
 			DTNConfiguration config) throws InvalidDTNConfigurationException {
 
@@ -494,6 +495,7 @@ public class DTNConfigurationParser {
 	 *            the configuration file we will put output on
 	 * @throws InvalidDTNConfigurationException
 	 */
+	//TODO: Throw exception if not needed values are found in the config
 	private static void process_security_config(Element config_element,
 			DTNConfiguration config) throws InvalidDTNConfigurationException {
 
