@@ -5,7 +5,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfoVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 
 /**
  * TODO
@@ -27,7 +27,8 @@ public class Security {
 		int err = 0;
 		
 		//Do we have to use PCB?
-		if(DTNConfiguration.getInstance().security_settings().use_pcb().equals("true")) 
+		if(BPF.getInstance().getConfig().security_setting().use_pcb().equals("true")) 
+
 		{
 			Ciphersuite bp =  Ciphersuite.find_suite(Ciphersuite_C3.CSNUM_C3);
 			assert(bp != null);
@@ -35,7 +36,7 @@ public class Security {
 		}
 		
 		//Do we have to use PIB?
-		if(DTNConfiguration.getInstance().security_settings().use_pib().equals("true"))
+		if(BPF.getInstance().getConfig().security_setting().use_pib().equals("true"))
 		{
 			BPF.getInstance().getBPFLogger().error(TAG, "PIB blocks are not supported yet!");
 			//TODO: Add PIB support!

@@ -96,7 +96,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNotHoldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventData;
 import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventHandler;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
@@ -505,7 +505,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	/**
 	 * Initialzation from configuration object
 	 */
-	public void init(DTNConfiguration config) {
+	public void init(Configuration config) {
 		local_eid_ = new EndpointID(config.routes_setting().local_eid());
 
 	}

@@ -24,7 +24,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.config;
  * This normally is threw when parsing the DTNConfiguration file in the
  * DTNConfiguration Parser
  */
-public class InvalidDTNConfigurationException extends DTNConfigurationException {
+public class InvalidDTNConfigurationException extends ConfigurationException {
 
 	/**
 	 * 

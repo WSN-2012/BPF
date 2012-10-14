@@ -47,7 +47,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  * 
  */
-public class DTNConfigurationParser {
+public class ConfigurationParser {
 
 	/**
 	 * The TAG name to parse for the DTNConfigration element
@@ -107,8 +107,8 @@ public class DTNConfigurationParser {
 	/**
 	 * The TAG name to parse for the Announce element
 	 */
-	private final static String AnnounceTagName = "tns:Announce";
-
+	private final static String AnnounceTagName = "tns:Announce";	
+	
 	/**
 	 * Main routine for parsing XML Configuration file input stream
 	 * 
@@ -118,9 +118,9 @@ public class DTNConfigurationParser {
 	 *         stream
 	 * @throws InvalidDTNConfigurationException
 	 */
-	public static DTNConfiguration parse_config_file(InputStream xml_stream)
+	public static Configuration parse_config_file(InputStream xml_stream)
 			throws InvalidDTNConfigurationException {
-		DTNConfiguration config_ = new DTNConfiguration();
+		Configuration config_ = new Configuration();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
 		try {
@@ -162,7 +162,7 @@ public class DTNConfigurationParser {
 	 * @throws Exception
 	 */
 	private static void process_config_element(Element config_element,
-			DTNConfiguration config) throws Exception {
+			Configuration config) throws Exception {
 		if (config_element.getTagName().equals(StorageSettingTagName)) {
 			process_storage_config(config_element, config);
 		}
@@ -208,7 +208,7 @@ public class DTNConfigurationParser {
 	 * @throws InvalidDTNConfigurationException
 	 */
 	private static void process_interfaces_config(Element config_element,
-			DTNConfiguration config) throws InvalidDTNConfigurationException {
+			Configuration config) throws InvalidDTNConfigurationException {
 		NodeList childNodes = config_element.getChildNodes();
 
 		List<InterfaceEntry> interface_entries = config.interfaces_setting_
@@ -261,7 +261,7 @@ public class DTNConfigurationParser {
 	 * @throws InvalidDTNConfigurationException
 	 */
 	private static void process_links_config(Element config_element,
-			DTNConfiguration config) throws InvalidDTNConfigurationException {
+			Configuration config) throws InvalidDTNConfigurationException {
 		NodeList childNodes = config_element.getChildNodes();
 
 		List<LinkEntry> link_entries = config.links_setting().link_entries();
@@ -327,7 +327,7 @@ public class DTNConfigurationParser {
 	 * @throws InvalidDTNConfigurationException
 	 */
 	private static void process_routes_config(Element config_element,
-			DTNConfiguration config) throws InvalidDTNConfigurationException {
+			Configuration config) throws InvalidDTNConfigurationException {
 		NodeList childNodes = config_element.getChildNodes();
 
 		Attr router_type = config_element.getAttributeNode("router_type");
@@ -351,7 +351,7 @@ public class DTNConfigurationParser {
 		// if (local_eid!=null)
 		{
 			config.routes_setting().set_local_eid(
-					DTNConfiguration.default_dtn_config().routes_setting()
+					Configuration.default_dtn_config().routes_setting()
 							.local_eid());
 		}
 		// else
@@ -398,7 +398,7 @@ public class DTNConfigurationParser {
 	 * @throws InvalidDTNConfigurationException
 	 */
 	private static void process_discoveries_config(Element config_element,
-			DTNConfiguration config) throws InvalidDTNConfigurationException {
+			Configuration config) throws InvalidDTNConfigurationException {
 		NodeList childNodes = config_element.getChildNodes();
 
 		List<DiscoveryEntry> discovery_entries = config.discoveries_setting()
@@ -473,8 +473,9 @@ public class DTNConfigurationParser {
 	 *            the configuration file we will put output on
 	 * @throws InvalidDTNConfigurationException
 	 */
+	//TODO: Throw exception if not needed values are found in the config
 	private static void process_storage_config(Element config_element,
-			DTNConfiguration config) throws InvalidDTNConfigurationException {
+			Configuration config) throws InvalidDTNConfigurationException {
 
 		Attr quota = config_element.getAttributeNode("quota");
 		config.storage_setting().set_quota(Integer.parseInt(quota.getValue()));
@@ -494,8 +495,9 @@ public class DTNConfigurationParser {
 	 *            the configuration file we will put output on
 	 * @throws InvalidDTNConfigurationException
 	 */
+	//TODO: Throw exception if not needed values are found in the config
 	private static void process_security_config(Element config_element,
-			DTNConfiguration config) throws InvalidDTNConfigurationException {
+			Configuration config) throws InvalidDTNConfigurationException {
 
 		Attr ks_path = config_element.getAttributeNode("ks_path");
 		config.security_setting().set_ks_path(ks_path.getValue());

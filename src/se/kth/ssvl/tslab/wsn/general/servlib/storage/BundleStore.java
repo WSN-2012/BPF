@@ -27,7 +27,7 @@ import java.util.Iterator;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundlePayload;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundlePayload.location_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing;
@@ -92,7 +92,7 @@ public class BundleStore {
 	 * @return returns true on success
 	 */
 
-	public boolean init(DTNConfiguration config) {
+	public boolean init(Configuration config) {
 		config_ = config;
 		
 		BPF.getInstance().getBPFLogger().debug(TAG, "Initializing bundle store");
@@ -609,7 +609,7 @@ public class BundleStore {
 	/**
 	 * DTNConfiguration to stores the application configurations,
 	 */
-	private static DTNConfiguration config_;
+	private static Configuration config_;
 
 	/**
 	 * Number of bundles stored on the disk

@@ -90,7 +90,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.SetLinkDefaultsReque
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ShutdownRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.StatusRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNotHoldByCurrentThread;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.RoutesSetting;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
@@ -861,7 +861,7 @@ public abstract class TableBasedRouter extends BundleRouter {
 	}
 
 	@Override
-	public void initialize(DTNConfiguration dtn_config) {
+	public void initialize(Configuration dtn_config) {
 		Iterator<RoutesSetting.RouteEntry> itr = dtn_config.routes_setting()
 				.route_entries().iterator();
 

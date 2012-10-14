@@ -31,7 +31,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleEventHandler;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleList;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.DTNConfiguration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetBundleRouter;
@@ -101,7 +101,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 	 * Initialization function called by the DTNServer upon, the start service
 	 * is requested
 	 */
-	public static void init(DTNConfiguration dtn) {
+	public static void init(Configuration dtn) {
 		config_ = new Config();
 		config_.set_type(dtn.routes_setting().router_type());
 		dtn_config_ = dtn;
@@ -279,7 +279,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 	/**
 	 * stored DTNConfiguration inside Bundle Router to check value later on
 	 */
-	private static DTNConfiguration dtn_config_;
+	private static Configuration dtn_config_;
 
 	/**
 	 * stored Config particulary for the router
@@ -313,7 +313,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 	/**
 	 * "called after all the global data structures are set up" [DTN2]
 	 */
-	abstract public void initialize(DTNConfiguration dtn_config_);
+	abstract public void initialize(Configuration dtn_config_);
 
 	/**
 	 * Display storage information

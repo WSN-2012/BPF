@@ -24,7 +24,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.config;
  * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class DTNConfigurationException extends Exception {
+public class ConfigurationException extends Exception {
 
 	/**
 	 * Java Serial version UID for Serializable
@@ -34,14 +34,14 @@ public class DTNConfigurationException extends Exception {
 	/**
 	 * Constructor with message
 	 */
-	public DTNConfigurationException(String message) {
+	public ConfigurationException(String message) {
 		super(message);
 	}
 
 	/**
 	 * Default Constructor
 	 */
-	public DTNConfigurationException() {
+	public ConfigurationException() {
 
 	}
 
