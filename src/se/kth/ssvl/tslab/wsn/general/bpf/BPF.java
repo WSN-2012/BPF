@@ -75,6 +75,12 @@ public class BPF {
 		return service.getBPFNotificationReceiver();
 	}
 	
-	
+	/**
+	 * Gets the BPSDB object passed in from the BPSService.
+	 * @return The BPSDB object in the BPSService
+	 */
+	public BPFDB getBPFDB() {
+		return service.getBPFDB();
+	}
 	
 }

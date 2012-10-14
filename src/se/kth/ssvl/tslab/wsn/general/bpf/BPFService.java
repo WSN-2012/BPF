@@ -8,4 +8,6 @@ public interface BPFService {
 	
 	public abstract BPFNotificationReceiver getBPFNotificationReceiver();
 	
+	public abstract BPFDB getBPFDB();
+	
 }
