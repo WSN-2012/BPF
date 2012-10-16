@@ -1240,7 +1240,7 @@ public class Link implements Serializable {
 
 		long uptime = stats_.uptime();
 		if (contact_ != null) {
-			uptime += TimeHelper.elapsed_ms(contact_.start_time_);
+			uptime += TimeHelper.elapsed_ms(contact_.start_time());
 		}
 
 		long throughput = 0;
