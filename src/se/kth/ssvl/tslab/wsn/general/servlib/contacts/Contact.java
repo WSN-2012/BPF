@@ -102,7 +102,7 @@ public class Contact implements Serializable {
 	 */
 	public int format(StringBuffer buf, int sz) {
 
-		String text = String.format("contact %s started %s /n", link_.nexthop_,
+		String text = String.format("contact %s started %s /n", link_.nexthop(),
 				start_time_);
 
 		buf.append(text);

@@ -1266,7 +1266,7 @@ public class Link implements Serializable {
 
 	}
 
-	/*
+	/**
 	 * Accessor for the bundles queue
 	 */
 
@@ -1274,35 +1274,35 @@ public class Link implements Serializable {
 		return bundles_queued_;
 	}
 
-	/*
+	/**
 	 * Accessors for the destination ip
 	 */
 	public InetAddress dest_ip() {
 		return dest_ip_;
 	}
 
-	/*
+	/**
 	 * Accessors for the remote port
 	 */
 	public short remote_port() {
 		return remote_port_;
 	}
 
-	/*
+	/**
 	 * Accessors for the bytes queue
 	 */
 	public int bytes_queued() {
 		return bytes_queued_;
 	}
 
-	/*
+	/**
 	 * Accessors for the bundles inflight
 	 */
 	public int bundles_inflight() {
 		return bundles_inflight_;
 	}
 
-	/*
+	/**
 	 * Accessors for the bytes inflight
 	 */
 	public int bytes_inflight() {
