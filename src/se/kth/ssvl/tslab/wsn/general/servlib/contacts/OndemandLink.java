@@ -20,7 +20,7 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.contacts;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.LinkAvailableEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_t;

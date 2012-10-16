@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.FileManager;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 

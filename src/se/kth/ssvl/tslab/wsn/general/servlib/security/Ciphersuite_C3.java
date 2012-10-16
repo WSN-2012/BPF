@@ -1,22 +1,22 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.security;
 
 
-import static se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockProcessor.BP_FAIL;
-import static se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockProcessor.BP_SUCCESS;
+import static se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor.BP_FAIL;
+import static se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor.BP_SUCCESS;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfoVec;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockProcessor.mutate_func;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockProcessor.mutate_func_event_data;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.status_report_reason_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfo;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor.mutate_func;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor.mutate_func_event_data;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
 import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventData;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;

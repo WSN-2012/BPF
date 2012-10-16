@@ -22,9 +22,9 @@ package se.kth.ssvl.tslab.wsn.general.servlib.reg;
 
 import java.util.concurrent.TimeUnit;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockingBundleList;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockingBundleList;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;

@@ -20,7 +20,7 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 

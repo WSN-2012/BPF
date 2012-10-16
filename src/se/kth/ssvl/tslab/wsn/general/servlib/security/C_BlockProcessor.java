@@ -1,13 +1,13 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.security;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfoVec;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockProcessor;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.bundle_block_type_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.status_report_reason_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfo;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.bundle_block_type_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.security.BP_Local_CS;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;

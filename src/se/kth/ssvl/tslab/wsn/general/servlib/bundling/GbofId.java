@@ -20,6 +20,7 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleTimestamp;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 
 /**

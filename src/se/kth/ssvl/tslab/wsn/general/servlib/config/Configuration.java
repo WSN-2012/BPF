@@ -19,6 +19,13 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.config;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.DiscoveriesSetting;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.InterfacesSetting;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.LinksSetting;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.RoutesSetting;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.SecuritySetting;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.StorageSetting;
+
 /**
  * Class represents DTNConfiguration that user can setup in the configuration
  * user interface

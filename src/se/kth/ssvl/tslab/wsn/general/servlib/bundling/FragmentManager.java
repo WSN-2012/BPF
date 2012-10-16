@@ -23,10 +23,14 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 import java.util.HashMap;
 import java.util.ListIterator;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundlePayload.location_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.block_flag_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.bundle_block_type_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.status_report_reason_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfo;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.block_flag_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.bundle_block_type_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ReassemblyCompletedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;

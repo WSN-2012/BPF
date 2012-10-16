@@ -19,7 +19,7 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 
 /**
  * Event Acception for testing purpose

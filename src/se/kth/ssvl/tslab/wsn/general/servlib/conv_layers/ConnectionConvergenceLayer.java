@@ -20,9 +20,9 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleSendCancelledEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleTransmittedEvent;

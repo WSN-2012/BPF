@@ -24,7 +24,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;

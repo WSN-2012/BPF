@@ -19,8 +19,8 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleList;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
 
 /**
  * Event class for reassembly completion.

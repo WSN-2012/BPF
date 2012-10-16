@@ -23,7 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.contacts;
 import java.util.Iterator;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.InterfacesSetting.InterfaceEntry;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.InterfacesSetting.InterfaceEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;

@@ -27,11 +27,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleInfoCache;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundlePayload;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundlePayload.location_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleInfoCache;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.RegistrationExpiredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;

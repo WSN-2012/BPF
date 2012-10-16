@@ -2,7 +2,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 
 public class Fifo extends ProphetQueuing {

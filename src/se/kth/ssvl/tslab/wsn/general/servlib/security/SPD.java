@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfoVec;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfo;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 
 

@@ -2,8 +2,8 @@ package se.kth.ssvl.tslab.wsn.general.servlib.security;
 
 import java.io.Serializable;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BP_Local;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BlockInfo;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BP_Local;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfo;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;

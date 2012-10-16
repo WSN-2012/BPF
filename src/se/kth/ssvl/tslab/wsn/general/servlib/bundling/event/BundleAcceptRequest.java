@@ -19,8 +19,8 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 
 /**
  * Event to check whether the Bundle would be accepted by the Bundle Daemon or

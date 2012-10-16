@@ -22,8 +22,8 @@ package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
 
 import java.util.Iterator;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.CLAParamsSetEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeNameVector;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeVector;

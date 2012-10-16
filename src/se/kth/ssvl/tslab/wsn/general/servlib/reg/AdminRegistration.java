@@ -20,10 +20,10 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.reg;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.CustodySignal;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.admin_record_type_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.admin_record_type_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodySignal;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.CustodySignalEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;

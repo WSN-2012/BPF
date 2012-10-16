@@ -22,10 +22,10 @@ package se.kth.ssvl.tslab.wsn.general.servlib.routing;
 
 import java.io.Serializable;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.CustodyTimerSpec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo.action_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.StringVector;

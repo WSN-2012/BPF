@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo.state_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;

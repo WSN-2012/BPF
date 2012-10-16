@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleEventHandler;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleEventHandler;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleAcceptRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleCancelRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
@@ -87,7 +87,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.SetLinkDefaultsReque
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ShutdownRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.StatusRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.LinksSetting.LinkEntry;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.LinksSetting.LinkEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link.Params;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;

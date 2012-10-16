@@ -23,9 +23,9 @@ package se.kth.ssvl.tslab.wsn.general.servlib.discovery;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleDaemon;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundlePayload.location_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.LinkStateChangeRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;

@@ -19,7 +19,7 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.CustodySignal;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodySignal;
 
 /**
  * Event class for custody transfer signal arrivals.
