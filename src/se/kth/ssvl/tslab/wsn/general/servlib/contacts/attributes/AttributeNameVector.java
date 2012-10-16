@@ -18,21 +18,21 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.contacts;
+package se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes;
+
+import java.util.ArrayList;
 
 /**
- * This class is used in NamedAttribute and in AttributeNameVector
+ * This class represents a list of AttributeName
  * 
  * @author María José Peroza Marval (mjpm@kth.se)
- * 
  */
 
-public class AttributeName {
+public class AttributeNameVector extends ArrayList<AttributeName> {
 
-	public String name() {
-		return name_;
-	}
-
-	private String name_;
+	/**
+	 * Unique identifier according to Java Serializable specification
+	 */
+	private static final long serialVersionUID = -8839662923195713659L;
 
 }

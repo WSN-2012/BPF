@@ -20,7 +20,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 
 /**
  * Event class for canceling a bundle transmission

@@ -93,8 +93,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNo
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.RoutesSetting;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.LinkSet;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.LinkSet;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;

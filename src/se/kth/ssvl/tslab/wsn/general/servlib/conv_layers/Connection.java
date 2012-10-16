@@ -39,7 +39,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.contact_header_flags_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.data_segment_flags_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.msg_type_t;

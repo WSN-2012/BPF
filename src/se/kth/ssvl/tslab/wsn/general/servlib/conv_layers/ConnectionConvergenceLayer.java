@@ -28,7 +28,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleSendCancelledE
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleTransmittedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;

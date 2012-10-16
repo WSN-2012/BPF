@@ -18,21 +18,20 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.contacts;
+package se.kth.ssvl.tslab.wsn.general.servlib.contacts.interfaces;
 
-import java.util.ArrayList;
+import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
 /**
- * This class represents a list of AttributeName
+ * This class represents a List of interfaces
  * 
  * @author María José Peroza Marval (mjpm@kth.se)
  */
-
-public class AttributeNameVector extends ArrayList<AttributeName> {
+public class InterfaceList extends List<Interface> {
 
 	/**
 	 * Unique identifier according to Java Serializable specification
 	 */
-	private static final long serialVersionUID = -8839662923195713659L;
+	private static final long serialVersionUID = 1728230726623241681L;
 
 }

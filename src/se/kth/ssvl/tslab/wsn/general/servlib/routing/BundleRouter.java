@@ -32,7 +32,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleEventHandler
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetBundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetRegistration;

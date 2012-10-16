@@ -20,7 +20,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.config.settings;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.config.types.conv_layer_type_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
 /**

@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.contacts;
+package se.kth.ssvl.tslab.wsn.general.servlib.contacts.links;
 
 import java.util.HashSet;
 

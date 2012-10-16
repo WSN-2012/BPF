@@ -19,8 +19,8 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeNameVector;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.AttributeNameVector;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 
 /**
  * Event for Link Attribute Query Request

@@ -29,7 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.loca
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.LinkStateChangeRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;

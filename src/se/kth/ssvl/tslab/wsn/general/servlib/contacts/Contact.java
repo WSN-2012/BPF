@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.CLInfo;
 
 /**

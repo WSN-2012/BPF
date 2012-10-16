@@ -38,7 +38,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.InterfacesSetting.I
 import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.LinksSetting.LinkEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.RoutesSetting.RouteEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.types.conv_layer_type_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link.link_type_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link.link_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 

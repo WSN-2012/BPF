@@ -30,7 +30,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PayloadBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PrimaryBlockProcessor;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;

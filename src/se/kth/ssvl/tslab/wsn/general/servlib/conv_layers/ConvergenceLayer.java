@@ -25,11 +25,11 @@ import java.util.Iterator;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.CLAParamsSetEvent;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeNameVector;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeVector;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.AttributeNameVector;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.AttributeVector;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.interfaces.Interface;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**

@@ -19,7 +19,7 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeVector;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.AttributeVector;
 
 /**
  * Class for reporting Interface attributes

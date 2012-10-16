@@ -19,8 +19,8 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.AttributeNameVector;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Interface;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.AttributeNameVector;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.interfaces.Interface;
 
 /**
  * Event for querying Interface attribute

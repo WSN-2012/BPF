@@ -23,7 +23,7 @@ import java.io.File;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo.action_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle.priority_values_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 
 /**

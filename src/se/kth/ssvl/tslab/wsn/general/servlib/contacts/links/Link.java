@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.contacts;
+package se.kth.ssvl.tslab.wsn.general.servlib.contacts.links;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -31,6 +31,9 @@ import java.util.Map;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.AttributeVector;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.NamedAttribute;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.CLInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
