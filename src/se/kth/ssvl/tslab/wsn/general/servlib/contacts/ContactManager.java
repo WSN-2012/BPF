@@ -848,19 +848,19 @@ public class ContactManager extends BundleEventHandler {
 
 			BPF.getInstance().getBPFLogger().debug(
 					TAG,
-					"Link availablity timer for link " + link_.name_
+					"Link availablity timer for link " + link_.name()
 							+ " fired, trying to open link");
 			if (!link_.isopening() && !link_.isopen()) {
 				BPF.getInstance().getBPFLogger().debug(
 						TAG,
 						"Timer ask Contact Manager to reopen link "
-								+ link_.name_);
+								+ link_.name());
 				cm_.reopen_link(link_);
 
 			} else {
 				BPF.getInstance().getBPFLogger().debug(
 						TAG,
-						"Link " + link_.name_
+						"Link " + link_.name()
 								+ " is already open or is openning");
 			}
 
