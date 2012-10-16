@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.naming;
+package se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint;
 
 import java.io.Serializable;
 

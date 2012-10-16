@@ -21,7 +21,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleTimestamp;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 
 /**
  * Class definition for a GBOF ID (Global Bundle Or Fragment ID)

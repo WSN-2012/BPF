@@ -26,7 +26,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.adm
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodySignal;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.CustodySignalEvent;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;

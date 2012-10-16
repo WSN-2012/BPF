@@ -33,8 +33,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.sta
 import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventData;
 import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventHandler;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDVector;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDVector;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;

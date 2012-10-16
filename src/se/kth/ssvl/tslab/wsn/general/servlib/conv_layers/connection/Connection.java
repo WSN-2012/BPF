@@ -51,7 +51,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.msg_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.shutdown_flags_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.shutdown_reason_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;

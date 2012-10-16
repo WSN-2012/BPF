@@ -20,7 +20,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 
 /**
  * Code for matching Router Entry during the querying process

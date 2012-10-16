@@ -18,9 +18,10 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.naming;
+package se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.DTNScheme;
 
 /**
  * Class to represent group of EndpointID. For example, dtn://host1.dtn/*,

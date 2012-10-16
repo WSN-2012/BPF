@@ -22,7 +22,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 
 import java.io.Serializable;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;

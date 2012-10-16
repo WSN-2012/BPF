@@ -23,7 +23,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 
 

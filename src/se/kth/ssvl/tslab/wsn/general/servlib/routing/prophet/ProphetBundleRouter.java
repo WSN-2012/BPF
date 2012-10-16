@@ -34,8 +34,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle.priority_va
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.RouteEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.TableBasedRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.BaseTLV.TLVType;

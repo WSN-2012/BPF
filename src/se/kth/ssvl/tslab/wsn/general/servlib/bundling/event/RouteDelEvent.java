@@ -19,7 +19,7 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 
 /**
  * Event class for route delete events

@@ -23,8 +23,8 @@ package se.kth.ssvl.tslab.wsn.general.servlib.reg;
 import java.io.File;
 
 
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;

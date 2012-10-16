@@ -29,7 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.GbofId;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleFreeEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNotHoldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHeldByCurrentThread;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;

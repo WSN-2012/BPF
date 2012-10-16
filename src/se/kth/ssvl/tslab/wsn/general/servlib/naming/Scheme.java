@@ -22,6 +22,11 @@ package se.kth.ssvl.tslab.wsn.general.servlib.naming;
 
 import java.net.URI;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.exceptions.InvalidURIException;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.exceptions.NamingException;
+
 /**
  * The base class for naming Scheme in DTN
  * 

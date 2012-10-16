@@ -38,7 +38,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.InFlightBundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.IncomingBundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.LinkParams;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.TCPConvergenceLayer.TCPLinkParams;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;

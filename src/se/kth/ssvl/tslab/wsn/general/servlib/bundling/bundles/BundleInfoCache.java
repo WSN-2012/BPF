@@ -23,7 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 
 /**
  * Caching of Bundle implementation for detecting duplicated Bundle

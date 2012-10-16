@@ -18,13 +18,17 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.naming;
+package se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.DTNScheme;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.Scheme;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.SchemeTable;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.exceptions.InvalidURIException;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNEndpointID;

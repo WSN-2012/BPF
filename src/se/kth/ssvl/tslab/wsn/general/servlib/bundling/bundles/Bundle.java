@@ -32,7 +32,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.LinkBlockSet;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHeldByCurrentThread;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.Set;

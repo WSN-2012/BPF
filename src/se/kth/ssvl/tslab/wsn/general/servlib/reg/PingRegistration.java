@@ -25,8 +25,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.loca
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDPattern;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**

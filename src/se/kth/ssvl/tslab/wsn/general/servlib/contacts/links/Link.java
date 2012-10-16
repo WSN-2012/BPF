@@ -36,7 +36,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.AttributeVector
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.NamedAttribute;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.CLInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.RouterInfo;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;

@@ -25,6 +25,10 @@ import java.net.URI;
 import java.util.regex.Pattern;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.exceptions.InvalidURIException;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.exceptions.NamingException;
 
 /**
  * This is the default scheme for the DTN network. The pattern for the scheme is

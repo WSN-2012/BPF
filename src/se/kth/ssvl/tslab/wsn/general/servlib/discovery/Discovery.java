@@ -34,7 +34,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce.Announce;
 import se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce.AnnouncementList;
 import se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce.IPDiscovery;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
