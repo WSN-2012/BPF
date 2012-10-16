@@ -80,7 +80,7 @@ public class ConfigurationParser {
 	 * The TAG name to parse for the DiscoveriesSetting element
 	 */
 	private final static String DiscoveriesSettingTagName = "tns:DiscoveriesSetting";
-	
+
 	/**
 	 * The TAG name to parse for the SecuritySetting element
 	 */
@@ -109,8 +109,8 @@ public class ConfigurationParser {
 	/**
 	 * The TAG name to parse for the Announce element
 	 */
-	private final static String AnnounceTagName = "tns:Announce";	
-	
+	private final static String AnnounceTagName = "tns:Announce";
+
 	/**
 	 * Main routine for parsing XML Configuration file input stream
 	 * 
@@ -188,7 +188,7 @@ public class ConfigurationParser {
 			process_discoveries_config(config_element, config);
 			return;
 		}
-		
+
 		else if (config_element.getTagName().equals(SecuritySettingTagName)) {
 			process_security_config(config_element, config);
 			return;
@@ -348,19 +348,12 @@ public class ConfigurationParser {
 		config.routes_setting().setQueuing_policy(
 				config_element.getAttributeNode("queuing").getValue());
 
-		// Attr local_eid = config_element.getAttributeNode("local_eid");
-		//
-		// if (local_eid!=null)
-		{
-			config.routes_setting().set_local_eid(
-					Configuration.default_dtn_config().routes_setting()
-							.local_eid());
+		Attr local_eid = config_element.getAttributeNode("local_eid");
+
+		if (local_eid == null) {
+			throw new InvalidDTNConfigurationException(
+					"Invalid DTN Config Exception: local_eid is not specified");
 		}
-		// else
-		// {
-		// throw new
-		// InvalidDTNConfigurationException("Invalid DTN Config Exception: local_eid is not specified");
-		// }
 
 		List<RouteEntry> route_entries = config.routes_setting()
 				.route_entries();
@@ -475,7 +468,7 @@ public class ConfigurationParser {
 	 *            the configuration file we will put output on
 	 * @throws InvalidDTNConfigurationException
 	 */
-	//TODO: Throw exception if not needed values are found in the config
+	// TODO: Throw exception if not needed values are found in the config
 	private static void process_storage_config(Element config_element,
 			Configuration config) throws InvalidDTNConfigurationException {
 
@@ -487,7 +480,7 @@ public class ConfigurationParser {
 
 		return;
 	}
-	
+
 	/**
 	 * Routine to process config related to security settings
 	 * 
@@ -497,7 +490,7 @@ public class ConfigurationParser {
 	 *            the configuration file we will put output on
 	 * @throws InvalidDTNConfigurationException
 	 */
-	//TODO: Throw exception if not needed values are found in the config
+	// TODO: Throw exception if not needed values are found in the config
 	private static void process_security_config(Element config_element,
 			Configuration config) throws InvalidDTNConfigurationException {
 
@@ -506,10 +499,10 @@ public class ConfigurationParser {
 
 		Attr ks_password = config_element.getAttributeNode("ks_password");
 		config.security_setting().set_ks_password(ks_password.getValue());
-		
+
 		Attr use_pcb = config_element.getAttributeNode("use_pcb");
 		config.security_setting().set_use_pcb(use_pcb.getValue());
-		
+
 		Attr use_pib = config_element.getAttributeNode("use_pib");
 		config.security_setting().set_use_pib(use_pib.getValue());
 
