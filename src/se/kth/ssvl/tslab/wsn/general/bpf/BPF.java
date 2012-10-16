@@ -89,8 +89,8 @@ public class BPF {
 	}
 	
 	/**
-	 * Gets the BPSDB object passed in from the BPSService.
-	 * @return The BPSDB object in the BPSService
+	 * Gets the BPFDB object passed in from the BPFService.
+	 * @return The BPFDB object in the BPFService
 	 */
 	public BPFDB getBPFDB() {
 		return service.getBPFDB();
