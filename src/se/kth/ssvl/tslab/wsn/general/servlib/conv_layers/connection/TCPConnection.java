@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
+package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +34,8 @@ import java.util.Date;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer.TCPLinkParams;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TestDataLogger;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.TCPConvergenceLayer.TCPLinkParams;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;

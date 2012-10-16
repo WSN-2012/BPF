@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
+package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -33,7 +33,11 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.LinkStateChangeReque
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
-import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer.TCPLinkParams;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.CLInfo;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.InFlightBundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.IncomingBundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.LinkParams;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.TCPConvergenceLayer.TCPLinkParams;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;

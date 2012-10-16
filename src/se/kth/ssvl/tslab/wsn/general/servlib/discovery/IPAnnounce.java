@@ -26,7 +26,7 @@ import java.util.Calendar;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
-import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TCPConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.TCPConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;

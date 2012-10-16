@@ -20,6 +20,8 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.CLConnection;
+
 /**
  * "Tunable parameter structure stored in each Link's CLInfo slot. Other
  * CL-specific parameters are handled by deriving from this class" [DTN2].

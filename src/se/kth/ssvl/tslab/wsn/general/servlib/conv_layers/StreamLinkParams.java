@@ -20,6 +20,8 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.CLConnection;
+
 /**
  * "Link parameters shared among all stream based convergence layers"[DTN2].
  * 

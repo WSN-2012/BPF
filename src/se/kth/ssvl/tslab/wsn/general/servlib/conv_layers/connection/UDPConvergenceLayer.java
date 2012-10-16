@@ -18,26 +18,26 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
+package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection;
 
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.UnknownHostException;
 
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.interfaces.Interface;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.LinkParams;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamLinkParams;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
- * The TCP Convergence Layer.
+ * The UDP Convergence Layer.
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Mahesh Bogadi Shankr Prasad(mabsp@kth.se)
  */
 
-public class TCPConvergenceLayer extends StreamConvergenceLayer implements
+public class UDPConvergenceLayer extends StreamConvergenceLayer implements
 		Serializable {
 
 	/**
@@ -46,29 +46,29 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	private static final long serialVersionUID = -5515355466259078293L;
 
 	/**
-	 * TCP ConvergeceLayer follow in this application
+	 * UDP ConvergeceLayer follow in this application
 	 */
-	public static final byte TCPCL_VERSION = 0x00;
+	public static final byte UDPCL_VERSION = 0x00;
 
 	/**
-	 * Default port for TCP ConvergenceLayer
+	 * Default port for UDP ConvergenceLayer
 	 */
-	public static final short TCPCL_DEFAULT_PORT = 4556;
+	public static final short UDPCL_DEFAULT_PORT = 4556;
 
 	/**
 	 * TAG for Android Logging mechanism
 	 */
-	private static final String TAG = "TCPConvergenceLayer";
+	private static final String TAG = "UDPConvergenceLayer";
 
 	/**
 	 * Constructors
 	 */
-	public TCPConvergenceLayer() {
+	public UDPConvergenceLayer() {
 		super();
 		cl_version_ = 3;
 	}
 
-	public TCPConvergenceLayer(String cl_name) {
+	public UDPConvergenceLayer(String cl_name) {
 		super();
 		name_ = cl_name;
 		cl_version_ = 3;
@@ -80,7 +80,7 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	 * @return The current IP address
 	 */
 	public static InetAddress getting_my_ip() {
-			return BPF.getInstance().getBPFCommunication().getDeviceIP();
+		return TCPConvergenceLayer.getting_my_ip();
 	}
 
 	/**
@@ -88,7 +88,6 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	 */
 	@Override
 	public boolean interface_up(Interface iface) {
-
 		BPF.getInstance().getBPFLogger().debug(TAG, "adding interface " + iface.name());
 		InetAddress local_addr_ = getting_my_ip();
 
@@ -103,10 +102,10 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 			BPF.getInstance().getBPFLogger().error(TAG, "invalid local port setting of 0");
 			return false;
 		}
-
+		//
 		// create a new server socket for the requested interface
 
-		listen_ = new TCPListener(iface.clayer(), local_port);
+		listen_ = new UDPListener(iface.clayer(), local_port);
 
 		if (!listen_.isBound()) {
 
@@ -135,8 +134,8 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	@Override
 	public boolean interface_down(Interface iface) {
 
-		TCPListener listener = (TCPListener) (iface.cl_info());
-		assert (listener != null) : "TCPConvergenceLayer : interface_down, socket is null";
+		UDPListener listener = (UDPListener) (iface.cl_info());
+		assert (listener != null) : "UDPConvergenceLayer : interface_down, socket is null";
 		listener.stop();
 		Interface.set_iface_counter(Interface.iface_counter() - 1);
 		return true;
@@ -149,12 +148,11 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	public void dump_interface(Interface iface, StringBuffer buf) {
 
 		ServerSocket listener = iface.socket();
-		assert (listener != null) : "TCPConvergenceLayer : dump_interface, socket is null";
+		assert (listener != null) : "UDPConvergenceLayer : dump_interface, socket is null";
 
 		String text = String.format("\tlocal_addr: %s local_port: %s\n",
 				listener.getInetAddress(), listener.getLocalPort());
 		buf.append(text);
-
 	}
 
 	/**
@@ -163,7 +161,7 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	@Override
 	public boolean parse_nexthop(Link link, LinkParams lparams) {
 
-		TCPLinkParams params = (TCPLinkParams) (lparams);
+		UDPLinkParams params = (UDPLinkParams) (lparams);
 		assert (params != null);
 
 		params.remote_addr_ = link.dest_ip();
@@ -171,7 +169,7 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 
 		// if the port wasn't specified, use the default
 		if (params.remote_port_ == 0) {
-			params.remote_port_ = TCPCL_DEFAULT_PORT;
+			params.remote_port_ = UDPCL_DEFAULT_PORT;
 		}
 
 		return true;
@@ -182,7 +180,7 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	 * 
 	 * @author María José Peroza Marval (mjpm@kth.se)
 	 */
-	public class TCPLinkParams extends StreamLinkParams {
+	public class UDPLinkParams extends StreamLinkParams {
 
 		/**
 		 * Unique identifier according to Java Serializable specification
@@ -203,57 +201,55 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 		/**
 		 * Constructor
 		 */
-		protected TCPLinkParams(boolean init_defaults) {
+		protected UDPLinkParams(boolean init_defaults) {
 
 			super(init_defaults);
 			hexdump_ = false;
 			local_addr_ = getting_my_ip();
 			local_port_ = local_port;
 			remote_addr_ = dest_addr_;
-			remote_port_ = TCPCL_DEFAULT_PORT;
+			remote_port_ = UDPCL_DEFAULT_PORT;
 		}
-
 	}
 
 	@Override
 	public void dump_link(Link link, StringBuffer buf) {
 
-		assert (link != null) : "TCPConvergenceLayer : dump_link, link is null";
-		assert (!link.isdeleted()) : "TCPConvergenceLayer : dump_link, link is deleted";
-		assert (link.cl_info() != null) : "TCPConvergenceLayer : dump_link, cl_info is null";
+		assert (link != null) : "UDPConvergenceLayer : dump_link, link is null";
+		assert (!link.isdeleted()) : "UDPConvergenceLayer : dump_link, link is deleted";
+		assert (link.cl_info() != null) : "UDPConvergenceLayer : dump_link, cl_info is null";
 
 		super.dump_link(link, buf);
 
-		TCPLinkParams params = (TCPLinkParams) (link.cl_info());
-		assert (params != null) : "TCPConvergenceLayer : dump_link, params are null";
+		UDPLinkParams params = (UDPLinkParams) (link.cl_info());
+		assert (params != null) : "UDPConvergenceLayer : dump_link, params are null";
 
 		buf.append("local_addr: " + (params.local_addr_) + "\n");
 		buf.append("remote_addr: " + (params.remote_addr_) + "\n");
 		buf.append("remote_port: " + (params.remote_port_) + "\n");
-
 	}
 
 	@Override
 	public LinkParams new_link_params() {
 
-		return new TCPLinkParams(true);
+		return new UDPLinkParams(true);
 	}
 
 	/**
-	 * Create a new TCPConnection
+	 * Create a new UDPConnection
 	 */
 	@Override
-	public TCPConnection new_connection(Link link, LinkParams p)
+	public UDPConnection new_connection(Link link, LinkParams p)
 			throws OutOfMemoryError {
 
-		TCPLinkParams params = (TCPLinkParams) p;
+		UDPLinkParams params = (UDPLinkParams) p;
 		assert (params != null);
 		dest_addr_ = link.dest_ip();
 		dest_port_ = link.remote_port();
-		return new TCPConnection(this, params);
+		return new UDPConnection(this, params);
 	}
 
-	TCPListener listen_; // / Listener (Represents a server socket waiting for a
+	UDPListener listen_; // / Listener (Represents a server socket waiting for a
 							// connection)
 
 	protected InetAddress dest_addr_; // / Destination IPaddress

@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
+package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
@@ -29,6 +29,10 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleTransmittedEve
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.InFlightBundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.IncomingBundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.LinkParams;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;

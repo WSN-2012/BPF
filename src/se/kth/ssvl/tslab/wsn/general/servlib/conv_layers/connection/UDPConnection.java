@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
+package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -44,12 +44,27 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.InFlightBundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.IncomingBundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamLinkParams;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TestDataLogger;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.CLConnection;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConnectionException;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ContactHeader;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.InFlightBundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.IncomingBundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_laimport se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.UDPConvergenceLayer.UDPLinkParams;
+LinkParams;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TestDataLogger;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.contact_header_flags_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.data_segment_flags_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.msg_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.shutdown_flags_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamConvergenceLayer.shutdown_reason_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.UDPConvergenceLayer.UDPLinkParams;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connections.udp.UDPConvergenceLayer.UDPLinkParams;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;

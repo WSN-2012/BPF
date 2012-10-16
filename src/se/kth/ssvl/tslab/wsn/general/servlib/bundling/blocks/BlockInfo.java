@@ -27,7 +27,7 @@ import java.util.Map;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.block_flag_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.bundle_block_type_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.CLConnection;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.CLConnection;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointIDVector;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;

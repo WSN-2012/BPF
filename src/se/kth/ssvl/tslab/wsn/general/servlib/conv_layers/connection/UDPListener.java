@@ -18,12 +18,14 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
+package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.UDPConvergenceLayer.UDPLinkParams;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.CLInfo;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.UDPConvergenceLayer.UDPLinkParams;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**

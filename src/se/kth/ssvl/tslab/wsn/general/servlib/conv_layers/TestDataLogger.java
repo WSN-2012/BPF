@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.CLConnection;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.FileManager;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
