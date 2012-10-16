@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.discovery;
+package se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -31,6 +31,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.discovery.Discovery;
+import se.kth.ssvl.tslab.wsn.general.servlib.discovery.DiscoveryHeader;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;

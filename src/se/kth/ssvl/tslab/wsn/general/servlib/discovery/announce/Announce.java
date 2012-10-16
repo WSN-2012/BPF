@@ -18,11 +18,12 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.discovery;
+package se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce;
 
 import java.util.Calendar;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.discovery.DiscoveryHeader;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 
 /**

@@ -22,6 +22,8 @@ package se.kth.ssvl.tslab.wsn.general.servlib.discovery;
 
 import java.net.InetAddress;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce.IPDiscovery;
+
 /**
  * "On-the-wire (radio, whatever) representation of IP address family's
  * advertisement beacon" [DTN2].

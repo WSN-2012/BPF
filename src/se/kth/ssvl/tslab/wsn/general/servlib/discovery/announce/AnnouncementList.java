@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.discovery;
+package se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce;
 
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
