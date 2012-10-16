@@ -28,9 +28,9 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.systemlib.storage.StorageIterator;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 

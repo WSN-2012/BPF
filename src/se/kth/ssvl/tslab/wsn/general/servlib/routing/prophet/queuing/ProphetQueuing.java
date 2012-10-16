@@ -3,7 +3,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.BundleRouter.Config;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter.Config;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
 

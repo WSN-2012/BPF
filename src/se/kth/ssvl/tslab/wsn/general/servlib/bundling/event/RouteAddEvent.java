@@ -19,7 +19,7 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.RouteEntry;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntry;
 
 /**
  * Route Add Event

@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.routing;
+package se.kth.ssvl.tslab.wsn.general.servlib.routing.routers;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -34,6 +34,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.RoutingException;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetBundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetRegistration;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing;

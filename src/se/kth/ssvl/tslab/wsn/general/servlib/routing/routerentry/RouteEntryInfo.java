@@ -17,7 +17,7 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.servlib.routing;
+package se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry;
 
 /**
  * Abstraction to put algorithm state in particular route entry

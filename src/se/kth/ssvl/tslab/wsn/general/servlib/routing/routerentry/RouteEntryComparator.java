@@ -17,21 +17,31 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.servlib.routing;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
+package se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry;
+
+import java.util.Comparator;
 
 /**
- * Class for list of Routing Entries. Used inside the route table and the return
- * result of get_matching().
+ * Comparator class for sorting the RouteEntry. This is used for sorting the
+ * Route Entry before processing This comparator compares based on the Route
+ * Priority.
  * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class RouteEntryVec extends List<RouteEntry> {
+public class RouteEntryComparator implements Comparator<RouteEntry> {
 
 	/**
-	 * Serial version UID for supporting Java Serializable
+	 * compare function override from Java Comparator
 	 */
-	private static final long serialVersionUID = 4170970509393976726L;
+
+	public int compare(RouteEntry r1, RouteEntry r2) {
+
+		if (r1.priority() < r2.priority())
+			return -1;
+		if (r1.priority() > r2.priority())
+			return +1;
+		return r1.link().bytes_queued() < r2.link().bytes_queued() ? -1 : +1;
+	}
 
 }

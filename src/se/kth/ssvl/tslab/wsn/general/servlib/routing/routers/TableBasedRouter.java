@@ -17,7 +17,7 @@
  *    limitations under the License.
  *    
  */
-package se.kth.ssvl.tslab.wsn.general.servlib.routing;
+package se.kth.ssvl.tslab.wsn.general.servlib.routing.routers;
 
 import java.util.Collections;
 import java.util.Date;
@@ -98,6 +98,11 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.LinkSet;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.RouteTable;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.RouterInfo;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntry;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntryComparator;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntryVec;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
