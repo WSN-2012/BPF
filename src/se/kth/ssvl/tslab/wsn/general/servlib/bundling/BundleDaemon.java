@@ -29,6 +29,7 @@ import java.util.ListIterator;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.security.Security;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.BundleProtocol.custody_signal_reason_t;
@@ -409,6 +410,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		reg_table_ = RegistrationTable.getInstance();
 		stats_ = new Stats();
 		params_ = new Params();
+		
+		new Security();
 	}
 
 	/**
