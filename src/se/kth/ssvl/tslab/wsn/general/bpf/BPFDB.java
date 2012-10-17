@@ -2,149 +2,116 @@ package se.kth.ssvl.tslab.wsn.general.bpf;
 
 import java.util.List;
 import java.util.Map;
-import se.kth.ssvl.tslab.wsn.general.utils.*;
 
 public interface BPFDB {
 
 	/**
 	 * Create or open an existing database
 	 * 
-	 * @param databaseName
-	 *            Name of database to be created or opened         
-	 * @return True if the database is created else return false
+	 * @param query
+	 * 			A string containing the SQL command to create or open an existing database
+	 * @return True if the database is created else throw a database Exception
 	 * 
 	 */
-	public abstract boolean createDatabase(String databaseName);
+	public abstract boolean createDatabase(String query)throws BPFDBException;
 
 	
 	/**
 	 * Add new record to database table
 	 * 
-	 * @param tableName
-	 *            Name of table in which to add a record
-	 * @param mp
-	 *            Map object contain String and Object pairs (String pointing the column name and 
-	 *            Object pointing the value to be stored) comprising all the values to be stored 
-	 *            in the table 
+	 * @param query
+	 * 			A string containing the SQL command to add a record in the appropriate table
 	 * @return If new row successfully added then return the newly added id
-	 *         otherwise return -1
+	 *         else throw a database Exception
 	 */
-	public abstract int addRecord(String tableName, Map<String, Object> mp);
+	public abstract int addRecord(String query)throws BPFDBException;
 
 	
 	/** 
 	 * Update record in database table
 	 * 
-	 * @param tableName
-	 *            Name of table in which record already exist
-	 * @param mp
-	 *            Map object contain String and Object pairs (String pointing the column name and 
-	 *            Object pointing the value to be updated) comprising all the values to be updated 
-	 *            in the table 
-	 * @param conditions
-	 *            Map object contain String and Object pairs (String holding the column name and 
-	 *            Object holding the filter for this column) comprising the conditions based on which the table should be
-	 *            updated 
-	 * @return True If new row successfully updated otherwise return false
+	 * @param query
+	 * 			A string containing the SQL command to update a record in the appropriate table
+	 * @return The amount of rows updated else throw a database Exception
 	 */
-	public abstract boolean updateRecord(String tableName, Map<String, Object> mp, Map<String, Object> conditions);
+	public abstract int updateRecord(String query)throws BPFDBException;
 
 	
 	/**
-	 * Get records from database based on condition
-	 * 
-	 * @param tableName
-	 *            Name of table in which records already exist
-	 * @param conditions
-	 *            Map object contain String and Object pairs (String holding the column name and 
-	 *            Object holding the filter for this column) comprising the conditions to return the records
-	 * @param field
-	 *            Only get this field from resulted row
-	 * @param orderBy
-	 *            OrderBy Clause to order the record results based on specified columns and order
-	 * @param limit
-	 *            Number of row to get
-	 * @return Returns a List of Maps (where each map is a row) and the String
-	 *         in the map contains the column name and the Object is the value
-	 *         of the column
+	 * @param query
+	 * 			A string containing the SQL command to get records from the appropriate table
+	 * @return 	Returns a List of Map Objects (where each map is a row) else throw a database Exception.
+	 * 			The String in the map contains the column name and the Object is the value
+	 *         	of the column.
 	 */
-	public abstract List<Map<String, Object>> getRecords(String tableName, Map<String, Object> conditions, Object field, String orderBy, String limit);	
+	public abstract List<Map<String, Object>> getRecords(String query)throws BPFDBException;	
 
 	
 	/**
-	 * Get the row count based on condition.
+	 * Get the row count based on conditions.
 	 * 
-	 * @param tableName
-	 *            Name of table in which record exists
-	 * @param conditions
-	 *            Map object contain String and Object pairs (String holding the column name and 
-	 *            Object holding the filter for this column) comprising the conditions for row counting
-	 * @param field
-	 *            Only get this field from resulted row
-	 * @return Total numbers rows
+	 * @param query
+	 * 			A string containing the SQL command to count the rows based on conditions
+	 * @return Total number of rows else throw a database Exception
 	 */
-	public abstract int getRowCount(String tableName, Map<String, Object> conditions, Object field);
+	public abstract int getRowCount(String query)throws BPFDBException;
 
 	/**
 	 * Get the ids of all the bundles in a list.
 	 * 
-	 * @return Return List of bundle ids
+	 * @param query
+	 * 			A string containing the SQL command to the ids of all bundles
+	 * @return Return List of bundle ids else throw a database Exception
 	 */
-	public abstract List<Integer> get_all_bundles();
+	public abstract List<Integer> getAllBundles(String query)throws BPFDBException;
 
 	
 	/**
-	 * Delete record from database based on condition.
+	 * Delete record from database based on conditions.
 	 * 
-	 * @param tableName
-	 *            Name of table in which record already exist
-	 * @param conditions
-	 *            Map object contain String and Object pairs (String holding the column name and 
-	 *            Object holding the filter for this column) comprising the conditions for deleting a row
-	 * @return True if successfully deleted else return false
+	 * @param query
+	 * 			A string containing the SQL command to delete a record from 
+	 * 			the database based on conditions
+	 * @return True if successfully deleted else throw a database Exception
 	 */
-	public abstract boolean deleteRecord(String tableName, Map<String, Object> conditions);
+	public abstract boolean deleteRecord(String query) throws BPFDBException;
 
 
 	/**
 	 * Delete table from database.
 	 * 
-	 * @param tableName
-	 *            Name of the table to be deleted
-	 * @return True if successfully deleted else return false
+	 * @param query
+	 * 			A string containing the SQL command to delete a table from 
+	 * 			the database
+	 * @return True if successfully deleted else throw a database Exception
 	 */
-	public abstract boolean dropTable(String tableName);
+	public abstract boolean dropTable(String query) throws BPFDBException;
 
 
 	/**
 	 * Create new table in database.
 	 * 
-	 * @param tableName
-	 *            Create new table using that
-	 * @param columns
-	 * 			  Map object contain String and String pairs (String holding the column name and
-	 * 			  and a pair of Strings in which the first String represents the data type and 
-	 * 			  the second the constraints) comprising the structure of the table to be created
-	 * @return True if successfully deleted else return false
+	 * @param query
+	 * 			A string containing the SQL command to create a table in the database
+	 * @return True if successfully deleted else throw a database Exception
 	 */
-	public abstract boolean createTable(String tableName, Map<String, Pair<String,String>> columns);
+	public abstract boolean createTable(String query) throws BPFDBException;
 
 	
 	/**
-	 * Find if record exist in the table or not based on condition provided.
+	 * Find if record exist in the table or not based on conditions provided.
 	 * 
-	 * @param tableName
-	 *            Name of table in which check if record exist
-	 * @param conditions
-	 *            Map object contain String and Object pairs (String holding the column name and 
-	 *            Object holding the filter for this column) comprising the conditions for finding a record
-	 * @return True if record found else false
+	 * @param query
+	 * 			A string containing the SQL command to find if a record exist in the
+	 * 			appropriate table based on conditions
+	 * @return True if record found else throw a database Exception
 	 */
-	public abstract boolean findRecord(String tableName, Map<String, Object> conditions);
+	public abstract boolean findRecord(String query)throws BPFDBException;
 
 	/**
 	 * Close database connection at the end of application
+	 * Throws a database exception if an error occurs
 	 */
-	public abstract void close();
+	public abstract void close() throws BPFDBException;
 
 }
