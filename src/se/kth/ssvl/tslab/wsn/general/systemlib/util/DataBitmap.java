@@ -58,11 +58,6 @@ public class DataBitmap {
 	}
 
 	/**
-	 * Serial Version UID to support Java Serializable
-	 */
-	private static final long serialVersionUID = -4184638080030926182L;
-
-	/**
 	 * Accessor for the size of this bitmap is
 	 * 
 	 * @return the size
