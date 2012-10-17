@@ -39,6 +39,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.LinksSetting.LinkEn
 import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.RoutesSetting.RouteEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.types.conv_layer_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link.link_type_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing.QueueingType;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
@@ -345,8 +346,16 @@ public class ConfigurationParser {
 					"Invalid DTN Config Exception: Router Type is invalid");
 		}
 
-		config.routes_setting().setQueuing_policy(
-				config_element.getAttributeNode("queuing").getValue());
+		String queueing = config_element.getAttributeNode("queuing").getValue();
+		if (queueing.toLowerCase().equals("fifo")) {
+			config.routes_setting().setQueuing_policy(QueueingType.FIFO);
+		} else if (queueing.toLowerCase().equals("mofo")) {
+			config.routes_setting().setQueuing_policy(QueueingType.MOFO);
+		} else {
+			throw new InvalidDTNConfigurationException("Invalid DTN Config Exception: Can't recognize the routing type");
+		}
+		
+		
 
 		Attr local_eid = config_element.getAttributeNode("local_eid");
 

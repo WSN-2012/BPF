@@ -19,10 +19,6 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.config.settings;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * This class represents StorageSetting in the configuration file
  * 
