@@ -19,7 +19,7 @@
  */
 package se.kth.ssvl.tslab.wsn.general.dtnapi.types;
 
-import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_bundle_priority_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_priority_t;
 
 /**
  * The actual DTNBundle description according to the Bundle Protocol.

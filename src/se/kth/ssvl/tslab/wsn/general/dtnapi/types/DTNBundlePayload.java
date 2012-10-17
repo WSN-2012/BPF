@@ -21,7 +21,7 @@ package se.kth.ssvl.tslab.wsn.general.dtnapi.types;
 
 import java.io.File;
 
-import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_bundle_payload_location_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_payload_location_t;
 
 /**
  * The class to represent DTNBundlePayload used in the API

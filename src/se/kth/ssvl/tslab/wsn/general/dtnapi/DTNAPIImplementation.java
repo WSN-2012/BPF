@@ -29,11 +29,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_api_status_report_code;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_bundle_delivery_opts_t;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_bundle_payload_location_t;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_reg_flags_t;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.dtn_status_report_reason_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_api_status_report_code;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_delivery_opts_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_payload_location_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_reg_flags_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundlePayload;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleSpec;
@@ -43,7 +43,6 @@ import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNEndpointID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNHandle;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNRegistrationInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.DTNTime;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
@@ -74,7 +73,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
  * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class DTNAPIBinder implements DTNAPI {
+public class DTNAPIImplementation implements DTNAPI {
 
 	/**
 	 * TAG String for Android logging system
@@ -100,7 +99,7 @@ public class DTNAPIBinder implements DTNAPI {
 	/**
 	 * Constructor by initializing all the Data Structures inside
 	 */
-	public DTNAPIBinder() {
+	public DTNAPIImplementation() {
 		super();
 		handles_ = new List<DTNHandle>();
 
@@ -238,7 +237,7 @@ public class DTNAPIBinder implements DTNAPI {
 	 * 
 	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_recv(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleSpec,
-	 *      se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPICode.
+	 *      se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.
 	 *      dtn_bundle_payload_location_t,
 	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundlePayload, int)
 	 */
