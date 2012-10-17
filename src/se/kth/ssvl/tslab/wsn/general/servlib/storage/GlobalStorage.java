@@ -67,10 +67,10 @@ public class GlobalStorage {
 	 * @return returns true on success
 	 */
 
-	public boolean init(Context context, Configuration config) {
-		config_ = config;
+	public boolean init() {
+		config_ = BPF.getInstance().getConfig();
 
-		impt_storage_ = new StorageImplementation<Bundle>(context);
+		impt_storage_ = new StorageImplementation<Bundle>();
 
 		String app_folder = "/" + config_.storage_setting().storage_path();
 		String path;
