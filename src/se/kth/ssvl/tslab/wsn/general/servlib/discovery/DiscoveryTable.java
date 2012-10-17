@@ -59,9 +59,9 @@ public class DiscoveryTable {
 	 * instances. This parameter are parsed from the configuration file. The
 	 * discoveries instances are stored in the table.
 	 */
-	public void init(Configuration config) {
-		config_ = config;
-		List<DiscoveryEntry> discovery_entries = config.discoveries_setting()
+	public void init() {
+		config_ = BPF.getInstance().getConfig();
+		List<DiscoveryEntry> discovery_entries = config_.discoveries_setting()
 				.discovery_entries();
 		Iterator<DiscoveryEntry> i = discovery_entries.iterator();
 
@@ -114,8 +114,10 @@ public class DiscoveryTable {
 				}
 
 				if (!disc.announce(AnnounceID, code, ClType, interval)) {
-					BPF.getInstance().getBPFLogger().debug(TAG,
-							"Error creting the Announce" + AnnounceID);
+					BPF.getInstance()
+							.getBPFLogger()
+							.debug(TAG,
+									"Error creting the Announce" + AnnounceID);
 				}
 				disc.start();
 			}
@@ -133,7 +135,8 @@ public class DiscoveryTable {
 
 		Discovery disc = find(name, iter);
 		if (disc != null) {
-			BPF.getInstance().getBPFLogger().error(TAG, "agent exists with that name");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "agent exists with that name");
 			return false;
 		}
 
@@ -143,7 +146,8 @@ public class DiscoveryTable {
 			return false;
 		}
 
-		BPF.getInstance().getBPFLogger().info(TAG, "adding discovery agent" + name);
+		BPF.getInstance().getBPFLogger()
+				.info(TAG, "adding discovery agent" + name);
 
 		dlist_.add(disc);
 		return true;
@@ -153,12 +157,14 @@ public class DiscoveryTable {
 
 		Iterator<Discovery> iter = dlist_.iterator();
 
-		BPF.getInstance().getBPFLogger().info(TAG, "removing discovery agent" + name);
+		BPF.getInstance().getBPFLogger()
+				.info(TAG, "removing discovery agent" + name);
 
 		Discovery disc = find(name, iter);
 
 		if (disc == null) {
-			BPF.getInstance().getBPFLogger().error(TAG, "error removing agent" + name);
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "error removing agent" + name);
 			return false;
 		}
 

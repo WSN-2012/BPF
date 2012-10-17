@@ -102,10 +102,11 @@ public abstract class BundleRouter extends BundleEventHandler {
 	 * Initialization function called by the DTNServer upon, the start service
 	 * is requested
 	 */
-	public static void init(Configuration dtn) {
+	public static void init() {
+		//TODO: What the f*ck is this now? Two configurations? Look into it!
 		config_ = new Config();
-		config_.set_type(dtn.routes_setting().router_type());
-		dtn_config_ = dtn;
+		config_.set_type(BPF.getInstance().getConfig().routes_setting().router_type());
+		dtn_config_ = BPF.getInstance().getConfig();
 	}
 
 	/**
@@ -131,7 +132,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 			throw new RoutingException();
 		}
 
-		router.initialize(dtn_config_);
+		router.initialize();
 		return router;
 	}
 
@@ -314,7 +315,7 @@ public abstract class BundleRouter extends BundleEventHandler {
 	/**
 	 * "called after all the global data structures are set up" [DTN2]
 	 */
-	abstract public void initialize(Configuration dtn_config_);
+	abstract public void initialize();
 
 	/**
 	 * Display storage information

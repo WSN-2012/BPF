@@ -419,7 +419,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		reg_table_ = RegistrationTable.getInstance();
 		stats_ = new Stats();
 		params_ = new Params();
-		
+
 		new Security();
 	}
 
@@ -517,8 +517,9 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	/**
 	 * Initialzation from configuration object
 	 */
-	public void init(Configuration config) {
-		local_eid_ = new EndpointID(config.routes_setting().local_eid());
+	public void init() {
+		local_eid_ = new EndpointID(BPF.getInstance().getConfig()
+				.routes_setting().local_eid());
 
 	}
 
