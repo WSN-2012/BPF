@@ -77,7 +77,7 @@ public class IPDiscovery extends Discovery implements Runnable {
 	/**
 	 * Constructor
 	 */
-	IPDiscovery(String name, short port) {
+	public IPDiscovery(String name, short port) {
 
 		super(name, "ip");
 		// remote_addr_ = null;
