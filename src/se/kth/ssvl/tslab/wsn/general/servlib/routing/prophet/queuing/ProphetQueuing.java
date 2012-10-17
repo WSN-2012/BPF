@@ -25,22 +25,29 @@ public abstract class ProphetQueuing {
 	private static ProphetQueuing instance_ = null;
 
 	/**
-	 * Queuing Type
-	 */
-	private static String policy = "Fifo";
-
-	/**
 	 * @return the policy
 	 */
-	public static String getPolicy() {
+	public static QueueingType getPolicy() {
 		return policy;
 	}
 
 	/**
+	 * An enum to hold the different queueing types
+	 */
+	public enum QueueingType { FIFO, MOFO };
+	
+	
+	/**
+	 * Queuing Type
+	 */
+	private static QueueingType policy = QueueingType.FIFO;
+
+	
+	/**
 	 * @param policy
 	 *            the policy to set
 	 */
-	public static void setPolicy(String policy) {
+	public static void setPolicy(QueueingType policy) {
 		ProphetQueuing.policy = policy;
 	}
 
@@ -59,16 +66,16 @@ public abstract class ProphetQueuing {
 	 */
 	public static ProphetQueuing getInstance() {
 		if (instance_ == null) {
-			Class myClass;
-			try {
-				myClass = Class
-						.forName("se.kth.ssvl.tslab.bytewalla.androiddtn.servlib.routing.prophet.queuing."
-								+ policy);
-				instance_ = (ProphetQueuing) myClass.newInstance();
-			} catch (Exception e) {
-				
-				BPF.getInstance().getBPFLogger().error(TAG, "Wrong policy");
-				e.printStackTrace();
+			switch (policy) {
+				case FIFO:
+					instance_ = (ProphetQueuing) new Fifo();
+					break;
+				case MOFO:
+					instance_ = (ProphetQueuing) new Mofo();
+					break;
+				default:
+					BPF.getInstance().getBPFLogger().error(TAG, "Wrong policy in prophet routing type");
+					break;
 			}
 		}
 		return instance_;
