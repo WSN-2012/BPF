@@ -2,13 +2,16 @@ package se.kth.ssvl.tslab.wsn.general.servlib.security;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;
-
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-
 import java.util.Enumeration;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import ext.org.bouncycastle.cms.CMSEnvelopedData;
 import ext.org.bouncycastle.cms.CMSEnvelopedDataGenerator1;
 import ext.org.bouncycastle.cms.CMSProcessable;
@@ -16,15 +19,6 @@ import ext.org.bouncycastle.cms.CMSProcessableByteArray;
 import ext.org.bouncycastle.cms.RecipientId;
 import ext.org.bouncycastle.cms.RecipientInformation;
 import ext.org.bouncycastle.cms.RecipientInformationStore;
-
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
-import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 
 
 /**

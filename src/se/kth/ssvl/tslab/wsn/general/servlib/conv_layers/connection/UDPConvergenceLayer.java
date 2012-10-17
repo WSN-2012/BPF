@@ -24,11 +24,11 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.interfaces.Interface;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.LinkParams;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamLinkParams;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * The UDP Convergence Layer.

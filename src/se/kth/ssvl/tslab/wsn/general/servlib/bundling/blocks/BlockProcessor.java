@@ -23,13 +23,14 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import org.bouncycastle.crypto.modes.GCMBlockCipher;
+
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Dictionary;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.block_flag_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.bundle_block_type_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventData;
 import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventHandler;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
@@ -38,9 +39,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDVector;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
-import org.bouncycastle.crypto.modes.GCMBlockCipher;
 
 /**
  * Base Class for the Block Processing unit. This unit mainly converting from

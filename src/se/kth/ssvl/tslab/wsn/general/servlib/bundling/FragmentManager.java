@@ -23,6 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 import java.util.HashMap;
 import java.util.ListIterator;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
@@ -35,7 +36,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ReassemblyCompletedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Fragment Manger stores the state of all the partial bundles/fragmentary

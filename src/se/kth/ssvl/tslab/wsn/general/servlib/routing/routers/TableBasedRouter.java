@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
@@ -90,7 +91,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.SetLinkDefaultsReque
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ShutdownRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.StatusRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNotHoldByCurrentThread;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.RoutesSetting;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
@@ -104,7 +104,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntryComparator;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntryVec;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This is the basic router mainly rely on the route entries in the RoutingTable

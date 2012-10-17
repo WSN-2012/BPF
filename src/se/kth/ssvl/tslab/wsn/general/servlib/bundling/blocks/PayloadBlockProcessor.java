@@ -22,8 +22,8 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks;
 
 import java.io.Serializable;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.block_flag_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.bundle_block_type_t;
@@ -31,7 +31,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.sta
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class extends BlockProcessor and is the implementation of the payload

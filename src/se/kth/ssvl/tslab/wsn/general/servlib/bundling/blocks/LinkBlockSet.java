@@ -22,9 +22,9 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * A set of BlockInfoVecs, one for each outgoing link.

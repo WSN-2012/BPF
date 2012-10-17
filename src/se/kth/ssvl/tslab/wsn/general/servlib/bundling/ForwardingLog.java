@@ -23,6 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo.state_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
@@ -30,7 +31,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to keep the log of where and when the bundles have been forward. This

@@ -22,7 +22,6 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks;
 import java.util.Iterator;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.Dictionary;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.bundle_block_type_t;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 

@@ -19,6 +19,7 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleAcceptRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleCancelRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
@@ -76,7 +77,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.RouteReportEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.SetLinkDefaultsRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ShutdownRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.StatusRequest;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Abstract class for handling various Bundle Events.

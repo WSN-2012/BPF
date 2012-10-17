@@ -23,8 +23,9 @@ package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection;
 import java.net.Socket;
 import java.util.Iterator;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo.action_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
@@ -36,8 +37,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleSendCancelledEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleTransmittedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
@@ -53,7 +54,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.StreamConver
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Stream connection class.

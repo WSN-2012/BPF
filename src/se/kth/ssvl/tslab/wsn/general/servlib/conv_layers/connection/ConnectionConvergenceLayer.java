@@ -20,6 +20,7 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
@@ -35,7 +36,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.IncomingBundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.LinkParams;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "All convergence layers that maintain a connection (i.e. a TCP socket) to

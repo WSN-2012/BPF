@@ -22,11 +22,10 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.FragmentManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.FragmentState;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo.action_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo.state_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
@@ -35,8 +34,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNotHoldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 
 /**
  * Helper class for Bundle daemon and router to execute particular actions

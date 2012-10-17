@@ -24,10 +24,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.CLInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.TCPConvergenceLayer.TCPLinkParams;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Helper class (and thread) that listens on a registered interface for new

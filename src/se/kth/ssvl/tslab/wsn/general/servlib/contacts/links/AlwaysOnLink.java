@@ -22,8 +22,8 @@ package se.kth.ssvl.tslab.wsn.general.servlib.contacts.links;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleEvent;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.LinkStateChangeRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.LinkStateChangeRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 
 /**

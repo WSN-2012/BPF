@@ -22,11 +22,11 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 
 import java.util.ListIterator;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNotHoldByCurrentThread;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to store the fragments of a bundle and keep their state.

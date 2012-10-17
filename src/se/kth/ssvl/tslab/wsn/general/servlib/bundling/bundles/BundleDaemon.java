@@ -29,14 +29,10 @@ import java.util.ListIterator;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.security.Security;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.FragmentManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.GbofId;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo.action_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo.state_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.custody_signal_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.status_report_reason_t;
@@ -66,6 +62,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.CLAParamsSetEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.CLASetParamsRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactAttributeChangedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactDownEvent;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactQueryRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactReportEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
@@ -102,11 +99,9 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ShutdownRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.StatusRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_type_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactEvent.reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNotHoldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventData;
 import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventHandler;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.NamedAttribute;
@@ -124,12 +119,12 @@ import se.kth.ssvl.tslab.wsn.general.servlib.reg.RegistrationTable;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.RoutingException;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter.router_type_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.security.Security;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * main DTNService daemon class to execute Bundle events posted in its queue.

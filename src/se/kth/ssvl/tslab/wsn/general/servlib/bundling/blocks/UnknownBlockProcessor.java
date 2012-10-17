@@ -22,7 +22,6 @@ package se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfo.list_owner_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.block_flag_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.bundle_block_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.status_report_reason_t;

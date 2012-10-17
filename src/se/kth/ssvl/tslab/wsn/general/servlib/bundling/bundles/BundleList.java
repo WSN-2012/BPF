@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.GbofId;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleFreeEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleListLockNotHoldByCurrentThread;
@@ -32,7 +33,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHel
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class for Bundles list having locking function for using in Multi-thread

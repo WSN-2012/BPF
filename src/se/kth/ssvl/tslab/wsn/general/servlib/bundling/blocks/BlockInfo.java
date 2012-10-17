@@ -24,18 +24,16 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.block_flag_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.bundle_block_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.CLConnection;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDVector;
+import se.kth.ssvl.tslab.wsn.general.servlib.security.BP_Local_CS;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
-import se.kth.ssvl.tslab.wsn.general.servlib.security.BP_Local_CS;
 
 /**
  * Class representing DTN protocol blocks.

@@ -24,6 +24,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleActions;
@@ -37,10 +38,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.RoutingException;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetBundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetRegistration;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * The BundleRouter is responsible for making routing decision. It will contact

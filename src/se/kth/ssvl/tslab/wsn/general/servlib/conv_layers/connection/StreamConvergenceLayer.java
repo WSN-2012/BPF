@@ -25,11 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.LinkParams;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamLinkParams;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Another shared-implementation convergence layer class for use with reliable,

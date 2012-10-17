@@ -24,10 +24,10 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to represent Bundle Timestamp according to the Bundle Protocol. The

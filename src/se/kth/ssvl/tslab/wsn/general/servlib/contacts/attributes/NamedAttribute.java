@@ -24,8 +24,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.Builder;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.systemlib.util.Builder;
 
 /**
  * "Class for a generic list of attributes/parameters, used for various

@@ -20,9 +20,9 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to handle parsing and formatting of self describing numeric values

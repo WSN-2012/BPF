@@ -21,6 +21,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.routing;
 
 import java.util.Iterator;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
@@ -30,7 +31,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntryVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.StringVector;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * Class to represent routing table in the router. It hold route entries and can
