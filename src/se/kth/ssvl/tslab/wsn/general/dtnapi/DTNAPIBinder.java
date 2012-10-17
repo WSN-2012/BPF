@@ -43,7 +43,6 @@ import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNEndpointID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNHandle;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNRegistrationInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.DTNTime;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.ApplicationBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
@@ -480,10 +479,14 @@ public class DTNAPIBinder implements DTNAPI {
 
 		Bundle b = new Bundle(location_t.DISK);
 
+		//TODO: Don't know if this is really needed?
+		/*
 		BlockInfo appBlock = b.recv_blocks().append_block(
 				new ApplicationBlockProcessor(), null);
 		appBlock.owner().consume(b, appBlock, appBlockData, abdlen);
-
+		 */
+		
+		
 		// assign the addressing fields...
 		// source and destination are always specified
 		b.source().assign(spec.source().toString());
@@ -817,8 +820,9 @@ public class DTNAPIBinder implements DTNAPI {
 		 * bisource.set_data_offset(0);
 		 * bisource.set_data_length(apbStr.getBytes().length);
 		 */
-
-		BlockInfo bi = new BlockInfo(new ApplicationBlockProcessor(), null);// bisource);
+		
+		//TODO: Do we really need this block? In that case what blockprocessor should it have?
+//		BlockInfo bi = new BlockInfo(new ApplicationBlockProcessor(), null);// bisource);
 
 		/*
 		 * Log.v("blockinfo", new String(bisource.contents().array()));
@@ -826,11 +830,11 @@ public class DTNAPIBinder implements DTNAPI {
 		 * bi.toString());
 		 */
 
-		bi.writable_contents().put(apbStr.getBytes());
-		bi.set_data_offset(0);
-		bi.set_data_length(apbStr.getBytes().length);
+//		bi.writable_contents().put(apbStr.getBytes());
+//		bi.set_data_offset(0);
+//		bi.set_data_length(apbStr.getBytes().length);
 
-		b.recv_blocks().add(bi);
+//		b.recv_blocks().add(bi);
 
 		return dtn_send_final(handle, spec, dtn_payload, dtn_bundle_id, b);
 	}
