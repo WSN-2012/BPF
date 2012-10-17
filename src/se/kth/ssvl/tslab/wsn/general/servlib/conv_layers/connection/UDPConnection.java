@@ -219,6 +219,9 @@ public class UDPConnection extends CLConnection {
 		case DISCOVERY:
 			BPF.getInstance().getBPFLogger().debug(TAG, "NOTREACHED");
 			break;
+		default:
+			BPF.getInstance().getBPFLogger().debug(TAG, "The reason for breaking contact is unknown");
+			break;
 		}
 
 		if (send_shutdown && sendbuf_.position() == 0
@@ -1015,7 +1018,6 @@ public class UDPConnection extends CLConnection {
 
 		BPF.getInstance().getBPFLogger().debug(TAG, "got SHUTDOWN byte");
 		int shutdown_len = 1;
-		int handled_len = 0;
 		boolean has_reason = false;
 		boolean has_delay = false;
 		if ((flags & (byte) shutdown_flags_t.SHUTDOWN_HAS_REASON.getCode()) > 0) {
@@ -1061,13 +1063,11 @@ public class UDPConnection extends CLConnection {
 
 		// now handle the message, first skipping the typecode byte
 		recvbuf_.position(1);
-		handled_len += 1;
 		shutdown_reason_t reason = shutdown_reason_t.SHUTDOWN_NO_REASON;
 		if (has_reason)
 
 		{
 			byte type_reason = recvbuf_.get();
-			handled_len += 1;
 
 			switch (shutdown_reason_t.get(type_reason)) {
 			case SHUTDOWN_NO_REASON:
@@ -1096,7 +1096,6 @@ public class UDPConnection extends CLConnection {
 				return false;
 
 			SDNV.decode(recvbuf_, delay);
-			handled_len += sdnv_len;
 		}
 
 		String text = String.format(

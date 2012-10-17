@@ -414,6 +414,9 @@ public abstract class Connection extends CLConnection {
 		case DISCOVERY:
 			BPF.getInstance().getBPFLogger().debug(TAG, "NOTREACHED");
 			break;
+		default:
+			BPF.getInstance().getBPFLogger().debug(TAG, "The reason for breaking contact was unknown");
+			break;
 		}
 
 		if (send_shutdown && sendbuf_.position() == 0
