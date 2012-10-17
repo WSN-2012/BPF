@@ -34,15 +34,15 @@ public abstract class ProphetQueuing {
 	/**
 	 * An enum to hold the different queueing types
 	 */
-	public enum QueueingType { FIFO, MOFO };
-	
-	
+	public enum QueueingType {
+		FIFO, MOFO
+	};
+
 	/**
 	 * Queuing Type
 	 */
 	private static QueueingType policy = QueueingType.FIFO;
 
-	
 	/**
 	 * @param policy
 	 *            the policy to set
@@ -55,8 +55,9 @@ public abstract class ProphetQueuing {
 	 * Initialization function called by the DTNServer upon, the start service
 	 * is requested
 	 */
-	public static void init(Configuration dtn) {
-		setPolicy(dtn.routes_setting().getQueuing_policy());
+	public static void init() {
+		setPolicy(BPF.getInstance().getConfig().routes_setting()
+				.getQueuing_policy());
 	}
 
 	/**
@@ -67,15 +68,16 @@ public abstract class ProphetQueuing {
 	public static ProphetQueuing getInstance() {
 		if (instance_ == null) {
 			switch (policy) {
-				case FIFO:
-					instance_ = (ProphetQueuing) new Fifo();
-					break;
-				case MOFO:
-					instance_ = (ProphetQueuing) new Mofo();
-					break;
-				default:
-					BPF.getInstance().getBPFLogger().error(TAG, "Wrong policy in prophet routing type");
-					break;
+			case FIFO:
+				instance_ = (ProphetQueuing) new Fifo();
+				break;
+			case MOFO:
+				instance_ = (ProphetQueuing) new Mofo();
+				break;
+			default:
+				BPF.getInstance().getBPFLogger()
+						.error(TAG, "Wrong policy in prophet routing type");
+				break;
 			}
 		}
 		return instance_;
@@ -93,7 +95,8 @@ public abstract class ProphetQueuing {
 	}
 
 	public void delete(int bundleid) {
-		BPF.getInstance().getBPFLogger().info(TAG, "Deleting bundle: " + bundleid);
+		BPF.getInstance().getBPFLogger()
+				.info(TAG, "Deleting bundle: " + bundleid);
 		bundleStore.del(bundleid);
 	}
 

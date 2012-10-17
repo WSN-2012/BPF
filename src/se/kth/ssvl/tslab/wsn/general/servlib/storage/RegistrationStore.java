@@ -105,9 +105,9 @@ public class RegistrationStore {
 	 * @return returns true on success
 	 */
 
-	public boolean init(Context context, Configuration config) {
+	public boolean init() {
 
-		config_ = config;
+		config_ = BPF.getInstance().getConfig();
 
 		BPF.getInstance().getBPFLogger().debug(TAG, "Going to init");
 		if (!init_) {

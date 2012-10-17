@@ -92,8 +92,8 @@ public class BundleStore {
 	 * @return returns true on success
 	 */
 
-	public boolean init(Configuration config) {
-		config_ = config;
+	public boolean init() {
+		config_ = BPF.getInstance().getConfig();
 		
 		BPF.getInstance().getBPFLogger().debug(TAG, "Initializing bundle store");
 		if (!init_) {

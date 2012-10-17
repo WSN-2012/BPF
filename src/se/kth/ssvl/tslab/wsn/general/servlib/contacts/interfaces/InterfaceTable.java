@@ -58,10 +58,10 @@ public class InterfaceTable {
 	 * Parsing the interface's parameters specified in the configuration file
 	 * (config). Create he interfaces and add them to the InterfaceTable.
 	 */
-	public static void init(Configuration config) {
+	public static void init() {
 
-		List<InterfaceEntry> EntriesList = config.interfaces_setting()
-				.interface_entries();
+		List<InterfaceEntry> EntriesList = BPF.getInstance().getConfig()
+				.interfaces_setting().interface_entries();
 		Iterator<InterfaceEntry> i = EntriesList.iterator();
 		Interface.set_iface_counter(0);
 
@@ -85,15 +85,15 @@ public class InterfaceTable {
 			ConvergenceLayer cl = ConvergenceLayer
 					.find_clayer(conv_layer_type_);
 			if (cl != null) {
-				BPF.getInstance().getBPFLogger().debug(TAG,
-						"can't find convergence layer for" + id);
+				BPF.getInstance().getBPFLogger()
+						.debug(TAG, "can't find convergence layer for" + id);
 
 			}
 			cl.set_local_port(local_port);
 
 			if (!InterfaceTable.getInstance().add(id, cl, conv_layer_type_)) {
-				BPF.getInstance().getBPFLogger().debug(TAG,
-						"error adding interface %s" + id);
+				BPF.getInstance().getBPFLogger()
+						.debug(TAG, "error adding interface %s" + id);
 			}
 
 		}
@@ -130,8 +130,10 @@ public class InterfaceTable {
 
 		Interface iface = new Interface(name, proto, cl);
 		if (!cl.interface_up(iface)) {
-			BPF.getInstance().getBPFLogger().error(TAG,
-					"convergence layer error adding interface" + name);
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							"convergence layer error adding interface" + name);
 			return false;
 		}
 
@@ -154,11 +156,13 @@ public class InterfaceTable {
 			iface = iter.next();
 			iter.remove();
 			if (iface.clayer().interface_down(iface)) {
-				BPF.getInstance().getBPFLogger().info(TAG,
-						"shutdown interface " + iface.name());
+				BPF.getInstance().getBPFLogger()
+						.info(TAG, "shutdown interface " + iface.name());
 			} else {
-				BPF.getInstance().getBPFLogger().error(TAG,
-						"error deleting interfaces from the convergence layer");
+				BPF.getInstance()
+						.getBPFLogger()
+						.error(TAG,
+								"error deleting interfaces from the convergence layer");
 
 			}
 		}

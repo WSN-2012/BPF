@@ -170,9 +170,9 @@ public class ContactManager extends BundleEventHandler {
 	 * Parsing the link's parameters specified in the configuration file
 	 * (config). Create the links and add them to the Contact Manager.
 	 */
-	public void init(Configuration config) {
+	public void init() {
 
-		List<LinkEntry> EntriesList = config.links_setting().link_entries();
+		List<LinkEntry> EntriesList = BPF.getInstance().getConfig().links_setting().link_entries();
 		Iterator<LinkEntry> i = EntriesList.iterator();
 		Link.set_link_counter(0);
 
