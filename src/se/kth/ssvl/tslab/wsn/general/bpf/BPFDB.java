@@ -3,6 +3,8 @@ package se.kth.ssvl.tslab.wsn.general.bpf;
 import java.util.List;
 import java.util.Map;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
+
 public interface BPFDB {
 
 	/**

@@ -1,5 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 

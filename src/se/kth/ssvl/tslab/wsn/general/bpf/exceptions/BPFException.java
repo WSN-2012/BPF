@@ -1,4 +1,4 @@
-package se.kth.ssvl.tslab.wsn.general.bpf;
+package se.kth.ssvl.tslab.wsn.general.bpf.exceptions;
 
 public class BPFException extends Exception {
 
