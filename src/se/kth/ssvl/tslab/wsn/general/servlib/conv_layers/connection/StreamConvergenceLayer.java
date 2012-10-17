@@ -18,7 +18,7 @@
  *    
  */
 
-package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers;
+package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -27,8 +27,8 @@ import java.util.Map;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPFException;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
-import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.CLConnection;
-import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.ConnectionConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.LinkParams;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamLinkParams;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**

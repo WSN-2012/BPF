@@ -702,9 +702,9 @@ public class BundleProtocol {
 	/**
 	 * "The current version of the bundling protocol." [DTN2]
 	 */
-	static final int CURRENT_VERSION = 0x06;
+	public static final int CURRENT_VERSION = 0x06;
 
-	static final int PREAMBLE_FIXED_LENGTH = 1;
+	public static final int PREAMBLE_FIXED_LENGTH = 1;
 
 	/**
 	 * "Valid type codes for bundle blocks." [DTN2]
