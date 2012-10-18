@@ -48,6 +48,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleStatusReport;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleTimestamp;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleAcceptRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.RegistrationAddedEvent;
@@ -299,9 +300,9 @@ public class DTNAPIImplementation implements DTNAPI {
 					| dtn_bundle_delivery_opts_t.DOPTS_DELETE_RCPT.getCode());
 
 		spec.set_expiration(b.expiration());
-		DTNBundleTimestamp spec_creation_ts = spec.creation_ts();
+		BundleTimestamp spec_creation_ts = spec.creation_ts();
 
-		spec_creation_ts.set_secs(b.creation_ts().seconds());
+		spec_creation_ts.set_seconds(b.creation_ts().seconds());
 		spec_creation_ts.set_seqno(b.creation_ts().seqno());
 
 		spec.set_delivery_regid(reg.regid());
@@ -751,8 +752,8 @@ public class DTNAPIImplementation implements DTNAPI {
 		}
 
 		// Before deliver the bundle fill in data in dtn_bundle_id
-		DTNBundleTimestamp dtn_bundle_creation_tiemstamp = new DTNBundleTimestamp();
-		dtn_bundle_creation_tiemstamp.set_secs(b.creation_ts().seconds());
+		BundleTimestamp dtn_bundle_creation_tiemstamp = new BundleTimestamp(0,0);
+		dtn_bundle_creation_tiemstamp.set_seconds(b.creation_ts().seconds());
 		dtn_bundle_creation_tiemstamp.set_seqno(b.creation_ts().seqno());
 		dtn_bundle_id.set_creation_ts(dtn_bundle_creation_tiemstamp);
 		dtn_bundle_id.set_frag_offset(0);
@@ -1106,8 +1107,8 @@ public class DTNAPIImplementation implements DTNAPI {
 		}
 
 		// Before deliver the bundle fill in data in dtn_bundle_id
-		DTNBundleTimestamp dtn_bundle_creation_tiemstamp = new DTNBundleTimestamp();
-		dtn_bundle_creation_tiemstamp.set_secs(b.creation_ts().seconds());
+		BundleTimestamp dtn_bundle_creation_tiemstamp = new BundleTimestamp(0,0);
+		dtn_bundle_creation_tiemstamp.set_seconds(b.creation_ts().seconds());
 		dtn_bundle_creation_tiemstamp.set_seqno(b.creation_ts().seqno());
 		dtn_bundle_id.set_creation_ts(dtn_bundle_creation_tiemstamp);
 		dtn_bundle_id.set_frag_offset(0);
