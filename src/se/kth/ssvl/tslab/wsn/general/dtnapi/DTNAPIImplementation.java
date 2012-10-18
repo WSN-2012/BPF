@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNAPIFailException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_api_status_report_code;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_delivery_opts_t;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_payload_location_t;
@@ -949,7 +950,8 @@ public class DTNAPIImplementation implements DTNAPI {
 				break;
 			}
 		}
-
+		
+		//TODO: This might need some better implementation to work?
 		// check the priority code
 		switch (spec.priority()) {
 		case COS_BULK:
