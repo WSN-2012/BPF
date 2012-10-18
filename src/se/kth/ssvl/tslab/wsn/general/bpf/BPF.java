@@ -1,30 +1,40 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
+import java.util.Iterator;
+
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPIImplementation;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNAPIFailException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNOpenException;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_payload_location_t;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_priority_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_reg_flags_t;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleSpec;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNEndpointID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNHandle;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_api_status_report_code;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNRegistrationInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
+import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class BPF {
 
-	/* ********* MEMBER VARIABLES ********** */
+	private static final String TAG = "BPF";
+
+	/* ******************************************************* */
+	/* ***************** MEMBER VARIABLES ******************** */
+	/* ******************************************************* */
 	private static BPF instance;
 	private static BPFService service;
 	private DTNAPIImplementation dtn;
 
-	/* ********* INITIALIZATION AND CONSTRUCTOR ********** */
+	/* ******************************************************* */
+	/* ********* INITIALIZATION AND CONSTRUCTOR ************** */
+	/* ******************************************************* */
 	/**
 	 * This method will return an singleton instance of BPF, which is used as a
 	 * main entry point to the library. Note: Must be called after init() method
@@ -75,7 +85,9 @@ public class BPF {
 		dtn = new DTNAPIImplementation();
 	}
 
+	/* ******************************************************* */
 	/* ********* GETTER METHODS FOR BPF CLASSES ************** */
+	/* ******************************************************* */
 	/**
 	 * Gets the configurations object
 	 * 
@@ -85,7 +97,9 @@ public class BPF {
 		throw new NotImplementedException();
 	}
 
+	/* ******************************************************* */
 	/* ********* GETTER METHODS FOR BPF API CLASSES ********** */
+	/* ******************************************************* */
 	/**
 	 * Gets the BPFCommunication object passed in from the BPFService.
 	 * 
@@ -122,11 +136,13 @@ public class BPF {
 		return service.getBPFDB();
 	}
 
-	/* **************** DTN API METHODS ********************* */
+	/* ******************************************************* */
+	/* **************** DTN API METHODS ********************** */
+	/* ******************************************************* */
 	/**
 	 * Use this method to send data using DTN.
 	 * 
-	 * @param receiver
+	 * @param destination
 	 *            The receiving endpoint
 	 * @param lifetime
 	 *            The lifetime of the bundle in seconds
@@ -137,7 +153,7 @@ public class BPF {
 	 *             This is thrown when there was an error in opening a handle
 	 *             for the DTN.
 	 */
-	public dtn_api_status_report_code send(DTNEndpointID receiver,
+	public dtn_api_status_report_code send(DTNEndpointID destination,
 			int lifetime, byte[] data) throws DTNOpenException {
 		// Create Bundle payload and store it in a file
 		BundlePayload payload = new BundlePayload(location_t.DISK);
@@ -151,7 +167,7 @@ public class BPF {
 
 		// Set some configuration for the Bundle
 		DTNBundleSpec spec = new DTNBundleSpec();
-		spec.set_dest(receiver);
+		spec.set_dest(destination);
 		spec.set_source(new DTNEndpointID(BundleDaemon.getInstance()
 				.local_eid().toString()));
 		spec.set_expiration(lifetime);
@@ -160,12 +176,74 @@ public class BPF {
 
 		// Send and store results
 		DTNBundleID bundleId = new DTNBundleID();
-		dtn_api_status_report_code result = dtn.dtn_send(handle, spec,
-				payload, bundleId);
+		dtn_api_status_report_code result = dtn.dtn_send(handle, spec, payload,
+				bundleId);
 
 		// Close the handler
 		dtn.dtn_close(handle);
-		
+
 		return result;
+	}
+
+	public void receive(DTNEndpointID destination)
+			throws DTNAPIFailException {
+		// Get all registrations for the specified destination
+		List<Integer> registrations = new List<Integer>();
+		DTNHandle handle = new DTNHandle();
+		dtn_api_status_report_code find = dtn.dtn_find_registrations(handle,
+				destination, registrations);
+
+		// If it wasn't found register it with regid = 0
+		if (find != dtn_api_status_report_code.DTN_SUCCESS) {
+			DTNRegistrationInfo reginfo = new DTNRegistrationInfo(destination,
+					dtn_reg_flags_t.DTN_REG_DEFER.getCode(), 3600, false);
+			dtn.dtn_register(handle, reginfo, 0);
+			registrations.add(new Integer(0));
+		}
+		
+		// Iterate through the registrations and fetch all bundles
+		try {
+			Iterator<Integer> iter = registrations.iterator();
+			Integer regid;
+			while (iter.hasNext()) {
+				regid = iter.next();
+
+				// Bind the handle to registration if it's not already bound
+				dtn.dtn_bind(handle, regid.intValue());
+
+				// Objects that will hold the received information
+				DTNBundleSpec spec = new DTNBundleSpec();
+				BundlePayload dtn_payload = new BundlePayload(location_t.DISK);
+
+				// Block Receiving call from API
+				dtn_api_status_report_code receive_result = null;
+				try {
+					do {
+						BPF.getInstance().getBPFLogger().debug(TAG,
+								"Trying to receive bundle sent to: " + destination.uri());
+						receive_result = dtn.dtn_recv(handle, regid.intValue(),
+								spec, dtn_payload, 1);
+						if (receive_result == dtn_api_status_report_code.DTN_SUCCESS) {
+							// TODO: Have some kind of callback here maybe?
+							// spec contains the information about the sender
+							// etc
+							// dtn_payload contains the data
+						}
+					} while (receive_result == dtn_api_status_report_code.DTN_SUCCESS);
+				} catch (InterruptedException e) {
+					// If we got more than one result try the next step
+					continue;
+				} finally {
+					dtn.dtn_unbind(handle, regid.intValue());
+				}
+			}
+		} finally {
+			// unregister all the found registration
+			Iterator<Integer> itr = registrations.iterator();
+			while (itr.hasNext()) {
+				Integer regid = itr.next();
+				dtn.dtn_unregister(handle, regid.intValue());
+			}
+		}
 	}
 }

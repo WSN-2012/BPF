@@ -52,7 +52,7 @@ public interface DTNAPI {
 	 * Create an API Registration and put it in the main Registration table
 	 */
 	dtn_api_status_report_code dtn_register(DTNHandle handle,
-			DTNRegistrationInfo reginfo, int[] newregid)
+			DTNRegistrationInfo reginfo, int newregid)
 			throws DTNAPIFailException;
 
 	/**

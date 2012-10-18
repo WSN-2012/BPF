@@ -32,14 +32,11 @@ import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNAPIFailException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_api_status_report_code;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_delivery_opts_t;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_payload_location_t;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_reg_flags_t;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleID;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundlePayload;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleSpec;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleStatusReport;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleTimestamp;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNEndpointID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNHandle;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNRegistrationInfo;
@@ -429,7 +426,7 @@ public class DTNAPIImplementation implements DTNAPI {
 	 */
 
 	public dtn_api_status_report_code dtn_register(DTNHandle handle,
-			DTNRegistrationInfo reginfo, int[] newregid)
+			DTNRegistrationInfo reginfo, int newregid)
 			throws DTNAPIFailException {
 
 		EndpointID endpoint = new EndpointID(reginfo.endpoint().uri());
@@ -484,7 +481,7 @@ public class DTNAPIImplementation implements DTNAPI {
 				notifier_, -1, true);
 
 		// fill the data with new regid before return
-		newregid[0] = regid;
+		newregid = regid;
 
 		return dtn_api_status_report_code.DTN_SUCCESS;
 	}
