@@ -53,6 +53,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.RegistrationAddedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.RegistrationRemovedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHeldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.APIRegistration;
@@ -73,7 +74,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
  * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class DTNAPIImplementation implements DTNAPI {
+public class DTN implements DTNAPI {
 
 	/**
 	 * TAG String for Android logging system
@@ -99,7 +100,7 @@ public class DTNAPIImplementation implements DTNAPI {
 	/**
 	 * Constructor by initializing all the Data Structures inside
 	 */
-	public DTNAPIImplementation() {
+	public DTN() {
 		super();
 		handles_ = new List<DTNHandle>();
 
@@ -263,7 +264,6 @@ public class DTNAPIImplementation implements DTNAPI {
 
 		APIRegistration api_reg = (APIRegistration) reg;
 
-		
 		// Get the bundle
 		Bundle b;
 		try {
@@ -271,7 +271,7 @@ public class DTNAPIImplementation implements DTNAPI {
 		} catch (InterruptedException e) {
 			throw e;
 		}
-		
+
 		if (b == null) {
 			return dtn_api_status_report_code.DTN_EINTERNAL;
 		}
@@ -283,7 +283,6 @@ public class DTNAPIImplementation implements DTNAPI {
 			spec.set_replyto(new DTNEndpointID(b.replyto().toString()));
 		}
 
-		
 		// Set some options
 		spec.set_dopts(0);
 		if (b.custody_requested()) {
@@ -312,7 +311,7 @@ public class DTNAPIImplementation implements DTNAPI {
 			spec.set_dopts(spec.dopts()
 					| dtn_bundle_delivery_opts_t.DOPTS_DELETE_RCPT.getCode());
 		}
-		
+
 		spec.set_expiration(b.expiration());
 		BundleTimestamp spec_creation_ts = spec.creation_ts();
 
@@ -325,8 +324,7 @@ public class DTNAPIImplementation implements DTNAPI {
 		dtn_payload.set_length(payload_len);
 
 		// Check that the payload is not to big to keep in memory
-		if (location == location_t.MEMORY
-				&& payload_len > DTN_MAX_BUNDLE_MEM) {
+		if (location == location_t.MEMORY && payload_len > DTN_MAX_BUNDLE_MEM) {
 			BPF.getInstance()
 					.getBPFLogger()
 					.debug(TAG,
@@ -340,8 +338,17 @@ public class DTNAPIImplementation implements DTNAPI {
 		if (location == location_t.MEMORY) {
 			// the app wants the payload in memory
 			if (payload_len != 0) {
-				//TODO: Is this memory buffer initialized here?
-				b.payload().read_data(0, payload_len, dtn_payload.memory_buf());
+				// TODO: Is this memory buffer initialized here?
+				try {
+					b.payload().read_data(0, payload_len,
+							dtn_payload.memory_buf());
+				} catch (BundleLockNotHeldByCurrentThread e) {
+					BPF.getInstance()
+							.getBPFLogger()
+							.error(TAG,
+									"Couldn't read the data since there was a lock on the payload");
+					e.printStackTrace();
+				}
 			}
 		} else if (location == location_t.DISK) {
 
@@ -354,8 +361,8 @@ public class DTNAPIImplementation implements DTNAPI {
 						".payload.dat", new File("api_temp"));
 
 				b.payload().copy_to_file(payload_file);
-				//TODO: Is below really needed?
-//				dtn_payload.set_file(payload_file);
+				// TODO: Is below really needed?
+				// dtn_payload.set_file(payload_file);
 
 			} catch (IOException e) {
 				BPF.getInstance()
@@ -373,7 +380,7 @@ public class DTNAPIImplementation implements DTNAPI {
 			return dtn_api_status_report_code.DTN_EINVAL;
 		}
 
-//		dtn_payload.set_location(location);
+		// dtn_payload.set_location(location);
 
 		if (b.is_admin()) {
 			spec.set_is_admin(true);
@@ -385,7 +392,7 @@ public class DTNAPIImplementation implements DTNAPI {
 			BundleStatusReport.data_t sr_data = new BundleStatusReport.data_t();
 			if (BundleStatusReport.parse_status_report(sr_data, b)) {
 				DTNBundleStatusReport dtn_status_report = new DTNBundleStatusReport();
-//				dtn_payload.set_status_report(dtn_status_report);
+				// dtn_payload.set_status_report(dtn_status_report);
 
 				dtn_status_report.set_bundle_id(b.bundleid());
 				dtn_status_report.set_reason(dtn_status_report_reason_t
@@ -665,7 +672,15 @@ public class DTNAPIImplementation implements DTNAPI {
 
 		switch (dtn_payload.location()) {
 		case MEMORY:
-			payload_len = dtn_payload.memory_buf().length;
+			try {
+				payload_len = dtn_payload.memory_buf().length;
+			} catch (BundleLockNotHeldByCurrentThread e1) {
+				BPF.getInstance()
+						.getBPFLogger()
+						.error(TAG,
+								"Couldn't get the payload buffer length, another thread has the lock");
+				e1.printStackTrace();
+			}
 			break;
 
 		case DISK:
@@ -734,7 +749,13 @@ public class DTNAPIImplementation implements DTNAPI {
 		case MEMORY:
 
 			// Set the payload according to byte array inside dtn_payload
-			b.payload().set_data(dtn_payload.memory_buf());
+			try {
+				b.payload().set_data(dtn_payload.memory_buf());
+			} catch (BundleLockNotHeldByCurrentThread e1) {
+				BPF.getInstance().getBPFLogger()
+						.error(TAG, "Couldn't set the data of the payload");
+				e1.printStackTrace();
+			}
 			break;
 
 		case DISK:
@@ -947,8 +968,8 @@ public class DTNAPIImplementation implements DTNAPI {
 				break;
 			}
 		}
-		
-		//TODO: This might need some better implementation to work?
+
+		// TODO: This might need some better implementation to work?
 		// check the priority code
 		switch (spec.priority()) {
 		case COS_BULK:
@@ -1045,7 +1066,13 @@ public class DTNAPIImplementation implements DTNAPI {
 
 		switch (dtn_payload.location()) {
 		case MEMORY:
-			payload_len = dtn_payload.memory_buf().length;
+			try {
+				payload_len = dtn_payload.memory_buf().length;
+			} catch (BundleLockNotHeldByCurrentThread e1) {
+				BPF.getInstance().getBPFLogger()
+						.error(TAG, "Couldn't get the length of the payload");
+				e1.printStackTrace();
+			}
 			break;
 
 		case DISK:
@@ -1113,7 +1140,13 @@ public class DTNAPIImplementation implements DTNAPI {
 		switch (dtn_payload.location()) {
 		case MEMORY:
 			// Set the payload according to byte array inside dtn_payload
-			b.payload().set_data(dtn_payload.memory_buf());
+			try {
+				b.payload().set_data(dtn_payload.memory_buf());
+			} catch (BundleLockNotHeldByCurrentThread e1) {
+				BPF.getInstance().getBPFLogger()
+						.error(TAG, "Couldn't set the data of the payload");
+				e1.printStackTrace();
+			}
 			break;
 		case DISK:
 			FileInputStream in = null;

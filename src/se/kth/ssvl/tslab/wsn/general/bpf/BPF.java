@@ -3,7 +3,7 @@ package se.kth.ssvl.tslab.wsn.general.bpf;
 import java.util.Iterator;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFException;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPIImplementation;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.DTN;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNAPIFailException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNOpenException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_priority_t;
@@ -30,7 +30,7 @@ public class BPF {
 	/* ******************************************************* */
 	private static BPF instance;
 	private static BPFService service;
-	private DTNAPIImplementation dtn;
+	private DTN dtn;
 
 	/* ******************************************************* */
 	/* ********* INITIALIZATION AND CONSTRUCTOR ************** */
@@ -82,7 +82,7 @@ public class BPF {
 	 */
 	private BPF(BPFService _service) {
 		service = _service;
-		dtn = new DTNAPIImplementation();
+		dtn = new DTN();
 	}
 
 	/* ******************************************************* */
