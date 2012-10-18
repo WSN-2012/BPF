@@ -26,6 +26,10 @@ package se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions;
  */
 public class DTNAPIFailException extends Exception {
 
+	public DTNAPIFailException(String e) {
+		super(e);
+	}
+	
 	/**
 	 * The generated UID to support Java Serializable
 	 */
