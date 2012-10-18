@@ -19,6 +19,8 @@
  */
 package se.kth.ssvl.tslab.wsn.general.dtnapi.types;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleTimestamp;
+
 /**
  * The data structure to get result from the IBinder
  * 
@@ -33,7 +35,7 @@ public class DTNBundleID {
 	/**
 	 * The Bundle creation Timestamp for this Bundle
 	 */
-	private DTNBundleTimestamp creation_ts_;
+	private BundleTimestamp creation_ts_;
 
 	/**
 	 * The fragmentation offset of this Bundle
@@ -70,7 +72,7 @@ public class DTNBundleID {
 	 * 
 	 * @return the creation_ts_
 	 */
-	public DTNBundleTimestamp creation_ts() {
+	public BundleTimestamp creation_ts() {
 		return creation_ts_;
 	}
 
@@ -80,7 +82,7 @@ public class DTNBundleID {
 	 * @param creationTs
 	 *            the creation_ts_ to set
 	 */
-	public void set_creation_ts(DTNBundleTimestamp creation_ts) {
+	public void set_creation_ts(BundleTimestamp creation_ts) {
 		creation_ts_ = creation_ts;
 	}
 

@@ -20,6 +20,7 @@
 package se.kth.ssvl.tslab.wsn.general.dtnapi.types;
 
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_priority_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleTimestamp;
 
 /**
  * The actual DTNBundle description according to the Bundle Protocol.
@@ -59,7 +60,7 @@ public class DTNBundleSpec {
 	/**
 	 * Bundle Creation Timestamp
 	 */
-	private DTNBundleTimestamp creation_ts_;
+	private BundleTimestamp creation_ts_;
 
 	/**
 	 * The delivery registration ID of the Bundle
@@ -82,7 +83,7 @@ public class DTNBundleSpec {
 		priority_ = dtn_bundle_priority_t.COS_NORMAL;
 		dopts_ = 0;
 		expiration_ = -1;
-		creation_ts_ = new DTNBundleTimestamp();
+		creation_ts_ = new BundleTimestamp(0,0); //TODO: Is this okey?
 		delivery_regid_ = -1;
 
 	}
@@ -209,7 +210,7 @@ public class DTNBundleSpec {
 	 *         DTNBundleTimestamp object
 	 * @see DTNBundleTimestamp
 	 */
-	public DTNBundleTimestamp creation_ts() {
+	public BundleTimestamp creation_ts() {
 		return creation_ts_;
 	}
 
@@ -220,7 +221,7 @@ public class DTNBundleSpec {
 	 * @param creationTs
 	 *            the creation_ts_ to set
 	 */
-	public void set_creation_ts(DTNBundleTimestamp creation_ts) {
+	public void set_creation_ts(BundleTimestamp creation_ts) {
 		creation_ts_ = creation_ts;
 	}
 
