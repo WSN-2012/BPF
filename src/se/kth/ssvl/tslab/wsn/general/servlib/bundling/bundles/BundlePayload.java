@@ -75,6 +75,12 @@ public class BundlePayload implements Serializable {
 		lock_ = lock;
 
 	}
+	
+	public BundlePayload(location_t location) {
+		location_ = location;
+		length_ = 0;
+		lock_ = new Lock();
+	}
 
 	/**
 	 * Options for payload location state.

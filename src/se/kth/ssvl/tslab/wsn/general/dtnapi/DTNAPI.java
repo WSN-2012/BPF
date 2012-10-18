@@ -20,12 +20,12 @@
 package se.kth.ssvl.tslab.wsn.general.dtnapi;
 
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleID;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundlePayload;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleSpec;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNEndpointID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNHandle;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNRegistrationInfo;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_api_status_report_code;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
 /**
@@ -94,7 +94,7 @@ public interface DTNAPI {
 	 * DTNBundlePayload location set
 	 */
 	dtn_api_status_report_code dtn_send(DTNHandle handle, DTNBundleSpec spec,
-			DTNBundlePayload payload, DTNBundleID dtn_bundle_id);
+			BundlePayload payload, DTNBundleID dtn_bundle_id);
 
 	/**
 	 * Try to receive DTNBundle by block waiting according to input timeout.
@@ -105,7 +105,7 @@ public interface DTNAPI {
 	 *            time to wait for Bundle in milliseconds
 	 */
 	dtn_api_status_report_code dtn_recv(DTNHandle handle, int regid,
-			DTNBundleSpec spec, DTNBundlePayload payload, int timeout)
+			DTNBundleSpec spec, BundlePayload payload, int timeout)
 			throws InterruptedException;
 
 }
