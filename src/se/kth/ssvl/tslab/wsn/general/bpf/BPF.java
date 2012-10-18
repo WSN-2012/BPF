@@ -2,9 +2,11 @@ package se.kth.ssvl.tslab.wsn.general.bpf;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPIImplementation;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNAPIFailException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNOpenException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_payload_location_t;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_priority_t;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleSpec;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNEndpointID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNHandle;
@@ -121,9 +123,22 @@ public class BPF {
 	}
 
 	/* **************** DTN API METHODS ********************* */
-
-	public dtn_api_status_report_code send(DTNEndpointID receiver, int lifetime, byte[] data)
-			throws DTNOpenException {
+	/**
+	 * Use this method to send data using DTN.
+	 * 
+	 * @param receiver
+	 *            The receiving endpoint
+	 * @param lifetime
+	 *            The lifetime of the bundle in seconds
+	 * @param data
+	 *            The data to be sent (payload)
+	 * @return A dtn_api_status_report_code with the result of the sending
+	 * @throws DTNOpenException
+	 *             This is thrown when there was an error in opening a handle
+	 *             for the DTN.
+	 */
+	public dtn_api_status_report_code send(DTNEndpointID receiver,
+			int lifetime, byte[] data) throws DTNOpenException {
 		// Create Bundle payload and store it in a file
 		BundlePayload payload = new BundlePayload(location_t.DISK);
 		payload.set_data(data);
@@ -142,8 +157,15 @@ public class BPF {
 		spec.set_expiration(lifetime);
 		spec.set_dopts(0);
 		spec.set_priority(dtn_bundle_priority_t.COS_NORMAL);
+
+		// Send and store results
+		DTNBundleID bundleId = new DTNBundleID();
+		dtn_api_status_report_code result = dtn.dtn_send(handle, spec,
+				payload, bundleId);
+
+		// Close the handler
+		dtn.dtn_close(handle);
 		
-		
-		
+		return result;
 	}
 }
