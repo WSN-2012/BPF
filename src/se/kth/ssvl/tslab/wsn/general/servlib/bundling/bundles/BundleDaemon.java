@@ -1970,10 +1970,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		 * "Check if this is a complete (non-fragment) bundle that obsoletes any
 		 * fragments that we know about." [DTN2]
 		 */
-		if (!bundle.is_fragment()
-				&& DTNService.context().getResources()
-						.getString(R.string.DTNEnableProactiveFragmentation)
-						.equals("true")) {
+		if (!BPF.getInstance().getConfig().links_setting().proactive_fragmentation()) {
 			fragmentmgr_.delete_obsoleted_fragments(bundle);
 		}
 
@@ -2343,15 +2340,16 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 								.data().succeeded() ? "succeeded" : "failed",
 								event.data().reason().getCaption()));
 
+		//TODO: Make sure that the below settings for the GbofId are working correctly
 		GbofId gbof_id = new GbofId();
-		gbof_id.source_.assign(event.data().orig_source_eid());
-		gbof_id.creation_ts_ = event.data().orig_creation_tv();
-		gbof_id.is_fragment_ = (event.data().admin_flags() & BundleProtocol.admin_record_flags_t.ADMIN_IS_FRAGMENT
-				.getCode()) > 0;
-		gbof_id.frag_length_ = gbof_id.is_fragment() ? event.data()
-				.orig_frag_length() : 0;
-		gbof_id.frag_offset_ = gbof_id.is_fragment_ ? event.data()
-				.orig_frag_offset() : 0;
+		gbof_id.source().assign(event.data().orig_source_eid());
+		gbof_id.set_creation_ts(event.data().orig_creation_tv());
+		gbof_id.set_is_fragment((event.data().admin_flags() & BundleProtocol.admin_record_flags_t.ADMIN_IS_FRAGMENT
+				.getCode()) > 0);
+		gbof_id.set_frag_length((int) (gbof_id.is_fragment() ? event.data()
+				.orig_frag_length() : 0));
+		gbof_id.set_frag_offset(gbof_id.is_fragment() ? event.data()
+				.orig_frag_offset() : 0);
 
 		Bundle orig_bundle = custody_bundles_.find(gbof_id);
 

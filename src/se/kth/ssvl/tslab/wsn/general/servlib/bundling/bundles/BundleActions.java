@@ -222,7 +222,7 @@ public class BundleActions {
 									link.name(), link.nexthop(), total_len,
 									link.params().mtu()));
 
-			if (FragmentManager.DTNEnableProactiveFragmentation.equals("true")) {
+			if (BPF.getInstance().getConfig().links_setting().proactive_fragmentation()) {
 
 				FragmentState proactive_fragment_state = FragmentManager
 						.getInstance().proactively_fragment(bundle, link,

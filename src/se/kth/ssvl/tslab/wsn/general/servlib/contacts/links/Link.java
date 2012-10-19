@@ -1007,11 +1007,8 @@ public class Link implements Serializable {
 		 */
 		Params() {
 
-			if (DTNService.context().getResources()
-					.getString(R.string.DTNEnableProactiveFragmentation)
-					.equals("true")) {
-				mtu_ = Integer.parseInt(DTNService.context().getResources()
-						.getString(R.string.DTNFragmentationMTU));
+			if (BPF.getInstance().getConfig().links_setting().proactive_fragmentation()) {
+				mtu_ = BPF.getInstance().getConfig().links_setting().fragmentation_mtu();
 			} else {
 				mtu_ = 0;
 			}
