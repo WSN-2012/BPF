@@ -102,7 +102,7 @@ public abstract class Connection extends CLConnection {
 								.number_uploading_bundles());
 		uploading_ = true;
 
-		if (DTNService.is_test_data_logging())
+		if (BPF.getInstance().getConfig().storage_setting().test_data_log())
 			TestDataLogger.getInstance().log_bundle_upload_begin(this, bundle);
 		ContactManager.getInstance().set_number_uploading_bundles(
 				ContactManager.getInstance().number_uploading_bundles() + 1);
@@ -147,7 +147,7 @@ public abstract class Connection extends CLConnection {
 						+ ContactManager.getInstance()
 								.number_uploading_bundles());
 
-		if (DTNService.is_test_data_logging())
+		if (BPF.getInstance().getConfig().storage_setting().test_data_log())
 			TestDataLogger.getInstance().log_bundle_upload_end(this, inflight);
 		ContactManager.getInstance().set_number_uploading_bundles(
 				ContactManager.getInstance().number_uploading_bundles() - 1);
@@ -168,7 +168,7 @@ public abstract class Connection extends CLConnection {
 								.number_downloading_bundles());
 
 		downloading_ = true;
-		if (DTNService.is_test_data_logging())
+		if (BPF.getInstance().getConfig().storage_setting().test_data_log())
 			TestDataLogger.getInstance().log_bundle_download_begin(this);
 
 		ContactManager.getInstance().set_number_downloading_bundles(
@@ -205,7 +205,7 @@ public abstract class Connection extends CLConnection {
 						+ ContactManager.getInstance()
 								.number_downloading_bundles());
 
-		if (DTNService.is_test_data_logging())
+		if (BPF.getInstance().getConfig().storage_setting().test_data_log())
 			TestDataLogger.getInstance()
 					.log_bundle_download_end(this, incoming);
 

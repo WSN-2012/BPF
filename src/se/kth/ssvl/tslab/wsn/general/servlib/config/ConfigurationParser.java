@@ -511,6 +511,15 @@ public class ConfigurationParser {
 		}
 		config.storage_setting().set_storage_path(storage_path.getValue());
 
+		Attr test_data_log = config_element.getAttributeNode("test_data_log");
+		if (test_data_log.equals("true")) {
+			config.storage_setting().set_test_data_log(true);
+		} else if (test_data_log.equals("false")) {
+			config.storage_setting().set_test_data_log(false);
+		} else {
+			throw new InvalidDTNConfigurationException("Test data logging was not set to true or false");
+		}
+		
 		return;
 	}
 

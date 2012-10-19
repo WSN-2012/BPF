@@ -12,7 +12,7 @@
         quota is the space you will allow DTN to store bundles in the storage
         type you set, the unit is Megabytes
     -->
-    <tns:StorageSetting quota="1" storage_path="dtn" />
+    <tns:StorageSetting quota="1" storage_path="dtn" test_data_log="true"/>
 
 
     <!--  Interfaces Section -->
