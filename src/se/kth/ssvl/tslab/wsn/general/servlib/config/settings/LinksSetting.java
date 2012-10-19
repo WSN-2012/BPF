@@ -111,6 +111,17 @@ public class LinksSetting {
 	 * The list maintaining the links inside this setting
 	 */
 	private List<LinkEntry> link_entries_;
+	
+	/**
+	 * A boolean wether to use proactive fragmentation or not 
+	 */
+	private boolean proactive_framgmentation; 
+	
+	/**
+	 * The fragmentation MTU.
+	 */
+	private int fragmentation_mtu;
+
 
 	/**
 	 * Accessor for the Link Entries inside this Link Setting
@@ -129,5 +140,21 @@ public class LinksSetting {
 	 */
 	public void set_link_entries(List<LinkEntry> link_entries) {
 		link_entries_ = link_entries;
+	}
+	
+	public void set_proactive_fragmentation(boolean pf) {
+		proactive_framgmentation = pf;
+	}
+	
+	public boolean proactive_fragmentation() {
+		return proactive_framgmentation;
+	}
+	
+	public void set_fragmentation_mtu(int mtu) {
+		fragmentation_mtu = mtu;
+	}
+	
+	public int fragmentation_mtu() {
+		return fragmentation_mtu;
 	}
 }

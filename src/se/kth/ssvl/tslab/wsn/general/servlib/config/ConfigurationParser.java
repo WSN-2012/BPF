@@ -267,6 +267,22 @@ public class ConfigurationParser {
 			Configuration config) throws InvalidDTNConfigurationException {
 		NodeList childNodes = config_element.getChildNodes();
 
+		Attr proactive_fragmentation = config_element.getAttributeNode("proactive_fragmentation");
+		if (proactive_fragmentation.getValue().equals("true")) {
+			config.links_setting().set_proactive_fragmentation(true);
+		} else if (proactive_fragmentation.equals("false")) {
+			config.links_setting().set_proactive_fragmentation(false);
+		} else {
+			throw new InvalidDTNConfigurationException("Invalid DTN Config Exception: proactive fragmentation not properly configured");
+		}
+		
+		Attr fragmentation_mtu = config_element.getAttributeNode("fragmentation_mtu");
+		try {
+			config.links_setting().set_fragmentation_mtu(Integer.parseInt(fragmentation_mtu.getValue()));
+		} catch (NumberFormatException e) {
+			throw new InvalidDTNConfigurationException("Invalid DTN Config Exception: Fragmentation MTU was not a correct number");
+		}
+		
 		List<LinkEntry> link_entries = config.links_setting().link_entries();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 
@@ -361,15 +377,6 @@ public class ConfigurationParser {
 		if (local_eid == null) {
 			throw new InvalidDTNConfigurationException(
 					"Invalid DTN Config Exception: local_eid is not specified");
-		}
-		
-		Attr proactive_fragmentation = config_element.getAttributeNode("proactive_fragmentation");
-		if (proactive_fragmentation.equals("true")) {
-			config.routes_setting().set_proactive_fragmentation(true);
-		} else if (proactive_fragmentation.equals("false")) {
-			config.routes_setting().set_proactive_fragmentation(false);
-		} else {
-			throw new InvalidDTNConfigurationException("Invalid DTN Config Exception: proactive fragmentation not properly configured");
 		}
 		
 

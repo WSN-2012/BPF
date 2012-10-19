@@ -39,11 +39,6 @@ public class RoutesSetting {
 	 * The local EID of this setting
 	 */
 	private String local_eid;
-
-	/**
-	 * A boolean wether to use proactive fragmentation or not 
-	 */
-	private boolean proactive_framgmentation; 
 	
 	/**
 	 * Queuing Policy
@@ -192,14 +187,6 @@ public class RoutesSetting {
 	 */
 	public void set_local_eid(String localEid) {
 		local_eid = localEid;
-	}
-	
-	public void set_proactive_fragmentation(boolean pf) {
-		proactive_framgmentation = pf;
-	}
-	
-	public boolean proactive_fragmentation() {
-		return proactive_framgmentation;
 	}
 
 	public ProphetSetting prophet = new ProphetSetting();
