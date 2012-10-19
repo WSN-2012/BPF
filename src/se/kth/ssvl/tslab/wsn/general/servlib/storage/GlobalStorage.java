@@ -68,33 +68,17 @@ public class GlobalStorage {
 	 */
 
 	public boolean init() {
-		config_ = BPF.getInstance().getConfig();
-
-		impt_storage_ = new StorageImplementation<Bundle>();
-
-		String app_folder = "/" + config_.storage_setting().storage_path();
-		String path;
-
-		if (config.storage_setting().storage_type() == storage_type_t.PHONE) {
-			path = context.getFilesDir().getAbsolutePath().concat(app_folder);
-		} else {
-			path = Environment.getExternalStorageDirectory().getAbsolutePath()
-					.concat(app_folder);
-		}
-
-		String path_registration = path + "/registration";
-
-		String path_database = context.getDatabasePath(
-				config.storage_setting().storage_path()).getAbsolutePath();
+		impt_storage_ = new StorageImplementation<Bundle>("Global");
 
 		// Total bundles size will be calculated in BundleStorge and added here
-		// total_size_ += impt_storage_.get_directory_size(path_storage);
-		total_size_ += impt_storage_.get_directory_size(path_registration);
+		total_size_ += impt_storage_.get_directory_size();
 		BPF.getInstance().getBPFLogger().debug(TAG,
 				"Total Size of DTN Folder:" + total_size_);
-		total_size_ += impt_storage_.get_file_size(path_database);
-		BPF.getInstance().getBPFLogger().debug(TAG,
-				"Total Size of DTN Folder:" + total_size_);
+		
+		//TODO: Is the below needed?
+//		total_size_ += impt_storage_.get_file_size(path_database);  
+//		BPF.getInstance().getBPFLogger().debug(TAG,
+//				"Total Size of DTN Folder:" + total_size_);
 
 		return true;
 	}
@@ -156,11 +140,6 @@ public class GlobalStorage {
 	 */
 
 	private long total_size_;
-
-	/**
-	 * DTNConfiguration to stores the application configurations,
-	 */
-	private Configuration config_;
 
 	/**
 	 * StorageImplementation object to use with bundle
