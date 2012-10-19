@@ -90,7 +90,7 @@ public abstract class VirtualTimerTask implements Serializable {
 		TimerTask timer_task = get_associated_TimerTask();
 		if (timer_task != null) {
 			timer_task.cancel();
-			DTNService.timer_tasks_map().remove(this);
+			BPF.getInstance().timer_tasks_map().remove(this);
 		}
 
 	}
@@ -101,7 +101,7 @@ public abstract class VirtualTimerTask implements Serializable {
 	 * @return the associate TimerTask in the DTNServer's Timer
 	 */
 	public TimerTask get_associated_TimerTask() {
-		TimerTask timer_task = DTNService.timer_tasks_map().get(this);
+		TimerTask timer_task = BPF.getInstance().timer_tasks_map().get(this);
 
 		if (timer_task == null)
 			BPF.getInstance().getBPFLogger().error(TAG,
@@ -137,9 +137,9 @@ public abstract class VirtualTimerTask implements Serializable {
 		// create and associated timer task
 		TimerTask associated_timer_task = create_associated_TimerTask();
 
-		DTNService.timer_tasks_map().put(this, associated_timer_task);
+		BPF.getInstance().timer_tasks_map().put(this, associated_timer_task);
 
-		DTNService.timer().schedule(associated_timer_task,
+		BPF.getInstance().timer().schedule(associated_timer_task,
 				(schedule_delay_second * 1000));
 
 	}
@@ -153,9 +153,9 @@ public abstract class VirtualTimerTask implements Serializable {
 
 		TimerTask associated_timer_task = create_associated_TimerTask();
 
-		DTNService.timer_tasks_map().put(this, associated_timer_task);
+		BPF.getInstance().timer_tasks_map().put(this, associated_timer_task);
 
-		DTNService.timer().schedule(associated_timer_task, when);
+		BPF.getInstance().timer().schedule(associated_timer_task, when);
 	}
 
 	/**

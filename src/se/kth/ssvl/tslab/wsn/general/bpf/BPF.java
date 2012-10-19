@@ -1,6 +1,9 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.DTN;
@@ -18,6 +21,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
+import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -31,6 +35,8 @@ public class BPF {
 	private static BPF instance;
 	private static BPFService service;
 	private DTN dtn;
+	private Timer timer_;
+	private HashMap<VirtualTimerTask, TimerTask> timer_tasks_map_;
 
 	/* ******************************************************* */
 	/* ********* INITIALIZATION AND CONSTRUCTOR ************** */
@@ -95,6 +101,23 @@ public class BPF {
 	 */
 	public Configuration getConfig() {
 		throw new NotImplementedException();
+	}
+	
+	/**
+	 * Getter for internal Timer
+	 * @return
+	 */
+	public Timer timer() {
+		return timer_;
+	}
+	
+	/**
+	 * Getter for the HashMap control timer and virtual timer task
+	 * @return the internal HashMap
+	 * @see VirtualTimerTask, TimerTask
+	 */
+	public HashMap<VirtualTimerTask,TimerTask> timer_tasks_map() {
+		return timer_tasks_map_;
 	}
 
 	/* ******************************************************* */
