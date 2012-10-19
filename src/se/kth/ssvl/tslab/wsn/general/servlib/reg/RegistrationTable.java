@@ -20,15 +20,15 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.reg;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 
-
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.FileManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This class is implemented as Singleton to store Registrations in memory.
@@ -49,10 +49,18 @@ public class RegistrationTable {
 		lock_ = new Lock();
 		reglist_ = new RegistrationList();
 
+		try {
+			//TODO: Changed this into its own folder instead of "api_temp". Is that a bad idea?
+			fileManager = new FileManager("registration", TAG); 
+		} catch (FileNotFoundException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, "Couldn't create a folder for the registrations");
+		}
+		// Clean up in there before we go on
 		cleanup_api_temp_folder();
-
 	}
 
+	private FileManager fileManager;
+	
 	/**
 	 * Singleton instance Implementation of the RegistrationTable
 	 */
@@ -92,22 +100,12 @@ public class RegistrationTable {
 	 * Cleanup function to clean API Temp Folder
 	 */
 	private void cleanup_api_temp_folder() {
-
-		Context context = DTNService.context();
-		String TempPrefixName = context.getResources().getString(
-				R.string.DTNAPITempFilePrefix);
-		File dir = DTNService.context().getDir(TempPrefixName,
-				Context.MODE_PRIVATE);
-
-		if (dir.exists()) {
-			File[] files = dir.listFiles();
-			for (int i = 0; i < files.length; i++) {
-				files[i].delete();
-			}
+		if (!fileManager.deleteFiles()) {
+			BPF.getInstance().getBPFLogger().error(TAG, "Couldn't clean up the registration folder");
+		} else {
+			BPF.getInstance().getBPFLogger().debug(TAG, "Clean up API Temp Folder Success");
 		}
-
-		BPF.getInstance().getBPFLogger().debug(TAG, "Clean up API Temp Folder Success");
-
+		
 	}
 
 	/**
@@ -133,15 +131,6 @@ public class RegistrationTable {
 
 			// now, all we should get are API registrations
 			Registration api_reg = reg;
-
-			if (api_reg == null) {
-				BPF.getInstance().getBPFLogger().error(TAG,
-								String.format(
-										"non-api registration %s passed to registration store",
-										reg.regid()));
-				return false;
-			}
-
 			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("adding registration %s/%s", reg.regid(), reg
@@ -216,14 +205,6 @@ public class RegistrationTable {
 			reg = find(regid);
 			reg.free_payload();
 
-			if (reg == null) {
-				BPF.getInstance().getBPFLogger().error(TAG,
-								String.format(
-										"error removing registration %s: no matching registration",
-										regid));
-				return false;
-			}
-
 			if (regid > Registration.MAX_RESERVED_REGID) {
 				if (!RegistrationStore.getInstance().del(reg)) {
 					BPF.getInstance().getBPFLogger()
@@ -260,15 +241,6 @@ public class RegistrationTable {
 							reg.endpoint().str()));
 
 			Registration api_reg = reg;
-
-			if (api_reg == null) {
-				BPF.getInstance().getBPFLogger()
-						.debug(TAG,
-								String.format(
-										"non-api registration %s passed to registration store",
-										reg.regid()));
-				return false;
-			}
 
 			if (!RegistrationStore.getInstance().update(api_reg)) {
 				BPF.getInstance().getBPFLogger().error(TAG,
