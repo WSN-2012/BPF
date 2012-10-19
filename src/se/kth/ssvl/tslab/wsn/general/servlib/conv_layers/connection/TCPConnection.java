@@ -230,7 +230,7 @@ public class TCPConnection extends Connection {
 				recvbuf_.position(recvbuf_.position()
 						+ temp_java_nio_buf.position());
 
-				if (DTNService.is_test_data_logging())
+				if (BPF.getInstance().getConfig().storage_setting().test_data_log())
 					TestDataLogger.getInstance().set_downloaded_size(
 							TestDataLogger.getInstance().downloaded_size()
 									+ temp_java_nio_buf.position()
@@ -349,7 +349,7 @@ public class TCPConnection extends Connection {
 			// position after movement
 			sendbuf_.rewind();
 
-			if (DTNService.is_test_data_logging())
+			if (BPF.getInstance().getConfig().storage_setting().test_data_log())
 				TestDataLogger.getInstance().set_uploaded_size(
 						TestDataLogger.getInstance().uploaded_size()
 								+ last_position);
