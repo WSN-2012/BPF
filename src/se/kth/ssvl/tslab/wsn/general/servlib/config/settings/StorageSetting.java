@@ -38,6 +38,8 @@ public class StorageSetting {
 	 * Quota of storage to consume, Unit is in MB
 	 */
 	private int quota;
+	
+	private boolean test_data_log;
 
 	/**
 	 * Accessor for the quota of storage to consume, Unit is in MB
@@ -81,6 +83,14 @@ public class StorageSetting {
 	 */
 	public void set_storage_path(String storagePath) {
 		storage_path_ = storagePath;
+	}
+
+	public boolean test_data_log() {
+		return test_data_log;
+	}
+
+	public void set_test_data_log(boolean test_data_log) {
+		this.test_data_log = test_data_log;
 	}
 
 }

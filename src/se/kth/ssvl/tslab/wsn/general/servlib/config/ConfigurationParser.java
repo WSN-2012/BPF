@@ -19,6 +19,7 @@
  */
 package se.kth.ssvl.tslab.wsn.general.servlib.config;
 
+import java.io.File;
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -493,14 +494,21 @@ public class ConfigurationParser {
 	 *            the configuration file we will put output on
 	 * @throws InvalidDTNConfigurationException
 	 */
-	// TODO: Throw exception if not needed values are found in the config
 	private static void process_storage_config(Element config_element,
 			Configuration config) throws InvalidDTNConfigurationException {
 
-		Attr quota = config_element.getAttributeNode("quota");
-		config.storage_setting().set_quota(Integer.parseInt(quota.getValue()));
-
+		try {
+			Attr quota = config_element.getAttributeNode("quota");
+			config.storage_setting().set_quota(Integer.parseInt(quota.getValue()));
+		} catch (NumberFormatException e) {
+			throw new InvalidDTNConfigurationException("The quota was not a correct number");
+		}
+		
 		Attr storage_path = config_element.getAttributeNode("storage_path");
+		File f = new File(storage_path.getValue());
+		if (!f.isDirectory() || !f.exists()) {
+			throw new InvalidDTNConfigurationException("The storage path was not an existing dir"); 
+		}
 		config.storage_setting().set_storage_path(storage_path.getValue());
 
 		return;
