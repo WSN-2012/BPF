@@ -358,11 +358,20 @@ public class ConfigurationParser {
 		
 
 		Attr local_eid = config_element.getAttributeNode("local_eid");
-
 		if (local_eid == null) {
 			throw new InvalidDTNConfigurationException(
 					"Invalid DTN Config Exception: local_eid is not specified");
 		}
+		
+		Attr proactive_fragmentation = config_element.getAttributeNode("proactive_fragmentation");
+		if (proactive_fragmentation.equals("true")) {
+			config.routes_setting().set_proactive_fragmentation(true);
+		} else if (proactive_fragmentation.equals("false")) {
+			config.routes_setting().set_proactive_fragmentation(false);
+		} else {
+			throw new InvalidDTNConfigurationException("Invalid DTN Config Exception: proactive fragmentation not properly configured");
+		}
+		
 
 		List<RouteEntry> route_entries = config.routes_setting()
 				.route_entries();
