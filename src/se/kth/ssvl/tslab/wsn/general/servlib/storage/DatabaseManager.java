@@ -20,6 +20,7 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -53,17 +54,19 @@ public class DatabaseManager {
 	 * 
 	 * @param table
 	 *            Table base table name to do all the operations
-	 * @throws BPFDBException Throws this when it cannot open the database
+	 * @throws BPFDBException
+	 *             Throws this when it cannot open the database
 	 */
-	
+
 	public DatabaseManager(String table) throws BPFDBException {
 		// Open and initialize the database
 		if (!BPF.getInstance().getBPFDB().init(DATABASE_NAME)) {
 			throw new BPFDBException("Couldn't open the database correctly");
 		}
-		// Init the table 
+		// Init the table
 		init(table);
-		BPF.getInstance().getBPFLogger().debug(TAG, "Database initialized and opened");
+		BPF.getInstance().getBPFLogger()
+				.debug(TAG, "Database initialized and opened");
 	}
 
 	/**
@@ -80,11 +83,12 @@ public class DatabaseManager {
 
 	public int add(String table, Map<String, Object> values) {
 		try {
-			BPF.getInstance().getBPFLogger().debug(TAG, "Adding Row to table " + table);
+			BPF.getInstance().getBPFLogger()
+					.debug(TAG, "Adding Row to table " + table);
 			return BPF.getInstance().getBPFDB().insert(table, values);
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG,
-					"SQLite Exception while adding a row");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "SQLite Exception while adding a row");
 			return -1;
 		}
 
@@ -103,7 +107,8 @@ public class DatabaseManager {
 		 * cv, "id = "+bundleid, null);
 		 */
 		// db.execSQL("UPDATE bundles Set forwarded_times = forwarded_times+1 WHERE id = "+bundleid);
-		//BPF.getInstance().getBPFLogger().info(TAG, "bundle " + bundleid + " incremented");
+		// BPF.getInstance().getBPFLogger().info(TAG, "bundle " + bundleid +
+		// " incremented");
 		throw new BPFDBException("incForwardTimes not implemented yet!");
 	}
 
@@ -121,15 +126,17 @@ public class DatabaseManager {
 	 *         return -1
 	 */
 
-	public boolean update(String table, Map<String, Object> values, String where,
-			String[] whereArgs) {
+	public boolean update(String table, Map<String, Object> values,
+			String where, String[] whereArgs) {
 		try {
-			BPF.getInstance().getBPFLogger().debug(TAG, "Updating Row in table " + table);
-			BPF.getInstance().getBPFDB().update(table, values, where, whereArgs);
+			BPF.getInstance().getBPFLogger()
+					.debug(TAG, "Updating Row in table " + table);
+			BPF.getInstance().getBPFDB()
+					.update(table, values, where, whereArgs);
 			return true;
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG,
-					"SQLite Exception while updating a row");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "SQLite Exception while updating a row");
 		}
 		return false;
 
@@ -147,34 +154,33 @@ public class DatabaseManager {
 	 *            Only get this field from resulted row
 	 * @param orderBy
 	 *            Orderby Clause for SQLite Query
-	 * @param limit
-	 *            Number of row get
 	 * @return Return required field value if found otherwise return -1
 	 */
 
 	public int get_record(String table, String condition, String field,
-			String orderBy, String limit) {
-
+			String orderBy) {
 		try {
-			Cursor cursor = BPF.getInstance().getBPFDB().query(table, null, condition, null, null, null,
-					orderBy, limit);
+			ResultSet rs = BPF.getInstance().getBPFDB().query(
+					table, null, condition, null, null, null, orderBy, null);
 
-			int fieldColumn = cursor.getColumnIndex(field);
-
-			if (cursor != null) {
-				if (cursor.moveToFirst()) {
-					int result = cursor.getInt(fieldColumn);
-					cursor.close();
-					return result;
-				}
-			} else {
-				BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
+			if (rs == null) {
+				BPF.getInstance().getBPFLogger()
+						.debug(TAG, "Get record: Resultset was null");
+				return -1;
 			}
-			cursor.close();
+
+			int fieldColumn = rs.findColumn(field);
+			if (rs.first()) {
+				int result = rs.getInt(fieldColumn);
+				rs.close();
+				return result;
+			}
+			
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "Coundn't run the query");
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
 		}
@@ -198,27 +204,32 @@ public class DatabaseManager {
 			String field) {
 		List<Integer> list = new ArrayList<Integer>();
 		try {
-			Cursor cursor = BPF.getInstance().getBPFDB().query(table, null, condition, null, null, null,
-					null, null);
+			ResultSet rs = BPF.getInstance().getBPFDB().query(
+					table, null, condition, null, null, null, null, null);
 
-			int idColumn = cursor.getColumnIndex(field);
-
-			if (cursor != null) {
-				if (cursor.moveToFirst()) {
-					do {
-						list.add(cursor.getInt(idColumn));
-						BPF.getInstance().getBPFLogger().debug(TAG,
-								"Found it@:" + cursor.getInt(idColumn));
-					} while (cursor.moveToNext());
-				}
-			} else {
-				BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
+			if (rs == null) {
+				BPF.getInstance().getBPFLogger().error(TAG, "Resultlist was null");
+				return null;
 			}
-			cursor.close();
+			
+			int idColumn = rs.findColumn(field);
+
+			if (rs != null) {
+				if (rs.first()) {
+					do {
+						list.add(rs.getInt(idColumn));
+						BPF.getInstance().getBPFLogger().debug(
+								TAG, "Found it@:" + rs.getInt(idColumn));
+					} while (rs.next());
+				}
+			}
+			rs.close();
+			
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "Coundn't run the query");
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
 		}
@@ -239,23 +250,26 @@ public class DatabaseManager {
 	public int get_count(String table, String condition, String[] field) {
 		int count = 0;
 		try {
-			Cursor cursor = BPF.getInstance().getBPFDB().query(table, field, condition, null, null, null,
-					null, null);
+			ResultSet rs = BPF.getInstance().getBPFDB().query(
+					table, field, condition, null, null, null, null, null);
 
-			if (cursor != null) {
-				if (cursor.moveToFirst()) {
-					count = cursor.getInt(0);
-					BPF.getInstance().getBPFLogger().debug(TAG,
-							"Records count @:" + cursor.getInt(0));
-				}
-			} else {
-				BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
+			if (rs == null) {
+				BPF.getInstance().getBPFLogger()
+						.debug(TAG, "Resultset was null");
+				return 0;
 			}
-			cursor.close();
+
+			if (rs.first()) {
+				count = rs.getInt(0);
+				BPF.getInstance().getBPFLogger().debug(
+						TAG, "Records count @:" + rs.getInt(0));
+			}
+			rs.close();
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "Coundn't run the query");
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
 		}
@@ -273,34 +287,31 @@ public class DatabaseManager {
 
 		try {
 
-			Cursor cursor = BPF.getInstance().getBPFDB().query("bundles", null, null, null, null, null,
-					null, null);
-			BPF.getInstance().getBPFLogger().debug(TAG, "Reading Row");
-
-			int idColumn = cursor.getColumnIndex("id");
-
-			if (cursor != null) {
-				if (cursor.moveToFirst()) {
-					do {
-						list.add(cursor.getInt(idColumn));
-						BPF.getInstance().getBPFLogger().debug(TAG,
-								"Found it@:" + cursor.getInt(idColumn));
-					} while (cursor.moveToNext());
-				}
-			} else {
-				BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
-				// return "Not Found";
+			ResultSet rs = BPF.getInstance().getBPFDB()
+					.query("bundles", null, null, null, null, null, null, null);
+			
+			if (rs == null) {
+				BPF.getInstance().getBPFLogger()
+						.debug(TAG, "Resultset was null");
+				return null;
 			}
-			cursor.close();
+
+			int idColumn = rs.findColumn("id");
+			if (rs.first()) {
+				do {
+					list.add(rs.getInt(idColumn));
+					BPF.getInstance().getBPFLogger()
+							.debug(TAG, "Found bundle with id: " + rs.getInt(idColumn));
+				} while (rs.next());
+			}
+			rs.close();
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
-			// return "Not Found";
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
-			// return "Not Found";
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "Coundn't run the query");
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
-			// return "Not Found";
 		}
 
 		return list.iterator();
@@ -319,7 +330,8 @@ public class DatabaseManager {
 	public boolean delete_record(String table, String condition) {
 
 		try {
-			int temp = BPF.getInstance().getBPFDB().delete(table, condition, null);
+			int temp = BPF.getInstance().getBPFDB()
+					.delete(table, condition, null);
 
 			if (temp == 0) {
 				BPF.getInstance().getBPFLogger().debug(TAG, "Already Deleted");
@@ -348,11 +360,13 @@ public class DatabaseManager {
 
 			BPF.getInstance().getBPFDB().execSQL("DROP TABLE " + tableName);
 
-			BPF.getInstance().getBPFLogger().debug(TAG, "Table Deleted: " + tableName);
+			BPF.getInstance().getBPFLogger()
+					.debug(TAG, "Table Deleted: " + tableName);
 			return true;
 
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't delete table");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "Coundn't delete table");
 			return false;
 		}
 	}
@@ -404,28 +418,31 @@ public class DatabaseManager {
 	 *            Get record where this condition matches
 	 * @return True if record found else false
 	 */
-	@SuppressWarnings("null")
 	public boolean find_record(String table, String condition) {
-
 		try {
-
-			Cursor cursor = BPF.getInstance().getBPFDB().query(table, null, condition, null, null, null,
-					null, null);
-			BPF.getInstance().getBPFLogger().debug(TAG, "Finding Row");
-			if (cursor != null) {
-				cursor.moveToFirst();
-				BPF.getInstance().getBPFLogger().debug(TAG, "Found it");
-				cursor.close();
-				return true;
-			} else {
-				cursor.close();
+			ResultSet rs = BPF.getInstance().getBPFDB().query(
+					table, null, condition, null, null, null, null, null);
+			if (rs == null) {
+				BPF.getInstance().getBPFLogger()
+						.error(TAG, "Resultset was null");
 				return false;
 			}
+
+			rs.first();
+			BPF.getInstance()
+					.getBPFLogger()
+					.debug(TAG,
+							"Found a row in the table: " + table
+									+ " with the condition: " + condition);
+			rs.close();
+			return true;
+			
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 			return false;
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "Coundn't run the query");
 			return false;
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");

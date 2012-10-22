@@ -1,5 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
+import java.sql.ResultSet;
 import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
@@ -47,10 +48,9 @@ public interface BPFDB {
 	 * @param whereArgs
 	 *            A string array containing the values to meet the where string
 	 * @return the number of rows affected
-	 * @throws BPFDBException
-	 *             Throws this when there was a problem in updating
+	 * @throws BPFDBException Throws this when there was a problem in updating
 	 */
-	public abstract int update(String table, Object values, String where,
+	public abstract int update(String table, Map<String, Object> values, String where,
 			String[] whereArgs) throws BPFDBException;
 
 	/**
@@ -91,7 +91,7 @@ public interface BPFDB {
 	 * @return An object type of a cursor Object which is positioned before the
 	 *         first entry or throws BPFDBException
 	 */
-	public abstract Object query(String table, String[] columns,
+	public abstract ResultSet query(String table, String[] columns,
 			String selection, String[] selectionArgs, String groupBy,
 			String having, String orderBy, String limit) throws BPFDBException;
 
