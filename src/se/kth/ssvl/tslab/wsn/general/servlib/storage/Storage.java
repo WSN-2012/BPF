@@ -40,7 +40,7 @@ import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
  * @author Sharjeel Ahmed (sharjeel@kth.se)
  */
 
-public class StorageImplementation<Type> {
+public class Storage<Type> {
 
 	/**
 	 * TAG for Android Logging
@@ -56,7 +56,7 @@ public class StorageImplementation<Type> {
 	 * Construct
 	 * 
 	 */
-	public StorageImplementation(String subDir) {
+	public Storage(String subDir) {
 		try {
 			fileManager = new FileManager(subDir, TAG);
 		} catch (FileNotFoundException e) {

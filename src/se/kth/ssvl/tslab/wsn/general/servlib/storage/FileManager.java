@@ -60,18 +60,9 @@ public class FileManager {
 				return f;
 			} else {
 				if (f.createNewFile()) {
-					BPF.getInstance()
-							.getBPFLogger()
-							.debug(TAG,
-									"Successfully created file :"
-											+ f.getAbsolutePath()); // TODO:
-																	// Check
-																	// that this
-																	// is
-																	// returning
-																	// the
-																	// filename
-																	// as well
+					BPF.getInstance().getBPFLogger().debug(TAG,
+							"Successfully created file :"+ f.getAbsolutePath());
+					// TODO: Check that this is returning the filename as well
 					return f;
 				} else {
 					BPF.getInstance().getBPFLogger()
@@ -190,19 +181,21 @@ public class FileManager {
 								+ " (-- SHOULD NOT REACH THIS POINT --)");
 		return 0;
 	}
-	
+
 	/**
 	 * Gets the size of a file stored in the subdir of this FileManager
-	 * @param fileName The filename of the file to look up the size of.
+	 * 
+	 * @param fileName
+	 *            The filename of the file to look up the size of.
 	 * @return The size of the file if it exists otherwise 0
 	 */
 	public long getFileSize(String fileName) {
 		File f = new File(dir, fileName);
-		
+
 		if (f.exists()) {
 			return f.length();
 		}
-		
+
 		return 0;
 	}
 
