@@ -26,7 +26,6 @@ import java.util.List;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.RegistrationList;
 import se.kth.ssvl.tslab.wsn.general.systemlib.storage.StorageIterator;
@@ -108,9 +107,6 @@ public class RegistrationStore {
 	 */
 
 	public void init() {
-
-		config_ = BPF.getInstance().getConfig();
-
 		BPF.getInstance().getBPFLogger().debug(TAG, "Going to init");
 		if (!init_) {
 			try {
@@ -448,19 +444,9 @@ public class RegistrationStore {
 	private int registration_count_;
 
 	/**
-	 * DTNConfiguration to stores the application configurations,
-	 */
-	private Configuration config_;
-
-	/**
 	 * init_ to make sure in init() it only makes SQLiteImplementation only once
 	 */
 
 	private static boolean init_ = false;
 
-	/**
-	 * Storage path of registration folder
-	 */
-
-	private String path_;
 }
