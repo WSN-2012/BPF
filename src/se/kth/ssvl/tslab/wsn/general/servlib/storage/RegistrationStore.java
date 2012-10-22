@@ -20,10 +20,12 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.RegistrationList;
@@ -105,40 +107,34 @@ public class RegistrationStore {
 	 * @return returns true on success
 	 */
 
-	public boolean init() {
+	public void init() {
 
 		config_ = BPF.getInstance().getConfig();
 
 		BPF.getInstance().getBPFLogger().debug(TAG, "Going to init");
 		if (!init_) {
-			impt_sqlite_ = new DatabaseManager(context,
-					Table_CREATE_Registration);
-			impt_storage_ = new Storage<Registration>(context);
+			try {
+				impt_sqlite_ = new DatabaseManager(Table_CREATE_Registration);
+			} catch (BPFDBException e) {
+				BPF.getInstance().getBPFLogger().error(
+						TAG, "Couldn't init RegistrationStore since the database couldn't be opened");
+			}
+			impt_storage_ = new Storage<Registration>("registration");
 			init_ = true;
 		}
 		String cond_find_record = "id = " + Registration.MAX_RESERVED_REGID;
-
+		
 		if (!impt_sqlite_.find_record(table, cond_find_record)) {
-			ContentValues values = new ContentValues();
+			HashMap<String, Object> values = new HashMap<String, Object>();
 			values.put("id", Registration.MAX_RESERVED_REGID);
 			values.put("uri", "");
 			impt_sqlite_.add(table, values);
-		}
-		String app_folder = "/" + config_.storage_setting().storage_path();
-
-		if (config.storage_setting().storage_type() == storage_type_t.PHONE) {
-			path_ = context.getFilesDir().getAbsolutePath().concat(app_folder)
-					.concat("/registration");
-		} else {
-			path_ = Environment.getExternalStorageDirectory().getAbsolutePath()
-					.concat(app_folder).concat("/registration");
 		}
 
 		String condition = "id > " + Registration.MAX_RESERVED_REGID;
 		String[] field = new String[1];
 		field[0] = "count(id)";
 		registration_count_ = impt_sqlite_.get_count(table, condition, field);
-		return impt_storage_.create_dir(path_);
 	}
 
 	/**
@@ -153,7 +149,7 @@ public class RegistrationStore {
 		// check If there no reg and endpoint then add
 
 		if (isUnique(reg)) {
-			ContentValues values = new ContentValues();
+			HashMap<String, Object> values = new HashMap<String, Object>();
 			values.put("uri", reg.endpoint().str());
 			String condition = "id = " + reg.regid();
 
@@ -202,7 +198,7 @@ public class RegistrationStore {
 	 */
 
 	public boolean update(Registration reg) {
-		ContentValues values = new ContentValues();
+		HashMap<String, Object> values = new HashMap<String, Object>();
 		values.put("uri", reg.endpoint().uri().toString());
 		String condition = "id = " + reg.regid();
 
@@ -259,7 +255,7 @@ public class RegistrationStore {
 	 */
 
 	public int next_regid() {
-		ContentValues values = new ContentValues();
+		HashMap<String, Object> values = new HashMap<String, Object>();
 		values.put("uri", "");
 
 		return impt_sqlite_.add(table, values);
@@ -277,21 +273,19 @@ public class RegistrationStore {
 
 		if (impt_sqlite_.drop_table(table)) {
 
-			if (!impt_storage_.delete_files_in_dir(path_)) {
+			if (!impt_storage_.delete_files_in_dir()) {
 				return false;
 			}
 
 			if (impt_sqlite_.create_table(Table_CREATE_Registration)) {
 
-				ContentValues values = new ContentValues();
+				HashMap<String, Object> values = new HashMap<String, Object>();
 				values.put("id", Registration.MAX_RESERVED_REGID);
 				values.put("uri", "");
 
 				if (impt_sqlite_.add(table, values) == Registration.MAX_RESERVED_REGID) {
 					return true;
 				}
-				;
-
 			}
 		}
 		registration_count_ = 0;
