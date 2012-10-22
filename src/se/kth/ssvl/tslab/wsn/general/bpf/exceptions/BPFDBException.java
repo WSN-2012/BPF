@@ -2,7 +2,7 @@ package se.kth.ssvl.tslab.wsn.general.bpf.exceptions;
 
 public class BPFDBException extends Exception{
 	
-	private static final long serialVersionUID = -468937647917398954L;
+	private static final long serialVersionUID = -468937647917498954L;
 
 	public BPFDBException (String message) {
 		super(message);
