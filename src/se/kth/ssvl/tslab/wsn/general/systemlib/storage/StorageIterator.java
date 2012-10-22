@@ -100,11 +100,10 @@ public class StorageIterator<Type> implements Iterator<Integer> {
 	 */
 	public boolean hasNext() {
 		if (id == -1) {
-			String limit = "1";
 			String field = "id";
 			String orderBy = null;
 			temp_id = impt_sqlite_.get_record(table_, first_condition_, field,
-					orderBy, limit);
+					orderBy);
 
 			if (temp_id == -1) {
 				return false;
@@ -114,12 +113,11 @@ public class StorageIterator<Type> implements Iterator<Integer> {
 		} else {
 			// int current_id = id;
 			String condition = pre_condition_ + id + post_condition_;
-			String limit = "1";
 			String field = "id";
 			String orderBy = null;
 
-			temp_id = impt_sqlite_.get_record(table_, condition, field,
-					orderBy, limit);
+			temp_id = impt_sqlite_
+					.get_record(table_, condition, field, orderBy);
 			if (temp_id == -1) {
 				return false;
 			} else {
@@ -135,11 +133,10 @@ public class StorageIterator<Type> implements Iterator<Integer> {
 	 */
 	public Integer next() {
 		if (id == -1) {
-			String limit = "1";
 			String field = "id";
 			String orderBy = null;
 			temp_id = impt_sqlite_.get_record(table_, first_condition_, field,
-					orderBy, limit);
+					orderBy);
 
 			if (temp_id == -1) {
 				return -1;
@@ -150,12 +147,11 @@ public class StorageIterator<Type> implements Iterator<Integer> {
 		} else {
 			// int current_id = id;
 			String condition = pre_condition_ + id + post_condition_;
-			String limit = "1";
 			String field = "id";
 			String orderBy = null;
 
-			temp_id = impt_sqlite_.get_record(table_, condition, field,
-					orderBy, limit);
+			temp_id = impt_sqlite_
+					.get_record(table_, condition, field, orderBy);
 			if (temp_id == -1) {
 				return -1;
 			} else {
@@ -166,7 +162,6 @@ public class StorageIterator<Type> implements Iterator<Integer> {
 	}
 
 	public void remove() {
-		
 
 	}
 
