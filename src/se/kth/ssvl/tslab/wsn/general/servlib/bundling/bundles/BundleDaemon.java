@@ -30,6 +30,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.FragmentManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.GbofId;
@@ -2184,7 +2185,11 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 				.notify("DTN Bundle Transmitted",
 						"To " + bundle.dest().toString());
 
-		BundleStore.getImpt_sqlite_().incForwardedTimes(bundle.bundleid());
+		try {
+			BundleStore.getImpt_sqlite_().incForwardedTimes(bundle.bundleid());
+		} catch (BPFDBException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
+		}
 
 		/*
 		 * "Remove the formatted block info from the bundle since we don't need

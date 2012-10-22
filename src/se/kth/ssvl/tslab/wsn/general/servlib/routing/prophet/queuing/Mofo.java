@@ -37,7 +37,7 @@ public class Mofo extends ProphetQueuing {
 		} catch (SQLException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "There was an SQL exception in getting the last bundle");
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "There was an error in querying the database");
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		}
 
 		return result;
