@@ -38,9 +38,9 @@ public interface BPFDB {
 	 * @param table
 	 *            A string containing the table name to update in
 	 * @param values
-	 *            This Object should be a type of map from column names to new
-	 *            column values. null is a valid value that will be translated
-	 *            to NULL.
+	 *            This map should contain the initial column values for the row.
+	 *            The keys should be the column names and the values the column
+	 *            values
 	 * @param where
 	 *            A string with the prepared WHERE statement. Add '?' (without
 	 *            quotes) to specify a parameter. Passing null will update all
