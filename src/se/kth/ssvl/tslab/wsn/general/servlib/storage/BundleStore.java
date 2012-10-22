@@ -97,8 +97,8 @@ public class BundleStore {
 		
 		BPF.getInstance().getBPFLogger().debug(TAG, "Initializing bundle store");
 		if (!init_) {
-			impt_sqlite_ = new SQLiteImplementation(Table_CREATE_BUNDLES);
-			impt_storage_ = new StorageImplementation<Bundle>("storage");
+			impt_sqlite_ = new DatabaseManager(Table_CREATE_BUNDLES);
+			impt_storage_ = new Storage<Bundle>("storage");
 			init_ = true;
 			saved_bundles_ = new HashMap<Integer, Long>();
 		}
@@ -391,7 +391,7 @@ public class BundleStore {
 		 *            Database query condition for initializing iterator
 		 */
 
-		public void set_itr(SQLiteImplementation impt_sqlite,
+		public void set_itr(DatabaseManager impt_sqlite,
 				BundleStore bundle_store, String table, String pre_condition,
 				String post_condition, String first_condition) {
 			itr_ = new StorageIterator<Integer>(impt_sqlite, table,
@@ -592,17 +592,17 @@ public class BundleStore {
 	 * StorageImplementation object to use with bundle
 	 */
 
-	private static StorageImplementation<Bundle> impt_storage_;
+	private static Storage<Bundle> impt_storage_;
 
 	/**
 	 * SQLiteImplementation object
 	 */
-	private static SQLiteImplementation impt_sqlite_;
+	private static DatabaseManager impt_sqlite_;
 
 	/**
 	 * @return the impt_sqlite_
 	 */
-	public static SQLiteImplementation getImpt_sqlite_() {
+	public static DatabaseManager getImpt_sqlite_() {
 		return impt_sqlite_;
 	}
 

@@ -22,7 +22,7 @@ package se.kth.ssvl.tslab.wsn.general.systemlib.storage;
 
 import java.util.Iterator;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.storage.SQLiteImplementation;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.DatabaseManager;
 
 /**
  * Class that implements Iterator to make iterators of the user defined types.
@@ -37,7 +37,7 @@ public class StorageIterator<Type> implements Iterator<Integer> {
 	/**
 	 * SQLite object
 	 */
-	private SQLiteImplementation impt_sqlite_;
+	private DatabaseManager impt_sqlite_;
 
 	/**
 	 * Pre condition for the iterator query
@@ -83,7 +83,7 @@ public class StorageIterator<Type> implements Iterator<Integer> {
 	 * @param first_condition
 	 *            Condition for init the iterator
 	 */
-	public StorageIterator(SQLiteImplementation impt_sqlite, String tableName,
+	public StorageIterator(DatabaseManager impt_sqlite, String tableName,
 			String pre_condition, String post_condition, String first_condition) {
 		impt_sqlite_ = impt_sqlite;
 		table_ = tableName;

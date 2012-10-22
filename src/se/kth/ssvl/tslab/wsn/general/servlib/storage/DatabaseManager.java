@@ -23,9 +23,10 @@ package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import se.kth.ssvl.tslab.wsn.general.bpf.*;
-import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.*;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
 
 /**
  * This class is the implementation of SQLite. This class directly interact with
@@ -34,7 +35,7 @@ import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.*;
  * @author Sharjeel Ahmed (sharjeel@kth.se)
  */
 
-public class SQLiteImplementation {
+public class DatabaseManager {
 
 	/**
 	 * TAG for Android Logging
@@ -50,23 +51,19 @@ public class SQLiteImplementation {
 	/**
 	 * Construct
 	 * 
-	 * @param ctx
-	 *            Application context to open the database file
 	 * @param table
 	 *            Table base table name to do all the operations
+	 * @throws BPFDBException Throws this when it cannot open the database
 	 */
-
-	public SQLiteImplementation(Context ctx, String table) {
-		try {
-			ctx.openOrCreateDatabase(DATABASE_NAME, 1, null);
-
-			init(table);
-
-			BPF.getInstance().getBPFLogger().debug(TAG, "Can open database");
-
-		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "SQLite Exception in Constructor");
+	
+	public DatabaseManager(String table) throws BPFDBException {
+		// Open and initialize the database
+		if (!BPF.getInstance().getBPFDB().init(DATABASE_NAME)) {
+			throw new BPFDBException("Couldn't open the database correctly");
 		}
+		// Init the table 
+		init(table);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Database initialized and opened");
 	}
 
 	/**
@@ -81,10 +78,10 @@ public class SQLiteImplementation {
 	 *         otherwise return -1
 	 */
 
-	public int add(String table, ContentValues values) {
+	public int add(String table, Map<String, Object> values) {
 		try {
-			BPF.getInstance().getBPFLogger().debug(TAG, "Adding Row");
-			return (int) BPF.getInstance().getBPFDB().insert(table, null, values);
+			BPF.getInstance().getBPFLogger().debug(TAG, "Adding Row to table " + table);
+			return BPF.getInstance().getBPFDB().insert(table, values);
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG,
 					"SQLite Exception while adding a row");
@@ -98,7 +95,7 @@ public class SQLiteImplementation {
 	 * 
 	 * @param bundleid
 	 */
-	public void incForwardedTimes(int bundleid) {
+	public void incForwardedTimes(int bundleid) throws BPFDBException {
 		/*
 		 * ContentValues cv = new ContentValues();
 		 * cv.putNull("forwarded_times = forwarded_times+1");
@@ -106,7 +103,8 @@ public class SQLiteImplementation {
 		 * cv, "id = "+bundleid, null);
 		 */
 		// db.execSQL("UPDATE bundles Set forwarded_times = forwarded_times+1 WHERE id = "+bundleid);
-		BPF.getInstance().getBPFLogger().info(TAG, "bundle " + bundleid + " incremented");
+		//BPF.getInstance().getBPFLogger().info(TAG, "bundle " + bundleid + " incremented");
+		throw new BPFDBException("incForwardTimes not implemented yet!");
 	}
 
 	/**
@@ -123,10 +121,10 @@ public class SQLiteImplementation {
 	 *         return -1
 	 */
 
-	public boolean update(String table, ContentValues values, String where,
+	public boolean update(String table, Map<String, Object> values, String where,
 			String[] whereArgs) {
 		try {
-			BPF.getInstance().getBPFLogger().debug(TAG, "Updating Row");
+			BPF.getInstance().getBPFLogger().debug(TAG, "Updating Row in table " + table);
 			BPF.getInstance().getBPFDB().update(table, values, where, whereArgs);
 			return true;
 		} catch (BPFDBException e) {

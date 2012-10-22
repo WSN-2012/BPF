@@ -111,9 +111,9 @@ public class RegistrationStore {
 
 		BPF.getInstance().getBPFLogger().debug(TAG, "Going to init");
 		if (!init_) {
-			impt_sqlite_ = new SQLiteImplementation(context,
+			impt_sqlite_ = new DatabaseManager(context,
 					Table_CREATE_Registration);
-			impt_storage_ = new StorageImplementation<Registration>(context);
+			impt_storage_ = new Storage<Registration>(context);
 			init_ = true;
 		}
 		String cond_find_record = "id = " + Registration.MAX_RESERVED_REGID;
@@ -402,7 +402,7 @@ public class RegistrationStore {
 		 *            Database query condition for initializing iterator
 		 */
 
-		public void set_itr(SQLiteImplementation impt_sqlite,
+		public void set_itr(DatabaseManager impt_sqlite,
 				RegistrationStore registration_store, String table,
 				String pre_condition, String post_condition,
 				String first_condition) {
@@ -441,12 +441,12 @@ public class RegistrationStore {
 	 * StorageImplementation object to use with registration
 	 */
 
-	private static StorageImplementation<Registration> impt_storage_;
+	private static Storage<Registration> impt_storage_;
 
 	/**
 	 * SQLiteImplementation object
 	 */
-	private static SQLiteImplementation impt_sqlite_;
+	private static DatabaseManager impt_sqlite_;
 
 	/**
 	 * Number of registrations stored
