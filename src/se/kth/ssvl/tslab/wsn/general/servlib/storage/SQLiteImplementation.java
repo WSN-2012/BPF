@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.*;
+import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.*;
 
 /**
  * This class is the implementation of SQLite. This class directly interact with
@@ -47,19 +48,6 @@ public class SQLiteImplementation {
 	private static final String DATABASE_NAME = "dtn";
 
 	/**
-	 * SQLiteDatabase object
-	 */
-
-	private SQLiteDatabase db;
-
-	/**
-	 * @return the db
-	 */
-	public SQLiteDatabase getDb() {
-		return db;
-	}
-
-	/**
 	 * Construct
 	 * 
 	 * @param ctx
@@ -70,13 +58,13 @@ public class SQLiteImplementation {
 
 	public SQLiteImplementation(Context ctx, String table) {
 		try {
-			db = ctx.openOrCreateDatabase(DATABASE_NAME, 1, null);
+			ctx.openOrCreateDatabase(DATABASE_NAME, 1, null);
 
 			init(table);
 
 			BPF.getInstance().getBPFLogger().debug(TAG, "Can open database");
 
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "SQLite Exception in Constructor");
 		}
 	}
@@ -96,8 +84,8 @@ public class SQLiteImplementation {
 	public int add(String table, ContentValues values) {
 		try {
 			BPF.getInstance().getBPFLogger().debug(TAG, "Adding Row");
-			return (int) db.insert(table, null, values);
-		} catch (SQLiteException e) {
+			return (int) BPF.getInstance().getBPFDB().insert(table, null, values);
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG,
 					"SQLite Exception while adding a row");
 			return -1;
@@ -139,9 +127,9 @@ public class SQLiteImplementation {
 			String[] whereArgs) {
 		try {
 			BPF.getInstance().getBPFLogger().debug(TAG, "Updating Row");
-			db.update(table, values, where, whereArgs);
+			BPF.getInstance().getBPFDB().update(table, values, where, whereArgs);
 			return true;
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG,
 					"SQLite Exception while updating a row");
 		}
@@ -170,7 +158,7 @@ public class SQLiteImplementation {
 			String orderBy, String limit) {
 
 		try {
-			Cursor cursor = db.query(table, null, condition, null, null, null,
+			Cursor cursor = BPF.getInstance().getBPFDB().query(table, null, condition, null, null, null,
 					orderBy, limit);
 
 			int fieldColumn = cursor.getColumnIndex(field);
@@ -187,7 +175,7 @@ public class SQLiteImplementation {
 			cursor.close();
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
@@ -212,7 +200,7 @@ public class SQLiteImplementation {
 			String field) {
 		List<Integer> list = new ArrayList<Integer>();
 		try {
-			Cursor cursor = db.query(table, null, condition, null, null, null,
+			Cursor cursor = BPF.getInstance().getBPFDB().query(table, null, condition, null, null, null,
 					null, null);
 
 			int idColumn = cursor.getColumnIndex(field);
@@ -231,7 +219,7 @@ public class SQLiteImplementation {
 			cursor.close();
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
@@ -253,7 +241,7 @@ public class SQLiteImplementation {
 	public int get_count(String table, String condition, String[] field) {
 		int count = 0;
 		try {
-			Cursor cursor = db.query(table, field, condition, null, null, null,
+			Cursor cursor = BPF.getInstance().getBPFDB().query(table, field, condition, null, null, null,
 					null, null);
 
 			if (cursor != null) {
@@ -268,7 +256,7 @@ public class SQLiteImplementation {
 			cursor.close();
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
@@ -287,7 +275,7 @@ public class SQLiteImplementation {
 
 		try {
 
-			Cursor cursor = db.query("bundles", null, null, null, null, null,
+			Cursor cursor = BPF.getInstance().getBPFDB().query("bundles", null, null, null, null, null,
 					null, null);
 			BPF.getInstance().getBPFLogger().debug(TAG, "Reading Row");
 
@@ -309,7 +297,7 @@ public class SQLiteImplementation {
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 			// return "Not Found";
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
 			// return "Not Found";
 		} catch (Exception e) {
@@ -333,7 +321,7 @@ public class SQLiteImplementation {
 	public boolean delete_record(String table, String condition) {
 
 		try {
-			int temp = db.delete(table, condition, null);
+			int temp = BPF.getInstance().getBPFDB().delete(table, condition, null);
 
 			if (temp == 0) {
 				BPF.getInstance().getBPFLogger().debug(TAG, "Already Deleted");
@@ -342,7 +330,7 @@ public class SQLiteImplementation {
 				BPF.getInstance().getBPFLogger().debug(TAG, "Deleted");
 				return true;
 			}
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't delete");
 			return false;
 		}
@@ -360,12 +348,12 @@ public class SQLiteImplementation {
 
 		try {
 
-			db.execSQL("DROP TABLE " + tableName);
+			BPF.getInstance().getBPFDB().execSQL("DROP TABLE " + tableName);
 
 			BPF.getInstance().getBPFLogger().debug(TAG, "Table Deleted: " + tableName);
 			return true;
 
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't delete table");
 			return false;
 		}
@@ -381,10 +369,10 @@ public class SQLiteImplementation {
 	public void init(String create_table_query) {
 
 		try {
-			db.execSQL(create_table_query);
+			BPF.getInstance().getBPFDB().execSQL(create_table_query);
 
 			BPF.getInstance().getBPFLogger().debug("DB:", "Creating Table");
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't open table");
 		}
 	}
@@ -399,11 +387,11 @@ public class SQLiteImplementation {
 
 	public boolean create_table(String create_table_query) {
 		try {
-			db.execSQL(create_table_query);
+			BPF.getInstance().getBPFDB().execSQL(create_table_query);
 
 			BPF.getInstance().getBPFLogger().debug("DB:", "Creating Table");
 			return true;
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't open table");
 		}
 		return false;
@@ -423,7 +411,7 @@ public class SQLiteImplementation {
 
 		try {
 
-			Cursor cursor = db.query(table, null, condition, null, null, null,
+			Cursor cursor = BPF.getInstance().getBPFDB().query(table, null, condition, null, null, null,
 					null, null);
 			BPF.getInstance().getBPFLogger().debug(TAG, "Finding Row");
 			if (cursor != null) {
@@ -438,7 +426,7 @@ public class SQLiteImplementation {
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 			return false;
-		} catch (SQLiteException e) {
+		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't run the query");
 			return false;
 		} catch (Exception e) {
@@ -451,7 +439,7 @@ public class SQLiteImplementation {
 	 * Close database connection at the end of application
 	 */
 	public void close() {
-		db.close();
+		BPF.getInstance().getBPFDB().close();
 	}
 
 }

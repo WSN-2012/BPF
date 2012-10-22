@@ -1,119 +1,102 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
-import java.util.List;
-import java.util.Map;
-
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
 
 public interface BPFDB {
 
-	/**
-	 * Create or open an existing database
+	/**Convenience method for inserting a row into the database.
 	 * 
-	 * @param query
-	 * 			A string containing the SQL command to create or open an existing database
-	 * @return True if the database is created else throw a database Exception
+	 * @param table 	
+	 * 			A string containing the table name to insert the row into
+	 * @param nullColumnHack 	
+	 * 			optional; may be null. SQL doesn't allow inserting a completely empty row 
+	 * 			without naming at least one column name. If your provided values is empty, 
+	 * 			no column names are known and an empty row can't be inserted. If not set 
+	 * 			to null, the nullColumnHack parameter provides the name of nullable column name 
+	 * 			to explicitly insert a NULL into in the case where your values is empty.
+	 * @param values 	
+	 * 			This Object should be a type of map which contains the initial column values for the row. The keys should 
+	 * 			be the column names and the values the column values
+	 * @return the row ID of the newly inserted row or throw an BPFDBException
 	 * 
 	 */
-	public abstract boolean createDatabase(String query)throws BPFDBException;
-
+	public abstract int insert(String table, String nullColumnHack, Object values) throws BPFDBException;
 	
 	/**
-	 * Add new record to database table
+	 * Convenience method for updating rows in the database.
 	 * 
-	 * @param query
-	 * 			A string containing the SQL command to add a record in the appropriate table
-	 * @return If new row successfully added then return the newly added id
-	 *         else throw a database Exception
+	 * @param table 	
+	 * 			A string containing the table name to update in
+	 * @param values 	
+	 * 			This Object should be a type of map from column names to new column values. 
+	 * 			null is a valid value that will be translated to NULL.
+	 * @param whereClause 	
+	 * 			A string containing the optional WHERE clause to apply when updating. Passing null will update all rows.
+	 * @param whereArgs
+	 * 			A string array containing the values to meet the whereClause string
+	 * @return the number of rows affected or throws BPFDBException 
 	 */
-	public abstract int addRecord(String query)throws BPFDBException;
-
-	
-	/** 
-	 * Update record in database table
-	 * 
-	 * @param query
-	 * 			A string containing the SQL command to update a record in the appropriate table
-	 * @return The amount of rows updated else throw a database Exception
-	 */
-	public abstract int updateRecord(String query)throws BPFDBException;
-
+	public abstract int update(String table, Object values, String whereClause, String[] whereArgs) throws BPFDBException;
 	
 	/**
-	 * @param query
-	 * 			A string containing the SQL command to get records from the appropriate table
-	 * @return 	Returns a List of Map Objects (where each map is a row) else throw a database Exception.
-	 * 			The String in the map contains the column name and the Object is the value
-	 *         	of the column.
+	 *Query the given table, returning a Cursor over the result set.
+	 *
+	 *@param table 	
+	 *		A string containing the table name to compile the query against.
+	 *@param columns 	
+	 *		An array string containing a list of which columns to return. 
+	 *		Passing null will return all columns, which is discouraged to prevent 
+	 *		reading data from storage that isn't going to be used.
+	 *@param selection 	
+	 *		A filter declaring which rows to return, formatted as an SQL WHERE clause 
+	 *		(excluding the WHERE itself). Passing null will return all rows for the given table.
+	 *@param selectionArgs 	
+	 *		You may include ?s in selection, which will be replaced by the values from selectionArgs, 
+	 *		in order that they appear in the selection. The values will be bound as Strings.
+	 *@param groupBy 	
+	 *		A filter declaring how to group rows, formatted as an SQL GROUP BY clause 
+	 *		(excluding the GROUP BY itself). Passing null will cause the rows to not be grouped.
+	 *@param having 	
+	 *		A filter declare which row groups to include in the cursor, if row grouping is being 
+	 *		used, formatted as an SQL HAVING clause (excluding the HAVING itself). Passing null 
+	 *		will cause all row groups to be included, and is required when row grouping is not being used.
+	 *@param orderBy 	
+	 *		How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). 
+	 *		Passing null will use the default sort order, which may be unordered.
+	 *@param limit 	
+	 *		Limits the number of rows returned by the query, formatted as LIMIT clause. 
+	 *		Passing null denotes no LIMIT clause.
+	 *@return An object type of a cursor Object which is positioned before the first entry
+	 *			or throws BPFDBException
 	 */
-	public abstract List<Map<String, Object>> getRecords(String query)throws BPFDBException;	
-
+	public abstract Object query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) throws BPFDBException;
 	
 	/**
-	 * Get the row count based on conditions.
+	 * Convenience method for deleting rows in the database.
 	 * 
-	 * @param query
-	 * 			A string containing the SQL command to count the rows based on conditions
-	 * @return Total number of rows else throw a database Exception
+	 * @param table 	
+	 * 		A string containing the table name to delete from
+	 * @param whereClause 	
+	 * 		A string containing the optional WHERE clause to apply when deleting. 
+	 * 		Passing null will delete all rows.
+	 * @param whereArgs
+	 * 		A string array containing the values to meet the whereClause string
+	 * @return the number of rows affected if a whereClause is passed in, 0 otherwise 
+	 * 			or throws BPFDBException 
 	 */
-	public abstract int getRowCount(String query)throws BPFDBException;
-
-	/**
-	 * Get the ids of all the bundles in a list.
-	 * 
-	 * @param query
-	 * 			A string containing the SQL command to the ids of all bundles
-	 * @return Return List of bundle ids else throw a database Exception
-	 */
-	public abstract List<Integer> getAllBundles(String query)throws BPFDBException;
-
+	public abstract int delete (String table, String whereClause, String[] whereArgs) throws BPFDBException;
 	
 	/**
-	 * Delete record from database based on conditions.
+	 * Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data
 	 * 
-	 * @param query
-	 * 			A string containing the SQL command to delete a record from 
-	 * 			the database based on conditions
-	 * @return True if successfully deleted else throw a database Exception
+	 * @param sql
+	 * 		A string containing the SQL statement to be executed
 	 */
-	public abstract boolean deleteRecord(String query) throws BPFDBException;
-
-
-	/**
-	 * Delete table from database.
-	 * 
-	 * @param query
-	 * 			A string containing the SQL command to delete a table from 
-	 * 			the database
-	 * @return True if successfully deleted else throw a database Exception
-	 */
-	public abstract boolean dropTable(String query) throws BPFDBException;
-
-
-	/**
-	 * Create new table in database.
-	 * 
-	 * @param query
-	 * 			A string containing the SQL command to create a table in the database
-	 * @return True if successfully deleted else throw a database Exception
-	 */
-	public abstract boolean createTable(String query) throws BPFDBException;
-
+	public abstract void execSQL(String sql) throws BPFDBException;
 	
 	/**
-	 * Find if record exist in the table or not based on conditions provided.
-	 * 
-	 * @param query
-	 * 			A string containing the SQL command to find if a record exist in the
-	 * 			appropriate table based on conditions
-	 * @return True if record found else throw a database Exception
+	 * Releases a reference to the object, closing the object if the last reference was released.
 	 */
-	public abstract boolean findRecord(String query)throws BPFDBException;
-
-	/**
-	 * Close database connection at the end of application
-	 * Throws a database exception if an error occurs
-	 */
-	public abstract void close() throws BPFDBException;
-
+	public abstract void close();
+	
 }
