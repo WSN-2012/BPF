@@ -1,36 +1,47 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
 
 public class Fifo extends ProphetQueuing {
 
 	private static final String TAG = "Fifo";
 
-	/**
-	 * SQLiteImplementation object
-	 */
-	private SQLiteDatabase db = BundleStore.getImpt_sqlite_().getDb();
-
 	@Override
 	public int getLastBundle() {
-		Cursor cursor = db.query("bundles", null, null, null, null, null,
-				"id Asc", null);
-		int fieldColumn = cursor.getColumnIndex("id");
-		if (cursor == null) {
-			BPF.getInstance().getBPFLogger().debug(TAG, "Row not found!");
-			return -1;
-		}
+		ResultSet rs = null;		
+		int forwardColumn;
+		int fieldColumn;
+		int result = 0;
+		
+		try {
+			rs = BPF.getInstance()
+					.getBPFDB()
+					.query("bundles", null, null, null, null, null,
+							"id Asc", null);
 
-		if (!cursor.moveToFirst()) {
-			return -1;
-		}
+			forwardColumn = rs.findColumn("forwarded_times");
+			fieldColumn = rs.findColumn("id");
+			
+			if (!rs.first()) {
+				return -1;
+			}
+		
+			BPF.getInstance().getBPFLogger().info("Queuing",
+					"Deleting bundle ft: " + rs.getInt(forwardColumn));
+			result = rs.getInt(fieldColumn);
+			rs.close();
 
-		int result = cursor.getInt(fieldColumn);
-		cursor.close();
+		} catch (SQLException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, "There was an SQL exception in getting the last bundle");
+		} catch (BPFDBException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, "There was an error in querying the database");
+		}
 
 		return result;
+		
 	}
 }
