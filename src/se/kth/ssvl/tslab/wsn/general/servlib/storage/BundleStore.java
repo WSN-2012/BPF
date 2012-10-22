@@ -33,6 +33,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.systemlib.storage.StorageIterator;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
 
 /**
  * This class is implemented as Singleton to store bundles. This class generates
@@ -95,9 +96,15 @@ public class BundleStore {
 	public boolean init() {
 		config_ = BPF.getInstance().getConfig();
 		
-		BPF.getInstance().getBPFLogger().debug(TAG, "Initializing bundle store");
+		BPF.getInstance().getBPFLogger()
+				.debug(TAG, "Initializing bundle store");
 		if (!init_) {
-			impt_sqlite_ = new DatabaseManager(Table_CREATE_BUNDLES);
+			try {
+				impt_sqlite_ = new DatabaseManager(Table_CREATE_BUNDLES);
+			} catch (BPFDBException e) {
+				BPF.getInstance().getBPFLogger().error(
+						TAG,"Couldn't init the bundle store. DatabaseManager couldn't open database");
+			}
 			impt_storage_ = new Storage<Bundle>("storage");
 			init_ = true;
 			saved_bundles_ = new HashMap<Integer, Long>();
@@ -144,7 +151,7 @@ public class BundleStore {
 								+ bundle.source().uri());
 				int bundleid = bundle.bundleid();
 
-				ContentValues values = new ContentValues();
+				HashMap<String, Object> values = new HashMap<String,Object>();
 				values.put("type", bundle.payload().location().getCode());
 
 				String condition = "id = " + bundleid;
@@ -213,11 +220,10 @@ public class BundleStore {
 	public boolean update(Bundle bundle) {
 		int id = bundle.bundleid();
 		String condition_is_record = " id = " + id;
-		String limit = "1";
 		String field = "id";
 		String orderBy = null;
 		int resulte_is_record = impt_sqlite_.get_record(table,
-				condition_is_record, field, orderBy, limit);
+				condition_is_record, field, orderBy);
 
 		if ((resulte_is_record == id)
 				&& bundle.payload().location() == BundlePayload.location_t.DISK) {
@@ -225,7 +231,8 @@ public class BundleStore {
 			int bundleid = bundle.bundleid();
 			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Going to update bundle in database : " + bundleid);
-			ContentValues values = new ContentValues();
+			
+			HashMap<String, Object> values = new HashMap<String, Object>();
 			values.put("type", bundle.payload().location().getCode());
 
 			String condition = "id = " + bundleid;
@@ -331,7 +338,7 @@ public class BundleStore {
 	 * @return the next bundle id
 	 */
 	public int next_id() {
-		ContentValues values = new ContentValues();
+		HashMap<String, Object> values = new HashMap<String, Object>();
 		values.put("type", -1);
 
 		int result = impt_sqlite_.add(table, values);
@@ -520,10 +527,9 @@ public class BundleStore {
 
 	public int test_get_location_type(int bundleid) {
 		String condition = " id = " + bundleid;
-		String limit = "1";
 		String field = "type";
 		String orderBy = null;
-		return impt_sqlite_.get_record(table, condition, field, orderBy, limit);
+		return impt_sqlite_.get_record(table, condition, field, orderBy);
 	}
 
 	/**
