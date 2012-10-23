@@ -6,7 +6,7 @@ public interface BPFService {
 	
 	public abstract BPFLogger getBPFLogger();
 	
-	public abstract BPFNotificationReceiver getBPFNotificationReceiver();
+	public abstract BPFActionReceiver getBPFActionReceiver();
 	
 	public abstract BPFDB getBPFDB();
 	

@@ -146,8 +146,8 @@ public class BPF {
 	 * 
 	 * @return The BPFNotificationReceiver object in the BPFService
 	 */
-	public BPFNotificationReceiver getBPFNotificationReceiver() {
-		return service.getBPFNotificationReceiver();
+	public BPFActionReceiver getBPFActionReceiver() {
+		return service.getBPFActionReceiver();
 	}
 
 	/**

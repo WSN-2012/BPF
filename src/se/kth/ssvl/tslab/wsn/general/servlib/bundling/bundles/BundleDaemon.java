@@ -29,6 +29,8 @@ import java.util.ListIterator;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import com.sun.tools.internal.ws.wsdl.document.jaxws.Exception;
+
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
@@ -126,6 +128,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * main DTNService daemon class to execute Bundle events posted in its queue.
@@ -1289,7 +1292,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		String reason_string = request.reason()[0] != null ? request.reason()[0]
 				.toString() : "no reason";
-		BPF.getInstance()
+		BPF.getInstance() 
 				.getBPFLogger()
 				.info(TAG,
 						String.format(
@@ -1695,7 +1698,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		case EVENTSRC_PEER:
 			stats_.received_bundles_++;
 			BPF.getInstance()
-					.getBPFNotificationReceiver()
+					.getBPFActionReceiver()
 					.notify("DTN Bundle Received",
 							"From " + bundle.source().toString());
 
@@ -1998,6 +2001,16 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 									bundle.bundleid()));
 			fragmentmgr_.process_for_reassembly(bundle);
 		}
+		
+		
+		/*
+		 * Do a callback to the use of the framework with the bundle received.
+		 */
+		if (is_local) {
+			BPF.getInstance().getBPFLogger().debug(TAG,
+					"Bundle received and doing a callback to the framework user");
+			BPF.getInstance().getBPFActionReceiver().bundleReceive(bundle);
+		}
 
 		/*
 		 * "Finally, bounce out so the router(s) can do something further with
@@ -2006,7 +2019,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	}
 
 	protected void handle_bundle_report(BundleReportEvent event) {
-
+		throw new NotImplementedException();
 	}
 
 	protected void handle_bundle_send(BundleSendRequest event) {
@@ -2181,7 +2194,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		bundle.fwdlog().update(link, ForwardingInfo.state_t.TRANSMITTED);
 
 		BPF.getInstance()
-				.getBPFNotificationReceiver()
+				.getBPFActionReceiver()
 				.notify("DTN Bundle Transmitted",
 						"To " + bundle.dest().toString());
 
