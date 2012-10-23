@@ -167,9 +167,12 @@ public class SPD
 
 		if ((policy.getCode() & spd_policy_t.SPD_USE_BAB.getCode())>0) 
 		{
+			//TODO: Set up the correct ciphersuite, commented this out since there was an error
+			/*
 			Ciphersuite bp = Ciphersuite.find_suite(Ciphersuite_BA1.CSNUM_BA1);
 			assert(bp != null);
 			err=bp.prepare(bundle, xmit_blocks, null, link, BlockInfo.list_owner_t.LIST_NONE);
+			*/
 		}
 		if (err!=0)
 			BPF.getInstance().getBPFLogger().error(TAG, "SPD.prepare_out_blocks(): ERROR WHILE EXECUTING *****************************");
@@ -188,12 +191,15 @@ public class SPD
 
 		BPF.getInstance().getBPFLogger().debug(TAG, "SPD::verify_in_policy() 0x" + policy.getCode());
 
+		//TODO: Use the correct value here for Ciphersuite_BA1
+		/*
 		if ((policy.getCode() & spd_policy_t.SPD_USE_BAB.getCode())>0) {
 			if ( !Ciphersuite.check_validation(bundle, recv_blocks, Ciphersuite_BA1.CSNUM_BA1 )) {
 				BPF.getInstance().getBPFLogger().debug(TAG, "SPD::verify_in_policy() no BP_TAG_BAB_IN_DONE");
 				return false;
 			}
 		}
+		*/
 
 		if ((policy.getCode() & spd_policy_t.SPD_USE_CB.getCode())>0) {
 			if ( !Ciphersuite.check_validation(bundle, recv_blocks, Ciphersuite_C3.CSNUM_C3 )) {
@@ -202,6 +208,8 @@ public class SPD
 			}
 		}
 
+		//TODO: Use the correct value here for Ciphersuite_BA1
+		/*
 		if ((policy.getCode() & spd_policy_t.SPD_USE_PSB.getCode())>0) 
 		{
 			if ( !Ciphersuite.check_validation(bundle, recv_blocks, Ciphersuite_PS2.CSNUM_PS2 )) 
@@ -210,6 +218,7 @@ public class SPD
 				return false;
 			}
 		}
+		*/
 
 		return true;
 	}

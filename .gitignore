@@ -13,6 +13,8 @@ tmp/**/*
 local.properties
 .settings/
 .loadpath
+.project
+.classpath
 
 # External tool builders
 .externalToolBuilders/
@@ -25,3 +27,13 @@ local.properties
 
 # PDT-specific
 .buildpath
+
+
+#########################
+# Project specific
+#########################
+
+# Build path created by build script
+build/
+
+
