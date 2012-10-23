@@ -2007,7 +2007,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		if (is_local) {
 			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Bundle received and doing a callback to the framework user");
-			BPF.getInstance().getBPFActionReceiver().bundleReceive(bundle);
+			BPF.getInstance().getBPFActionReceiver().bundleReceived(bundle);
 		}
 
 		/*

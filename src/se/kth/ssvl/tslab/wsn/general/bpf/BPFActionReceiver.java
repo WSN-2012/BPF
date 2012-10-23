@@ -15,6 +15,6 @@ public interface BPFActionReceiver {
 	 * This method is called from the framework when there was a bundle received for the local device. 
 	 * @param bundle The bundle which was received
 	 */
-	public abstract void bundleReceive(Bundle bundle);
+	public abstract void bundleReceived(Bundle bundle);
 	
 }
