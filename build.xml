@@ -40,6 +40,7 @@
     <target name="compile" depends="prepare">
         <javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}"
 			debug="on" debuglevel="lines,vars,source">
+			<compilerarg value="-Xlint" />
 			<classpath refid="lib-classpath"/>
 		</javac>
     </target>
