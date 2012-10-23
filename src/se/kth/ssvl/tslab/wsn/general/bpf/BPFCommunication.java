@@ -11,4 +11,10 @@ public interface BPFCommunication {
 	 */
 	public abstract InetAddress getDeviceIP();
 	
+	/**
+	 * Get the broadcast address for which to send the discovery packets on.
+	 * @return
+	 */
+	public abstract InetAddress getBroadcastAddress();
+	
 }

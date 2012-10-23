@@ -64,12 +64,6 @@ public class IPDiscovery extends Discovery implements Runnable {
 	private static final int INT_MAX = 500;
 
 	/**
-	 * Wifi Manager //
-	 */
-	// private static WifiManager mWifi = (WifiManager) DTNService.context()
-	// .getSystemService(Context.WIFI_SERVICE);
-
-	/**
 	 * Internal thread
 	 */
 	private Thread thread_;
@@ -149,64 +143,6 @@ public class IPDiscovery extends Discovery implements Runnable {
 		socket_.close();
 	}
 
-	//
-	// /**
-	// * Get the current ip addres of the mobile. Get the ip assigned by the
-	// DHCP
-	// * @return the current IPaddress
-	// */
-	// public static InetAddress getting_my_ip() {
-	//
-	// InetAddress local_addr_ = null;
-	// DhcpInfo dhcp = mWifi.getDhcpInfo();
-	// if (dhcp == null) {
-	// BPF.getInstance().getBPFLogger().debug(TAG, "Could not get dhcp info");
-	// }
-	//
-	// short[] quads = new short[4];
-	// byte[] quads2 = new byte[4];
-	// for (int k = 0; k < 4; k++) {
-	// quads[k] = (byte) ((dhcp.ipAddress >> k * 8) & 0xFF);
-	// quads2[k] = (byte) quads[k];
-	// }
-	// try {
-	// local_addr_ = InetAddress.getByAddress(quads2);
-	//
-	// } catch (UnknownHostException e) {
-	//
-	// BPF.getInstance().getBPFLogger().debug(TAG, "error getting_my_ip");
-	// }
-	//
-	// return local_addr_;
-	//
-	// }
-
-	/**
-	 * Get the broadcast IP of the network where the phone is connected
-	 * 
-	 * @return the broadcast IPaddress
-	 */
-	// public InetAddress getting_broadcast_ip() {
-	//
-	// BROADCAST = null;
-	// DhcpInfo dhcp = mWifi.getDhcpInfo();
-	// if (dhcp == null) {
-	// BPF.getInstance().getBPFLogger().debug(TAG, "Could not get dhcp info");
-	// }
-	//
-	// int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
-	// byte[] quads = new byte[4];
-	// for (int k = 0; k < 4; k++)
-	// quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
-	// try {
-	// BROADCAST = InetAddress.getByAddress(quads);
-	// } catch (UnknownHostException e) {
-	// BPF.getInstance().getBPFLogger().debug(TAG, "Error calculating Broadcast address");
-	// }
-	//
-	// return BROADCAST;
-	// }
-
 	/**
 	 * Set internal state using parameter list; return true on success, else
 	 * false
@@ -225,21 +161,6 @@ public class IPDiscovery extends Discovery implements Runnable {
 			return false;
 		}
 
-		// remote_addr_ = getting_broadcast_ip();
-
-		// "Assume everything is broadcast unless unicast flag is set or if
-		// the remote address is a multicast address
-		// static IntAddress mcast_mask = 224.0.0.0" [DTN2];
-		//
-		// if (remote_addr_ == BROADCAST) {
-		// BPF.getInstance().getBPFLogger().debug(TAG,
-		// "configuring broadcast socket for remote address");
-		//
-		// } else if (!remote_addr_.isMulticastAddress()) {
-		// BPF.getInstance().getBPFLogger().debug(TAG,
-		// "configuring unicast socket for remote address");
-		// }
-
 		try {
 			socket_ = new DatagramSocket(port_);
 			socket_.setBroadcast(true);
@@ -248,6 +169,8 @@ public class IPDiscovery extends Discovery implements Runnable {
 			BPF.getInstance().getBPFLogger().error(TAG, "bind failed " + e.getMessage());
 		}
 
+		BROADCAST = BPF.getInstance().getBPFCommunication().getBroadcastAddress();
+		
 		BPF.getInstance().getBPFLogger().debug(TAG, "starting thread");
 
 		return true;
@@ -302,7 +225,7 @@ public class IPDiscovery extends Discovery implements Runnable {
 
 							DatagramPacket pack = new DatagramPacket(data,
 									data.length,
-									InetAddress.getByName("255.255.255.255"),
+									BROADCAST,
 									port_);
 							socket_.send(pack);
 							min_diff = announce.interval();
