@@ -20,9 +20,8 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 
 /**
  * GlobalStorage class is implemented as Singleton to keep the total application

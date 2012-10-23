@@ -29,8 +29,6 @@ import java.util.ListIterator;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import com.sun.tools.internal.ws.wsdl.document.jaxws.Exception;
-
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
