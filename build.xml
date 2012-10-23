@@ -12,7 +12,7 @@
 	<property name="dir.classes" value="${dir.build}/classes"/>
 	<property name="dir.jar" value="${dir.build}/jar"/>
 	<property name="dir.lib" value="lib" />
-	<property name="dir.javadoc" value="${dir.build}/javadoc"/>
+    <property name="dir.javadoc" value="${dir.build}/javadoc" />
 	<property name="dir.config" value="config"/>
 
 	<!-- Proprties FILES -->
@@ -36,7 +36,7 @@
 		<mkdir dir="${dir.build}" />
 		<mkdir dir="${dir.classes}" />
 		<mkdir dir="${dir.jar}" />
-		<mkdir dir="${dir.javadoc}" />
+        <mkdir dir="${dir.javadoc}" />
 		<mkdir dir="${dir.jar}/config" />
 	</target>
 
@@ -69,6 +69,7 @@
             use="true"
             windowtitle="${app.name} API"
             doctitle="&lt;h1&gt;${app.name}&lt;/h1&gt;" />
+        <jar compress="true" destfile="${dir.jar}/${app.name}-doc.jar" basedir="${dir.javadoc}" />
 	</target>
 	
 
