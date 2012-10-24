@@ -43,7 +43,7 @@ public interface BPFDB {
 			String[] whereArgs) throws BPFDBException;
 
 	/**
-	 * Query the given table, returning a Cursor over the result set.
+	 * Query the given table for data
 	 * 
 	 * @param table
 	 *            A string containing the table name to compile the query
