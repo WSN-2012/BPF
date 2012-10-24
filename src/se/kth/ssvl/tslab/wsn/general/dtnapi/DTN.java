@@ -79,7 +79,7 @@ public class DTN implements DTNAPI {
 	/**
 	 * TAG String for Android logging system
 	 */
-	private static String TAG = "DTNAPIBinder";
+	private static String TAG = "DTN";
 
 	/**
 	 * List for holding DTN Handles registred with this binder

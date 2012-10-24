@@ -1,5 +1,7 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Timer;
@@ -9,18 +11,28 @@ import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.DTN;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNAPIFailException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNOpenException;
+import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_api_status_report_code;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_bundle_priority_t;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_reg_flags_t;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleSpec;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNEndpointID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNHandle;
-import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNAPICode.dtn_api_status_report_code;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNRegistrationInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.ConfigurationParser;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.exceptions.InvalidDTNConfigurationException;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.interfaces.InterfaceTable;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.discovery.DiscoveryTable;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -34,9 +46,9 @@ public class BPF {
 	/* ******************************************************* */
 	private static BPF instance;
 	private static BPFService service;
-	private DTN dtn;
-	private Timer timer_;
-	private HashMap<VirtualTimerTask, TimerTask> timer_tasks_map_;
+	private static DTN dtn;
+	private static Timer timer_;
+	private static HashMap<VirtualTimerTask, TimerTask> timer_tasks_map_;
 
 	/* ******************************************************* */
 	/* ********* INITIALIZATION AND CONSTRUCTOR ************** */
@@ -71,12 +83,44 @@ public class BPF {
 	 *            The BPFService implementation.
 	 * @throws BPFException
 	 */
-	public void init(BPFService _service) throws BPFException {
+	public static void init(BPFService _service) throws BPFException {
+		// Error checking
 		if (_service == null) {
 			throw new BPFException(
 					"BPFService cannot be null, we really need this guy to work!");
 		}
+		// Create a new instance
 		instance = new BPF(_service);
+	
+		// Set up the timers
+		timer_   = new Timer();
+    	timer_tasks_map_ = new HashMap<VirtualTimerTask,TimerTask>();
+    	
+    	// Parse the config before continuing
+    	try {
+			Configuration config = ConfigurationParser.parse_config_file(new FileInputStream("config/dtn.config.xml"));
+		} catch (InvalidDTNConfigurationException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, e.getStackTrace().toString());
+			throw new BPFException("There was an error in the configuration");
+		} catch (FileNotFoundException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, e.getStackTrace().toString());
+			throw new BPFException("Configuration file was not found");
+		}
+		
+		// Initialize all objects used by the BPF
+		dtn = new DTN();
+		ConvergenceLayer.init_clayers();
+    	ContactManager.getInstance().init();
+    	InterfaceTable.init();
+    	DiscoveryTable.getInstance().init();
+    	BundleRouter.init();
+    	BundleDaemon.getInstance().init();
+    	BundleStore.getInstance().init();
+    	RegistrationStore.getInstance().init();
+    	GlobalStorage.getInstance().init();
+    	
+    	// Log that we are initialized
+    	BPF.getInstance().getBPFLogger().debug(TAG, "BPF has been initialized successfully!");
 	}
 
 	/**
@@ -88,7 +132,6 @@ public class BPF {
 	 */
 	private BPF(BPFService _service) {
 		service = _service;
-		dtn = new DTN();
 	}
 
 	/* ******************************************************* */
