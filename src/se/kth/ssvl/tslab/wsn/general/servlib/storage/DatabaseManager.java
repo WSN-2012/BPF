@@ -47,8 +47,6 @@ public class DatabaseManager {
 	 * Database name for storing the records.
 	 */
 
-	private static final String DATABASE_NAME = "dtn";
-
 	/**
 	 * Construct
 	 * 
@@ -59,10 +57,6 @@ public class DatabaseManager {
 	 */
 
 	public DatabaseManager(String table) throws BPFDBException {
-		// Open and initialize the database
-		if (!BPF.getInstance().getBPFDB().init(DATABASE_NAME)) {
-			throw new BPFDBException("Couldn't open the database correctly");
-		}
 		// Init the table
 		init(table);
 		BPF.getInstance().getBPFLogger()

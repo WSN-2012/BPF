@@ -8,17 +8,6 @@ import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
 public interface BPFDB {
 
 	/**
-	 * This method should open or create the database if it doesn't exist. And
-	 * also probably initialize connectors to the database.
-	 * 
-	 * @param databaseName
-	 *            The name of the database to open.
-	 * @return Should return true if the initialization succeeded, otherwise
-	 *         false.
-	 */
-	public abstract boolean init(String databaseName);
-
-	/**
 	 * Convenience method for inserting a row into the database.
 	 * 
 	 * @param table
@@ -88,8 +77,10 @@ public interface BPFDB {
 	 * @param limit
 	 *            Limits the number of rows returned by the query, formatted as
 	 *            LIMIT clause. Passing null denotes no LIMIT clause.
-	 * @return An object type of a cursor Object which is positioned before the
-	 *         first entry or throws BPFDBException
+	 * @return A ResultSet with all the resulting rows
+	 * 
+	 * @throws BPFDBException
+	 *             This is thrown when there was an error in fetching the data
 	 */
 	public abstract ResultSet query(String table, String[] columns,
 			String selection, String[] selectionArgs, String groupBy,
