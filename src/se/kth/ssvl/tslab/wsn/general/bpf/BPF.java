@@ -83,7 +83,7 @@ public class BPF {
 	 *            The BPFService implementation.
 	 * @throws BPFException
 	 */
-	public static void init(BPFService _service) throws BPFException {
+	public static void init(BPFService _service, String configPath) throws BPFException {
 		// Error checking
 		if (_service == null) {
 			throw new BPFException(
@@ -91,14 +91,14 @@ public class BPF {
 		}
 		// Create a new instance
 		instance = new BPF(_service);
-	
+
 		// Set up the timers
 		timer_   = new Timer();
     	timer_tasks_map_ = new HashMap<VirtualTimerTask,TimerTask>();
     	
     	// Parse the config before continuing
     	try {
-			config = ConfigurationParser.parse_config_file(new FileInputStream("config/dtn.config.xml"));
+			config = ConfigurationParser.parse_config_file(new FileInputStream(configPath));
 		} catch (InvalidDTNConfigurationException e) {
 			throw new BPFException("There was an error in the configuration: " + e.getMessage());
 		} catch (FileNotFoundException e) {

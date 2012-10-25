@@ -13,7 +13,6 @@
 	<property name="dir.jar" value="${dir.build}/jar"/>
 	<property name="dir.lib" value="lib" />
     <property name="dir.javadoc" value="${dir.build}/javadoc" />
-	<property name="dir.config" value="config"/>
 
 	<!-- Proprties FILES -->
 	<property name="jar.file" value="${dir.jar}/${app.name}.jar"/>
@@ -54,9 +53,6 @@
 				<attribute name="Class-Path" value="${manifest.classpath}"/>
     		</manifest>
 		</jar>
-		<copy todir="${dir.jar}/${dir.config}">
-    		<fileset dir="${dir.config}"/>
- 		</copy>
 	</target>
 	
 	<target name="javadoc" depends="prepare">
