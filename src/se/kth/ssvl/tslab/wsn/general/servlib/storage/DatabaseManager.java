@@ -116,6 +116,7 @@ public class DatabaseManager {
 	 * @param where
 	 *            Condition: Update record if this condition match
 	 * @param whereArgs
+	 * 			  Values to the be meet in the condition
 	 * @return True If new row successfully updated else return false otherwise
 	 *         return -1
 	 */
@@ -138,7 +139,7 @@ public class DatabaseManager {
 
 	/**
 	 * Get record from database based on condition. This function is used to
-	 * only one record from database
+	 * get only one record from database
 	 * 
 	 * @param table
 	 *            Name of table in which record already exist
