@@ -35,7 +35,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class BPF {
 
@@ -49,6 +48,7 @@ public class BPF {
 	private static DTN dtn;
 	private static Timer timer_;
 	private static HashMap<VirtualTimerTask, TimerTask> timer_tasks_map_;
+	private static Configuration config;
 
 	/* ******************************************************* */
 	/* ********* INITIALIZATION AND CONSTRUCTOR ************** */
@@ -98,12 +98,10 @@ public class BPF {
     	
     	// Parse the config before continuing
     	try {
-			Configuration config = ConfigurationParser.parse_config_file(new FileInputStream("config/dtn.config.xml"));
+			config = ConfigurationParser.parse_config_file(new FileInputStream("config/dtn.config.xml"));
 		} catch (InvalidDTNConfigurationException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, e.getStackTrace().toString());
-			throw new BPFException("There was an error in the configuration");
+			throw new BPFException("There was an error in the configuration: " + e.getMessage());
 		} catch (FileNotFoundException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, e.getStackTrace().toString());
 			throw new BPFException("Configuration file was not found");
 		}
 		
@@ -120,7 +118,11 @@ public class BPF {
     	GlobalStorage.getInstance().init();
     	
     	// Log that we are initialized
-    	BPF.getInstance().getBPFLogger().debug(TAG, "BPF has been initialized successfully!");
+    	BPF.getInstance().getBPFLogger().debug(TAG, "BPF classes has been initialized successfully!");
+    	
+    	// Start the bundle daemon
+    	BundleDaemon.getInstance().start();
+    	BPF.getInstance().getBPFLogger().debug(TAG, "Started the BundleDaemon");
 	}
 
 	/**
@@ -143,7 +145,7 @@ public class BPF {
 	 * @return The Configurations object filled with configuration parameters
 	 */
 	public Configuration getConfig() {
-		throw new NotImplementedException();
+		return config;
 	}
 	
 	/**
