@@ -417,7 +417,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		stats_ = new Stats();
 		params_ = new Params();
 
-		new Security();
+		//new Security();
 	}
 
 	/**
