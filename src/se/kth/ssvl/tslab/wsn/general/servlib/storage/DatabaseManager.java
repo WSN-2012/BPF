@@ -21,6 +21,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -41,7 +42,7 @@ public class DatabaseManager {
 	/**
 	 * TAG for Android Logging
 	 */
-	private static final String TAG = "SQLiteImplementation";
+	private static final String TAG = "DatabaseManager";
 
 	/**
 	 * Database name for storing the records.
@@ -58,7 +59,7 @@ public class DatabaseManager {
 
 	public DatabaseManager(String table) throws BPFDBException {
 		// Init the table
-		init(table);
+		create_table(table);
 		BPF.getInstance().getBPFLogger()
 				.debug(TAG, "Database initialized and opened");
 	}
@@ -131,7 +132,7 @@ public class DatabaseManager {
 			return true;
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "SQLite Exception while updating a row");
+					.error(TAG, e.getMessage());
 		}
 		return false;
 
@@ -175,9 +176,9 @@ public class DatabaseManager {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Coundn't run the query");
-		} catch (Exception e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
+					.error(TAG, e.getMessage());
+		} catch (SQLException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		}
 		return -1;
 	}
@@ -224,9 +225,9 @@ public class DatabaseManager {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Coundn't run the query");
-		} catch (Exception e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
+					.error(TAG, e.getMessage());
+		} catch (SQLException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		}
 		return list;
 	}
@@ -264,9 +265,9 @@ public class DatabaseManager {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Coundn't run the query");
-		} catch (Exception e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
+					.error("There was an error when trying to fetch the count: " + TAG, e.getMessage());
+		} catch (SQLException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		}
 		return count;
 	}
@@ -304,9 +305,9 @@ public class DatabaseManager {
 			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Coundn't run the query");
-		} catch (Exception e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
+					.error(TAG, "Couldn't get all bundles: " + e.getMessage());
+		} catch (SQLException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		}
 
 		return list.iterator();
@@ -336,7 +337,8 @@ public class DatabaseManager {
 				return true;
 			}
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't delete");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "Failed in deleting record: " + e.getMessage());
 			return false;
 		}
 	}
@@ -361,26 +363,8 @@ public class DatabaseManager {
 
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Coundn't delete table");
+					.error(TAG, "Delete table failed: " + e.getMessage());
 			return false;
-		}
-	}
-
-	/**
-	 * Create new table in database.
-	 * 
-	 * @param create_table_query
-	 *            Create new tabled using this query.
-	 */
-
-	public void init(String create_table_query) {
-
-		try {
-			BPF.getInstance().getBPFDB().execSQL(create_table_query);
-
-			BPF.getInstance().getBPFLogger().debug("DB:", "Creating Table");
-		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't open table");
 		}
 	}
 
@@ -394,12 +378,12 @@ public class DatabaseManager {
 
 	public boolean create_table(String create_table_query) {
 		try {
+			BPF.getInstance().getBPFLogger().debug(TAG, "Creating table");
 			BPF.getInstance().getBPFDB().execSQL(create_table_query);
-
-			BPF.getInstance().getBPFLogger().debug("DB:", "Creating Table");
 			return true;
 		} catch (BPFDBException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Coundn't open table");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "Failed to create table: " + e.getMessage());
 		}
 		return false;
 	}
@@ -437,10 +421,10 @@ public class DatabaseManager {
 			return false;
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Coundn't run the query");
+					.error(TAG, "Find record failed: " + e.getMessage());
 			return false;
-		} catch (Exception e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "General Exception");
+		} catch (SQLException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 			return false;
 		}
 	}
