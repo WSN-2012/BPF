@@ -1126,8 +1126,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		BPF.getInstance()
 				.getBPFLogger()
 				.debug(TAG,
-						String.format("Event Handler Complete for (%s) %s",
-								event.toString(), event.type().toString()));
+						String.format("Event Handler Complete for %s",
+								event.toString()));
 
 		/**
 		 * "Once bundle reception, transmission or delivery has been processed

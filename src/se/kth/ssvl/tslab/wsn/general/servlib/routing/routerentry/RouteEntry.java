@@ -310,6 +310,10 @@ public class RouteEntry implements Serializable {
 					str, tmp));
 		}
 	}
+	
+	public String toString() {
+		return action() + " (@" + Integer.toHexString(super.hashCode()) + ")";
+	}
 
 	/**
 	 * The pattern that matches bundles' destination eid

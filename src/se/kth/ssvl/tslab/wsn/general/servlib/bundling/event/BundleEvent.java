@@ -175,4 +175,8 @@ public class BundleEvent {
 		this.priority_ = priority;
 	}
 
+	public String toString() {
+		return type_str() + " (@" + Integer.toHexString(super.hashCode()) + ")";
+	}
+	
 }
