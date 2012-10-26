@@ -378,6 +378,8 @@ public class ConfigurationParser {
 		if (local_eid == null) {
 			throw new InvalidDTNConfigurationException(
 					"Invalid DTN Config Exception: local_eid is not specified");
+		} else {
+			config.routes_setting().set_local_eid(local_eid.getValue());
 		}
 		
 
