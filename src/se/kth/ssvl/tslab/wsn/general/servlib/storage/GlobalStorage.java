@@ -67,7 +67,7 @@ public class GlobalStorage {
 	 */
 
 	public boolean init() {
-		impt_storage_ = new Storage<Bundle>("Global");
+		impt_storage_ = new Storage<Bundle>("global");
 
 		// Total bundles size will be calculated in BundleStorge and added here
 		total_size_ += impt_storage_.get_directory_size();
