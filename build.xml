@@ -15,7 +15,8 @@
     <property name="dir.javadoc" value="${dir.build}/javadoc" />
 
 	<!-- Proprties FILES -->
-	<property name="jar.file" value="${dir.jar}/${app.name}.jar"/>
+	<property name="file.app.jar" value="${dir.jar}/${app.name}.jar"/>
+    <property name="file.javadoc.jar" value="${dir.jar}/${app.name}-doc.jar" />
 	
 
 	<!-- ******************* FILESETS ************************ -->
@@ -28,16 +29,25 @@
 
 	<!-- ******************* TARGETS ************************ -->
 	<target name="clean">
-        <delete dir="${dir.build}"/>
+        <delete dir="${dir.classes}"/>
+        <delete file="${file.app.jar}" />
+    </target>
+    
+    <target name="clean-javadoc">
+        <delete dir="${dir.javadoc}" />
+        <delete file="${file.javadoc.jar}" />
     </target>
 	
 	<target name="prepare">
 		<mkdir dir="${dir.build}" />
 		<mkdir dir="${dir.classes}" />
 		<mkdir dir="${dir.jar}" />
-        <mkdir dir="${dir.javadoc}" />
 		<mkdir dir="${dir.jar}/config" />
 	</target>
+
+    <target name="prepare-javadoc">
+        <mkdir dir="${dir.javadoc}" />
+    </target>
 
     <target name="compile" depends="prepare">
         <javac includeantruntime="false" srcdir="${dir.src}" destdir="${dir.classes}"
@@ -48,14 +58,14 @@
     </target>
 
 	<target name="jar" depends="compile">
-		<jar destfile="${jar.file}" basedir="${dir.classes}">
+		<jar destfile="${file.app.jar}" basedir="${dir.classes}">
 			<manifest>
 				<attribute name="Class-Path" value="${manifest.classpath}"/>
     		</manifest>
 		</jar>
 	</target>
 	
-	<target name="javadoc" depends="prepare">
+	<target name="javadoc" depends="clean-javadoc,prepare-javadoc">
 		<javadoc packagenames="se.kth.ssvl.tslab.wsn.general.*"
             sourcepath="${dir.src}"
             destdir="${dir.javadoc}"
@@ -65,7 +75,7 @@
             use="true"
             windowtitle="${app.name} API"
             doctitle="&lt;h1&gt;${app.name}&lt;/h1&gt;" />
-        <jar compress="true" destfile="${dir.jar}/${app.name}-doc.jar" basedir="${dir.javadoc}" />
+        <jar compress="true" destfile="${file.javadoc.jar}" basedir="${dir.javadoc}" />
 	</target>
 	
 

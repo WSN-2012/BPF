@@ -33,7 +33,9 @@ public class FileManager {
 	 *             be created.
 	 */
 	public FileManager(String subDir, String tag) throws FileNotFoundException {
-		dir = new File(subDir);
+		dir = new File(trailingSlashPath(BPF.getInstance().getConfig()
+				.storage_setting().storage_path())
+				+ subDir);
 		TAG = tag + "/" + dir.getName();
 
 		if (!dir.exists()) {
@@ -199,4 +201,13 @@ public class FileManager {
 		return 0;
 	}
 
+	
+	private String trailingSlashPath(String path) {
+		if (path.endsWith("/")) {
+			return path;
+		} else {
+			return path + "/";
+		}
+	}
+	
 }

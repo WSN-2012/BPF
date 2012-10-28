@@ -99,8 +99,7 @@ public abstract class BundleEventHandler {
 	protected void dispatch_event(BundleEvent e) {
 		BPF.getInstance().getBPFLogger().debug(
 				TAG,
-				String.format("dispatching event (%s) %s", e.toString(), e
-						.type().getCaption()));
+				String.format("dispatching event %s", e.toString()));
 
 		switch (e.type()) {
 		case BUNDLE_RECEIVED:
