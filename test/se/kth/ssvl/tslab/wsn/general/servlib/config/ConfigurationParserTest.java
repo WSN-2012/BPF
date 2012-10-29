@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.exceptions.InvalidDTNConfigurationException;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.DiscoveriesSetting;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.DiscoveriesSetting.AnnounceEntry;
@@ -32,6 +33,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing.QueueingType;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.*;
+
 
 /**
  * @author natalia
@@ -157,14 +159,18 @@ public class ConfigurationParserTest {
 					linkEntries.get(i).type());
 		}
 
-		// Create an Routes Setting using the variables written in the
+		// Create a Routes Setting using the variables written in the
 		// configuration file
 		RoutesSetting configurationRoutesSetting = new RoutesSetting();
 		// set parameters of Routes Setting
 		configurationRoutesSetting
 				.set_router_type(router_type_t.PROPHET_BUNDLE_ROUTER);
 		configurationRoutesSetting.set_local_eid("dtn://linux.dtn");
-		configurationRoutesSetting.setQueuing_policy(QueueingType.FIFO);
+		if(BPF.getInstance()!=null)
+			configurationRoutesSetting.setQueuing_policy(QueueingType.FIFO);
+		else{
+			
+		}
 
 		/*
 		 * Create a List of Route Entries present in the configuration file to
@@ -204,7 +210,7 @@ public class ConfigurationParserTest {
 					.link_id(), routeEntries.get(i).link_id());
 		}
 
-		// Create an Discoveries Setting using the variables written in the
+		// Create a Discoveries Setting using the variables written in the
 		// configuration file
 		DiscoveriesSetting configurationDiscoveriesSetting = new DiscoveriesSetting();
 
@@ -276,7 +282,7 @@ public class ConfigurationParserTest {
 					.get(i).interval(), announceEntries.get(i).interval());
 		}
 
-		// Create an Storage Setting using the variables written in the
+		// Create a Storage Setting using the variables written in the
 		// configuration file
 		StorageSetting configurationStorageSetting = new StorageSetting();
 		// set parameters of Storage Setting
@@ -293,7 +299,7 @@ public class ConfigurationParserTest {
 		assertEquals(configurationStorageSetting.test_data_log(), conf
 				.storage_setting().test_data_log());
 
-		// Create an Security Setting using the variables written in the
+		// Create a Security Setting using the variables written in the
 		// configuration file
 		/*SecuritySetting configurationSecuritySetting = new SecuritySetting();
 		// set parameters of Storage Setting
