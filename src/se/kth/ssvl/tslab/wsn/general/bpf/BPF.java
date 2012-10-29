@@ -118,11 +118,11 @@ public class BPF {
     	GlobalStorage.getInstance().init();
     	
     	// Log that we are initialized
-    	BPF.getInstance().getBPFLogger().debug(TAG, "BPF classes has been initialized successfully!");
+    	BPF.getInstance().getBPFLogger().info(TAG, "BPF classes has been initialized");
     	
     	// Start the bundle daemon
     	BundleDaemon.getInstance().start();
-    	BPF.getInstance().getBPFLogger().debug(TAG, "Started the BundleDaemon");
+    	BPF.getInstance().getBPFLogger().info(TAG, "Started the BundleDaemon");
 	}
 
 	/**
