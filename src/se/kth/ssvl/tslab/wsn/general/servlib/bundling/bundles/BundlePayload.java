@@ -124,6 +124,7 @@ public class BundlePayload implements Serializable {
 			data_ = new byte[DEFAULT_DATA_BUFFER_SIZE];
 		if (location_ == location_t.DISK)
 			// Only when the location is DISK
+
 			file_ = BundleStore.getInstance().get_payload_file(bundleid);
 		
 		// Init the fileManager
@@ -558,7 +559,6 @@ public class BundlePayload implements Serializable {
 			BundlePayloadWrongTypeException {
 		if (location_ != location_t.DISK)
 			throw new BundlePayloadWrongTypeException();
-
 		return new RandomAccessFile(file_, "rwd");
 	}
 

@@ -121,8 +121,9 @@ public class TestDataLogger {
 	 */
 	public static TestDataLogger getInstance() {
 		if (instance_ == null) {
+			
 			instance_ = new TestDataLogger();
-
+			instance_.init();
 		}
 
 		return instance_;
