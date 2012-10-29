@@ -123,6 +123,8 @@ public class BPF {
     	// Start the bundle daemon
     	BundleDaemon.getInstance().start();
     	BPF.getInstance().getBPFLogger().info(TAG, "Started the BundleDaemon");
+    	DiscoveryTable.getInstance().start();
+    	BPF.getInstance().getBPFLogger().info(TAG, "Started the discovery");
 	}
 
 	/**
