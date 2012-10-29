@@ -165,20 +165,20 @@ public class DatabaseManager {
 				return -1;
 			}
 
-			int fieldColumn = rs.findColumn(field);
 			if (rs.first()) {
-				int result = rs.getInt(fieldColumn);
+				int result = rs.getInt(rs.findColumn(field));
 				rs.close();
 				return result;
 			}
 			
 		} catch (IndexOutOfBoundsException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
+			
+			BPF.getInstance().getBPFLogger().error(TAG, "get_record: Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, e.getMessage());
+					.error(TAG, "get_record: " + e.getMessage());
 		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, "get_record: " + e.getMessage());
 		}
 		return -1;
 	}
@@ -208,26 +208,25 @@ public class DatabaseManager {
 				return null;
 			}
 			
-			int idColumn = rs.findColumn(field);
 
 			if (rs != null) {
 				if (rs.first()) {
 					do {
-						list.add(rs.getInt(idColumn));
+						list.add(rs.getInt(rs.findColumn(field)));
 						BPF.getInstance().getBPFLogger().debug(
-								TAG, "Found it@:" + rs.getInt(idColumn));
+								TAG, "Found it@:" + rs.getInt(rs.findColumn(field)));
 					} while (rs.next());
 				}
 			}
 			rs.close();
 			
 		} catch (IndexOutOfBoundsException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
+			BPF.getInstance().getBPFLogger().error(TAG, "get_records: Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, e.getMessage());
+					.error(TAG, "get_records: " + e.getMessage());
 		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, "get_records: " + e.getMessage());
 		}
 		return list;
 	}
@@ -255,19 +254,19 @@ public class DatabaseManager {
 				return 0;
 			}
 
-			if (rs.first()) {
+			if (rs.next()) {
 				count = rs.getInt(0);
 				BPF.getInstance().getBPFLogger().debug(
 						TAG, "Records count @:" + rs.getInt(0));
 			}
 			rs.close();
 		} catch (IndexOutOfBoundsException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
+			BPF.getInstance().getBPFLogger().error(TAG, "get_count: Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error("There was an error when trying to fetch the count: " + TAG, e.getMessage());
+					.error("get_count: " + TAG, e.getMessage());
 		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, "get_count: " + e.getMessage());
 		}
 		return count;
 	}
@@ -292,22 +291,21 @@ public class DatabaseManager {
 				return null;
 			}
 
-			int idColumn = rs.findColumn("id");
 			if (rs.first()) {
 				do {
-					list.add(rs.getInt(idColumn));
+					list.add(rs.getInt(rs.findColumn("id")));
 					BPF.getInstance().getBPFLogger()
-							.debug(TAG, "Found bundle with id: " + rs.getInt(idColumn));
+							.debug(TAG, "Found bundle with id: " + rs.getInt(rs.findColumn("id")));
 				} while (rs.next());
 			}
 			rs.close();
 		} catch (IndexOutOfBoundsException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
+			BPF.getInstance().getBPFLogger().error(TAG, "get_all_bundles: Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Couldn't get all bundles: " + e.getMessage());
+					.error(TAG, "get_all_bundles: " + e.getMessage());
 		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, "get_all_bundles: " + e.getMessage());
 		}
 
 		return list.iterator();
@@ -338,7 +336,7 @@ public class DatabaseManager {
 			}
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Failed in deleting record: " + e.getMessage());
+					.error(TAG, "delete_record: " + e.getMessage());
 			return false;
 		}
 	}
@@ -363,7 +361,7 @@ public class DatabaseManager {
 
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Delete table failed: " + e.getMessage());
+					.error(TAG, "drop_table: " + e.getMessage());
 			return false;
 		}
 	}
@@ -417,14 +415,14 @@ public class DatabaseManager {
 			return true;
 			
 		} catch (IndexOutOfBoundsException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "Id Already deleted");
+			BPF.getInstance().getBPFLogger().error(TAG, "find_record: Id Already deleted");
 			return false;
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Find record failed: " + e.getMessage());
+					.error(TAG, "find_record: Find record failed: " + e.getMessage());
 			return false;
 		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, "find_record: " + e.getMessage());
 			return false;
 		}
 	}
