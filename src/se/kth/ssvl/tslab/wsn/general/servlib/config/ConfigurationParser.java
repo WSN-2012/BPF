@@ -149,7 +149,8 @@ public class ConfigurationParser {
 						"The expected DTNConfiguration is missing");
 
 		} catch (Exception e) {
-			throw new InvalidDTNConfigurationException(e.toString());
+			e.printStackTrace();
+			//throw new InvalidDTNConfigurationException(e.toString());
 		}
 
 		return config_;
