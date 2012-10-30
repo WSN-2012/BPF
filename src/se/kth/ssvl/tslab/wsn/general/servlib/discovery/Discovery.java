@@ -261,7 +261,9 @@ public abstract class Discovery {
 			bundle.set_source(BundleDaemon.getInstance().local_eid());
 			link.queue().insert_random(bundle);
 
-			if (discoveries.get(remote_eid.str()).equals(cl_addr)) {
+			if (discoveries.get(remote_eid.str()) != null &&
+					discoveries.get(remote_eid.str()).equals(cl_addr)) {
+				//TODO: Should something happen here?
 			} else {
 				discoveries.remove(remote_eid.str());
 				discoveries.put(remote_eid.str(), cl_addr);
