@@ -261,7 +261,6 @@ public class IPDiscovery extends Discovery implements Runnable {
 				ByteBuffer bb = ByteBuffer.wrap(b);
 
 				hdr = new DiscoveryHeader();
-				hdr = new DiscoveryHeader();
 				hdr.set_cl_type(bb.get());
 
 				hdr.set_interval(bb.get());

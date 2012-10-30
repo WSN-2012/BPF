@@ -550,7 +550,7 @@ public abstract class Connection extends CLConnection {
 				"processing up to %s bytes from receive buffer",
 				recvbuf_.position());
 		BPF.getInstance().getBPFLogger().debug(TAG, text);
-		BPF.getInstance().getBPFLogger().debug("B4", "received bytes in buffer..");
+		BPF.getInstance().getBPFLogger().debug(TAG, "received bytes in buffer..");
 
 		// "all data (keepalives included) should be noted since the last
 		// reception time is used to determine when to generate new

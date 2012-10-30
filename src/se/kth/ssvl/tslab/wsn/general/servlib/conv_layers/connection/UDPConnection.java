@@ -1905,7 +1905,7 @@ public class UDPConnection extends CLConnection {
 		try {
 			byte[] data = new byte[2048];
 			DatagramPacket pack = new DatagramPacket(data, data.length);
-			BPF.getInstance().getBPFLogger().debug("B4", pack.getAddress().toString());
+			BPF.getInstance().getBPFLogger().debug(TAG, pack.getAddress().toString());
 			socket_.receive(pack);
 			num_to_read_ = pack.getLength();
 

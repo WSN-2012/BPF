@@ -70,7 +70,7 @@ public class Contact implements Serializable {
 		bps_ = 0;
 		latency_ = 0;
 		link_ = link;
-		BPF.getInstance().getBPFLogger().info(TAG, "new contact" + this);
+		BPF.getInstance().getBPFLogger().info(TAG, "Created new contact " + this);
 	}
 
 	/**
@@ -148,6 +148,10 @@ public class Contact implements Serializable {
 		latency_ = latency;
 	}
 
+	public String toString() {
+		return "Contact@" + Integer.toHexString(super.hashCode());
+	}
+	
 	// / @}
 
 	// / Time when the contact begin
