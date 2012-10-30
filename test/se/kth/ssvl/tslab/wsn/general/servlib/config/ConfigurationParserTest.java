@@ -287,7 +287,7 @@ public class ConfigurationParserTest {
 		StorageSetting configurationStorageSetting = new StorageSetting();
 		// set parameters of Storage Setting
 		configurationStorageSetting
-				.set_storage_path("test/se/kth/ssvl/tslab/wsn/general/servlib/config/build/dtn");
+				.set_storage_path("test/se/kth/ssvl/tslab/wsn/general/servlib/config/");
 		configurationStorageSetting.set_quota(1);
 		configurationStorageSetting.set_test_data_log(true);
 
