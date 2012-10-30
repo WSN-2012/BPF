@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -202,8 +203,6 @@ public class IPDiscovery extends Discovery implements Runnable {
 
 					if (remaining == 0) {
 						try {
-							// BPF.getInstance().getBPFLogger().debug(TAG,
-							// "announce ready for sending");
 							hdr = announce.format_advertisement(buf, 1024);
 
 							buf.put(hdr.cl_type());
@@ -236,8 +235,6 @@ public class IPDiscovery extends Discovery implements Runnable {
 											+ e.getMessage());
 						}
 					} else {
-						// BPF.getInstance().getBPFLogger().debug(TAG,
-						// "Could not send discovery request");
 						if (remaining < min_diff) {
 							min_diff = announce.interval_remaining();
 						}
@@ -256,12 +253,6 @@ public class IPDiscovery extends Discovery implements Runnable {
 				DatagramPacket packet = new DatagramPacket(Rdata, Rdata.length);
 
 				socket_.receive(packet);
-				BPF.getInstance().getBPFLogger().debug("B4",
-						"Received beacon: " + packet.getAddress());
-
-				// String s = new String(packet.getData(), 0,
-				// packet.getLength());
-				// BPF.getInstance().getBPFLogger().debug(TAG, "Received response " + s);
 
 				EndpointID remote_eid = new EndpointID();
 				String nexthop = "";// For now
@@ -288,30 +279,27 @@ public class IPDiscovery extends Discovery implements Runnable {
 				String sender_name = new String(name);
 				hdr.set_sender_name(sender_name);
 				remote_eid = new EndpointID(hdr.sender_name());
-				// if(hdr.inet_addr().toString().equals("0.0.0.0"))
 				nexthop = packet.getAddress().toString() + ":"
 						+ hdr.inet_port();
-				// else
-				// nexthop = hdr.inet_addr().toString()+":"+hdr.inet_port();
 
 				String Type = IPDiscovery.type_to_str(cl_type_t.get(hdr
 						.cl_type()));
 
 				BundleDaemon BD = BundleDaemon.getInstance();
 
-				if (remote_eid.equals(BD.local_eid())) {
-					// BPF.getInstance().getBPFLogger().debug(TAG,
-					// "ignoring beacon from self" + remote_eid);
-				} else {
+				if (!remote_eid.equals(BD.local_eid())) {
+					BPF.getInstance().getBPFLogger().debug(TAG, "Received beacon from: " 
+							+ remote_eid + "@" + packet.getAddress().toString().substring(1));
 					// distribute to all beacons registered for this CL type
 					handle_neighbor_discovered(Type, nexthop, remote_eid);
 				}
-
-				BPF.getInstance().getBPFLogger().debug("B4", "beacon: " + remote_eid);
-
+			} catch (SocketTimeoutException e) {
+				/* Do nothing if it times out, this is normal.
+				 * This means that the no one is broadcasting to us and we just have to wait */
 			} catch (Exception e) {
 				BPF.getInstance().getBPFLogger().info(TAG,
 						"Fail receiving the UDP datagram " + e.getMessage());
+				e.printStackTrace();
 			}
 
 		}
