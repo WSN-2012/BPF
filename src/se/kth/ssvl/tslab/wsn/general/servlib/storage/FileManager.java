@@ -3,10 +3,13 @@ package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
-public class FileManager {
+public class FileManager implements Serializable{
+
+	private static final long serialVersionUID = -7098934602546011778L;
 
 	/**
 	 * The directory for which this instance will operate within

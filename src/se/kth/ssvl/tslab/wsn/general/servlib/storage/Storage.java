@@ -96,9 +96,9 @@ public class Storage<Type> {
 			BPF.getInstance().getBPFLogger().debug(TAG, "File Written" + filename);
 
 			return true;
-		} catch (Throwable t) {
+		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG,
-					"Writing in file " + filename + ":" + t.toString());
+					"Writing in file " + filename + ":" + e.toString());
 			return false;
 		}
 	}
