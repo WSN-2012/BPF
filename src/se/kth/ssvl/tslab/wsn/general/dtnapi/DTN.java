@@ -23,8 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -64,10 +63,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.reg.RegistrationTable;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
 
 /**
  * An DTNAPI implementation using Android Binder
@@ -534,7 +530,29 @@ public class DTN implements DTNAPI {
 
 		Bundle b = new Bundle(location_t.DISK);
 
-		return dtn_send_final(handle, spec, dtn_payload, dtn_bundle_id, b);
+		RandomAccessFile f = null;
+		try {
+			
+			f = new RandomAccessFile(payload, "r");
+			byte[] buffer = new byte[(int)f.length()];
+			f.read(buffer);
+			
+			// Run the actual send
+			return dtn_send_final(handle, spec, buffer, dtn_bundle_id, b);
+		} catch (FileNotFoundException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, 
+					String.format("payload file %s can't be opened: %s",
+							payload.getAbsoluteFile(), e.getMessage()));
+		} catch (Exception e) {
+			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
+		} finally {
+			try {
+				f.close();
+			} catch (IOException e) {
+				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
+			}
+		}
+		return dtn_api_status_report_code.DTN_EINVAL;
 	}
 	
 

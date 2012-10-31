@@ -19,6 +19,8 @@
  */
 package se.kth.ssvl.tslab.wsn.general.dtnapi;
 
+import java.io.File;
+
 import se.kth.ssvl.tslab.wsn.general.dtnapi.exceptions.DTNAPIFailException;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleID;
 import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNBundleSpec;
@@ -91,11 +93,16 @@ public interface DTNAPI {
 	dtn_api_status_report_code dtn_close(DTNHandle handle);
 
 	/**
-	 * Send a bundle either from memory or from a file. This depends on the
-	 * DTNBundlePayload location set
+	 * Send method for sending a byte array
 	 */
 	dtn_api_status_report_code dtn_send(DTNHandle handle, DTNBundleSpec spec,
-			BundlePayload payload, DTNBundleID dtn_bundle_id);
+			byte[] payload, DTNBundleID dtn_bundle_id);
+	
+	/**
+	 * Send method for sending files
+	 */
+	dtn_api_status_report_code dtn_send(DTNHandle handle, DTNBundleSpec spec, File payload,
+			DTNBundleID dtn_bundle_id);
 
 	/**
 	 * Try to receive DTNBundle by block waiting according to input timeout.
