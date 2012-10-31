@@ -494,7 +494,7 @@ public class DTN implements DTNAPI {
 	}
 
 	/**
-	 * An implementation of the DTNAPI's dtn_send
+	 * Method for sending a byte array
 	 * 
 	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_send(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
 	 *      se.kth.ssvl.tslab.bytewalla.androiddtn.applib.types.DTNRegistrationID,
@@ -504,7 +504,7 @@ public class DTN implements DTNAPI {
 	 */
 
 	public dtn_api_status_report_code dtn_send(DTNHandle handle,
-			DTNBundleSpec spec, BundlePayload dtn_payload,
+			DTNBundleSpec spec, byte[] payload,
 			DTNBundleID dtn_bundle_id) {
 
 		if (!is_handle_valid(handle))
@@ -514,6 +514,29 @@ public class DTN implements DTNAPI {
 
 		return dtn_send_final(handle, spec, dtn_payload, dtn_bundle_id, b);
 	}
+
+	/**
+	 * Method used for sending a file
+	 * 
+	 * @see se.kth.ssvl.tslab.wsn.general.dtnapi.DTNAPI#dtn_send(se.kth.ssvl.tslab.wsn.general.applib.types.DTNHandle,
+	 *      se.kth.ssvl.tslab.bytewalla.androiddtn.applib.types.DTNRegistrationID,
+	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleSpec,
+	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundlePayload,
+	 *      se.kth.ssvl.tslab.wsn.general.applib.types.DTNBundleID)
+	 */
+
+	public dtn_api_status_report_code dtn_send(DTNHandle handle,
+			DTNBundleSpec spec, File payload,
+			DTNBundleID dtn_bundle_id) {
+
+		if (!is_handle_valid(handle))
+			return dtn_api_status_report_code.DTN_EHANDLE_INVALID;
+
+		Bundle b = new Bundle(location_t.DISK);
+
+		return dtn_send_final(handle, spec, dtn_payload, dtn_bundle_id, b);
+	}
+	
 
 	private dtn_api_status_report_code dtn_send_final(DTNHandle handle,
 			DTNBundleSpec spec, BundlePayload dtn_payload,
