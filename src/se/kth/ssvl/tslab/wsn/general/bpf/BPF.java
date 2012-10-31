@@ -1,5 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -224,10 +225,7 @@ public class BPF {
 	 *             for the DTN.
 	 */
 	public dtn_api_status_report_code send(DTNEndpointID destination,
-			int lifetime, byte[] data) throws DTNOpenException {
-		// Create Bundle payload and store it in a file
-		BundlePayload payload = new BundlePayload(location_t.DISK);
-		payload.set_data(data);
+			int lifetime, byte[] data) throws DTNOpenException {				
 
 		// Create a handle and check if it can be opened
 		DTNHandle handle = new DTNHandle();
@@ -246,7 +244,36 @@ public class BPF {
 
 		// Send and store results
 		DTNBundleID bundleId = new DTNBundleID();
-		dtn_api_status_report_code result = dtn.dtn_send(handle, spec, payload,
+		dtn_api_status_report_code result = dtn.dtn_send(handle, spec, data,
+				bundleId);
+
+		// Close the handler
+		dtn.dtn_close(handle);
+
+		return result;
+	}
+	
+	public dtn_api_status_report_code send(DTNEndpointID destination,
+			int lifetime, File f) throws DTNOpenException {				
+
+		// Create a handle and check if it can be opened
+		DTNHandle handle = new DTNHandle();
+		if (dtn.dtn_open(handle) != dtn_api_status_report_code.DTN_SUCCESS) {
+			throw new DTNOpenException();
+		}
+
+		// Set some configuration for the Bundle
+		DTNBundleSpec spec = new DTNBundleSpec();
+		spec.set_dest(destination);
+		spec.set_source(new DTNEndpointID(BundleDaemon.getInstance()
+				.local_eid().toString()));
+		spec.set_expiration(lifetime);
+		spec.set_dopts(0);
+		spec.set_priority(dtn_bundle_priority_t.COS_NORMAL);
+
+		// Send and store results
+		DTNBundleID bundleId = new DTNBundleID();
+		dtn_api_status_report_code result = dtn.dtn_send(handle, spec, f,
 				bundleId);
 
 		// Close the handler
