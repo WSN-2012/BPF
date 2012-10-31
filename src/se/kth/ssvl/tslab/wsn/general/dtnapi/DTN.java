@@ -512,7 +512,7 @@ public class DTN implements DTNAPI {
 
 		Bundle b = new Bundle(location_t.DISK);
 
-		return dtn_send_final(handle, spec, dtn_payload, dtn_bundle_id, b);
+		return dtn_send_final(handle, spec, payload, dtn_bundle_id, b);
 	}
 
 	/**
@@ -539,7 +539,7 @@ public class DTN implements DTNAPI {
 	
 
 	private dtn_api_status_report_code dtn_send_final(DTNHandle handle,
-			DTNBundleSpec spec, BundlePayload dtn_payload,
+			DTNBundleSpec spec, byte[] payload,
 			DTNBundleID dtn_bundle_id, Bundle b) {
 		// assign the addressing fields...
 		// source and destination are always specified
@@ -689,56 +689,9 @@ public class DTN implements DTNAPI {
 			return dtn_api_status_report_code.DTN_EINVAL;
 		}
 
-		// set up the payload, including calculating its length, but don't
-		// copy it in yet
-		int payload_len = -1;
-
-		switch (dtn_payload.location()) {
-		case MEMORY:
-			try {
-				payload_len = dtn_payload.memory_buf().length;
-			} catch (BundleLockNotHeldByCurrentThread e1) {
-				BPF.getInstance().getBPFLogger()
-						.error(TAG, "Couldn't get the length of the payload");
-				e1.printStackTrace();
-			}
-			break;
-
-		case DISK:
-
-			BPF.getInstance()
-					.getBPFLogger()
-					.debug(TAG,
-							String.format(
-									"dtn_send, getting payload from file name %s",
-									dtn_payload.file().getAbsoluteFile()));
-
-			File payload_file = dtn_payload.file();
-
-			if (!payload_file.exists()) {
-				BPF.getInstance()
-						.getBPFLogger()
-						.error(TAG,
-								String.format(
-										"payload file %s does not exist!",
-										dtn_payload.file().getAbsoluteFile()));
-				return dtn_api_status_report_code.DTN_EINVAL;
-			}
-
-			payload_len = (int) payload_file.length();
-			break;
-
-		default:
-			BPF.getInstance()
-					.getBPFLogger()
-					.error(TAG,
-							String.format("payload.location of %d unknown",
-									dtn_payload.location().toString()));
-			return dtn_api_status_report_code.DTN_EINVAL;
-		}
-
+		
 		// Set an allocate dat for Bundle to be store
-		b.payload().set_length(payload_len);
+		b.payload().set_length(payload.length);
 
 		// before filling in the payload, we first probe the router to
 		// determine if there's sufficient storage for the bundle
@@ -766,74 +719,11 @@ public class DTN implements DTNAPI {
 			}
 		}
 
-		switch (dtn_payload.location()) {
-		case MEMORY:
-			// Set the payload according to byte array inside dtn_payload
-			try {
-				b.payload().set_data(dtn_payload.memory_buf());
-			} catch (BundleLockNotHeldByCurrentThread e1) {
-				BPF.getInstance().getBPFLogger()
-						.error(TAG, "Couldn't set the data of the payload");
-				e1.printStackTrace();
-			}
-			break;
-		case DISK:
-			FileInputStream in = null;
-			try {
-				in = new FileInputStream(dtn_payload.file());
-
-				b.payload().set_length(dtn_payload.length());
-				// Transfer bytes from in to payload
-				java.nio.ByteBuffer temp_buffer = java.nio.ByteBuffer
-						.allocate(32696);
-				int offset = 0;
-				ReadableByteChannel read_channel = Channels.newChannel(in);
-				while (in.available() > 0) {
-
-					read_channel.read(temp_buffer);
-					int read_len = temp_buffer.position();
-					temp_buffer.rewind();
-
-					IByteBuffer serializable_temp_buffer = new SerializableByteBuffer(
-							read_len);
-					BufferHelper.copy_data(serializable_temp_buffer, 0,
-							temp_buffer, 0, read_len);
-					b.payload().write_data(serializable_temp_buffer, offset,
-							read_len);
-					offset += read_len;
-				}
-
-			} catch (FileNotFoundException e) {
-				BPF.getInstance()
-						.getBPFLogger()
-						.error(TAG,
-								String.format(
-										"payload file %s can't be opened: %s",
-										dtn_payload.file().getAbsoluteFile(),
-										e.getMessage()));
-			} catch (SecurityException e) {
-				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
-			} catch (IOException e) {
-				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
-			} catch (Exception e) {
-				BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
-			} finally {
-				try {
-					in.close();
-				} catch (IOException e) {
-					BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
-				}
-
-			}
-
-			break;
-		default:
-			BPF.getInstance().getBPFLogger()
-					.error(TAG, "Did not recognize the payload location");
-			break;
-
-		}
-
+		
+		// Set the payload data
+		b.payload().set_data(payload);
+		
+		
 		// Before deliver the bundle fill in data in dtn_bundle_id
 		BundleTimestamp dtn_bundle_creation_tiemstamp = new BundleTimestamp(0,
 				0);
@@ -843,14 +733,8 @@ public class DTN implements DTNAPI {
 		dtn_bundle_id.set_frag_offset(0);
 		dtn_bundle_id.set_orig_length(0);
 
-		BPF.getInstance()
-				.getBPFLogger()
-				.info(TAG,
-						String.format(
-								"DTN_SEND bundle %d, with payload type %s, payload length %d bytes",
-								b.bundleid(),
-								b.payload().location().toString(), b.payload()
-										.length()));
+		BPF.getInstance().getBPFLogger().info(TAG,String.format("DTN_SEND bundle %d, with payload type %s, payload length %d bytes",
+				b.bundleid(),b.payload().location().toString(), b.payload().length()));
 
 		// deliver the bundle
 		BundleDaemon.getInstance().post(
