@@ -105,15 +105,12 @@ public class FileManager implements Serializable{
 	 * 
 	 * @param fileName
 	 *            The name of the file to get
-	 * @return Returns the file or null if the files doesn't exist.
+	 * @return Returns a file object even though the file doesn't exist.
 	 */
 	public File getFile(String fileName) {
 		File f = new File(dir, fileName);
 
-		if (f.exists()) {
-			return f;
-		}
-		return null;
+		return f;
 	}
 
 	/**
