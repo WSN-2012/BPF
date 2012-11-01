@@ -147,7 +147,7 @@ public class BundleStore {
 			if (bundle.payload().location() == BundlePayload.location_t.DISK) {
 				BPF.getInstance().getBPFLogger().debug(
 						TAG,
-						"Going to add bundle in database with eids"
+						"Going to add bundle in database with eid: "
 								+ bundle.source().uri());
 				int bundleid = bundle.bundleid();
 
