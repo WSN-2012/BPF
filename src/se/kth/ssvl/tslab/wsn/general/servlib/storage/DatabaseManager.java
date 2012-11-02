@@ -23,6 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -156,40 +157,32 @@ public class DatabaseManager {
 	public int get_record(String table, String condition, String field,
 			String orderBy) {
 		
-		ResultSet rs = null;
-		
+		List<Map<String, Object>> dbResult; 
 		try {
-			rs = BPF.getInstance().getBPFDB().query(
+			dbResult = BPF.getInstance().getBPFDB().query(
 					table, null, condition, null, null, null, orderBy, null);
 
-			if (rs == null) {
+			if (dbResult == null) {
 				BPF.getInstance().getBPFLogger()
-						.debug(TAG, "Get record: Resultset was null");
+						.warning(TAG, "Get record: Database query resulted in null");
 				return -1;
 			}
 
-			if (rs.next()) {
-				int result = rs.getInt(rs.findColumn(field));
-				rs.close();
+			if (dbResult.size() > 0) {			
+				int result = (Integer) dbResult.get(0).get(field);
 				return result;
 			}
 			
-		} catch (IndexOutOfBoundsException e) {
+			BPF.getInstance().getBPFLogger().warning(TAG, 
+					"get_record: didn't find anything with condition: " + condition);
 			
+		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "get_record: Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
 					.error(TAG, "get_record: " + e.getMessage());
-		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "get_record: " + e.getMessage());
-		} finally {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				BPF.getInstance().getBPFLogger().error(TAG, 
-						"get_record: Couldn't close the resultset: " + e.getMessage());
-			}
 		}
+		
 		return -1;
 	}
 
@@ -209,42 +202,34 @@ public class DatabaseManager {
 	public List<Integer> get_records(String table, String condition,
 			String field) {
 		List<Integer> list = new ArrayList<Integer>();
-		ResultSet rs = null;
+		List<Map<String, Object>> dbResult; 
+		
 		try {
-			rs = BPF.getInstance().getBPFDB().query(
+			dbResult = BPF.getInstance().getBPFDB().query(
 					table, null, condition, null, null, null, null, null);
 
-			if (rs == null) {
-				BPF.getInstance().getBPFLogger().error(TAG, "Resultlist was null");
+			if (dbResult == null) {
+				BPF.getInstance().getBPFLogger().error(TAG,
+						"get_records: Database query resulted in null");
 				return null;
 			}
-			
 
-			if (rs != null) {
-				if (rs.next()) {
-					do {
-						list.add(rs.getInt(rs.findColumn(field)));
-						BPF.getInstance().getBPFLogger().debug(
-								TAG, "Found it@:" + rs.getInt(rs.findColumn(field)));
-					} while (rs.next());
-				}
+			Map<String, Object> item;
+			Iterator<Map<String, Object>> iterator = dbResult.iterator();
+			
+			while (iterator.hasNext()) {
+				item = iterator.next();
+				list.add((Integer) item.get(field));
+				BPF.getInstance().getBPFLogger().debug(TAG,
+						"Found it@:" + item);
 			}
 		} catch (IndexOutOfBoundsException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "get_records: Id Already deleted");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "get_records: Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
 					.error(TAG, "get_records: " + e.getMessage());
-		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "get_records: " + e.getMessage());
-		} finally {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				BPF.getInstance().getBPFLogger().error(TAG, 
-						"get_records: Couldn't close the resultset: " + e.getMessage());
-			}
 		}
-		
 		
 		return list;
 	}
@@ -261,40 +246,31 @@ public class DatabaseManager {
 	 * @return Total numbers rows
 	 */
 	public int get_count(String table, String condition, String[] field) {
-		int count = 0;
-		ResultSet rs = null;
+		List<Map<String, Object>> dbResult; 
 		try {
-			rs = BPF.getInstance().getBPFDB().query(
+			dbResult = BPF.getInstance().getBPFDB().query(
 					table, field, condition, null, null, null, null, null);
 
-			if (rs == null) {
+			if (dbResult == null) {
 				BPF.getInstance().getBPFLogger()
-						.debug(TAG, "Resultset was null");
+						.debug(TAG, "get_count:" + "Database result was null");
 				return 0;
 			}
 
-			if (rs.next()) {
-				count = rs.getInt(0);
+			if (dbResult.size() < 0) {
+				BPF.getInstance().getBPFLogger().warning(TAG, "get_count: Resulted in 0");
+			} else {
 				BPF.getInstance().getBPFLogger().debug(
-						TAG, "Records count @:" + rs.getInt(0));
+						TAG, "get_count: Counted: " + dbResult.size());
 			}
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "get_count: Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
 					.error("get_count: " + TAG, e.getMessage());
-		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "get_count: " + e.getMessage());
-		} finally {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				BPF.getInstance().getBPFLogger().error(TAG, 
-						"get_count: Couldn't close the resultset: " + e.getMessage());
-			}
 		}
 		
-		return count;
+		return 0;
 	}
 
 	/**
@@ -305,39 +281,32 @@ public class DatabaseManager {
 	public Iterator<Integer> get_all_bundles() {
 
 		List<Integer> list = new ArrayList<Integer>();
-		ResultSet rs = null;
+		List<Map<String, Object>> dbResult;
 		try {
 
-			rs = BPF.getInstance().getBPFDB()
+			dbResult = BPF.getInstance().getBPFDB()
 					.query("bundles", null, null, null, null, null, null, null);
 			
-			if (rs == null) {
+			if (dbResult == null) {
 				BPF.getInstance().getBPFLogger()
-						.debug(TAG, "Resultset was null");
+						.debug(TAG, "Database result was null");
 				return null;
 			}
 
-			if (rs.next()) {
-				do {
-					list.add(rs.getInt(rs.findColumn("id")));
-					BPF.getInstance().getBPFLogger()
-							.debug(TAG, "Found bundle with id: " + rs.getInt(rs.findColumn("id")));
-				} while (rs.next());
+			Iterator<Map<String,Object>> iterator = dbResult.iterator();
+			Map<String, Object> item;
+			while (iterator.hasNext()) {
+				item = iterator.next();
+				list.add((Integer) item.get("id"));
+				BPF.getInstance().getBPFLogger().debug(TAG, 
+						"Found bundle with id: " + item.get("id"));
 			}
+			
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "get_all_bundles: Id Already deleted");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
 					.error(TAG, "get_all_bundles: " + e.getMessage());
-		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "get_all_bundles: " + e.getMessage());
-		} finally {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				BPF.getInstance().getBPFLogger().error(TAG, 
-						"get_all_bundles: Couldn't close the resultset: " + e.getMessage());
-			}
 		}
 
 		return list.iterator();
@@ -428,45 +397,33 @@ public class DatabaseManager {
 	 * @return True if record found else false
 	 */
 	public boolean find_record(String table, String condition) {
-		ResultSet rs = null;
+		
+		List<Map<String, Object>> dbResult;
 		
 		try {
-			rs = BPF.getInstance().getBPFDB().query(
+			dbResult = BPF.getInstance().getBPFDB().query(
 					table, null, condition, null, null, null, null, null);
-			if (rs == null) {
-				BPF.getInstance().getBPFLogger()
-						.error(TAG, "Resultset was null");
+			if (dbResult == null) {
+				BPF.getInstance().getBPFLogger().error(TAG, "Database result was null");
 				return false;
 			}
 			
-			if (!rs.next()) {
-				return false;
+			if (dbResult.size() > 0) {
+				BPF.getInstance().getBPFLogger().debug(TAG, "Found a row in the table: " + table
+						+ " with the condition: " + condition);
+				return true;
 			}
 			
-			BPF.getInstance().getBPFLogger().debug(TAG, "Found a row in the table: " + table
-					+ " with the condition: " + condition);
-			return true;
-			
+			BPF.getInstance().getBPFLogger().warning(TAG,
+					"find_record: Didn't find any rows with condition: " + condition);
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "find_record: Id Already deleted");
-			return false;
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger()
 					.error(TAG, "find_record: Find record failed: " + e.getMessage());
-			return false;
-		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "find_record: " + e.getMessage());
-			return false;
-		} finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					BPF.getInstance().getBPFLogger().error(TAG, 
-							"find_record: Couldn't close the resultset: " + e.getMessage());
-				}
-			}
 		}
+
+		return false;
 	}
 
 	/**

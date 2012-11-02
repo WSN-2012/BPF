@@ -1,7 +1,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
@@ -11,35 +11,23 @@ public class Mofo extends ProphetQueuing {
 	private static final String TAG = "ForwardedTimes";
 
 	public int getLastBundle() {
-		ResultSet rs = null;		
-		int forwardColumn;
-		int fieldColumn;
-		int result = 0;
+		List<Map<String, Object>> dbResult;	
 		
 		try {
-			rs = BPF.getInstance()
-					.getBPFDB()
-					.query("bundles", null, null, null, null, null,
+			dbResult = BPF.getInstance().getBPFDB().query("bundles", null, null, null, null, null,
 							"forwarded_times Desc, id Desc", null);
 
-			forwardColumn = rs.findColumn("forwarded_times");
-			fieldColumn = rs.findColumn("id");
-			
-			if (!rs.first()) {
-				return -1;
+			if (dbResult.size() > 0) {
+				BPF.getInstance().getBPFLogger().info("Queuing",
+						"Deleting bundle ft: " + dbResult.get(0).get("forwarded_times"));
+				return (Integer) dbResult.get(0).get("id");
 			}
-		
-			BPF.getInstance().getBPFLogger().info("Queuing",
-					"Deleting bundle ft: " + rs.getInt(forwardColumn));
-			result = rs.getInt(fieldColumn);
-			rs.close();
-
-		} catch (SQLException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "There was an SQL exception in getting the last bundle");
+			
+			BPF.getInstance().getBPFLogger().warning(TAG, "Couldn't find the last bundle");
 		} catch (BPFDBException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		}
 
-		return result;
+		return -1;
 	}
 }

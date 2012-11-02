@@ -222,10 +222,10 @@ public class BundleStore {
 		String condition_is_record = " id = " + id;
 		String field = "id";
 		String orderBy = null;
-		int resulte_is_record = impt_sqlite_.get_record(table,
+		int result_record = impt_sqlite_.get_record(table,
 				condition_is_record, field, orderBy);
 
-		if ((resulte_is_record == id)
+		if ((result_record == id)
 				&& bundle.payload().location() == BundlePayload.location_t.DISK) {
 
 			int bundleid = bundle.bundleid();

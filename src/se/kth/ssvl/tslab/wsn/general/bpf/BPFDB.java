@@ -1,6 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
-import java.sql.ResultSet;
+import java.util.List;
 import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
@@ -77,12 +77,12 @@ public interface BPFDB {
 	 * @param limit
 	 *            Limits the number of rows returned by the query, formatted as
 	 *            LIMIT clause. Passing null denotes no LIMIT clause.
-	 * @return A ResultSet with all the resulting rows
+	 * @return A list with a map for each row.
 	 * 
 	 * @throws BPFDBException
 	 *             This is thrown when there was an error in fetching the data
 	 */
-	public abstract ResultSet query(String table, String[] columns,
+	public abstract List<Map<String, Object>> query(String table, String[] columns,
 			String selection, String[] selectionArgs, String groupBy,
 			String having, String orderBy, String limit) throws BPFDBException;
 
