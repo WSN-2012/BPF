@@ -47,7 +47,7 @@ public class KeySteward
 
 		BPF.getInstance().getBPFLogger().debug(TAG,"Encrypting symmetric key...");
 
-		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+		KeyStore ks = KeyStore.getInstance("BKS");
 
 		//path to the key store file
 	    String kspath = BPF.getInstance().getConfig().security_setting().ks_path();
@@ -59,7 +59,10 @@ public class KeySteward
 	    try {
 	        fis = new FileInputStream(kspath);
 	        ks.load(fis, password);
-	    } finally {
+	    } catch(Exception e){
+	    	BPF.getInstance().getBPFLogger().error(TAG,"Error while loading keystore!");
+	    }
+	    finally {
 	        if (fis != null) {
 	            fis.close();
 	        }
@@ -91,7 +94,7 @@ public class KeySteward
 		CMSProcessable data1 = new CMSProcessableByteArray(key1);
 
 		//create a CMSEnveloped data, by encrypting the symmetric key with the public key from the certificate (cert)
-		CMSEnvelopedData enveloped = gen.generate(data1, CMSEnvelopedDataGenerator1.AES128_CBC, "SunJCE");
+		CMSEnvelopedData enveloped = gen.generate(data1, CMSEnvelopedDataGenerator1.AES128_CBC, "BC");
 
 		byte[] cMS_structure = new byte[enveloped.getEncoded().length];
 
@@ -199,7 +202,7 @@ public class KeySteward
 		{
 			//decrypt the data
 			//take the private key and decrypt the encrypted symmetric key, placing the symmetric key in recData.
-			recData = recipient.getContent(key, "SunJCE");
+			recData = recipient.getContent(key, "BC");
 		}
 		else
 		{
