@@ -25,7 +25,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 /**
  * Representation of a list of Discoveries
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class DiscoveryList extends List<Discovery> {

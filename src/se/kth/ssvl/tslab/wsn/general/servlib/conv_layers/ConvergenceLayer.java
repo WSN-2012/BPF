@@ -36,7 +36,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.TCPConvergen
 /**
  * The abstract interface for a convergence layer
  * 
- * @author María José Peroza Marval (mjpm@kth.se).
+ * @author Maria Jose Peroza Marval (mjpm@kth.se).
  */
 
 public abstract class ConvergenceLayer {

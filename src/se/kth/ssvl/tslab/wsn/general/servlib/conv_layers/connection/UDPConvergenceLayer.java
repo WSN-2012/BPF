@@ -177,7 +177,7 @@ public class UDPConvergenceLayer extends StreamConvergenceLayer implements
 	/**
 	 * Tunable link parameter.
 	 * 
-	 * @author María José Peroza Marval (mjpm@kth.se)
+	 * @author Maria Jose Peroza Marval (mjpm@kth.se)
 	 */
 	public class UDPLinkParams extends StreamLinkParams {
 

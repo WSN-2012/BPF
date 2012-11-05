@@ -36,7 +36,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
  * new Contact to the remote node by placing the appropriate call into its
  * CL"[DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public abstract class Announce {

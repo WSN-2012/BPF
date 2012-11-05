@@ -25,7 +25,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 /**
  * This class represents a List of interfaces
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 public class InterfaceList extends List<Interface> {
 

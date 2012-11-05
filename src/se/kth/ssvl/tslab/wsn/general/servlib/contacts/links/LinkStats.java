@@ -23,7 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.contacts.links;
 /**
  * This class represents of the statistics of a link
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 public class LinkStats {
 

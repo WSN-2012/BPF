@@ -42,7 +42,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.CLInfo;
  * reference counted and will be deleted when the last reference is removed"
  * [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class Contact implements Serializable {

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * This class represents a list of NamedAttribute
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class AttributeVector extends ArrayList<NamedAttribute> {

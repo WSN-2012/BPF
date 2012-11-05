@@ -76,7 +76,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamLinkParams;
  * total range of acks that have been previously sent in acked_length_. As we
  * send acks out, we clear away the bits in ack_data_" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public abstract class StreamConvergenceLayer extends ConnectionConvergenceLayer {

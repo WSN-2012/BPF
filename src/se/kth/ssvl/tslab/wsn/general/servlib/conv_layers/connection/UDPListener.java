@@ -32,7 +32,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.UDPConvergen
  * "Helper class (and thread) that listens on a registered interface for new
  * connections" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class UDPListener extends CLInfo implements Runnable {

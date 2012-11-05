@@ -31,7 +31,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 /**
  * The list of interfaces
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 public class InterfaceTable {
 
@@ -83,10 +83,9 @@ public class InterfaceTable {
 
 			ConvergenceLayer cl = ConvergenceLayer
 					.find_clayer(conv_layer_type_);
-			if (cl != null) {
+			if (cl == null) {
 				BPF.getInstance().getBPFLogger()
-						.debug(TAG, "can't find convergence layer for" + id);
-
+						.error(TAG, "can't find convergence layer for " + id);
 			}
 			cl.set_local_port(local_port);
 

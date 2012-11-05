@@ -26,7 +26,7 @@ import java.io.Serializable;
  * "Abstract base class for convergence layer specific state stored in an
  * interface / contact / link" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class CLInfo implements Serializable {

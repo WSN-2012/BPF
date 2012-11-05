@@ -26,7 +26,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.CLConnection
  * "Tunable parameter structure stored in each Link's CLInfo slot. Other
  * CL-specific parameters are handled by deriving from this class" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class LinkParams extends CLInfo {

@@ -28,7 +28,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.DataBitmap;
  * "Class used to record bundles that are in-flight along with their
  * transmission state and optionally acknowledgement data" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 public class InFlightBundle {
 

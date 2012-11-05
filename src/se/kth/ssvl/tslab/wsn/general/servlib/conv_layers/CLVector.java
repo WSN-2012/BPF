@@ -26,7 +26,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
  * "Use a singleton vector to enumerate the convergence layers that are
  * currently implemented" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class CLVector extends List<ConvergenceLayer> {

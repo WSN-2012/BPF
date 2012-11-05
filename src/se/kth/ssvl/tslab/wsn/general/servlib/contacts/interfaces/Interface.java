@@ -31,7 +31,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
  * Generally, interfaces are created by the configuration file / console"
  * [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class Interface {

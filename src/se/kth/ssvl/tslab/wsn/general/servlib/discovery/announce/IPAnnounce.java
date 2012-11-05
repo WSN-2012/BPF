@@ -37,7 +37,7 @@ import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
  * via neighbor discovery, and 2) responds to inbound advertisements by creating
  * a new Contact"[DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class IPAnnounce extends Announce {

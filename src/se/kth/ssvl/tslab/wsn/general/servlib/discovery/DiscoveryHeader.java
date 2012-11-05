@@ -28,7 +28,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce.IPDiscovery;
  * "On-the-wire (radio, whatever) representation of IP address family's
  * advertisement beacon" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class DiscoveryHeader {

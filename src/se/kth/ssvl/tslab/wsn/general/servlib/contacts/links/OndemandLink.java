@@ -32,7 +32,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
  * ONDEMAND links have to be opened every time one wants to use it and close
  * after an idle period" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class OndemandLink extends Link {

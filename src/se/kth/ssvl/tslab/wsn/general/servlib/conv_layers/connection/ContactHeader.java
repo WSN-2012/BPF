@@ -23,7 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection;
 /**
  * "Contact initiation header. Sent at the beginning of a contact" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class ContactHeader {

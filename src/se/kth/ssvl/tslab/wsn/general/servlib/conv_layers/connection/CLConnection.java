@@ -49,7 +49,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
  * "Helper class (and thread) that manages an established connection with a peer
  * daemon" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public abstract class CLConnection extends CLInfo implements Runnable {

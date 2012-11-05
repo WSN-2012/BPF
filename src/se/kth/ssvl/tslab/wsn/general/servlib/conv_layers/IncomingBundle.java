@@ -27,7 +27,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.DataBitmap;
  * "Class used to record bundles that are in the process of being received along
  * with their transmission state and relevant acknowledgement data"[DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class IncomingBundle {

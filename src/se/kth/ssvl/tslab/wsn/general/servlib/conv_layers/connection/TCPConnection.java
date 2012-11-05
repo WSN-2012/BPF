@@ -49,7 +49,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
  * that to deal with NAT, the side which does the active connect is not
  * necessarily the sender" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class TCPConnection extends Connection {

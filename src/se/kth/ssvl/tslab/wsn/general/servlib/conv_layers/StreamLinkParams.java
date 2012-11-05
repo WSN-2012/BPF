@@ -25,7 +25,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.connection.CLConnection
 /**
  * "Link parameters shared among all stream based convergence layers"[DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class StreamLinkParams extends LinkParams {

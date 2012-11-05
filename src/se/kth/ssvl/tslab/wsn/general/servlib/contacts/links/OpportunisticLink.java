@@ -29,7 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
  * ondemand link is that the ondemand link does not have a queue of its own"
  * [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class OpportunisticLink extends Link {

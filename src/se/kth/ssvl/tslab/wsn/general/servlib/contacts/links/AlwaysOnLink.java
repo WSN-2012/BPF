@@ -30,7 +30,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
  * "ALWAYSON links are immediately opened upon creation and remain open for
  * their duration" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class AlwaysOnLink extends Link {

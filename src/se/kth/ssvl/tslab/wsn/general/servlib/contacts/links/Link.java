@@ -91,7 +91,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;
  *          created whenever a new connection is made to a peer or when a
  *          connection arrives from a peer" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class Link implements Serializable {

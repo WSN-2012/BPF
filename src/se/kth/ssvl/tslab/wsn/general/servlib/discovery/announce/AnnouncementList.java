@@ -25,7 +25,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 /**
  * This class represents a list of announcements
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class AnnouncementList extends List<Announce> {

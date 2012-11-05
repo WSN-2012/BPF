@@ -51,7 +51,7 @@ import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
  * advertise (outbound) the CL's presence to neighbors, and distribute (inbound)
  * each event of neighbor discovery to each CL" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public abstract class Discovery {

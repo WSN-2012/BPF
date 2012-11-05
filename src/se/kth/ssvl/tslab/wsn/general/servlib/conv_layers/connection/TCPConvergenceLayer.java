@@ -33,7 +33,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.StreamLinkParams;
 /**
  * The TCP Convergence Layer.
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class TCPConvergenceLayer extends StreamConvergenceLayer implements
@@ -179,7 +179,7 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	/**
 	 * Tunable link parameter.
 	 * 
-	 * @author María José Peroza Marval (mjpm@kth.se)
+	 * @author Maria Jose Peroza Marval (mjpm@kth.se)
 	 */
 	public class TCPLinkParams extends StreamLinkParams {
 

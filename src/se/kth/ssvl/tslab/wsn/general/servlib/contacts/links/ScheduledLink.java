@@ -28,7 +28,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
  * "Abstraction for a SCHEDULED link. Scheduled links have a list of future
  * contacts" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class ScheduledLink extends Link {

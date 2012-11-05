@@ -80,7 +80,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
  * Finally, for bidirectional protocols, opportunistic links can be created in
  * response to new connections arriving from a peer node" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public abstract class ConnectionConvergenceLayer extends ConvergenceLayer {

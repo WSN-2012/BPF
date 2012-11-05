@@ -102,7 +102,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
  * "A contact manager class. Maintains topological information and connectivity
  * state regarding available links and contacts"[DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class ContactManager extends BundleEventHandler {

@@ -23,7 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes;
 /**
  * This class is used in NamedAttribute and in AttributeNameVector
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  * 
  */
 

@@ -44,7 +44,7 @@ import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
  * via config file or command console to listen to a specified UDP port for
  * unicast, broadcast, or multicast beacons from advertising neighbors" [DTN2].
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public class IPDiscovery extends Discovery implements Runnable {

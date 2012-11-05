@@ -58,7 +58,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 /**
  * Stream connection class.
  * 
- * @author María José Peroza Marval (mjpm@kth.se)
+ * @author Maria Jose Peroza Marval (mjpm@kth.se)
  */
 
 public abstract class Connection extends CLConnection {
