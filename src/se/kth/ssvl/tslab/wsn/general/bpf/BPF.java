@@ -29,6 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.config.exceptions.InvalidDTNConfigu
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.ContactManager;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.interfaces.InterfaceTable;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
+import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TestDataLogger;
 import se.kth.ssvl.tslab.wsn.general.servlib.discovery.DiscoveryTable;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
@@ -107,6 +108,7 @@ public class BPF {
 		}
 		
 		// Initialize all objects used by the BPF
+    	TestDataLogger.getInstance().init();
 		dtn = new DTN();
 		ConvergenceLayer.init_clayers();
     	ContactManager.getInstance().init();
