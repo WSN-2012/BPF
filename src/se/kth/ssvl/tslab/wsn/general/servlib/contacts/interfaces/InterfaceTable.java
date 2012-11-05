@@ -69,12 +69,10 @@ public class InterfaceTable {
 			InterfaceEntry element = i.next();
 
 			String conv_layer_type_ = element.conv_layer_type().getCaption();
-			BPF.getInstance().getBPFLogger().debug(TAG, conv_layer_type_);
 			String id = element.id();
-			BPF.getInstance().getBPFLogger().debug(TAG, id);
 			short local_port = element.local_port();
-			BPF.getInstance().getBPFLogger().debug(TAG, "" + local_port);
 			boolean fixed_local_port_ = element.fixed_local_port();
+			BPF.getInstance().getBPFLogger().debug(TAG, conv_layer_type_ + " - " + id + " - " + local_port);
 
 			if (!fixed_local_port_) {
 
