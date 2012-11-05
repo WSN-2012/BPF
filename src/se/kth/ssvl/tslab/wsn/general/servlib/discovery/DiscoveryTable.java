@@ -69,13 +69,10 @@ public class DiscoveryTable {
 
 			DiscoveryEntry element = i.next();
 			String name_id = element.id();
-			BPF.getInstance().getBPFLogger().debug(TAG, name_id);
 			String afamily = element.address_family().getCaption();
-			BPF.getInstance().getBPFLogger().debug(TAG, afamily);
 			int port = element.port();
-			BPF.getInstance().getBPFLogger().debug(TAG, "" + port);
 			add(name_id, afamily, (short) port);
-
+			BPF.getInstance().getBPFLogger().debug(TAG, name_id + " - " + afamily + " - " + port);
 		}
 
 	}
@@ -90,9 +87,7 @@ public class DiscoveryTable {
 
 				AnnounceEntry element = it.next();
 				String AnnounceID = element.interface_id();
-				BPF.getInstance().getBPFLogger().debug(TAG, AnnounceID);
 				String DiscoveryID = element.discovery_id();
-				BPF.getInstance().getBPFLogger().debug(TAG, DiscoveryID);
 				int interval = element.interval();
 				String ClType = element.conv_layer_type().getCaption();
 				int code;
