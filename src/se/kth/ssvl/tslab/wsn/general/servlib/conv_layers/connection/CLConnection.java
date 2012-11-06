@@ -215,7 +215,13 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 				return;
 			}
 
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			handle_poll_activity(timeout);
+			
 		}
 	}
 

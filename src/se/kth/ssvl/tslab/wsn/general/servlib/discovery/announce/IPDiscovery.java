@@ -190,12 +190,12 @@ public class IPDiscovery extends Discovery implements Runnable {
 		while (true) {
 			if (shutdown_)
 				break;
-
+			
 			/* Send section */
 			try {
 				int min_diff = INT_MAX;
 				Iterator<Announce> i = list_.iterator();
-
+				
 				while (i.hasNext()) {
 					IPAnnounce announce = (IPAnnounce) i.next();
 
@@ -290,7 +290,7 @@ public class IPDiscovery extends Discovery implements Runnable {
 					BPF.getInstance().getBPFLogger().debug(TAG, "Received beacon from: " 
 							+ remote_eid + "@" + packet.getAddress().toString().substring(1));
 					// distribute to all beacons registered for this CL type
-					handle_neighbor_discovered(Type, nexthop, remote_eid);
+					handle_neighbor_discovered(Type, nexthop, remote_eid);	
 				}
 			} catch (SocketTimeoutException e) {
 				/* Do nothing if it times out, this is normal.
