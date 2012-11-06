@@ -906,7 +906,12 @@ public abstract class Connection extends CLConnection {
 					.format("send_next_segment: already sent all %d bytes, finishing bundle",
 							bytes_sent);
 			BPF.getInstance().getBPFLogger().debug(TAG, text);
-			return finish_bundle(inflight);
+		
+			//TODO: verify that it doesn't cause problems! 
+//			return finish_bundle(inflight);
+			
+			current_inflight_ = null;
+			return true;
 		}
 
 		byte flags = 0;
