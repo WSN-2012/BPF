@@ -279,7 +279,7 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 	 */
 	void process_command() {
 
-		BPF.getInstance().getBPFLogger().error(TAG, "receiving command from Bundle Daemon");
+		BPF.getInstance().getBPFLogger().debug(TAG, "receiving command from Bundle Daemon");
 		CLMsg msg;
 		try {
 			msg = cmdqueue_.take();
