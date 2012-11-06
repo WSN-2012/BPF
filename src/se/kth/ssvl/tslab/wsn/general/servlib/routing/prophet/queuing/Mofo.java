@@ -8,7 +8,7 @@ import se.kth.ssvl.tslab.wsn.general.bpf.exceptions.BPFDBException;
 
 public class Mofo extends ProphetQueuing {
 
-	private static final String TAG = "ForwardedTimes";
+	private static final String TAG = "Mofo";
 
 	public int getLastBundle() {
 		List<Map<String, Object>> dbResult;	

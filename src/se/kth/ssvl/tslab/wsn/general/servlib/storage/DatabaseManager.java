@@ -93,16 +93,17 @@ public class DatabaseManager {
 	 * @param bundleid
 	 */
 	public void incForwardedTimes(int bundleid) throws BPFDBException {
-		/*
-		 * ContentValues cv = new ContentValues();
-		 * cv.putNull("forwarded_times = forwarded_times+1");
-		 * //cv.put("forwarded_times", "forwarded_times+1"); update("bundles",
-		 * cv, "id = "+bundleid, null);
-		 */
-		// db.execSQL("UPDATE bundles Set forwarded_times = forwarded_times+1 WHERE id = "+bundleid);
-		// BPF.getInstance().getBPFLogger().info(TAG, "bundle " + bundleid +
-		// " incremented");
-		throw new BPFDBException("incForwardTimes not implemented yet!");
+		// Get the bundle's forwarded times
+		//TODO: Increment forward times needs some better implementation!
+//		Map<String, Object> bundle = BPF.getInstance().getBPFDB().query("bundles", new String[]{"forwarded_times"},
+//					"id=" + bundleid , null, null, null, null, null).get(0);
+//		
+//		Map<String, Object> updateValues = new HashMap<String, Object>(1);
+//		updateValues.put("forwarded_times", ((Integer)bundle.get("forwarded_times")) + 1);
+//		if (update("bundles", updateValues, "id=" + bundleid, null)) {
+//			BPF.getInstance().getBPFLogger().debug(TAG, "Updated the forwarded times for bundle " + bundleid + 
+//					" to " + ((Integer)bundle.get("forwarded_times")) + 1);
+//		}
 	}
 
 	/**
