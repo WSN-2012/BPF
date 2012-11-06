@@ -589,8 +589,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 
 		buf.position(0);
 		assert (len == 0) : TAG + ": len not ==0";
-		BPF.getInstance().getBPFLogger().error(TAG, "Current Len: " + len);
-	}
+}
 
 	/**
 	 * Encode the value and write to the buffer
