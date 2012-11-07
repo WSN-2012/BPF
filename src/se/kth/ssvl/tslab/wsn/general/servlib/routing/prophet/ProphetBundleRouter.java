@@ -26,12 +26,13 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Map;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle.priority_values_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
@@ -44,7 +45,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.TableBasedRouter;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * This is a non-abstract version of TableBasedRouter.
@@ -132,7 +132,7 @@ public class ProphetBundleRouter extends TableBasedRouter {
 	}
 
 	@Override
-	public ProphetRegistration getProphetRegistration() {
+	public ProphetRegistration getRegistration() {
 		return registration;
 	}
 

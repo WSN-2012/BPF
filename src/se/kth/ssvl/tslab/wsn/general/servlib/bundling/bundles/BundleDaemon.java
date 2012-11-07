@@ -3146,21 +3146,9 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 			handle_event(event);
 		}
 
-		EndpointID prophet_eid = new EndpointID(local_eid());
-		ok = prophet_eid.append_service_tag("prophet");
-		if (!ok) {
-			BPF.getInstance()
-					.getBPFLogger()
-					.error(TAG,
-							String.format(
-									"prophet local eid (%s) scheme must be able to append service tags",
-									local_eid().toString()));
-
-		}
-
 		if (BundleRouter.config().type() == router_type_t.PROPHET_BUNDLE_ROUTER) {
 			RegistrationAddedEvent event = new RegistrationAddedEvent(
-					router_.getProphetRegistration(),
+					router_.getRegistration(),
 					event_source_t.EVENTSRC_ADMIN);
 			handle_event(event);
 		}
