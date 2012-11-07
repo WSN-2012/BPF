@@ -37,6 +37,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
+import se.kth.ssvl.tslab.wsn.general.servlib.reg.ProphetRegistration;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.BaseTLV.TLVType;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.HelloTLV.HelloFunctionType;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetNeighbor.ProphetNeighborRecvState;
