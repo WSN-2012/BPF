@@ -86,8 +86,15 @@ public abstract class Registration implements Serializable {
 	 */
 	final static int DTLSR_REGID = 4;
 
-	/* prophet */
+	/**
+	 * Prohpet registration id
+	 */
 	protected final static int PROPHET_REGID = 5;
+	
+	/**
+	 * Epidemic registration id
+	 */
+	protected final static int EPIDEMIC_REGID = 6;
 
 	/**
 	 * Number of Max reserved id for Admin Registrations
