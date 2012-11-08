@@ -95,6 +95,10 @@ public class EndpointID implements Serializable {
 		return uri_.toString();
 	}
 
+	public String getHostOnly() {
+		return uri_.getHost();
+	}
+
 	/**
 	 * Construct the endpoint id from the given string.
 	 * 

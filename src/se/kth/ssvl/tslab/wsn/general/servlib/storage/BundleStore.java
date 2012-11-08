@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
@@ -311,26 +312,30 @@ public class BundleStore {
 			HashMap<String, Object> values = new HashMap<String, Object>();
 			values.put("type", bundle.payload().location().getCode());
 
-			//calculate and add hash
-			try {
-				byte payload[] = new byte[bundle.payload().length()];
-				bundle.payload().read_data(0, bundle.payload().length(),
-						payload);
-				String toHash = new String(bundle.dest().byte_array())
-						+ new String(payload);
-				MessageDigest md;
-				md = MessageDigest.getInstance("SHA-1");
-				md.update(toHash.getBytes());
-				byte byteData[] = md.digest();
-				String hash = byteArrayToHexString(byteData);
-				values.put("hash", hash);
-				BPF.getInstance().getBPFLogger().warning(TAG, "This is to be hashed: " +  toHash);
-			} catch (NoSuchAlgorithmException e) {
-				BPF.getInstance()
-						.getBPFLogger()
-						.error(TAG,
-								"Exception during hash calculation: "
-										+ e.getMessage());
+			// calculate and add hash if the bundle is not destined for us
+			BPF.getInstance().getBPFLogger().warning(TAG, bundle.dest().getHostOnly() + "=?=" + BundleDaemon.getInstance().local_eid().getHostOnly());
+			if (!bundle.dest().getHostOnly().equals(BundleDaemon.getInstance().local_eid().getHostOnly())) {
+				try {
+					byte payload[] = new byte[bundle.payload().length()];
+					bundle.payload().read_data(0, bundle.payload().length(),
+							payload);
+					String toHash = new String(bundle.dest().byte_array())
+							+ new String(payload);
+					MessageDigest md;
+					md = MessageDigest.getInstance("SHA-1");
+					md.update(toHash.getBytes());
+					byte byteData[] = md.digest();
+					String hash = byteArrayToHexString(byteData);
+					values.put("hash", hash);
+					BPF.getInstance().getBPFLogger()
+							.warning(TAG, "This is to be hashed: " + toHash);
+				} catch (NoSuchAlgorithmException e) {
+					BPF.getInstance()
+							.getBPFLogger()
+							.error(TAG,
+									"Exception during hash calculation: "
+											+ e.getMessage());
+				}
 			}
 			
 			String condition = "id = " + bundleid;
