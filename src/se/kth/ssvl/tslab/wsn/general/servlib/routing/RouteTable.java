@@ -29,6 +29,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntryMatcher;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntryVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter.router_type_t;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.StringVector;
 
@@ -376,6 +377,13 @@ public class RouteTable {
 												entry.toString()));
 					}
 
+				} else {
+					if (BPF.getInstance().getConfig().routes_setting()
+							.router_type()
+							.equals(router_type_t.EPIDEMIC_BUNDLE_ROUTER)) {
+						entry_vec.add(entry);
+						++count;
+					}
 				}
 
 			}

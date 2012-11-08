@@ -44,6 +44,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 		String list[] = BundleStore.getInstance().getHashList();
 		if(list == null){ //do we have anything to send?
+			BPF.getInstance().getBPFLogger().debug(TAG, "List is empty: nothing to send.");
 			return;
 		}
 		
@@ -82,13 +83,16 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 		//format the payload -> [hash1]-[hash2]-[hash3]...
 		String payload = "";
-		for(int i = 0; i < list.length; i++){
+		for (int i = 0; i < list.length; i++) {
 			payload += list[i];
-			if(i != list.length - 1)	payload += "-";
+			if (i != list.length - 1) {
+				payload += "-";
+			}
 		}
 		
 		bundle.payload().set_data(payload.getBytes());
 
+		/*
 		ForwardingInfo info = new ForwardingInfo(ForwardingInfo.state_t.NONE,
 				ForwardingInfo.action_t.FORWARD_ACTION, link.name_str(),
 				0xffffffff, link.remote_eid(),
@@ -96,6 +100,13 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 		// send bundle
 		actions_.queue_bundle(bundle, link, info.action(), info.custody_spec());
+		*/
+		
+		//send bundle
+		
+		BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send bundle with payload: " + payload);
+		
+		route_bundle(bundle);
 	}
 
 	public void deliver_bundle(Bundle bundle) {
@@ -106,7 +117,12 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 					.error(TAG, "Couldn't read the epidemic bundle");
 			return;
 		}
-
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						"Epidemic bundle received. List: "
+								+ new String(buf.array()));
+		
 		// Split the list on dashes (hashes and dashes!)
 		String[] neighborList = new String(buf.array()).split("-");
 		
@@ -117,8 +133,16 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 			return;
 		}
 
-		//TODO: Run the diff with the list we got and the list we have, take the ones that differ and put them on the queue for sending
-
+		String [] localList = BundleStore.getInstance().getHashList();
+		String [] diff = diff(localList,neighborList);
+		for(int i = 0; i < diff.length; i++){
+			//get bundle given hash
+			Bundle b = BundleStore.getInstance().getBundle(diff[i]);
+			BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send bundle with hash: " + diff[i]);
+			//queue bundle
+			route_bundle(b);
+		}
+		
 		// Delete the bundle since we are handling it
 		BundleDaemon.getInstance().post_at_head(new BundleDeleteRequest(bundle,
 				BundleProtocol.status_report_reason_t.REASON_NO_ADDTL_INFO));
