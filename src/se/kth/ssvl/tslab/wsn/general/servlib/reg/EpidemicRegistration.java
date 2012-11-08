@@ -18,7 +18,7 @@ public class EpidemicRegistration extends Registration {
 	public EpidemicRegistration(EpidemicBundleRouter router_) {
 		
 		super(EPIDEMIC_REGID, new EndpointIDPattern(BundleDaemon.getInstance().local_eid().str()
-				+ "/prophet"), Registration.failure_action_t.DEFER, 0, 0, "");
+				+ "/epidemic"), Registration.failure_action_t.DEFER, 0, 0, "");
 		
 		this.router_ = router_;
 		set_active(true);
@@ -27,7 +27,7 @@ public class EpidemicRegistration extends Registration {
 	@Override
 	public void deliver_bundle(Bundle bundle) {
 		BPF.getInstance().getBPFLogger().debug(TAG,
-				"Prophet bundle from " + bundle.source());
+				"Epidemic bundle from " + bundle.source());
 		router_.deliver_bundle(bundle);
 		BundleDaemon.getInstance().post_at_head(
 				new BundleDeliveredEvent(bundle, this));
