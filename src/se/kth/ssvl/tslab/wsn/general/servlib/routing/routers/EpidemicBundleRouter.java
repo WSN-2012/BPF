@@ -3,11 +3,13 @@ package se.kth.ssvl.tslab.wsn.general.servlib.routing.routers;
 import java.util.ArrayList;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle.priority_values_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
@@ -27,7 +29,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 	}
 
 	protected void handle_contact_up(ContactUpEvent event) {
-		super.handle_contact_up(event);
+//		super.handle_contact_up(event);
 		Link link = event.contact().link();
 		sendList(link);
 	}
@@ -85,7 +87,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		
 		bundle.payload().set_data(payload.getBytes());
 
-		/*
+		
 		ForwardingInfo info = new ForwardingInfo(ForwardingInfo.state_t.NONE,
 				ForwardingInfo.action_t.FORWARD_ACTION, link.name_str(),
 				0xffffffff, link.remote_eid(),
@@ -93,13 +95,11 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 		// send bundle
 		actions_.queue_bundle(bundle, link, info.action(), info.custody_spec());
-		*/
 		
 		//send bundle
-		
 		BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send bundle with payload: " + payload);
 		
-		route_bundle(bundle);
+//		route_bundle(bundle);
 	}
 
 	public void deliver_bundle(Bundle bundle) {
