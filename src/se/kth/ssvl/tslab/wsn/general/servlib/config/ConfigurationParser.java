@@ -359,6 +359,9 @@ public class ConfigurationParser {
 		} else if (router_type.getValue().equals("prophet")) {
 			config.routes_setting().set_router_type(
 					router_type_t.PROPHET_BUNDLE_ROUTER);
+		} else if (router_type.getValue().equals("epidemic")) {
+			config.routes_setting().set_router_type(
+					router_type_t.EPIDEMIC_BUNDLE_ROUTER);
 		} else {
 			throw new InvalidDTNConfigurationException(
 					"Invalid DTN Config Exception: Router Type is invalid");

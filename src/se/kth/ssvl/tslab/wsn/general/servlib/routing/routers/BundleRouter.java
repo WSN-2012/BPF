@@ -62,8 +62,9 @@ public abstract class BundleRouter extends BundleEventHandler {
 	 */
 	public static enum router_type_t {
 
-		STATIC_BUNDLE_ROUTER("static", (byte) 0x00), PROPHET_BUNDLE_ROUTER(
-				"prophet", (byte) 0x01);
+		STATIC_BUNDLE_ROUTER("static", (byte) 0x00),
+		PROPHET_BUNDLE_ROUTER("prophet", (byte) 0x01),
+		EPIDEMIC_BUNDLE_ROUTER("epidemic", (byte) 0x02);
 
 		private static final Map<Byte, router_type_t> lookup = new HashMap<Byte, router_type_t>();
 		private static final Map<String, router_type_t> caption_map = new HashMap<String, router_type_t>();
