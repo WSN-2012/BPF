@@ -35,11 +35,11 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 	public void sendList(Link link) {
 
 		String list[] = BundleStore.getInstance().getHashList();
-		if(list == null || list.length == 0){ //do we have anything to send?
-			BPF.getInstance().getBPFLogger().debug(TAG, "List is empty: nothing to send.");
+		if(list == null){ //do we have anything to send?
+			BPF.getInstance().getBPFLogger().warning(TAG, "List is empty: nothing to send.");
 			return;
 		}
-		BPF.getInstance().getBPFLogger().warning(TAG, "size of hashlist: " + list.length);
+		BPF.getInstance().getBPFLogger().debug(TAG, "size of hashlist: " + list.length);
 		
 		// "check if the link is not open
 		if (!link.isopen()) {

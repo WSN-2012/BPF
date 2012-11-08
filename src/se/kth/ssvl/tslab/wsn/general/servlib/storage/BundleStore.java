@@ -23,6 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -64,7 +65,7 @@ public class BundleStore {
 	 * SQL Query for creating new Bundle in the SQLite database.
 	 */
 	private static final String Table_CREATE_BUNDLES = "create table IF NOT EXISTS  bundles (id integer primary key autoincrement, "
-			+ "type integer not null, hash char(40), forwarded_times integer);";
+			+ "type integer not null, hash char(40) not null default '0000000000000000000000000000000000000000', forwarded_times integer);";
 
 	/**
 	 * Singleton Implementation Getter function
@@ -153,7 +154,7 @@ public class BundleStore {
 	 * Get a list with the hashes from the database of all bundles (used by
 	 * epidemic routing to exchange bundlelists)
 	 * 
-	 * @return A String array with all the hashes
+	 * @return A String array with all the hashes or null if it didn't find any proper bundle
 	 */
 	public String[] getHashList() {
 		try {
@@ -162,19 +163,22 @@ public class BundleStore {
 			List<Map<String, Object>> hashes = BPF.getInstance().getBPFDB().query(table, new String[]{"hash"},
 					null, null, null, null, null, null);
 			
-			String[] ret = new String[hashes.size()];
-			
+			ArrayList<String> ret = new ArrayList<String>();
 			Iterator<Map<String, Object>> i = hashes.iterator();
-			int c = 0;
 			Map<String, Object> item;
 			while(i.hasNext()) {
 				item = i.next();
-				if ((String) item.get("hash") != null && ((String) item.get("hash")).toLowerCase() != "null") {
-					ret[c++] = (String) item.get("hash");
+				if (!((String) item.get("hash")).equals("0000000000000000000000000000000000000000")) {
+					BPF.getInstance().getBPFLogger().debug(TAG, "Adding bundle with hash: " + (String) item.get("hash") 
+							+ " to the hash list");
+					ret.add((String) item.get("hash"));
 				}
 			}
-			
-			return ret;
+			if (ret.size() == 0) {
+				return null;
+			} else {
+				return ret.toArray(new String[ret.size()]);
+			}
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "Couldn't get the bundle list (of hashes):" + e.toString());
 		}
