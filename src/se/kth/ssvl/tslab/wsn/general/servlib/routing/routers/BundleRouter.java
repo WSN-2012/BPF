@@ -125,6 +125,9 @@ public abstract class BundleRouter extends BundleEventHandler {
 		} else if (type == router_type_t.PROPHET_BUNDLE_ROUTER) {
 			router = new ProphetBundleRouter();
 			router.name_ = "prophet bundle router";
+		} else if (type == router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
+			router = new EpidemicBundleRouter();
+			router.name_ = "epidemic bundle router";
 		} else {
 			BPF.getInstance().getBPFLogger().error(
 					TAG,
