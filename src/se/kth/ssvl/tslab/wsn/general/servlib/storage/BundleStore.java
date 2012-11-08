@@ -22,6 +22,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 
 import java.io.File;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -197,16 +198,6 @@ public class BundleStore {
 
 				HashMap<String, Object> values = new HashMap<String,Object>();
 				values.put("type", bundle.payload().location().getCode());
-
-				//calculate and add hash
-				byte payload[] = new byte[bundle.payload().length()];
-				bundle.payload().read_data(0, bundle.payload().length(), payload);
-				String toHash = new String(bundle.dest().byte_array()) + new String(payload);
-				MessageDigest md = MessageDigest.getInstance("SHA-1");
-		        md.update(toHash.getBytes());
-		        byte byteData[] = md.digest();
-		        String hash = byteArrayToHexString(byteData);
-		        values.put("hash",hash);
 				
 				String condition = "id = " + bundleid;
 
@@ -289,6 +280,29 @@ public class BundleStore {
 			HashMap<String, Object> values = new HashMap<String, Object>();
 			values.put("type", bundle.payload().location().getCode());
 
+			//calculate and add hash
+			try {
+				byte payload[] = new byte[bundle.payload().length()];
+				bundle.payload().read_data(0, bundle.payload().length(),
+						payload);
+				String toHash = new String(bundle.dest().byte_array())
+						+ new String(payload);
+				MessageDigest md;
+				md = MessageDigest.getInstance("SHA-1");
+				md.update(toHash.getBytes());
+				byte byteData[] = md.digest();
+				String hash = byteArrayToHexString(byteData);
+				values.put("hash", hash);
+				BPF.getInstance().getBPFLogger()
+						.debug("HHHHHHAAAAASSSSSHHHHHH", hash);
+			} catch (NoSuchAlgorithmException e) {
+				BPF.getInstance()
+						.getBPFLogger()
+						.error(TAG,
+								"Exception during hash calculation: "
+										+ e.getMessage());
+			}
+			
 			String condition = "id = " + bundleid;
 
 			if (impt_sqlite_.update(table, values, condition, null)) {

@@ -65,8 +65,8 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		bundle.set_expiration(60);
 		bundle.set_priority(priority_values_t.COS_EXPEDITED);
 
-		String list = BundleStore.getInstance().getHashList();
-		bundle.payload().set_data(list.getBytes());
+		String list[] = BundleStore.getInstance().getHashList();
+//		bundle.payload().set_data(list.getBytes());
 
 		ForwardingInfo info = new ForwardingInfo(ForwardingInfo.state_t.NONE,
 				ForwardingInfo.action_t.FORWARD_ACTION, link.name_str(),
