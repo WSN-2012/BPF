@@ -1,19 +1,29 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.routers;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle.priority_values_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetBundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetNeighbor;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.BaseTLV.TLVType;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.HelloTLV.HelloFunctionType;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetNeighbor.ProphetNeighborRecvState;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
+import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
+import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
 
 public class EpidemicBundleRouter extends TableBasedRouter {
 
@@ -78,6 +88,49 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 	}
 
 	public void deliver_bundle(Bundle bundle) {
+		IByteBuffer buf = new SerializableByteBuffer(1000);
+
+		if (!bundle.payload().read_data(0, bundle.payload().length(), buf)) {
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "Couldn't read the epidemic bundle");
+			return;
+		}
+
+		// Split the list on dashes (hashes and dashes!)
+		String[] neighborList = new String(buf.array()).split("-");
+		
+		String remote_eid = bundle.source().str().split("/epidemic")[0];
+		if (remote_eid == null) {
+			BPF.getInstance().getBPFLogger()
+					.error("TAG", "Bundle recv : remote_eid == null");
+			return;
+		}
+
+		//TODO: Run the diff with the list we got and the list we have, take the ones that differ and put them on the queue for sending
+
+		// Delete the bundle since we are handling it
+		BundleDaemon.getInstance().post_at_head(new BundleDeleteRequest(bundle,
+				BundleProtocol.status_report_reason_t.REASON_NO_ADDTL_INFO));
 
 	}
+	
+	/**
+	 * Get the items that are not in the remote list compared to our local
+	 * @param local Our local list
+	 * @param remote The remote list to compare to
+	 * @return The diff list
+	 */
+	private String[] diff(String[] local, String[] remote) {
+		ArrayList<String> res = new ArrayList<String>();
+		for (int i = 0; i < local.length; i++) {
+			for (int j = 0; j < remote.length; j++) {
+				if (local[i] != remote[j]) {
+					res.add(local[i]);
+				}
+			}
+		}
+		
+		return res.toArray(new String[res.size()]);
+	}
+	
 }
