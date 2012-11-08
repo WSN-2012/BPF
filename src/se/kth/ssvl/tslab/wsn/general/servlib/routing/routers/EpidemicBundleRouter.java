@@ -42,6 +42,11 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 	public void sendList(Link link) {
 
+		String list[] = BundleStore.getInstance().getHashList();
+		if(list == null){ //do we have anything to send?
+			return;
+		}
+		
 		// "check if the link is not open
 		if (!link.isopen()) {
 			BPF.getInstance()
@@ -75,8 +80,14 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		bundle.set_expiration(60);
 		bundle.set_priority(priority_values_t.COS_EXPEDITED);
 
-		String list[] = BundleStore.getInstance().getHashList();
-//		bundle.payload().set_data(list.getBytes());
+		//format the payload -> [hash1]-[hash2]-[hash3]...
+		String payload = "";
+		for(int i = 0; i < list.length; i++){
+			payload += list[i];
+			if(i != list.length - 1)	payload += "-";
+		}
+		
+		bundle.payload().set_data(payload.getBytes());
 
 		ForwardingInfo info = new ForwardingInfo(ForwardingInfo.state_t.NONE,
 				ForwardingInfo.action_t.FORWARD_ACTION, link.name_str(),
