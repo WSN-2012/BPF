@@ -136,7 +136,13 @@ public class BundleStore {
 		return impt_storage_.get_file(payload_filname);
 	}
 
-	public String[] getBundleList() {
+	/**
+	 * Get a list with the hashes from the database of all bundles (used by
+	 * epidemic routing to exchange bundlelists)
+	 * 
+	 * @return A String array with all the hashes
+	 */
+	public String[] getHashList() {
 		try {
 			BPF.getInstance().getBPFLogger().debug(TAG, "Getting bundle list from our storage");
 			
