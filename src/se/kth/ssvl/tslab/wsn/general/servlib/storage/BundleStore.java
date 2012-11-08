@@ -21,6 +21,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 
 import java.io.File;
+import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -133,7 +134,18 @@ public class BundleStore {
 		String payload_filname = payloadFileName + bundleid;
 		return impt_storage_.get_file(payload_filname);
 	}
-
+	
+	
+	public static String byteArrayToHexString(byte[] b) {
+		  String result = "";
+		  for (int i=0; i < b.length; i++) {
+		    result +=
+		          Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
+		  }
+		  return result;
+	}
+	
+	
 	/**
 	 * Store the new bundle on the disk.
 	 * 
@@ -154,6 +166,16 @@ public class BundleStore {
 				HashMap<String, Object> values = new HashMap<String,Object>();
 				values.put("type", bundle.payload().location().getCode());
 
+				//calculate and add hash
+				byte payload[] = new byte[bundle.payload().length()];
+				bundle.payload().read_data(0, bundle.payload().length(), payload);
+				String toHash = new String(bundle.dest().byte_array()) + new String(payload);
+				MessageDigest md = MessageDigest.getInstance("SHA-1");
+		        md.update(toHash.getBytes());
+		        byte byteData[] = md.digest();
+		        String hash = byteArrayToHexString(byteData);
+		        values.put("hash",hash);
+				
 				String condition = "id = " + bundleid;
 
 				if (impt_sqlite_.update(table, values, condition, null)) {

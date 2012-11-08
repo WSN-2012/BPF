@@ -55,7 +55,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		}
 
 		// create bundle containing list
-		Bundle bundle = new Bundle(location_t.MEMORY);
+		Bundle bundle = new Bundle(location_t.MEMORY); //TODO: verify that MEMORY type does not cause problems
 		bundle.set_dest(new EndpointID(link.remote_eid() + "/epidemic"));
 		bundle.set_source(new EndpointID(BundleDaemon.getInstance().local_eid().str() + "/epidemic"));
 		bundle.set_prevhop(BundleDaemon.getInstance().local_eid());
@@ -65,7 +65,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		bundle.set_expiration(60);
 		bundle.set_priority(priority_values_t.COS_EXPEDITED);
 
-		String list = BundleStore.getInstance().getList();
+		String list = BundleStore.getInstance().getHashList();
 		bundle.payload().set_data(list.getBytes());
 
 		ForwardingInfo info = new ForwardingInfo(ForwardingInfo.state_t.NONE,
