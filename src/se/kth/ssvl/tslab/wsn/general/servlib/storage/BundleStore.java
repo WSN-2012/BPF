@@ -24,6 +24,8 @@ import java.io.File;
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload;
@@ -61,7 +63,7 @@ public class BundleStore {
 	 * SQL Query for creating new Bundle in the SQLite database.
 	 */
 	private static final String Table_CREATE_BUNDLES = "create table IF NOT EXISTS  bundles (id integer primary key autoincrement, "
-			+ "type integer not null," + "forwarded_times integer);";
+			+ "type integer not null, hash char(40), forwarded_times integer);";
 
 	/**
 	 * Singleton Implementation Getter function
@@ -145,6 +147,36 @@ public class BundleStore {
 		  return result;
 	}
 	
+	
+	/**
+	 * Get a list with the hashes from the database of all bundles (used by
+	 * epidemic routing to exchange bundlelists)
+	 * 
+	 * @return A String array with all the hashes
+	 */
+	public String[] getHashList() {
+		try {
+			BPF.getInstance().getBPFLogger().debug(TAG, "Getting bundle list from our storage");
+			
+			List<Map<String, Object>> hashes = BPF.getInstance().getBPFDB().query(table, new String[]{"hash"},
+					null, null, null, null, null, null);
+			
+			String[] ret = new String[hashes.size()];
+			
+			Iterator<Map<String, Object>> i = hashes.iterator();
+			int c = 0;
+			Map<String, Object> item;
+			while(i.hasNext()) {
+				item = i.next();
+				ret[c++] = (String) item.get("hash"); 
+			}
+			
+			return ret;
+		} catch (Exception e) {
+			BPF.getInstance().getBPFLogger().error(TAG, "Couldn't get the bundle list (of hashes):" + e.toString());
+		}
+		return null;
+	}
 	
 	/**
 	 * Store the new bundle on the disk.
