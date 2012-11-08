@@ -180,6 +180,31 @@ public class BundleStore {
 	}
 	
 	/**
+	 * This method will fetch a bundle based on the hash of it.
+	 * @param hash The hash represented in a SHA-1 40 char hex string
+	 * @return The bundle that was requested or null if there was an error
+	 */
+	public Bundle getBundle(String hash) {
+		try {
+			BPF.getInstance().getBPFLogger().debug(TAG, "Getting bundle with hash: " + hash);
+			
+			List<Map<String, Object>> hashes = BPF.getInstance().getBPFDB().query(table, null,
+					"hash='" + hash + "'", null, null, null, null, null);
+			
+			// Means we didn't find any or we found too many
+			if (hashes.size() != 1) {
+				return null;
+			}
+			
+			return get((Integer)hashes.get(0).get("id"));
+		} catch (Exception e) {
+			BPF.getInstance().getBPFLogger().error(TAG, 
+					"Couldn't find the bundle with the hash: " + hash + " - " + e.toString());
+		}
+		return null;
+	}
+	
+	/**
 	 * Store the new bundle on the disk.
 	 * 
 	 * @param bundle
