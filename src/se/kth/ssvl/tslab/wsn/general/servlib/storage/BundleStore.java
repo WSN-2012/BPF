@@ -169,7 +169,9 @@ public class BundleStore {
 			Map<String, Object> item;
 			while(i.hasNext()) {
 				item = i.next();
-				ret[c++] = (String) item.get("hash"); 
+				if ((String) item.get("hash") != null) {
+					ret[c++] = (String) item.get("hash");
+				}
 			}
 			
 			return ret;
@@ -318,8 +320,7 @@ public class BundleStore {
 				byte byteData[] = md.digest();
 				String hash = byteArrayToHexString(byteData);
 				values.put("hash", hash);
-				BPF.getInstance().getBPFLogger()
-						.debug("HHHHHHAAAAASSSSSHHHHHH", hash);
+				BPF.getInstance().getBPFLogger().warning(TAG, "This is to be hashed: " +  toHash);
 			} catch (NoSuchAlgorithmException e) {
 				BPF.getInstance()
 						.getBPFLogger()

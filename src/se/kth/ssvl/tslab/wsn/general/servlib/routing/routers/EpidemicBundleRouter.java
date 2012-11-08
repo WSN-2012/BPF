@@ -1,26 +1,18 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.routers;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle.priority_values_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetBundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetNeighbor;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.BaseTLV.TLVType;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.HelloTLV.HelloFunctionType;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetNeighbor.ProphetNeighborRecvState;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
