@@ -169,7 +169,7 @@ public class BundleStore {
 			Map<String, Object> item;
 			while(i.hasNext()) {
 				item = i.next();
-				if ((String) item.get("hash") != null) {
+				if ((String) item.get("hash") != null && ((String) item.get("hash")).toLowerCase() != "null") {
 					ret[c++] = (String) item.get("hash");
 				}
 			}
