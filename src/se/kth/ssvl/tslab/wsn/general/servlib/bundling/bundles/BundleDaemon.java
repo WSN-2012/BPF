@@ -830,7 +830,6 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		}
 
 			
-		BPF.getInstance().getBPFLogger().warning(TAG, "add to store: " + add_to_store);
 		if (add_to_store) {
 			bundle.set_complete(true);
 			actions_.store_update(bundle);
