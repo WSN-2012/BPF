@@ -115,17 +115,17 @@ public abstract class BundleRouter extends BundleEventHandler {
 	 * 
 	 * @throws RoutingException
 	 */
-	public static BundleRouter create_router() throws RoutingException {
+	public static BundleRouter create_router(BundleActions actions, BundleList pendingBundles, BundleList custodyBundles) throws RoutingException {
 		router_type_t type = config_.type_;
 		BundleRouter router;
 		if (type == router_type_t.STATIC_BUNDLE_ROUTER) {
-			router = new StaticBundleRouter();
+			router = new StaticBundleRouter(actions, pendingBundles, custodyBundles);
 			router.name_ = "static bundle router";
 		} else if (type == router_type_t.PROPHET_BUNDLE_ROUTER) {
-			router = new ProphetBundleRouter();
+			router = new ProphetBundleRouter(actions, pendingBundles, custodyBundles);
 			router.name_ = "prophet bundle router";
 		} else if (type == router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
-			router = new EpidemicBundleRouter();
+			router = new EpidemicBundleRouter(actions, pendingBundles, custodyBundles);
 			router.name_ = "epidemic bundle router";
 		} else {
 			BPF.getInstance().getBPFLogger().error(
@@ -510,10 +510,10 @@ public abstract class BundleRouter extends BundleEventHandler {
 	/**
 	 * Constructor
 	 */
-	public BundleRouter() {
-		actions_ = BundleDaemon.getInstance().actions();
-		pending_bundles_ = BundleDaemon.getInstance().pending_bundles();
-		custody_bundles_ = BundleDaemon.getInstance().custody_bundles();
+	public BundleRouter(BundleActions actions, BundleList pendingBundles, BundleList custodyBundles) {
+		actions_ = actions;
+		pending_bundles_ = pendingBundles;
+		custody_bundles_ = custodyBundles;
 		name_ = "default router";
 	}
 

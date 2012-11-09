@@ -28,6 +28,7 @@ import java.util.ListIterator;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleActions;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleInfoCache;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
@@ -120,7 +121,8 @@ public abstract class TableBasedRouter extends BundleRouter {
 	/**
 	 * Constructor
 	 */
-	protected TableBasedRouter() {
+	protected TableBasedRouter(BundleActions actions, BundleList pendingBundles, BundleList custodyBundles) {
+		super(actions, pendingBundles, custodyBundles);
 		route_table_ = new RouteTable("TableBasedRouter");
 		reception_cache_ = new BundleInfoCache(1024);
 		reroute_timers_ = new HashMap<String, RerouteTimer>();

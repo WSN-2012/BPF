@@ -115,10 +115,10 @@ public class BPF {
     	InterfaceTable.init();
     	DiscoveryTable.getInstance().init();
     	BundleRouter.init();
-    	BundleDaemon.getInstance().init();
-    	BundleStore.getInstance().init();
     	RegistrationStore.getInstance().init();
+    	BundleStore.getInstance().init();
     	GlobalStorage.getInstance().init();
+    	BundleDaemon.getInstance().init();
     	
     	// Start the bundle daemon
     	BundleDaemon.getInstance().start();

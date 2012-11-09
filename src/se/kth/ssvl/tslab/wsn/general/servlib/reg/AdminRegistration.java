@@ -56,8 +56,7 @@ public class AdminRegistration extends Registration {
 	 * Constructor to initialize this class.
 	 */
 	public AdminRegistration() {
-		super(Registration.ADMIN_REGID, new EndpointIDPattern(BundleDaemon
-				.getInstance().local_eid()),
+		super(Registration.ADMIN_REGID, new EndpointIDPattern(BPF.getInstance().getConfig().routes_setting().local_eid()),
 				Registration.failure_action_t.DEFER, 0, 0, "");
 		set_active(true);
 	}

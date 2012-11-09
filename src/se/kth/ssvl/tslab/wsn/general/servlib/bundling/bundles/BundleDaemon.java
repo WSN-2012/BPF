@@ -373,7 +373,6 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	 * main constructor
 	 */
 	private BundleDaemon() {
-		do_init();
 	}
 
 	/**
@@ -400,7 +399,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	/**
 	 * Object initialization function
 	 */
-	public void do_init() {
+	public void init() {
 
 		BundleProtocol.init_default_processors();
 		shutting_down_ = false;
@@ -415,6 +414,29 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		reg_table_ = RegistrationTable.getInstance();
 		stats_ = new Stats();
 		params_ = new Params();
+		local_eid_ = new EndpointID(BPF.getInstance().getConfig()
+				.routes_setting().local_eid());
+		
+		// Create router according to config in the configuration process
+		try {
+			router_ = BundleRouter.create_router(actions_, pending_bundles_, custody_bundles_);
+		} catch (RoutingException e) {
+			BPF.getInstance().getBPFLogger().error(TAG, "BundleDeamon:run(), UnknownRouterType ");
+			e.printStackTrace();
+		}
+		
+		// Load all registrations
+		BPF.getInstance().getBPFLogger().debug(TAG, "Going to load registrations");
+		load_registrations();
+
+		// Clean all bad bundles
+		BPF.getInstance().getBPFLogger().debug(TAG, "Started cleaning");
+		BundleStore.getInstance().clean_garbage_bundles();
+		BPF.getInstance().getBPFLogger().debug(TAG, "Cleaning done");
+
+		// Load all the existing bundles that are in the store
+		BPF.getInstance().getBPFLogger().debug(TAG, "Loaded registrations, going to load bundles");
+		load_bundles();
 
 		//new Security();
 	}
@@ -508,15 +530,6 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 								"BundleDaemon: handle_event InterruptedException");
 			}
 		}
-	}
-
-	/**
-	 * Initialzation from configuration object
-	 */
-	public void init() {
-		local_eid_ = new EndpointID(BPF.getInstance().getConfig()
-				.routes_setting().local_eid());
-
 	}
 
 	/**
@@ -665,40 +678,25 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	 * "Main thread function that dispatches events." [DTN2]
 	 */
 	public void run() {
-
-		try {
-			// Create router according to config in the configuration process
-			router_ = BundleRouter.create_router();
-
-			load_registrations();
-			load_bundles();
-
-			while (true) {
-				if (shutting_down_) {
-					BPF.getInstance().getBPFLogger()
-							.debug(TAG, "BundleDaemon: shutting down");
-					break;
-				}
-
-				BundleEvent event;
-				try {
-					event = eventq_.take();
-
-					handle_event(event);
-				} catch (InterruptedException e) {
-					BPF.getInstance().getBPFLogger()
-							.error(TAG, "Event Handle Interuptted Exception");
-				}
-
-				//
+		while (true) {
+			if (shutting_down_) {
+				BPF.getInstance().getBPFLogger()
+						.debug(TAG, "BundleDaemon: shutting down");
+				break;
 			}
 
-			BPF.getInstance().getBPFLogger()
-					.debug(TAG, "BundleDaemon: at the end of run() of Daemon");
-		} catch (RoutingException e1) {
-			BPF.getInstance().getBPFLogger()
-					.error(TAG, "BundleDeamon:run(), UnknownRouterType ");
+			BundleEvent event;
+			try {
+				event = eventq_.take();
+
+				handle_event(event);
+			} catch (InterruptedException e) {
+				BPF.getInstance().getBPFLogger()
+						.error(TAG, "Event Handle Interuptted Exception");
+			}
 		}
+		BPF.getInstance().getBPFLogger()
+				.debug(TAG, "BundleDaemon: at the end of run() of Daemon");
 	}
 
 	/**
@@ -827,12 +825,12 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		// Don't add the bundle to the pending list if we use epidemic routing.
 		// Sending of bundles will be handled in the epidemic routing triggered by the receiving of the neighbor list
-		if (BPF.getInstance().getConfig().routes_setting().router_type() != router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
+//		if (BPF.getInstance().getConfig().routes_setting().router_type() != router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
 			pending_bundles_.push_back(bundle);
-		} else {
-			ok_to_route = false;
-		}
+//		}
 
+			
+		BPF.getInstance().getBPFLogger().warning(TAG, "add to store: " + add_to_store);
 		if (add_to_store) {
 			bundle.set_complete(true);
 			actions_.store_update(bundle);

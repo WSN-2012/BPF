@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleActions;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle.priority_values_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
@@ -23,6 +25,11 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 	private final static String TAG = "EpidemicBundleRouter";
 
+	public EpidemicBundleRouter(BundleActions actions, BundleList pendingBundles, BundleList custodyBundles) {
+		super(actions, pendingBundles, custodyBundles);
+	}
+	
+	
 	@Override
 	public Registration getRegistration() {
 		return null;

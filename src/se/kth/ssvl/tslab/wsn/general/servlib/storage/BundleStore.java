@@ -302,6 +302,7 @@ public class BundleStore {
 		int result_record = impt_sqlite_.get_record(table,
 				condition_is_record, field, orderBy);
 
+		BPF.getInstance().getBPFLogger().warning(TAG, "result record: " + result_record);
 		if ((result_record == id)
 				&& bundle.payload().location() == BundlePayload.location_t.DISK) {
 
@@ -458,9 +459,6 @@ public class BundleStore {
 	 */
 
 	public Iterator<Bundle> new_iterator() {
-
-		clean_garbage_bundles(); // first cleanup garbage bundles
-
 		BundleStoreIterator itr_ = new BundleStoreIterator();
 		String pre_condition = " id > ";
 		String post_condition = " AND type = " + location_t.DISK.getCode();
