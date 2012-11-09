@@ -338,10 +338,11 @@ public class BundleStore {
 											+ e.getMessage());
 				}
 			}
-			
+
 			String condition = "id = " + bundleid;
 
 			if (impt_sqlite_.update(table, values, condition, null)) {
+				
 				if (!saved_bundles_.containsKey(bundle.bundleid())) {
 					long bundle_size = impt_storage_
 							.get_file_size(bundleFileName
@@ -349,14 +350,13 @@ public class BundleStore {
 					bundle_size += bundle.durable_size();
 					saved_bundles_.put(bundle.bundleid(), bundle_size);
 					global_storage_.add_total_size(bundle_size);
-					BPF.getInstance().getBPFLogger().debug(
-							TAG,
-							"Added size : " + bundle.durable_size() + " to "
-									+ global_storage_.get_total_size());
+					BPF.getInstance().getBPFLogger().debug(TAG, "Added size : " + bundle.durable_size()
+							+ " to " + global_storage_.get_total_size());
 				}
+				
 				String bundle_filname = bundleFileName + bundle.durable_key();
-
 				BPF.getInstance().getBPFLogger().error(TAG, "Updating One by One");
+				
 				// Testing functions
 				BPF.getInstance().getBPFLogger().error(TAG, "Updating Object");
 				boolean result = impt_storage_.add_object(bundle,

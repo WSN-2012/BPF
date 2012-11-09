@@ -16,7 +16,10 @@ public interface BPFDB {
 	 *            This map should contain the initial column values for the row.
 	 *            The keys should be the column names and the values the column
 	 *            values
-	 * @return the row ID of the newly inserted row or throw an BPFDBException
+	 * @return the row ID of the newly inserted row or -1 if it couldn't get the
+	 *         row ID.
+	 * @throws BPFDBException
+	 *             Throws this if there was an SQLException
 	 */
 	public abstract int insert(String table, Map<String, Object> values)
 			throws BPFDBException;
