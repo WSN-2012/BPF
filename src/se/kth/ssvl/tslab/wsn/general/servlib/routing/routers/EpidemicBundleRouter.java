@@ -47,7 +47,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		String list[] = BundleStore.getInstance().getHashList();
 		if(list == null){
 			BPF.getInstance().getBPFLogger().warning(TAG, "List is empty, sending empty list");
-			list = new String[]{};
+			list = new String[0];
 		}
 		BPF.getInstance().getBPFLogger().debug(TAG, "size of hashlist: " + list.length);
 		
@@ -155,6 +155,10 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 	 * @return The diff list
 	 */
 	private String[] diff(String[] local, String[] remote) {
+		if (local == null || remote == null) {
+			return new String[0];
+		}
+		
 		ArrayList<String> res = new ArrayList<String>();
 		for (int i = 0; i < local.length; i++) {
 			for (int j = 0; j < remote.length; j++) {
