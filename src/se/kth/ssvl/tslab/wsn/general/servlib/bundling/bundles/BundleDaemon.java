@@ -823,7 +823,15 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 						String.format("adding bundle id %d to pending list",
 								bundle.bundleid()));
 
-		pending_bundles_.push_back(bundle);
+		boolean ok_to_route = true;
+
+		// Don't add the bundle to the pending list if we use epidemic routing.
+		// Sending of bundles will be handled in the epidemic routing triggered by the receiving of the neighbor list
+		if (BPF.getInstance().getConfig().routes_setting().router_type() != router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
+			pending_bundles_.push_back(bundle);
+		} else {
+			ok_to_route = false;
+		}
 
 		if (add_to_store) {
 			bundle.set_complete(true);
@@ -839,7 +847,6 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		long when = TimeHelper.seconds_from_ref(expiration_calendar)
 				- TimeHelper.seconds_from_ref(now_Calendar);
-		boolean ok_to_route = true;
 
 		bundle.set_expiration_timer(new ExpirationTimer(bundle));
 		if (expiration_calendar.getTime().after(now_Calendar.getTime())) {
