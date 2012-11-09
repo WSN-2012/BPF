@@ -1,6 +1,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.routers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
@@ -118,7 +119,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		}
 		BPF.getInstance()
 				.getBPFLogger()
-				.debug(TAG,
+				.info(TAG,
 						"Epidemic bundle received. List: "
 								+ new String(buf.array()));
 		
@@ -132,8 +133,8 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 			return;
 		}
 
-		String [] localList = BundleStore.getInstance().getHashList();
-		String [] diff = diff(localList,neighborList);
+		String [] diff = diff(BundleStore.getInstance().getHashList(),neighborList);
+		BPF.getInstance().getBPFLogger().info(TAG, "Diff is: " + Arrays.toString(diff));
 		for(int i = 0; i < diff.length; i++){
 			//get bundle given hash
 			Bundle b = BundleStore.getInstance().getBundle(diff[i]);
