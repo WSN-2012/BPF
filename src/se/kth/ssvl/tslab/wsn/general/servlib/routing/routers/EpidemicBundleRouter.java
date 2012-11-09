@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleActions;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle.priority_values_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleActions;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
@@ -16,6 +16,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.reg.EpidemicRegistration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
@@ -25,18 +26,18 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 	private final static String TAG = "EpidemicBundleRouter";
 
+	private EpidemicRegistration registration = new EpidemicRegistration(this);
+	
 	public EpidemicBundleRouter(BundleActions actions, BundleList pendingBundles, BundleList custodyBundles) {
 		super(actions, pendingBundles, custodyBundles);
 	}
 	
-	
 	@Override
 	public Registration getRegistration() {
-		return null;
+		return registration;
 	}
 
 	protected void handle_contact_up(ContactUpEvent event) {
-//		super.handle_contact_up(event);
 		Link link = event.contact().link();
 		sendList(link);
 	}
@@ -44,9 +45,9 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 	public void sendList(Link link) {
 
 		String list[] = BundleStore.getInstance().getHashList();
-		if(list == null){ //do we have anything to send?
-			BPF.getInstance().getBPFLogger().warning(TAG, "List is empty: nothing to send.");
-			return;
+		if(list == null){
+			BPF.getInstance().getBPFLogger().warning(TAG, "List is empty, sending empty list");
+			list = new String[]{};
 		}
 		BPF.getInstance().getBPFLogger().debug(TAG, "size of hashlist: " + list.length);
 		
@@ -61,7 +62,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 			return;
 		}
 
-		// "check if the link queue doesn't have space
+		// check if the link queue doesn't have space
 		if (!link.queue_has_space()) {
 			BPF.getInstance()
 					.getBPFLogger()
@@ -105,8 +106,6 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		
 		//send bundle
 		BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send bundle with payload: " + payload);
-		
-//		route_bundle(bundle);
 	}
 
 	public void deliver_bundle(Bundle bundle) {

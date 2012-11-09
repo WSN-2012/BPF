@@ -3150,7 +3150,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 			handle_event(event);
 		}
 
-		if (BundleRouter.config().type() == router_type_t.PROPHET_BUNDLE_ROUTER) {
+		if (BundleRouter.config().type() == router_type_t.PROPHET_BUNDLE_ROUTER ||
+				BundleRouter.config().type() == router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
 			RegistrationAddedEvent event = new RegistrationAddedEvent(
 					router_.getRegistration(),
 					event_source_t.EVENTSRC_ADMIN);
