@@ -196,7 +196,7 @@ public class BundleProtocol {
 		
 		//Now prepare security blocks
 		BPF.getInstance().getBPFLogger().debug(TAG, "Now preparing security blocks...");
-		//Security.prepare_out_blocks(bundle, link, xmit_blocks);
+		Security.prepare_out_blocks(bundle, link, xmit_blocks);
 		
 		return xmit_blocks;
 	}
