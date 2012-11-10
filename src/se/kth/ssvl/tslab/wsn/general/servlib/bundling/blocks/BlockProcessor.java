@@ -509,7 +509,9 @@ public class BlockProcessor implements Serializable {
 
 		// "convert the offset to a pointer in the target block" [DTN2]
 		IByteBuffer buf = target_block.contents();
-		buf.position(buf.position() + offset);
+		
+		buf.position(buf.position() - offset);
+//		buf.position(buf.position() + offset);
 
 		// "call the mutating function to do the work" [DTN2]
 		mutate_func_event_data data = new mutate_func_event_data();

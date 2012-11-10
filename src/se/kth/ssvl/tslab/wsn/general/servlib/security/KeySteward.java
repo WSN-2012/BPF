@@ -47,6 +47,7 @@ public class KeySteward
 
 		BPF.getInstance().getBPFLogger().debug(TAG,"Encrypting symmetric key...");
 
+		java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		KeyStore ks = KeyStore.getInstance("BKS");
 
 		//path to the key store file
@@ -57,7 +58,9 @@ public class KeySteward
 	    
 	    FileInputStream fis = null;
 	    try {
+	    	BPF.getInstance().getBPFLogger().info(TAG, "Opening file: " + kspath);
 	        fis = new FileInputStream(kspath);
+	        BPF.getInstance().getBPFLogger().info(TAG, "Loading keystore from: " + kspath);
 	        ks.load(fis, password);
 	    } catch(Exception e){
 	    	BPF.getInstance().getBPFLogger().error(TAG,"Error while loading keystore!");
@@ -142,7 +145,8 @@ public class KeySteward
 		EndpointID local_eid = BundleDaemon.getInstance().local_eid();
 		String my_alias=local_eid.toString();
 		
-		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+		java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		KeyStore ks = KeyStore.getInstance("BKS");
     
 		//path to the key store file
 	    String kspath = BPF.getInstance().getConfig().security_setting().ks_path();

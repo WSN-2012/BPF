@@ -1358,7 +1358,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 		}
 		catch (Exception e) 
 		{
-			BPF.getInstance().getBPFLogger().error(TAG,e.toString());
+			BPF.getInstance().getBPFLogger().error(TAG, "Exception during key encryption in KeySteward.encrypt(): " + e.toString());
 		} 
 
 		if (err != 0) // TODO: KeySteward.encrypt() always returns 0!
@@ -1607,6 +1607,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 			BlockInfo iter = blocks_iter.next();
 
 			BPF.getInstance().getBPFLogger().debug(TAG, "finalize()  iteration.next. type of block: "+iter.type().toString());
+			BPF.getInstance().getBPFLogger().info(TAG, "data offset: " + iter.data_offset() + " data_length: " + iter.data_length());
 
 			// Advance the iterator to our current position.
 			// While we do it, we also remember the correlator values
@@ -2022,7 +2023,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 				//Log.e(TAG, String.format("-------------key: "));
 				//String inMsgS= new String(inMsg);
 				
-				BPF.getInstance().getBPFLogger().debug(TAG, String.format(  "generate() random key: 0x %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h", unsignedByteToInt(temp_key_array[0]), unsignedByteToInt(temp_key_array[1]), unsignedByteToInt(temp_key_array[2]), unsignedByteToInt(temp_key_array[3]), unsignedByteToInt(temp_key_array[4]), unsignedByteToInt(temp_key_array[5]), unsignedByteToInt(temp_key_array[6]), unsignedByteToInt(temp_key_array[7]), unsignedByteToInt(temp_key_array[8]), unsignedByteToInt(temp_key_array[9]), unsignedByteToInt(temp_key_array[10]), unsignedByteToInt(temp_key_array[11]), unsignedByteToInt(temp_key_array[12]), unsignedByteToInt(temp_key_array[13]), unsignedByteToInt(temp_key_array[14]), unsignedByteToInt(temp_key_array[15])));
+				BPF.getInstance().getBPFLogger().debug(TAG, String.format(  "finalize() random key: 0x %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h", unsignedByteToInt(temp_key_array[0]), unsignedByteToInt(temp_key_array[1]), unsignedByteToInt(temp_key_array[2]), unsignedByteToInt(temp_key_array[3]), unsignedByteToInt(temp_key_array[4]), unsignedByteToInt(temp_key_array[5]), unsignedByteToInt(temp_key_array[6]), unsignedByteToInt(temp_key_array[7]), unsignedByteToInt(temp_key_array[8]), unsignedByteToInt(temp_key_array[9]), unsignedByteToInt(temp_key_array[10]), unsignedByteToInt(temp_key_array[11]), unsignedByteToInt(temp_key_array[12]), unsignedByteToInt(temp_key_array[13]), unsignedByteToInt(temp_key_array[14]), unsignedByteToInt(temp_key_array[15])));
 				//for (int i=0; i<temp_key_array.length;i++)
 				//	Log.e(TAG, ""+( unsignedByteToInt(temp_key_array[i])) );
 				//Log.d(TAG, "");
@@ -2086,6 +2087,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 						BPF.getInstance().getBPFLogger().debug(TAG, "generate(). Plaintext message (first 10 char max): 0x "+key_str);
 						
 						in_encr_length=inMsg.length;
+						BPF.getInstance().getBPFLogger().info(TAG, "in_array_off: " + in_array_off);
 						 encLen = gcmEngine.processBytes(inMsg, in_array_off, len,encMsg,0);
 						//   byte[]          out_ICV= new byte[16];
 
