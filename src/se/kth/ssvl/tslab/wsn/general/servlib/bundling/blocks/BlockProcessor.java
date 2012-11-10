@@ -314,6 +314,7 @@ public class BlockProcessor implements Serializable {
 				return -1;
 			}
 
+			buf.position(buf.position()+cc); //added by Fabio
 			len -= cc;
 			consumed += cc;
 		}
@@ -345,7 +346,6 @@ public class BlockProcessor implements Serializable {
 		}
 
 		// "copy in the data" [DTN2]
-
 		BufferHelper.copy_data(block.writable_contents(), block
 				.writable_contents().position(), buf, buf.position(), tocopy);
 
@@ -510,7 +510,7 @@ public class BlockProcessor implements Serializable {
 		// "convert the offset to a pointer in the target block" [DTN2]
 		IByteBuffer buf = target_block.contents();
 		
-		buf.position(buf.position() - offset);
+		buf.position(buf.position() - offset); //modified by Fabio
 //		buf.position(buf.position() + offset);
 
 		// "call the mutating function to do the work" [DTN2]
@@ -616,6 +616,7 @@ public class BlockProcessor implements Serializable {
 			assert (tocopy == len);
 			return len;
 		}
+
 		// from now on flags value should be ready
 		processing_flags[0] = flags[0];
 
@@ -697,6 +698,12 @@ public class BlockProcessor implements Serializable {
 		block.set_data_length(block_len[0]);
 		block.set_data_offset(buf_offset);
 
+		//Added by Fabio
+	    if ((block.type().equals(bundle_block_type_t.CONFIDENTIALITY_BLOCK)))
+	    {
+	    	contents.position(buf_offset);
+	    }
+		
 		block.set_eid_list(eid_list);
 
 		BPF.getInstance()

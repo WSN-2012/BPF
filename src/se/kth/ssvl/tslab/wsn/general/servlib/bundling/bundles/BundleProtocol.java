@@ -33,6 +33,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PayloadBlockProcess
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PrimaryBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.security.Security;
+import se.kth.ssvl.tslab.wsn.general.servlib.security.Ciphersuite_C3;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
@@ -459,6 +460,7 @@ public class BundleProtocol {
 			if (info.complete()) {
 				data.mark();
 				byte bundle_block_type_byte = data.get();
+				BPF.getInstance().getBPFLogger().info(TAG, String.format(  "bundle_block_type_byte: 0x %2.2h", Ciphersuite_C3.unsignedByteToInt(bundle_block_type_byte)));
 				bundle_block_type_t type = bundle_block_type_t
 						.get(bundle_block_type_byte);
 				data.reset();
