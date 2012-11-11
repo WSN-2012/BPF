@@ -336,6 +336,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 						KeySteward.decrypt(buf, field_length, db);
 					} catch (Exception e) {
 						BPF.getInstance().getBPFLogger().error(TAG, "The key could not be decrypted. Exception: " + e.getMessage());
+						e.printStackTrace();
 						return false;
 					}
 					//decrypt DOES NOT MOVE  the buf position!
@@ -835,7 +836,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 							for (int i=0; i<len&&i<10;i++)
 								encr_payl=new String(encr_payl+ String.format("%2.2h ", unsignedByteToInt(encMsg[i])));
 
-							BPF.getInstance().getBPFLogger().error(TAG, "do_crypt(): Encrypted payload (first 10 bytes max): 0x " + encr_payl);
+							BPF.getInstance().getBPFLogger().debug(TAG, "do_crypt(): Encrypted payload (first 10 bytes max): 0x " + encr_payl);
 
 							decLen = gcmEngine.processBytes(encMsg, 0, encMsg.length,decMsg,0);
 
@@ -852,11 +853,12 @@ public class Ciphersuite_C3 extends Ciphersuite
 					{
 						decLen += gcmEngine.doFinal(decMsg, decLen);
 						
-						BPF.getInstance().getBPFLogger().error(TAG, String.format( "validate(): Tag comparison successful for tag: 0x %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h ", unsignedByteToInt(tag.get(0)), unsignedByteToInt(tag.get(1)), unsignedByteToInt(tag.get(2)), unsignedByteToInt(tag.get(3)), unsignedByteToInt(tag.get(4)), unsignedByteToInt(tag.get(5)), unsignedByteToInt(tag.get(6)), unsignedByteToInt(tag.get(7)), unsignedByteToInt(tag.get(8)), unsignedByteToInt(tag.get(9)), unsignedByteToInt(tag.get(10)), unsignedByteToInt(tag.get(11)), unsignedByteToInt(tag.get(12)), unsignedByteToInt(tag.get(13)), unsignedByteToInt(tag.get(14)), unsignedByteToInt(tag.get(15))));
+						BPF.getInstance().getBPFLogger().info(TAG, String.format( "validate(): Tag comparison successful for tag: 0x %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h ", unsignedByteToInt(tag.get(0)), unsignedByteToInt(tag.get(1)), unsignedByteToInt(tag.get(2)), unsignedByteToInt(tag.get(3)), unsignedByteToInt(tag.get(4)), unsignedByteToInt(tag.get(5)), unsignedByteToInt(tag.get(6)), unsignedByteToInt(tag.get(7)), unsignedByteToInt(tag.get(8)), unsignedByteToInt(tag.get(9)), unsignedByteToInt(tag.get(10)), unsignedByteToInt(tag.get(11)), unsignedByteToInt(tag.get(12)), unsignedByteToInt(tag.get(13)), unsignedByteToInt(tag.get(14)), unsignedByteToInt(tag.get(15))));
 					} 
 					catch (Exception e) 
 					{
 						BPF.getInstance().getBPFLogger().error(TAG, "validate: tag comparison failed");
+//						e.printStackTrace();
 						if ( locals !=  null ) //GOTO FAIL
 							locals.set_proc_flags ((short) (proc_flags_t.CS_BLOCK_FAILED_VALIDATION.getCode() | proc_flags_t.CS_BLOCK_COMPLETED_DO_NOT_FORWARD.getCode()));
 						return false;

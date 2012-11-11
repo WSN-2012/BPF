@@ -86,8 +86,8 @@ public class KeySteward
 		}
 		
 		//set up the generator
-		CMSEnvelopedDataGenerator1 gen = new CMSEnvelopedDataGenerator1();
-
+//		CMSEnvelopedDataGenerator1 gen = new CMSEnvelopedDataGenerator1();
+		CMSEnvelopedDataGenerator1 gen = new ext.org.bouncycastle.cms.CMSEnvelopedDataGenerator1();
 		//add the recipient's public key to the cms message. This key will be used to encrypt the sym key.
 		//it also fills the rid field in KeyTransRecipientInfo.
 		gen.addKeyTransRecipient(cert);
@@ -128,7 +128,7 @@ public class KeySteward
 	public static int decrypt(
 			IByteBuffer       enc_data,
 			long        enc_data_len,
-			IByteBuffer   dec_key) throws Exception //TODO: be more specific!
+			IByteBuffer   dec_key) throws Exception
 	{
 		BPF.getInstance().getBPFLogger().debug(TAG,"Decrypting symmetric key...");
 		
@@ -138,8 +138,8 @@ public class KeySteward
 			return -1;
 
 		long[] len = new long[1];
-		len[0]=enc_data_len;
-		//SDNV.decode(enc_data, len);
+//		len[0]=enc_data_len;
+		SDNV.decode(enc_data, len);
 		BPF.getInstance().getBPFLogger().debug(TAG,"length of CMS encoded key field: " + len[0]);
 		
 		EndpointID local_eid = BundleDaemon.getInstance().local_eid();
