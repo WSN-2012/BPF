@@ -66,9 +66,9 @@ public class C_BlockProcessor extends BlockProcessor
 			return cc;
 		}
 
-		if ( block.locals() == null ) {      // then we need to parse it
+//		if ( block.locals() == null ) {      // then we need to parse it
 			Ciphersuite.parse(block);
-		}
+//		}
 
 		return cc;
 	}
@@ -148,6 +148,8 @@ public class C_BlockProcessor extends BlockProcessor
 		{  //yes - this is ours 
 
 			p = (Ciphersuite_C3) Ciphersuite.find_suite( locals.owner_cs_num() );
+//			p = (Ciphersuite_C3) Ciphersuite.default_suite();
+			
 			if ( p != null ) 
 			{
 				result = p.validate(bundle, block_list, block, reception_reason, deletion_reason);

@@ -223,6 +223,13 @@ public class Ciphersuite_C3 extends Ciphersuite
 			BPF.getInstance().getBPFLogger().debug(TAG, "validate() locals.correlator() " + locals.correlator());
 			BPF.getInstance().getBPFLogger().debug(TAG, "validate() security params, len = " + len);
 			
+//			IByteBuffer x = locals.security_result();
+//			String xs = "";
+//			for (int i = 0; i < x.capacity(); i++){
+//				xs += String.format(  "%2.2h ", Ciphersuite_C3.unsignedByteToInt(x.get()));
+//			}
+//			BPF.getInstance().getBPFLogger().info(TAG, "SECURITY RESULT: " + xs);
+			
 			while ( len > 0 ) 
 			{
 				//we parse the params: type-length-value
@@ -328,7 +335,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 					try {
 						KeySteward.decrypt(buf, field_length, db);
 					} catch (Exception e) {
-						BPF.getInstance().getBPFLogger().error(TAG, "The key could not be decrypted. Deleting bundle...");
+						BPF.getInstance().getBPFLogger().error(TAG, "The key could not be decrypted. Exception: " + e.getMessage());
 						return false;
 					}
 					//decrypt DOES NOT MOVE  the buf position!

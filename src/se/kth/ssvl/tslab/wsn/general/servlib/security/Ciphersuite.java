@@ -228,6 +228,14 @@ public class Ciphersuite
 			BPF.getInstance().getBPFLogger().error(TAG, "find_suite: Suite number: "+suiteNum +". out of bounds.");
 		return ret;
 	}
+	
+	public static Ciphersuite default_suite()
+	{
+		Ciphersuite ret = null;
+		BPF.getInstance().getBPFLogger().debug(TAG, "default_suite()");
+		ret = ciphersuites_[3];
+		return ret;
+	}
 
 	public static void init_default_ciphersuites()
 	{
