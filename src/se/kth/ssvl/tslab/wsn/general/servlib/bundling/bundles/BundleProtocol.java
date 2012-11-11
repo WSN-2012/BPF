@@ -460,7 +460,6 @@ public class BundleProtocol {
 			if (info.complete()) {
 				data.mark();
 				byte bundle_block_type_byte = data.get();
-				BPF.getInstance().getBPFLogger().info(TAG, String.format(  "bundle_block_type_byte: 0x %2.2h", Ciphersuite_C3.unsignedByteToInt(bundle_block_type_byte)));
 				bundle_block_type_t type = bundle_block_type_t
 						.get(bundle_block_type_byte);
 				data.reset();
@@ -482,6 +481,8 @@ public class BundleProtocol {
 									info.owner().block_type(), info.type(),
 									info.contents().position()));
 
+			int pos_data_temp = data.position();
+			
 			int cc = info.owner().consume(bundle, info, data, len);
 			if (cc < 0) {
 				BPF.getInstance().getBPFLogger().error(
@@ -492,6 +493,9 @@ public class BundleProtocol {
 				return -1;
 			}
 
+			//sd. in C++, "value" is not modified. But in Java, value.pos was modified. We set it back.
+	        data.position(pos_data_temp);
+			
 			// "decrement the amount that was just handled from the overall
 			// total. verify that the block was either completed or
 			// consumed all the data that was passed in." [DTN2]
