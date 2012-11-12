@@ -21,6 +21,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.storage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -255,11 +256,15 @@ public class DatabaseManager {
 				return 0;
 			}
 
+			Map<String, Object> resultRow;
+			
 			if (dbResult.size() < 0) {
 				BPF.getInstance().getBPFLogger().warning(TAG, "get_count: Resulted in 0");
 			} else {
-				BPF.getInstance().getBPFLogger().debug(
-						TAG, "get_count: Counted: " + dbResult.size());
+				resultRow = dbResult.get(0);
+				BPF.getInstance().getBPFLogger().debug(TAG, "get_count: Counted: " + 
+						resultRow.get(resultRow.keySet().iterator().next()));
+				return (Integer) resultRow.get(resultRow.keySet().iterator().next());
 			}
 		} catch (IndexOutOfBoundsException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, "get_count: Id Already deleted");
