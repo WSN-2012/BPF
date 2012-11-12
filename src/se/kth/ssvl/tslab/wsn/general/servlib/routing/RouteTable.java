@@ -342,8 +342,11 @@ public class RouteTable {
 				BPF.getInstance().getBPFLogger().debug(TAG,
 						String.format("check entry %s", entry.toString()));
 
-				if (!entry.dest_pattern().match(eid))
+				if (!entry.dest_pattern().match(eid) &&
+						!BPF.getInstance().getConfig().routes_setting().router_type().equals(
+								router_type_t.EPIDEMIC_BUNDLE_ROUTER)) {
 					continue;
+				}
 
 				if (entry.link() == null) {
 					assert entry.route_to().length() != 0 : "RouteTable get_matching_helper assertion fail";
