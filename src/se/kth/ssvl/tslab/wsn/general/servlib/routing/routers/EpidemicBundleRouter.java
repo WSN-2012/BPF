@@ -48,7 +48,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		String list[] = BundleStore.getInstance().getHashList();
 		if(list == null){
 			BPF.getInstance().getBPFLogger().warning(TAG, "List is empty, sending empty list");
-			list = new String[0];
+			list = new String[]{"empty"};
 		}
 		BPF.getInstance().getBPFLogger().debug(TAG, "size of hashlist: " + list.length);
 		
@@ -93,7 +93,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 				payload += "-";
 			}
 		}
-		
+		BPF.getInstance().getBPFLogger().info(TAG, "List payload: " + payload);
 		bundle.payload().set_data(payload.getBytes());
 
 		
@@ -133,14 +133,22 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 			return;
 		}
 
-		String [] diff = diff(BundleStore.getInstance().getHashList(),neighborList);
-		BPF.getInstance().getBPFLogger().info(TAG, "Diff is: " + Arrays.toString(diff));
-		for(int i = 0; i < diff.length; i++){
-			//get bundle given hash
-			Bundle b = BundleStore.getInstance().getBundle(diff[i]);
-			BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send bundle with hash: " + diff[i]);
-			//queue bundle
-			route_bundle(b);
+		if (neighborList.length > 0 && neighborList[0].equals("empty")) {
+			BPF.getInstance().getBPFLogger().info(TAG,
+							"Received list is empty! Not checking for diffs.");
+		} else {
+			String[] diff = diff(BundleStore.getInstance().getHashList(),
+					neighborList);
+			BPF.getInstance().getBPFLogger()
+					.info(TAG, "Diff is: " + Arrays.toString(diff));
+			for (int i = 0; i < diff.length; i++) {
+				// get bundle given hash
+				Bundle b = BundleStore.getInstance().getBundle(diff[i]);
+				BPF.getInstance().getBPFLogger().debug(TAG,
+								"Trying to send bundle with hash: " + diff[i]);
+				// queue bundle
+				route_bundle(b);
+			}
 		}
 		
 		// Delete the bundle since we are handling it

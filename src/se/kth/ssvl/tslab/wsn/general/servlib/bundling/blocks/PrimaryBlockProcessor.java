@@ -644,7 +644,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 		if (sdnv_len < 0) {
 			throw new BlockProcessorTooShortException();
 		}
-		assert (sdnv_len < 0) : TAG + "read sdnv: incorrect length";
+		assert (sdnv_len > 0) : TAG + "read sdnv: incorrect length";
 
 		return sdnv_len;
 	}
