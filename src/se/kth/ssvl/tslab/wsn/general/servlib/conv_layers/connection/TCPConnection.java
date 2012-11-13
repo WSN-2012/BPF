@@ -360,8 +360,8 @@ public class TCPConnection extends Connection {
 			break_contact(reason_t.CL_ERROR);
 			sendbuf_.position(last_position);
 		} catch (IOException e) {
-
-			BPF.getInstance().getBPFLogger().error(TAG, "writting broken pipe");
+			e.printStackTrace();
+			BPF.getInstance().getBPFLogger().error(TAG, "Pipe is broken: " + e.getMessage());
 			break_contact(reason_t.CL_ERROR);
 			sendbuf_.position(last_position);
 		}
