@@ -314,8 +314,9 @@ public class BundleStore {
 			values.put("type", bundle.payload().location().getCode());
 
 			// calculate and add hash if the bundle is not destined for us
-			BPF.getInstance().getBPFLogger().warning(TAG, bundle.dest().getHostOnly() + "=?=" + BundleDaemon.getInstance().local_eid().getHostOnly());
-			if (!bundle.dest().getHostOnly().equals(BundleDaemon.getInstance().local_eid().getHostOnly())) {
+			BPF.getInstance().getBPFLogger().warning(TAG, "Destination: " + bundle.dest() + ", Local: " + BundleDaemon.getInstance().local_eid());
+			if (!bundle.dest().getHostOnly().equals(BundleDaemon.getInstance().local_eid().getHostOnly())
+					&& !bundle.dest().uri().toString().contains("/epidemic")) {
 				try {
 					byte payload[] = new byte[bundle.payload().length()];
 					bundle.payload().read_data(0, bundle.payload().length(),
@@ -355,10 +356,8 @@ public class BundleStore {
 				}
 				
 				String bundle_filname = bundleFileName + bundle.durable_key();
-				BPF.getInstance().getBPFLogger().error(TAG, "Updating One by One");
 				
 				// Testing functions
-				BPF.getInstance().getBPFLogger().error(TAG, "Updating Object");
 				boolean result = impt_storage_.add_object(bundle,
 						bundle_filname);
 

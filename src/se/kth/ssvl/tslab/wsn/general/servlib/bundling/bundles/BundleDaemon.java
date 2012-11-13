@@ -823,11 +823,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		boolean ok_to_route = true;
 
-		// Don't add the bundle to the pending list if we use epidemic routing.
-		// Sending of bundles will be handled in the epidemic routing triggered by the receiving of the neighbor list
-		if (BPF.getInstance().getConfig().routes_setting().router_type() != router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
-			pending_bundles_.push_back(bundle);
-		}
+		pending_bundles_.push_back(bundle);
 
 			
 		if (add_to_store) {

@@ -14,7 +14,9 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.loca
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.EpidemicRegistration;
@@ -104,7 +106,9 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 		// send bundle
 //		actions_.queue_bundle(bundle, link, info.action(), info.custody_spec());
-		route_bundle(bundle);
+//		route_bundle(bundle);
+		BundleDaemon.getInstance().post(
+				new BundleReceivedEvent(bundle, event_source_t.EVENTSRC_APP));
 		
 		//send bundle
 		BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send bundle with payload: " + payload);
@@ -148,13 +152,15 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 				BPF.getInstance().getBPFLogger().debug(TAG,
 								"Trying to send bundle with hash: " + diff[i]);
 				// queue bundle
-				route_bundle(b);
+//				route_bundle(b);
+				BundleDaemon.getInstance().post(
+						new BundleReceivedEvent(b, event_source_t.EVENTSRC_APP));
 			}
 		}
 		
 		// Delete the bundle since we are handling it
-		BundleDaemon.getInstance().post_at_head(new BundleDeleteRequest(bundle,
-				BundleProtocol.status_report_reason_t.REASON_NO_ADDTL_INFO));
+//		BundleDaemon.getInstance().post_at_head(new BundleDeleteRequest(bundle,
+//				BundleProtocol.status_report_reason_t.REASON_NO_ADDTL_INFO));
 
 	}
 	

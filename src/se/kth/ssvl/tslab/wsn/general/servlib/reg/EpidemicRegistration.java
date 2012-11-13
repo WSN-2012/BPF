@@ -26,9 +26,11 @@ public class EpidemicRegistration extends Registration {
 
 	@Override
 	public void deliver_bundle(Bundle bundle) {
-		BPF.getInstance().getBPFLogger().debug(TAG,
+		BPF.getInstance().getBPFLogger().info(TAG,
 				"Epidemic bundle from " + bundle.source());
 		router_.deliver_bundle(bundle);
+		BPF.getInstance().getBPFLogger().debug(TAG,
+				"deliver_bundle done, going to post delivered event and deleterequest event");
 		BundleDaemon.getInstance().post_at_head(
 				new BundleDeliveredEvent(bundle, this));
 		BundleDaemon.getInstance().post_at_head(
