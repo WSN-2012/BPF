@@ -75,7 +75,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		}
 
 		// create bundle containing list
-		Bundle bundle = new Bundle(location_t.MEMORY); //TODO: verify that MEMORY type does not cause problems
+		Bundle bundle = new Bundle(location_t.DISK);
 		bundle.set_dest(new EndpointID(link.remote_eid() + "/epidemic"));
 		bundle.set_source(new EndpointID(BundleDaemon.getInstance().local_eid().str() + "/epidemic"));
 		bundle.set_prevhop(BundleDaemon.getInstance().local_eid());
@@ -103,7 +103,8 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 				CustodyTimerSpec.getDefaultInstance());
 
 		// send bundle
-		actions_.queue_bundle(bundle, link, info.action(), info.custody_spec());
+//		actions_.queue_bundle(bundle, link, info.action(), info.custody_spec());
+		route_bundle(bundle);
 		
 		//send bundle
 		BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send bundle with payload: " + payload);

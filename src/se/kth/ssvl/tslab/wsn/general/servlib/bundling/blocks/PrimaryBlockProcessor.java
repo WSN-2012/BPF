@@ -139,7 +139,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("parsed primary block: version %s length %s",
-							primary.version(), block.data_length()));
+							primary.version(), primary.block_length_value()));
 
 			// Parse the flags.
 			parse_bundle_flags(bundle, primary.processing_flags_value());
