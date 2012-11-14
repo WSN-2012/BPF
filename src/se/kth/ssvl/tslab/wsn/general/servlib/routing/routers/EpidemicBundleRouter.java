@@ -12,6 +12,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.ExpirationTimer;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
@@ -84,7 +85,8 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		bundle.set_custodian(EndpointID.NULL_EID());
 		bundle.set_replyto(new EndpointID(BundleDaemon.getInstance().local_eid().str() + "/epidemic"));
 		bundle.set_singleton_dest(true);
-		bundle.set_expiration(60);
+		bundle.set_expiration(60000);
+		bundle.set_expiration_timer(new ExpirationTimer(bundle));
 		bundle.set_priority(priority_values_t.COS_EXPEDITED);
 
 		//format the payload -> [hash1]-[hash2]-[hash3]...
@@ -138,12 +140,12 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 			return;
 		}
 
-		if (neighborList.length > 0 && neighborList[0].equals("empty")) {
+		String[] local = BundleStore.getInstance().getHashList();
+		if (local == null) {
 			BPF.getInstance().getBPFLogger().info(TAG,
-							"Received list is empty! Not checking for diffs.");
+							"Local list is empty! Not checking for diffs.");
 		} else {
-			String[] diff = diff(BundleStore.getInstance().getHashList(),
-					neighborList);
+			String[] diff = diff(local, neighborList);
 			BPF.getInstance().getBPFLogger()
 					.info(TAG, "Diff is: " + Arrays.toString(diff));
 			for (int i = 0; i < diff.length; i++) {
