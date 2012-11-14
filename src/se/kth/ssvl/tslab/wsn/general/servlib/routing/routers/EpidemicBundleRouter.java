@@ -107,10 +107,10 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 				CustodyTimerSpec.getDefaultInstance());
 
 		// send bundle
-//		actions_.queue_bundle(bundle, link, info.action(), info.custody_spec());
+		actions_.queue_bundle(bundle, link, info.action(), info.custody_spec());
 //		route_bundle(bundle);
-		BundleDaemon.getInstance().post(
-				new BundleReceivedEvent(bundle, event_source_t.EVENTSRC_APP));
+//		BundleDaemon.getInstance().post(
+//				new BundleReceivedEvent(bundle, event_source_t.EVENTSRC_ADMIN));
 		
 		//send bundle
 		BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send bundle with payload: " + payload);
@@ -155,8 +155,8 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 								"Trying to send bundle with hash: " + diff[i]);
 				// queue bundle
 //				route_bundle(b);
-				BundleDaemon.getInstance().post(
-						new BundleReceivedEvent(b, event_source_t.EVENTSRC_APP));
+//				BundleDaemon.getInstance().post(
+//						new BundleReceivedEvent(b, event_source_t.EVENTSRC_APP));
 			}
 		}
 		

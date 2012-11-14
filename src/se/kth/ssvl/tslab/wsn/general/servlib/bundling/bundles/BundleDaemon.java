@@ -510,6 +510,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		dispatch_event(event);
 
 		if (!event.daemon_only()) {
+			BPF.getInstance().getBPFLogger().error(TAG, "Dispatching event to router and contactmgr (daemon_only = false)");
 			// "dispatch the event to the router and also
 			// the contact manager" [DTN2]
 			router_.handle_event(event);
@@ -814,14 +815,22 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	 * @return true "if the bundle is legal to be delivered and/or forwarded,
 	 *         false if it's already expired" [DTN2]
 	 */
-	protected boolean add_to_pending(Bundle bundle, boolean add_to_store) {
+	protected boolean add_to_pending(Bundle bundle, boolean add_to_store, boolean fromApp) {
 		BPF.getInstance()
 				.getBPFLogger()
 				.debug(TAG,
 						String.format("adding bundle id %d to pending list",
 								bundle.bundleid()));
 
-		boolean ok_to_route = true;
+		boolean ok_to_route;
+		
+		if (BPF.getInstance().getConfig().routes_setting().router_type() == router_type_t.EPIDEMIC_BUNDLE_ROUTER
+				&& fromApp) {
+			ok_to_route = false;
+		} else {
+			ok_to_route = true;
+		}
+		
 
 		pending_bundles_.push_back(bundle);
 
@@ -1135,19 +1144,19 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		 */
 		Bundle bundle = null;
 
-		if (event.type() == event_type_t.BUNDLE_TRANSMITTED) {
-			bundle = ((BundleTransmittedEvent) event).bundle();
-
-		}
-
-		if (event.type() == event_type_t.BUNDLE_DELIVERED) {
-			bundle = ((BundleDeliveredEvent) event).bundle();
-
-		}
-
-		if (bundle != null) {
-			try_to_delete(bundle);
-		}
+//		if (event.type() == event_type_t.BUNDLE_TRANSMITTED) {
+//			bundle = ((BundleTransmittedEvent) event).bundle();
+//
+//		}
+//
+//		if (event.type() == event_type_t.BUNDLE_DELIVERED) {
+//			bundle = ((BundleDeliveredEvent) event).bundle();
+//
+//		}
+//
+//		if (bundle != null) {
+//			try_to_delete(bundle);
+//		}
 
 		/**
 		 * "Once the bundle expired event has been processed, the bundle
@@ -1636,7 +1645,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		// If add_to_pending returns false, the bundle has already expired"
 		// [DTN2]
-		if (add_to_pending(bundle, false))
+		if (add_to_pending(bundle, false, false))
 			BundleDaemon.getInstance().post(
 					new BundleInjectedEvent(bundle, event.request_id()));
 
@@ -1930,7 +1939,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		 * will persist in the network." [DTN2]
 		 */
 		boolean ok_to_route = add_to_pending(bundle,
-				(event.source() != event_source_t.EVENTSRC_STORE));
+				(event.source() != event_source_t.EVENTSRC_STORE),
+				(event.source() == event_source_t.EVENTSRC_APP));
 
 		if (!ok_to_route) {
 			event.set_daemon_only(true);
@@ -3224,15 +3234,15 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 						String.format("pending_bundles size %d",
 								pending_bundles_.size()));
 		if (!bundle.is_queued_on(pending_bundles_)) {
-			if (bundle.expired()) {
-				BPF.getInstance()
-						.getBPFLogger()
-						.debug(TAG,
-								String.format(
-										"try_to_delete( bundle id %d): bundle already expired",
-										bundle.bundleid()));
-				return false;
-			}
+//			if (bundle.expired()) {
+//				BPF.getInstance()
+//						.getBPFLogger()
+//						.debug(TAG,
+//								String.format(
+//										"try_to_delete( bundle id %d): bundle already expired",
+//										bundle.bundleid()));
+//				return false;
+//			}
 
 			BPF.getInstance()
 					.getBPFLogger()

@@ -332,38 +332,39 @@ public class BundleStore {
 					BPF.getInstance().getBPFLogger()
 							.warning(TAG, "This is to be hashed: " + toHash);
 				} catch (NoSuchAlgorithmException e) {
-					BPF.getInstance()
-							.getBPFLogger()
-							.error(TAG,
-									"Exception during hash calculation: "
-											+ e.getMessage());
+					BPF.getInstance().getBPFLogger().error(TAG, "Exception during hash calculation: "
+							+ e.getMessage());
 				}
-			}
 
-			String condition = "id = " + bundleid;
+				String condition = "id = " + bundleid;
 
-			if (impt_sqlite_.update(table, values, condition, null)) {
-				
-				if (!saved_bundles_.containsKey(bundle.bundleid())) {
-					long bundle_size = impt_storage_
-							.get_file_size(bundleFileName
-									+ bundle.durable_key());
-					bundle_size += bundle.durable_size();
-					saved_bundles_.put(bundle.bundleid(), bundle_size);
-					global_storage_.add_total_size(bundle_size);
-					BPF.getInstance().getBPFLogger().debug(TAG, "Added size : " + bundle.durable_size()
-							+ " to " + global_storage_.get_total_size());
+				if (impt_sqlite_.update(table, values, condition, null)) {
+
+					if (!saved_bundles_.containsKey(bundle.bundleid())) {
+						long bundle_size = impt_storage_
+								.get_file_size(bundleFileName
+										+ bundle.durable_key());
+						bundle_size += bundle.durable_size();
+						saved_bundles_.put(bundle.bundleid(), bundle_size);
+						global_storage_.add_total_size(bundle_size);
+						BPF.getInstance().getBPFLogger().debug(TAG, "Added size : " + bundle.durable_size()+ " to " 
+								+ global_storage_.get_total_size());
+					}
+
+					String bundle_filname = bundleFileName
+							+ bundle.durable_key();
+
+					// Testing functions
+					boolean result = impt_storage_.add_object(bundle,
+							bundle_filname);
+
+					return result;
 				}
-				
-				String bundle_filname = bundleFileName + bundle.durable_key();
-				
-				// Testing functions
-				boolean result = impt_storage_.add_object(bundle,
-						bundle_filname);
-
-				return result;
 			}
 		}
+		
+		
+		// Return false since this wasn't on the DISK
 		return false;
 	}
 
