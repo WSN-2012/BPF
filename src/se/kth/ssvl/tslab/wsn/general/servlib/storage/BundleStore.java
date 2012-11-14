@@ -360,6 +360,8 @@ public class BundleStore {
 
 					return result;
 				}
+			} else {
+				return true;
 			}
 		}
 		
