@@ -1939,7 +1939,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		 * will persist in the network." [DTN2]
 		 */
 		boolean ok_to_route = add_to_pending(bundle,
-				(event.source() != event_source_t.EVENTSRC_STORE),
+				(event.source() != event_source_t.EVENTSRC_STORE)
+						&& bundle.dest().getService().contains("epidemic"),
 				(event.source() == event_source_t.EVENTSRC_APP));
 
 		if (!ok_to_route) {
@@ -2017,6 +2018,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Bundle received and doing a callback to the framework user");
 			BPF.getInstance().getBPFActionReceiver().bundleReceived(bundle);
+			event.set_daemon_only(true);
 		}
 
 		/*

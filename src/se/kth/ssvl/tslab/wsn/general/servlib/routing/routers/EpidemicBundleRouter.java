@@ -11,10 +11,12 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleActions;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.ExpirationTimer;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
@@ -108,12 +110,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 		// send bundle
 		actions_.queue_bundle(bundle, link, info.action(), info.custody_spec());
-//		route_bundle(bundle);
-//		BundleDaemon.getInstance().post(
-//				new BundleReceivedEvent(bundle, event_source_t.EVENTSRC_ADMIN));
-		
-		//send bundle
-		BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send bundle with payload: " + payload);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send Epidemic List with payload: " + payload);
 	}
 
 	public void deliver_bundle(Bundle bundle) {
@@ -154,16 +151,11 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 				BPF.getInstance().getBPFLogger().debug(TAG,
 								"Trying to send bundle with hash: " + diff[i]);
 				// queue bundle
-//				route_bundle(b);
-//				BundleDaemon.getInstance().post(
-//						new BundleReceivedEvent(b, event_source_t.EVENTSRC_APP));
+				//route_bundle_once(b); ?
+				BundleDaemon.getInstance().post(
+						new BundleDeleteRequest(b, status_report_reason_t.REASON_NO_ADDTL_INFO));
 			}
 		}
-		
-		// Delete the bundle since we are handling it
-//		BundleDaemon.getInstance().post_at_head(new BundleDeleteRequest(bundle,
-//				BundleProtocol.status_report_reason_t.REASON_NO_ADDTL_INFO));
-
 	}
 	
 	/**
