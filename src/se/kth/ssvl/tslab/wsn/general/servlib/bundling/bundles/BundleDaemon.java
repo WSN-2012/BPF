@@ -823,6 +823,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		boolean ok_to_route = true;
 		
+		BPF.getInstance().getBPFLogger().warning(TAG, "add_to_store: " + add_to_store);
 		BPF.getInstance().getBPFLogger().warning(TAG, "add_to_pending: fromApp = " + fromApp);
 		BPF.getInstance().getBPFLogger().warning(TAG, "add_to_pending: fromPeer = " + fromPeer);
 		
@@ -1954,7 +1955,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		 */
 		boolean ok_to_route = add_to_pending(bundle,
 				(event.source() != event_source_t.EVENTSRC_STORE)
-						&& bundle.dest().getService().contains("epidemic"),
+						&& !bundle.dest().getService().contains("epidemic"),
 				(event.source() == event_source_t.EVENTSRC_APP),
 				(event.source() == event_source_t.EVENTSRC_PEER));
 
