@@ -815,7 +815,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	 * @return true "if the bundle is legal to be delivered and/or forwarded,
 	 *         false if it's already expired" [DTN2]
 	 */
-	protected boolean add_to_pending(Bundle bundle, boolean add_to_store, boolean fromApp) {
+	protected boolean add_to_pending(Bundle bundle, boolean add_to_store, boolean fromApp, boolean fromPeer) {
 		BPF.getInstance()
 				.getBPFLogger()
 				.debug(TAG,
@@ -825,7 +825,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		boolean ok_to_route;
 		
 		if (BPF.getInstance().getConfig().routes_setting().router_type() == router_type_t.EPIDEMIC_BUNDLE_ROUTER
-				&& fromApp) {
+				&& (fromApp || (fromPeer && bundle.dest().str()
+						.contains(BundleDaemon.getInstance().local_eid().str())))) {
 			ok_to_route = false;
 		} else {
 			ok_to_route = true;
@@ -1645,7 +1646,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		// If add_to_pending returns false, the bundle has already expired"
 		// [DTN2]
-		if (add_to_pending(bundle, false, false))
+		if (add_to_pending(bundle, false, false, false))
 			BundleDaemon.getInstance().post(
 					new BundleInjectedEvent(bundle, event.request_id()));
 
@@ -1941,7 +1942,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		boolean ok_to_route = add_to_pending(bundle,
 				(event.source() != event_source_t.EVENTSRC_STORE)
 						&& bundle.dest().getService().contains("epidemic"),
-				(event.source() == event_source_t.EVENTSRC_APP));
+				(event.source() == event_source_t.EVENTSRC_APP),
+				(event.source() == event_source_t.EVENTSRC_PEER));
 
 		if (!ok_to_route) {
 			event.set_daemon_only(true);

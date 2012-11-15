@@ -158,6 +158,14 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		}
 	}
 	
+	protected int route_bundle(Bundle bundle) {
+		
+		BPF.getInstance().getBPFLogger().info(TAG,
+				"route_bundle has been called but we are not doing anything");
+		
+		return 0;
+	}
+	
 	/**
 	 * Get the items that are not in the remote list compared to our local
 	 * @param local Our local list
