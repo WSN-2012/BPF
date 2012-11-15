@@ -2,6 +2,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.routing.routers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
@@ -22,8 +23,11 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.EpidemicRegistration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntry;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntryVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
@@ -80,7 +84,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		}
 
 		// create bundle containing list
-		Bundle bundle = new Bundle(location_t.DISK);
+		Bundle bundle = new Bundle(location_t.MEMORY);
 		bundle.set_dest(new EndpointID(link.remote_eid() + "/epidemic"));
 		bundle.set_source(new EndpointID(BundleDaemon.getInstance().local_eid().str() + "/epidemic"));
 		bundle.set_prevhop(BundleDaemon.getInstance().local_eid());
@@ -113,7 +117,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send Epidemic List with payload: " + payload);
 	}
 
-	public void deliver_bundle(Bundle bundle) {
+	public void deliver_bundle(Bundle bundle, Link link) {
 		IByteBuffer buf = new SerializableByteBuffer(1000);
 
 		if (!bundle.payload().read_data(0, bundle.payload().length(), buf)) {
@@ -151,12 +155,19 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 				BPF.getInstance().getBPFLogger().debug(TAG,
 								"Trying to send bundle with hash: " + diff[i]);
 				// queue bundle
-				//route_bundle_once(b); ?
+				ForwardingInfo info = new ForwardingInfo(ForwardingInfo.state_t.NONE,
+						ForwardingInfo.action_t.FORWARD_ACTION, link.name_str(),
+						0xffffffff, link.remote_eid(),
+						CustodyTimerSpec.getDefaultInstance());
+
+				// send bundle
+				actions_.queue_bundle(b, link, info.action(), info.custody_spec());
 				BundleDaemon.getInstance().post(
 						new BundleDeleteRequest(b, status_report_reason_t.REASON_NO_ADDTL_INFO));
 			}
 		}
 	}
+	
 	
 	protected int route_bundle(Bundle bundle) {
 		

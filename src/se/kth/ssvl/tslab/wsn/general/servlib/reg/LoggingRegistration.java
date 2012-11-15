@@ -23,6 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.reg;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
@@ -63,7 +64,7 @@ public class LoggingRegistration extends Registration {
 	 */
 
 	@Override
-	public void deliver_bundle(Bundle b) {
+	public void deliver_bundle(Bundle b, Link link) {
 
 		StringBuffer buf = new StringBuffer();
 		b.format_verbose(buf);

@@ -26,6 +26,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockingBundleList;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
@@ -80,7 +81,7 @@ public class APIRegistration extends Registration {
 	 */
 
 	@Override
-	public void deliver_bundle(Bundle bundle) {
+	public void deliver_bundle(Bundle bundle, Link link) {
 
 		if (!active() && (failure_action_ == failure_action_t.DROP)) {
 			BPF.getInstance().getBPFLogger()

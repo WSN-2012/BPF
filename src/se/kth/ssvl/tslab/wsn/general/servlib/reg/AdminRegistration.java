@@ -26,6 +26,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.adm
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodySignal;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.CustodySignalEvent;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
@@ -69,7 +70,7 @@ public class AdminRegistration extends Registration {
 	 *            Administrative bundle to process.
 	 */
 	@Override
-	public void deliver_bundle(Bundle bundle) {
+	public void deliver_bundle(Bundle bundle, Link link) {
 
 		int payload_len = bundle.payload().length();
 

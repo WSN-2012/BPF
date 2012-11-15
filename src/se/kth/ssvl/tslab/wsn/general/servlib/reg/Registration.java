@@ -33,6 +33,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleInfoCache;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.RegistrationExpiredEvent;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
@@ -196,7 +197,7 @@ public abstract class Registration implements Serializable {
 	 *            Bundle to deliver
 	 */
 
-	public abstract void deliver_bundle(Bundle bundle);
+	public abstract void deliver_bundle(Bundle bundle, Link link);
 
 	/**
 	 * Function to delete previously created file when migrate to api temp
@@ -214,7 +215,7 @@ public abstract class Registration implements Serializable {
 	/**
 	 * Deliver the bundle if it isn't a duplicate.
 	 */
-	public boolean deliver_if_not_duplicate(Bundle bundle) {
+	public boolean deliver_if_not_duplicate(Bundle bundle, Link link) {
 		if (!delivery_cache_.add_entry(bundle, EndpointID.NULL_EID())) {
 			BPF.getInstance().getBPFLogger().error(
 					TAG,
@@ -234,7 +235,7 @@ public abstract class Registration implements Serializable {
 
 		BPF.getInstance().getBPFLogger().debug(TAG,
 				String.format("delivering bundle %s", bundle.bundleid()));
-		deliver_bundle(bundle);
+		deliver_bundle(bundle, link);
 
 		return true;
 	}

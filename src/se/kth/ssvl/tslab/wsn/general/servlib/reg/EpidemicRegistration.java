@@ -6,6 +6,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.status_report_reason_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.EpidemicBundleRouter;
 
@@ -25,10 +26,10 @@ public class EpidemicRegistration extends Registration {
 	}
 
 	@Override
-	public void deliver_bundle(Bundle bundle) {
+	public void deliver_bundle(Bundle bundle, Link link) {
 		BPF.getInstance().getBPFLogger().info(TAG,
 				"Epidemic bundle from " + bundle.source());
-		router_.deliver_bundle(bundle);
+		router_.deliver_bundle(bundle, link);
 		BPF.getInstance().getBPFLogger().debug(TAG,
 				"deliver_bundle done, going to post delivered event and deleterequest event");
 		BundleDaemon.getInstance().post_at_head(
