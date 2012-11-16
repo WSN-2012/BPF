@@ -162,8 +162,8 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 				// send bundle
 				actions_.queue_bundle(b, link, info.action(), info.custody_spec());
-				BundleDaemon.getInstance().post(
-						new BundleDeleteRequest(b, status_report_reason_t.REASON_NO_ADDTL_INFO));
+//				BundleDaemon.getInstance().post(
+//						new BundleDeleteRequest(b, status_report_reason_t.REASON_NO_ADDTL_INFO));
 			}
 		}
 	}

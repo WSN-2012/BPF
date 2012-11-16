@@ -20,8 +20,10 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
+import java.util.Comparator;
 import java.util.Date;
 
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon.BundleEventPriorityComparator;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 
 /**
@@ -30,7 +32,7 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
  * 
  * @author Rerngvit Yanggratoke (rerngvit@kth.se)
  */
-public class BundleEvent {
+public class BundleEvent implements Comparable<BundleEvent> {
 	/**
 	 * The enum indicating the Event Type
 	 */
@@ -178,6 +180,11 @@ public class BundleEvent {
 
 	public String toString() {
 		return type_str() + " (@" + Integer.toHexString(super.hashCode()) + ") (prio: " + priority_ + ")";
+	}
+
+	@Override
+	public int compareTo(BundleEvent y) {
+		return BundleEventPriorityComparator.getInstance().compare(this, y);
 	}
 	
 }

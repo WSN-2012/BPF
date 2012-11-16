@@ -21,6 +21,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -186,7 +187,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	 * Comparator implementation to sort BundleEvent according to the event's
 	 * priority
 	 */
-	private static class BundleEventPriorityComparator implements
+	public static class BundleEventPriorityComparator implements
 			Comparator<BundleEvent> {
 
 		private static BundleEventPriorityComparator instance_;
@@ -693,14 +694,6 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 			BundleEvent event;
 			try {
-				
-				BPF.getInstance().getBPFLogger().debug(TAG, "********************* EVENT QUEUE **********************");
-				Iterator<BundleEvent> i = eventq_.iterator();
-				while (i.hasNext()) {
-					BPF.getInstance().getBPFLogger().debug(TAG, i.next().toString());
-				}
-				BPF.getInstance().getBPFLogger().debug(TAG, "********************************************************");
-				
 				event = eventq_.take();
 
 				handle_event(event);
@@ -848,8 +841,11 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 			// we do not want to route it, if it is from the app, because it is when we are sending a bundle (any)
 			// or we don not want to route it, if it came from a peer and it was for us. In this case we 
 			// want to store it only
-			if (fromApp || (fromPeer && bundle.dest().str()
-					.contains(BundleDaemon.getInstance().local_eid().str()))) {
+//			if (fromApp || (fromPeer && bundle.dest().str()
+//					.contains(BundleDaemon.getInstance().local_eid().str()))) {
+//				ok_to_route = false;
+//			}
+			if (fromApp) {
 				ok_to_route = false;
 			}
 			
@@ -2276,7 +2272,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 					new CustodyTimer(fwdinfo.timestamp(), fwdinfo
 							.custody_spec(), bundle, link));
 		}
-
+		
 	}
 
 	protected void handle_cla_parameters_query(CLAParametersQueryRequest request) {
@@ -3313,6 +3309,18 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		return delete_bundle(bundle,
 				BundleProtocol.status_report_reason_t.REASON_NO_ADDTL_INFO);
 
+	}
+	
+	
+	protected void printEventQueue() {
+		BPF.getInstance().getBPFLogger().debug(TAG, "********************* EVENT QUEUE **********************");
+		BundleEvent[] bea = new BundleEvent[eventq_.size()];
+		eventq_.toArray(bea);
+		Arrays.sort(bea);
+		for (int i=0; i < bea.length; i++){
+			BPF.getInstance().getBPFLogger().debug(TAG, bea[i].toString());
+		}
+		BPF.getInstance().getBPFLogger().debug(TAG, "********************************************************");
 	}
 
 }
