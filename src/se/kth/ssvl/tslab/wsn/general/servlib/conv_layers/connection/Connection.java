@@ -908,10 +908,10 @@ public abstract class Connection extends CLConnection {
 			BPF.getInstance().getBPFLogger().debug(TAG, text);
 		
 			//TODO: verify that it doesn't cause problems! 
-//			return finish_bundle(inflight);
-			
-			current_inflight_ = null;
-			return true;
+			return finish_bundle(inflight);
+//			
+//			current_inflight_ = null;
+//			return true;
 		}
 
 		byte flags = 0;
