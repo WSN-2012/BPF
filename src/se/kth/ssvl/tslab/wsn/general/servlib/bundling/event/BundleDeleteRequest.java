@@ -101,4 +101,9 @@ public class BundleDeleteRequest extends BundleEvent {
 	public void set_reason(BundleProtocol.status_report_reason_t reason) {
 		reason_ = reason;
 	}
+	
+	public String toString() {
+		return type_str() + " (@" + Integer.toHexString(super.hashCode())  +
+				") (prio: " + super.priority() + ")" + " for bundle " + bundle_.bundleid();
+	}
 };

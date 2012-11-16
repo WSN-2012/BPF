@@ -198,16 +198,22 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 			return instance_;
 		}
 
-		public int compare(BundleEvent event1, BundleEvent event2) {
-
-			// according the PriorityQueue the lower the output value the closer
-			// to the top of the queue
-			if (event1.priority() < event2.priority())
-				return 1;
-			else if (event1.priority() > event1.priority())
-				return -1;
-			else
-				return 0;
+		public int compare(BundleEvent x, BundleEvent y) {
+	    	// Error checking
+	    	if (y == null && x != null) {
+	    		return -1;
+	    	} else if (x == null && y != null) {
+	    		return 1;
+	    	} else if (x == null && y == null) {
+	    		return 0;
+	    	}
+	    	
+	    	if (x.priority() > y.priority()) {
+	    		return -1;
+	    	} else if (x.priority() < y.priority()) {
+	    		return 1;
+	    	}
+	        return 0;
 		}
 
 	}
@@ -687,6 +693,14 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 			BundleEvent event;
 			try {
+				
+				BPF.getInstance().getBPFLogger().debug(TAG, "********************* EVENT QUEUE **********************");
+				Iterator<BundleEvent> i = eventq_.iterator();
+				while (i.hasNext()) {
+					BPF.getInstance().getBPFLogger().debug(TAG, i.next().toString());
+				}
+				BPF.getInstance().getBPFLogger().debug(TAG, "********************************************************");
+				
 				event = eventq_.take();
 
 				handle_event(event);
@@ -1859,6 +1873,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 			 */
 			if (bundle.receive_rcpt()
 					|| reception_reason[0] != BundleProtocol.status_report_reason_t.REASON_NO_ADDTL_INFO) {
+				BPF.getInstance().getBPFLogger().error(TAG, "reception_reason is not NO_ADDTL_INFO");
 				generate_status_report(bundle,
 						BundleStatusReport.flag_t.STATUS_RECEIVED,
 						reception_reason[0]);
@@ -1910,6 +1925,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 			stats_.duplicate_bundles_++;
 
 			if (bundle.custody_requested() && duplicate.local_custody()) {
+				BPF.getInstance().getBPFLogger().error(TAG, "Custody was redundant");
 				generate_custody_signal(
 						bundle,
 						false,

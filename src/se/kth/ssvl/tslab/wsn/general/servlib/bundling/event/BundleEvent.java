@@ -73,6 +73,7 @@ public class BundleEvent {
 		type_ = type;
 		daemon_only_ = false;
 		processed_notifier_ = null;
+		priority_ = 0;
 	}
 
 	/**
@@ -176,7 +177,7 @@ public class BundleEvent {
 	}
 
 	public String toString() {
-		return type_str() + " (@" + Integer.toHexString(super.hashCode()) + ")";
+		return type_str() + " (@" + Integer.toHexString(super.hashCode()) + ") (prio: " + priority_ + ")";
 	}
 	
 }
