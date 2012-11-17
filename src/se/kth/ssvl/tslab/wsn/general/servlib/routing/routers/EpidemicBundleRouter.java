@@ -1,5 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.routers;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -118,7 +119,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 	}
 
 	public void deliver_bundle(Bundle bundle, Link link) {
-		IByteBuffer buf = new SerializableByteBuffer(1000);
+		IByteBuffer buf = new SerializableByteBuffer(bundle.payload().length());
 
 		if (!bundle.payload().read_data(0, bundle.payload().length(), buf)) {
 			BPF.getInstance().getBPFLogger()
@@ -132,7 +133,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 								+ new String(buf.array()));
 		
 		// Split the list on dashes (hashes and dashes!)
-		String[] neighborList = new String(buf.array()).split("-");
+		String[] neighborList = new String(buf.array(), 0, bundle.payload().length()).split("-");
 		
 		String remote_eid = bundle.source().str().split("/epidemic")[0];
 		if (remote_eid == null) {
@@ -189,15 +190,22 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		}
 		
 		ArrayList<String> res = new ArrayList<String>();
+		boolean foundInRemote = false;
 		for (int i = 0; i < local.length; i++) {
 			for (int j = 0; j < remote.length; j++) {
-				if (local[i] != remote[j]) {
-					res.add(local[i]);
+				if (local[i].contains(remote[j])) {
+					foundInRemote = true;
 				}
+			}
+			
+			// If we found it in the remote, then don't add it to the diff
+			if (!foundInRemote) {
+				res.add(local[i]);
+			} else {
+				foundInRemote = false;
 			}
 		}
 		
 		return res.toArray(new String[res.size()]);
 	}
-	
 }
