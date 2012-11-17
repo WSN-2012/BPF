@@ -907,11 +907,7 @@ public abstract class Connection extends CLConnection {
 							bytes_sent);
 			BPF.getInstance().getBPFLogger().debug(TAG, text);
 		
-			//TODO: verify that it doesn't cause problems! 
-//			return finish_bundle(inflight);
-			
-			current_inflight_ = null;
-			return true;
+			return finish_bundle(inflight);
 		}
 
 		byte flags = 0;
@@ -1053,11 +1049,12 @@ public abstract class Connection extends CLConnection {
 		if (params_.segment_ack_enabled()) {
 			int acked_len = inflight.ack_data().size();
 			if (acked_len != inflight.total_length()) {
-				String text = String
-						.format("check_completed: bundle %d fail because only acked %d/%d",
-								inflight.bundle().bundleid(), acked_len,
-								inflight.total_length());
-				BPF.getInstance().getBPFLogger().error(TAG, text);
+				//TODO: Verify that commenting this out doesn't confuse anyone
+//				String text = String
+//						.format("check_completed: bundle %d fail because only acked %d/%d",
+//								inflight.bundle().bundleid(), acked_len,
+//								inflight.total_length());
+//				BPF.getInstance().getBPFLogger().error(TAG, text);
 				return;
 			}
 		}
