@@ -31,6 +31,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingLog;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockInfoVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.LinkBlockSet;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.exception.BundleLockNotHeldByCurrentThread;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
@@ -63,19 +64,20 @@ public class Bundle implements Serializable {
 	 * For temporary bundles, the location can be set to MEMORY
 	 */
 	public Bundle(BundlePayload.location_t location) {
-
-		int id = BundleStore.getInstance().next_id();
-		init(id);
-
-		payload_ = new BundlePayload(lock_);
-		payload_.init(this.bundleid_, location);
-
-		creation_ts_ = new BundleTimestamp(id);
-		// Only add to persistant storage when the location to store is disk
-		if (location == BundlePayload.location_t.DISK) {
+		if (location == location_t.MEMORY) {
+			init(0);
+			creation_ts_ = new BundleTimestamp(0);
+			payload_ = new BundlePayload(lock_);
+			payload_.init(this.bundleid_, location);
+		} else if (location == location_t.DISK) {
+			int id = BundleStore.getInstance().next_id(); 
+			init(id);
+			creation_ts_ = new BundleTimestamp(id);
+			payload_ = new BundlePayload(lock_);
+			payload_.init(this.bundleid_, location);
+			// Only add to persistant storage when the location to store is disk
 			BundleStore.getInstance().add(this);
 		}
-
 	}
 
 	/**
