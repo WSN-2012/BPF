@@ -651,7 +651,7 @@ public class BundleList implements Serializable {
 		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format(
-						"bundle id %d is added to list [%s] , the size become",
+						"bundle id %d is added to list [%s] , the size is now %d",
 						b.bundleid(), name_, list_.size()));
 
 	}
