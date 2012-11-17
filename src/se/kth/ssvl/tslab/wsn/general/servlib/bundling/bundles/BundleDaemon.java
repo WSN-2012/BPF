@@ -2043,11 +2043,13 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		/*
 		 * Do a callback to the use of the framework with the bundle received.
 		 */
-		if (is_local) {
+		if (is_local && !bundle.dest().getService().contains("epidemic")) {
 			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Bundle received and doing a callback to the framework user");
 			BPF.getInstance().getBPFActionReceiver().bundleReceived(bundle);
 			event.set_daemon_only(true);
+			BundleDaemon.getInstance().post(
+					new BundleDeleteRequest(bundle, status_report_reason_t.REASON_NO_ADDTL_INFO));
 		}
 
 		/*
