@@ -32,9 +32,9 @@ public class EpidemicRegistration extends Registration {
 		router_.deliver_bundle(bundle, link);
 		BPF.getInstance().getBPFLogger().debug(TAG,
 				"deliver_bundle done, going to post delivered event and deleterequest event");
-		BundleDaemon.getInstance().post_at_head(
+		BundleDaemon.getInstance().post(
 				new BundleDeliveredEvent(bundle, this));
-		BundleDaemon.getInstance().post_at_head(
+		BundleDaemon.getInstance().post(
 				new BundleDeleteRequest(bundle,
 						status_report_reason_t.REASON_NO_ADDTL_INFO));
 	}
