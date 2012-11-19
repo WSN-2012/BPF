@@ -550,7 +550,7 @@ public class BundleStore {
 	 */
 
 	public long quota() {
-		return config_.storage_setting().quota() * (long) Math.pow(2, 15);
+		return config_.storage_setting().quota() * (long) Math.pow(2, 20);
 		// return (long) Math.pow(2, 14);
 		// return (long) Math.pow(2, 16);
 	}
