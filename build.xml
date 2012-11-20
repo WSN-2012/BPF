@@ -15,8 +15,8 @@
     <property name="dir.javadoc" value="${dir.build}/javadoc" />
 
 	<!-- Proprties FILES -->
-	<property name="file.app.jar" value="${dir.jar}/${app.name}.jar"/>
-    <property name="file.javadoc.jar" value="${dir.jar}/${app.name}-doc.jar" />
+	<property name="file.app.jar" value="${dir.jar}/WSN-BPF.jar"/>
+    <property name="file.javadoc.jar" value="${dir.jar}/WSN-BPF-doc.jar" />
 	
 
 	<!-- ******************* FILESETS ************************ -->
