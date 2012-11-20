@@ -40,6 +40,8 @@ public class StorageSetting {
 	private int quota;
 	
 	private boolean test_data_log;
+	
+	private boolean keep_copy;
 
 	/**
 	 * Accessor for the quota of storage to consume, Unit is in MB
@@ -91,6 +93,14 @@ public class StorageSetting {
 
 	public void set_test_data_log(boolean test_data_log) {
 		this.test_data_log = test_data_log;
+	}
+	
+	public boolean keep_copy() {
+		return keep_copy;
+	}
+
+	public void set_keep_copy(boolean keep_copy) {
+		this.keep_copy = keep_copy;
 	}
 
 }

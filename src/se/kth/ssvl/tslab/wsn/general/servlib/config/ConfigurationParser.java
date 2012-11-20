@@ -526,6 +526,15 @@ public class ConfigurationParser {
 			throw new InvalidDTNConfigurationException("Test data logging was not set to true or false");
 		}
 		
+		Attr keep_copy = config_element.getAttributeNode("keep_copy");
+		if (keep_copy.getValue().equals("true")) {
+			config.storage_setting().set_keep_copy(true);
+		} else if (keep_copy.getValue().equals("false")) {
+			config.storage_setting().set_keep_copy(false);
+		} else {
+			throw new InvalidDTNConfigurationException("Keep copy was not set to true or false");
+		}
+		
 		return;
 	}
 

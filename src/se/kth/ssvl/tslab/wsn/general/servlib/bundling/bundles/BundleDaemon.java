@@ -2275,6 +2275,14 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 							.custody_spec(), bundle, link));
 		}
 		
+		// if it is not an epidemic list (id=0) and
+		// we are not configured to keep a copy of what we send, then delete bundle
+		if (bundle.bundleid() > 0
+				&& !BPF.getInstance().getConfig().storage_setting().keep_copy()) {
+			BundleDaemon.getInstance().post(
+					new BundleDeleteRequest(bundle,
+							status_report_reason_t.REASON_NO_ADDTL_INFO));
+		}
 	}
 
 	protected void handle_cla_parameters_query(CLAParametersQueryRequest request) {
