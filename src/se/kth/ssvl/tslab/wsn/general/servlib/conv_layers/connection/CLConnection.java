@@ -197,7 +197,7 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 				continue;
 			}
 
-			int timeout = 10;
+			handle_poll_activity(0);
 
 			if (contact_up_) {
 				// "send any data there is to send. if something was sent
@@ -205,7 +205,6 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 				// zero timeout so we can read any data there is to
 				// consume, then return to send another chunk" [DTN2].
 				more_to_send = send_pending_data();
-				timeout = more_to_send ? 0 : poll_timeout_;
 			}
 
 			// "check again here for contact broken since we don't want to
@@ -222,9 +221,6 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 				e.printStackTrace();
 			}
 			
-			if (!more_to_send) {
-				handle_poll_activity(timeout);
-			}
 			
 		}
 	}

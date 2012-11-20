@@ -207,8 +207,9 @@ public class TCPConnection extends Connection {
 		}
 
 		// if we have something to send , send it first
-		if (sendbuf_.position() > 0)
+		if (sendbuf_.position() > 0) {
 			send_data();
+		}
 
 		// poll to receive and process data
 		try {

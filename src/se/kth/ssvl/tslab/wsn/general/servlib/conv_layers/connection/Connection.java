@@ -1351,8 +1351,9 @@ public abstract class Connection extends CLConnection {
 
 				}
 
-				if (uploading_)
-					return false;
+				if (uploading_) {
+					BPF.getInstance().getBPFLogger().warning(TAG, "uploading_ is true, was about to return but didn't!");
+				}
 
 				handle_bundle_begin_download();
 

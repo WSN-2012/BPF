@@ -198,11 +198,19 @@ public class BundleStore {
 			List<Map<String, Object>> hashes = BPF.getInstance().getBPFDB().query(table, null,
 					"hash='" + hash + "'", null, null, null, null, null);
 			
-			// Means we didn't find any or we found too many
-			if (hashes.size() != 1) {
+			// Means we didn't find any
+			if (hashes.size() <= 0) {
+				BPF.getInstance().getBPFLogger().error(TAG, "Could not find bundle with hash: " + hash + 
+						" in store");
 				return null;
 			}
 			
+			// Means we found too many
+			if (hashes.size() > 1) {
+				BPF.getInstance().getBPFLogger().warning(TAG, "Found more than one bundle with hash: " + hash + 
+						" in store");
+			}
+						
 			return get((Integer)hashes.get(0).get("id"));
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, 

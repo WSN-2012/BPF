@@ -113,13 +113,6 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 				0xffffffff, link.remote_eid(),
 				CustodyTimerSpec.getDefaultInstance());
 		
-		BPF.getInstance().getBPFLogger().warning(TAG, "Sleeping for random time");
-		try {
-			Thread.sleep((long)(Math.random()*2000));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
 		// send bundle
 		BPF.getInstance().getBPFLogger().debug(TAG, "Trying to send Epidemic List with payload: " + payload);
 		actions_.queue_bundle(bundle, link, info.action(), info.custody_spec());
@@ -168,8 +161,10 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 						0xffffffff, link.remote_eid(),
 						CustodyTimerSpec.getDefaultInstance());
 
-				// send bundle
-				actions_.queue_bundle(b, link, info.action(), info.custody_spec());
+				if (b != null) {
+					// send bundle
+					actions_.queue_bundle(b, link, info.action(), info.custody_spec());
+				}
 //				BundleDaemon.getInstance().post(
 //						new BundleDeleteRequest(b, status_report_reason_t.REASON_NO_ADDTL_INFO));
 			}
