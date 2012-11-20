@@ -358,7 +358,7 @@ public abstract class Connection extends CLConnection {
 	@Override
 	public void break_contact(ContactEvent.reason_t reason) {
 
-		BPF.getInstance().getBPFLogger().error(TAG,
+		BPF.getInstance().getBPFLogger().warning(TAG,
 				"Breaking contact with reason " + reason.toString());
 		// "it's possible that we can end up calling break_contact multiple
 		// times, if for example we have an error when sending out the

@@ -295,7 +295,7 @@ public class TCPConnection extends Connection {
 		protected void timeout(Date now) {
 
 			BPF.getInstance().getBPFLogger()
-					.error(TAG,
+					.warning(TAG,
 							"write socket timeout timer fire, closing the write_channel");
 			try {
 				write_channel_.close();
@@ -361,8 +361,7 @@ public class TCPConnection extends Connection {
 			break_contact(reason_t.CL_ERROR);
 			sendbuf_.position(last_position);
 		} catch (IOException e) {
-			e.printStackTrace();
-			BPF.getInstance().getBPFLogger().error(TAG, "Pipe is broken: " + e.getMessage());
+			BPF.getInstance().getBPFLogger().warning(TAG, "Could not write to channel. Contact might have disconnected.");
 			break_contact(reason_t.CL_ERROR);
 			sendbuf_.position(last_position);
 		}
