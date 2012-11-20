@@ -330,7 +330,7 @@ public class BundleStore {
 					bundle.payload().read_data(0, bundle.payload().length(),
 							payload);
 					String toHash = new String(bundle.dest().byte_array())
-							+ new String(payload);
+							+ new String(payload) + bundle.creation_ts().seconds();
 					MessageDigest md;
 					md = MessageDigest.getInstance("SHA-1");
 					md.update(toHash.getBytes());
