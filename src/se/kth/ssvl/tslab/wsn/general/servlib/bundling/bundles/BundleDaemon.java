@@ -409,6 +409,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	public void init() {
 
 		BundleProtocol.init_default_processors();
+		local_eid_ = new EndpointID(BPF.getInstance().getConfig()
+				.routes_setting().local_eid());
 		shutting_down_ = false;
 		actions_ = new BundleActions();
 		contactmgr_ = ContactManager.getInstance();
@@ -421,31 +423,6 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		reg_table_ = RegistrationTable.getInstance();
 		stats_ = new Stats();
 		params_ = new Params();
-		local_eid_ = new EndpointID(BPF.getInstance().getConfig()
-				.routes_setting().local_eid());
-		
-		// Create router according to config in the configuration process
-		try {
-			router_ = BundleRouter.create_router(actions_, pending_bundles_, custody_bundles_);
-		} catch (RoutingException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "BundleDeamon:run(), UnknownRouterType ");
-			e.printStackTrace();
-		}
-		
-		// Load all registrations
-		BPF.getInstance().getBPFLogger().debug(TAG, "Going to load registrations");
-		load_registrations();
-
-		// Clean all bad bundles
-		BPF.getInstance().getBPFLogger().debug(TAG, "Started cleaning");
-		BundleStore.getInstance().clean_garbage_bundles();
-		BPF.getInstance().getBPFLogger().debug(TAG, "Cleaning done");
-
-		// Load all the existing bundles that are in the store
-		BPF.getInstance().getBPFLogger().debug(TAG, "Loaded registrations, going to load bundles");
-		load_bundles();
-
-		//new Security();
 	}
 
 	/**
@@ -741,10 +718,36 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	 * Start the Bundle Daemon by executing a new thread
 	 */
 	public void start() {
+		// Create router according to config in the configuration process
+		try {
+			router_ = BundleRouter.create_router(actions_, pending_bundles_,
+					custody_bundles_);
+		} catch (RoutingException e) {
+			BPF.getInstance().getBPFLogger()
+			.error(TAG, "BundleDeamon:run(), UnknownRouterType ");
+			e.printStackTrace();
+		}
+		
+		// Load all registrations
+		BPF.getInstance().getBPFLogger()
+		.debug(TAG, "Going to load registrations");
+		load_registrations();
+		
+		// Clean all bad bundles
+		BPF.getInstance().getBPFLogger().debug(TAG, "Started cleaning");
+		BundleStore.getInstance().clean_garbage_bundles();
+		BPF.getInstance().getBPFLogger().debug(TAG, "Cleaning done");
+		
+		// Load all the existing bundles that are in the store
+		BPF.getInstance().getBPFLogger()
+		.debug(TAG, "Loaded registrations, going to load bundles");
+		load_bundles();
+		
+		// new Security();
+		
 		shutting_down_ = false;
 		thread_ = new Thread(this);
 		thread_.start();
-
 	}
 
 	/**

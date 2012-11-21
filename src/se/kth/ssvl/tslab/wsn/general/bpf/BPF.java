@@ -31,6 +31,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.interfaces.InterfaceTable;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TestDataLogger;
 import se.kth.ssvl.tslab.wsn.general.servlib.discovery.DiscoveryTable;
+import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
@@ -108,17 +109,19 @@ public class BPF {
 		}
 		
 		// Initialize all objects used by the BPF
-    	TestDataLogger.getInstance().init();
-		dtn = new DTN();
-		ConvergenceLayer.init_clayers();
+    	dtn = new DTN();
+    	ConvergenceLayer.init_clayers();
+    	DiscoveryTable.getInstance().init();
+    	BundleDaemon.getInstance().init();
     	ContactManager.getInstance().init();
     	InterfaceTable.init();
-    	DiscoveryTable.getInstance().init();
     	BundleRouter.init();
+    	ProphetQueuing.init();
+    	TestDataLogger.getInstance().init();
+
     	RegistrationStore.getInstance().init();
     	BundleStore.getInstance().init();
     	GlobalStorage.getInstance().init();
-    	BundleDaemon.getInstance().init();
     	
     	// Start the bundle daemon
     	BundleDaemon.getInstance().start();
