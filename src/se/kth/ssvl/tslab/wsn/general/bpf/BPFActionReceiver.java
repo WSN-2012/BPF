@@ -1,6 +1,7 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.Stats;
 
 public interface BPFActionReceiver {
 
@@ -16,5 +17,11 @@ public interface BPFActionReceiver {
 	 * @param bundle The bundle which was received
 	 */
 	public abstract void bundleReceived(Bundle bundle);
+	
+	/**
+	 * This method is called from the framework when there was a change in the statistics. 
+	 * @param stats The Stats object containing the updated statistics
+	 */
+	public abstract void updateStats(Stats stats);
 	
 }

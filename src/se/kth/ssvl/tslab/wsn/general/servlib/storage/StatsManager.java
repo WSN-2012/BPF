@@ -133,6 +133,7 @@ public class StatsManager {
 			return;
 		}
 
+		//update private variables
 		if (stat.equals("size")) {
 			size = value;
 		} else if (stat.equals("stored")) {
@@ -142,6 +143,9 @@ public class StatsManager {
 		} else if (stat.equals("received")) {
 			received = value;
 		}
+		
+		//inform the Service that new statistics are available
+		BPF.getInstance().updateStats(new Stats(size,stored,transmitted,received));
 	}
 
 	public void increase(String stat) {

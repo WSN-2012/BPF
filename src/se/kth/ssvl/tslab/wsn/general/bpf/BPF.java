@@ -227,6 +227,14 @@ public class BPF {
 				StatsManager.getInstance().received());
 	}
 	
+	/**
+	 * Update statistics. Informs the service that there are new statistics.
+	 * @param A Stats object containing the statistics
+	 */
+	public void updateStats(Stats stats) {
+		service.getBPFActionReceiver().updateStats(stats);
+	}
+	
 	
 	/* ******************************************************* */
 	/* ********* GETTER METHODS FOR BPF CLASSES ************** */
