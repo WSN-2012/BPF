@@ -23,6 +23,7 @@ import se.kth.ssvl.tslab.wsn.general.dtnapi.types.DTNRegistrationInfo;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ShutdownRequest;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.Configuration;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.ConfigurationParser;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.exceptions.InvalidDTNConfigurationException;
@@ -31,11 +32,14 @@ import se.kth.ssvl.tslab.wsn.general.servlib.contacts.interfaces.InterfaceTable;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.TestDataLogger;
 import se.kth.ssvl.tslab.wsn.general.servlib.discovery.DiscoveryTable;
+import se.kth.ssvl.tslab.wsn.general.servlib.reg.RegistrationTable;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing.ProphetQueuing;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
+import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
+import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 
@@ -49,9 +53,11 @@ public class BPF {
 	private static BPF instance;
 	private static BPFService service;
 	private static DTN dtn;
-	private static Timer timer_;
-	private static HashMap<VirtualTimerTask, TimerTask> timer_tasks_map_;
+	private static Timer timer;
+	private static HashMap<VirtualTimerTask, TimerTask> timerTasks;
 	private static Configuration config;
+	private static boolean isRunning;
+	private static Lock lock;
 
 	/* ******************************************************* */
 	/* ********* INITIALIZATION AND CONSTRUCTOR ************** */
@@ -75,6 +81,17 @@ public class BPF {
 
 		return instance;
 	}
+	
+	/**
+	 * Constructor for BPF, which is private since BPF is a singleton.
+	 * 
+	 * @param service
+	 *            The BPFService implementation that the BPF library will use
+	 *            for device-specific methods.
+	 */
+	private BPF(BPFService _service) {
+		service = _service;
+	}
 
 	/**
 	 * The init method will take in a BPFService which needs to implement
@@ -95,9 +112,12 @@ public class BPF {
 		// Create a new instance
 		instance = new BPF(_service);
 
-		// Set up the timers
-		timer_   = new Timer();
-    	timer_tasks_map_ = new HashMap<VirtualTimerTask,TimerTask>();
+		// Initialize some variables
+		isRunning = false;
+		lock = new Lock();
+		timer   = new Timer();
+    	timerTasks = new HashMap<VirtualTimerTask,TimerTask>();
+    	dtn = new DTN();
     	
     	// Parse the config before continuing
     	try {
@@ -109,7 +129,6 @@ public class BPF {
 		}
 		
 		// Initialize all objects used by the BPF
-    	dtn = new DTN();
     	ConvergenceLayer.init_clayers();
     	DiscoveryTable.getInstance().init();
     	BundleDaemon.getInstance().init();
@@ -123,30 +142,75 @@ public class BPF {
     	BundleStore.getInstance().init();
     	GlobalStorage.getInstance().init();
     	
-    	// Start the bundle daemon
-    	BundleDaemon.getInstance().start();
-    	BPF.getInstance().getBPFLogger().info(TAG, "Started the BundleDaemon");
-    	DiscoveryTable.getInstance().start();
-    	BPF.getInstance().getBPFLogger().info(TAG, "Started the discovery");
-    	
-    	// Print a separating line
     	BPF.getInstance().getBPFLogger().debug(TAG, 
     			"\n**************************************************\n" + 
     			"******************* BPF initialized **************\n" +
     			"**************************************************");
 	}
-
+	
+	
 	/**
-	 * Constructor for BPF, which is private since BPF is a singleton.
-	 * 
-	 * @param service
-	 *            The BPFService implementation that the BPF library will use
-	 *            for device-specific methods.
+	 * Method to starting the BPF
 	 */
-	private BPF(BPFService _service) {
-		service = _service;
+	public void start() {
+		BundleDaemon.getInstance().start();
+    	DiscoveryTable.getInstance().start();
+    	BPF.getInstance().getBPFLogger().info(TAG, "BPF has been started");
+    	isRunning = true;
+	}
+	
+	
+	/**
+	 * Method for stopping the BPF 
+	 */
+	public void stop() {
+		
+		BPF.getInstance().getBPFLogger().info(TAG, "Got stop command, shutting down BPF");
+    	
+        lock.lock();
+        try
+        {
+        	MsgBlockingQueue<Integer> notifier = new MsgBlockingQueue<Integer>(1);
+        	ShutdownRequest event = new ShutdownRequest();
+        	
+        	// Post the shutdown request and wait until it is executed
+        	BundleDaemon.getInstance().post_and_wait
+        	(event, notifier, -1, true);
+        
+        	// Shutdown different workers
+        	RegistrationTable.getInstance().shutdown();
+        	DiscoveryTable.getInstance().shutdown();
+        	InterfaceTable.getInstance().shutdown();
+        	ContactManager.getInstance().shutdown();
+        	TestDataLogger.getInstance().shutdown();
+        	
+    		// Close down datastores
+    		BundleStore.getInstance().close();
+        	RegistrationStore.getInstance().close();
+        	GlobalStorage.getInstance().close();
+        	
+        	timer.cancel();
+        	timerTasks.clear();
+        	
+        	
+        	BPF.getInstance().getBPFLogger().info(TAG, "Shutdown complete");
+        }
+        finally
+        {
+        	lock.unlock();
+        	isRunning = false;
+        }
 	}
 
+	
+	/**
+	 * Check if the BPF is running
+	 * @return A boolean with the running status
+	 */
+	public boolean isRunning() {
+		return isRunning;
+	}
+	
 	/* ******************************************************* */
 	/* ********* GETTER METHODS FOR BPF CLASSES ************** */
 	/* ******************************************************* */
@@ -164,7 +228,7 @@ public class BPF {
 	 * @return
 	 */
 	public Timer timer() {
-		return timer_;
+		return timer;
 	}
 	
 	/**
@@ -173,7 +237,7 @@ public class BPF {
 	 * @see VirtualTimerTask, TimerTask
 	 */
 	public HashMap<VirtualTimerTask,TimerTask> timer_tasks_map() {
-		return timer_tasks_map_;
+		return timerTasks;
 	}
 
 	/* ******************************************************* */
