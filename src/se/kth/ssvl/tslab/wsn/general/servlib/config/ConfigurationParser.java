@@ -56,62 +56,62 @@ public class ConfigurationParser {
 	/**
 	 * The TAG name to parse for the DTNConfigration element
 	 */
-	private final static String DTNConfigurationTagName = "tns:DTNConfiguration";
+	public final static String DTNConfigurationTagName = "tns:DTNConfiguration";
 
 	/**
 	 * The TAG name to parse for the StorageSetting element
 	 */
-	private final static String StorageSettingTagName = "tns:StorageSetting";
+	public final static String StorageSettingTagName = "tns:StorageSetting";
 
 	/**
 	 * The TAG name to parse for the InterfacesSetting element
 	 */
-	private final static String InterfacesSettingTagName = "tns:InterfacesSetting";
+	public final static String InterfacesSettingTagName = "tns:InterfacesSetting";
 
 	/**
 	 * The TAG name to parse for the LinksSetting element
 	 */
-	private final static String LinksSettingTagName = "tns:LinksSetting";
+	public final static String LinksSettingTagName = "tns:LinksSetting";
 
 	/**
 	 * The TAG name to parse for the RoutesSetting element
 	 */
-	private final static String RoutesSettingTagName = "tns:RoutesSetting";
+	public final static String RoutesSettingTagName = "tns:RoutesSetting";
 
 	/**
 	 * The TAG name to parse for the DiscoveriesSetting element
 	 */
-	private final static String DiscoveriesSettingTagName = "tns:DiscoveriesSetting";
+	public final static String DiscoveriesSettingTagName = "tns:DiscoveriesSetting";
 
 	/**
 	 * The TAG name to parse for the SecuritySetting element
 	 */
-	private final static String SecuritySettingTagName = "tns:SecuritySetting";
+	public final static String SecuritySettingTagName = "tns:SecuritySetting";
 
 	/**
 	 * The TAG name to parse for the Link element
 	 */
-	private final static String LinkTagName = "tns:Link";
+	public final static String LinkTagName = "tns:Link";
 
 	/**
 	 * The TAG name to parse for the Interface element
 	 */
-	private final static String InterfaceTagName = "tns:Interface";
+	public final static String InterfaceTagName = "tns:Interface";
 
 	/**
 	 * The TAG name to parse for the Route element
 	 */
-	private final static String RouteTagName = "tns:Route";
+	public final static String RouteTagName = "tns:Route";
 
 	/**
 	 * The TAG name to parse for the Discovery element
 	 */
-	private final static String DiscoveryTagName = "tns:Discovery";
+	public final static String DiscoveryTagName = "tns:Discovery";
 
 	/**
 	 * The TAG name to parse for the Announce element
 	 */
-	private final static String AnnounceTagName = "tns:Announce";
+	public final static String AnnounceTagName = "tns:Announce";
 
 	/**
 	 * Main routine for parsing XML Configuration file input stream
