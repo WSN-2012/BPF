@@ -247,6 +247,7 @@ public class BundleStore {
 
 					if (impt_storage_.add_object(bundle, bundle_filname)) {
 						bundle_count_ += 1;
+						StatsManager.getInstance().update("stored", bundle_count_);
 					} else {
 						return false;
 					}
@@ -405,6 +406,7 @@ public class BundleStore {
 				if (impt_storage_.delete_file(filename)
 						&& impt_storage_.delete_file(filename_payload)) {
 					bundle_count_ -= 1;
+					StatsManager.getInstance().update("stored", bundle_count_);
 					return true;
 				}
 			}
@@ -438,6 +440,7 @@ public class BundleStore {
 			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Going to Del bundle on disk:" + bundleid);
 			bundle_count_ -= 1;
+			StatsManager.getInstance().update("stored", bundle_count_);
 			impt_storage_.delete_file(filename);
 			impt_storage_.delete_file(filename_payload);
 
@@ -695,6 +698,7 @@ public class BundleStore {
 		String[] field = new String[1];
 		field[0] = "count(id)";
 		bundle_count_ = impt_sqlite_.get_count(table, condition, field);
+		StatsManager.getInstance().update("stored", bundle_count_);
 
 		BPF.getInstance().getBPFLogger()
 				.debug(TAG, "Total Valid Bundles: " + bundle_count_);

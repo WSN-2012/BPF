@@ -38,6 +38,8 @@ import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.Stats;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.StatsManager;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.Lock;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.VirtualTimerTask;
@@ -141,6 +143,7 @@ public class BPF {
     	RegistrationStore.getInstance().init();
     	BundleStore.getInstance().init();
     	GlobalStorage.getInstance().init();
+    	StatsManager.getInstance().init();
     	
     	BPF.getInstance().getBPFLogger().debug(TAG, 
     			"\n**************************************************\n" + 
@@ -202,7 +205,9 @@ public class BPF {
         }
 	}
 
-	
+	/* ******************************************************* */
+	/* ********* METHODS TO INTERACT WITH THE BPF ************ */
+	/* ******************************************************* */
 	/**
 	 * Check if the BPF is running
 	 * @return A boolean with the running status
@@ -210,6 +215,18 @@ public class BPF {
 	public boolean isRunning() {
 		return isRunning;
 	}
+	
+	/**
+	 * Get statistics
+	 * @return A Stats object containing the statistics
+	 */
+	public Stats getStats() {
+		return new Stats(StatsManager.getInstance().totalSize(),
+				StatsManager.getInstance().storedBundles(),
+				StatsManager.getInstance().transmitted(),
+				StatsManager.getInstance().received());
+	}
+	
 	
 	/* ******************************************************* */
 	/* ********* GETTER METHODS FOR BPF CLASSES ************** */
