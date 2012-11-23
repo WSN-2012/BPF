@@ -252,8 +252,6 @@ public class ConfigurationParser {
 			}
 
 		}
-
-		return;
 	}
 
 	/**
@@ -334,8 +332,6 @@ public class ConfigurationParser {
 			}
 
 		}
-
-		return;
 	}
 
 	/**
@@ -411,8 +407,6 @@ public class ConfigurationParser {
 			}
 
 		}
-
-		return;
 	}
 
 	/**
@@ -487,8 +481,6 @@ public class ConfigurationParser {
 			}
 
 		}
-
-		return;
 	}
 
 	/**
@@ -534,8 +526,6 @@ public class ConfigurationParser {
 		} else {
 			throw new InvalidDTNConfigurationException("Keep copy was not set to true or false");
 		}
-		
-		return;
 	}
 
 	/**
@@ -547,23 +537,38 @@ public class ConfigurationParser {
 	 *            the configuration file we will put output on
 	 * @throws InvalidDTNConfigurationException
 	 */
-	// TODO: Throw exception if not needed values are found in the config
 	private static void process_security_config(Element config_element,
 			Configuration config) throws InvalidDTNConfigurationException {
 
 		Attr ks_path = config_element.getAttributeNode("ks_path");
+		if (ks_path.getValue().isEmpty()) {
+			throw new InvalidDTNConfigurationException("ks_path cannot be empty");
+		}
 		config.security_setting().set_ks_path(ks_path.getValue());
 
 		Attr ks_password = config_element.getAttributeNode("ks_password");
+		if (ks_password.getValue().isEmpty()) {
+			throw new InvalidDTNConfigurationException("ks_password should not be empty");
+		}
 		config.security_setting().set_ks_password(ks_password.getValue());
 
 		Attr use_pcb = config_element.getAttributeNode("use_pcb");
-		config.security_setting().set_use_pcb(use_pcb.getValue());
+		if (use_pcb.getValue().equals("true")) {
+			config.security_setting().set_use_pcb(true);			
+		} else if (use_pcb.getValue().equals("false")){
+			config.security_setting().set_use_pcb(false);			
+		} else {
+			throw new InvalidDTNConfigurationException("use_pcb needs to be true or false"); 
+		}
 
 		Attr use_pib = config_element.getAttributeNode("use_pib");
-		config.security_setting().set_use_pib(use_pib.getValue());
-
-		return;
+		if (use_pib.getValue().equals("true")) {
+			config.security_setting().set_use_pib(true);			
+		} else if (use_pib.getValue().equals("false")){
+			config.security_setting().set_use_pib(false);			
+		} else {
+			throw new InvalidDTNConfigurationException("use_pib needs to be true or false"); 
+		}
 	}
 
 }
