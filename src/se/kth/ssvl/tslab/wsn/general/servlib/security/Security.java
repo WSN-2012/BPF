@@ -26,7 +26,7 @@ public class Security {
 		int err = 0;
 		
 		//Do we have to use PCB?
-		if(BPF.getInstance().getConfig().security_setting().use_pcb().equals("true")) 
+		if(BPF.getInstance().getConfig().security_setting().use_pcb()) 
 
 		{
 			Ciphersuite bp =  Ciphersuite.find_suite(Ciphersuite_C3.CSNUM_C3);
@@ -35,7 +35,7 @@ public class Security {
 		}
 		
 		//Do we have to use PIB?
-		if(BPF.getInstance().getConfig().security_setting().use_pib().equals("true"))
+		if(BPF.getInstance().getConfig().security_setting().use_pib())
 		{
 			BPF.getInstance().getBPFLogger().error(TAG, "PIB blocks are not supported yet!");
 			//TODO: Add PIB support!
