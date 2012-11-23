@@ -1,6 +1,11 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.queuing;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.types.conv_layer_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
 
@@ -32,7 +37,22 @@ public abstract class ProphetQueuing {
 	 * An enum to hold the different queueing types
 	 */
 	public enum QueueingType {
-		FIFO, MOFO
+		FIFO ("fifo"),
+		MOFO ("mofo");
+		
+		private static final Map<String, QueueingType> lookupCaption = new HashMap<String, QueueingType>();
+		static {
+			for (QueueingType s : EnumSet.allOf(QueueingType.class)) {
+				lookupCaption.put(s.getCaption(), s);
+			}
+		}
+		private String caption;
+		private QueueingType(String caption) {
+			this.caption = caption;
+		}
+		public String getCaption() {
+			return caption;
+		}
 	};
 
 	/**
