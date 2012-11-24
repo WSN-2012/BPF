@@ -128,6 +128,8 @@ public class BPF {
 			throw new BPFException("There was an error in the configuration: " + e.getMessage());
 		} catch (FileNotFoundException e) {
 			throw new BPFException("Configuration file was not found");
+		} catch (Exception e) {
+			throw new BPFException("There was an error in the parsing or reading of the configuration: " + e.getMessage());
 		}
 		
 		// Initialize all objects used by the BPF
