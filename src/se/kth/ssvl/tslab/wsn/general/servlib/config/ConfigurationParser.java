@@ -20,16 +20,19 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.config.exceptions.InvalidDTNConfigurationException;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.DiscoveriesSetting.AnnounceEntry;
@@ -121,38 +124,37 @@ public class ConfigurationParser {
 	 * @return the result DTNConfiguration object filled with data from the
 	 *         stream
 	 * @throws InvalidDTNConfigurationException
+	 * @throws ParserConfigurationException 
+	 * @throws IOException 
+	 * @throws SAXException 
 	 */
 	public static Configuration parse_config_file(InputStream xml_stream)
-			throws InvalidDTNConfigurationException {
+			throws InvalidDTNConfigurationException, ParserConfigurationException, SAXException, IOException {
+		
 		Configuration config_ = new Configuration();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-		try {
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document dom = builder.parse(xml_stream);
-			Element DTNConfigurationElement = dom.getDocumentElement();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document dom = builder.parse(xml_stream);
+		Element DTNConfigurationElement = dom.getDocumentElement();
 
-			if (DTNConfigurationElement.getTagName().equals(
-					DTNConfigurationTagName)) {
-				NodeList configurationNodes = DTNConfigurationElement
-						.getChildNodes();
+		if (DTNConfigurationElement.getTagName()
+				.equals(DTNConfigurationTagName)) {
+			NodeList configurationNodes = DTNConfigurationElement
+					.getChildNodes();
 
-				for (int i = 0; i < configurationNodes.getLength(); i++) {
-					if (configurationNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
-						process_config_element(
-								(Element) configurationNodes.item(i), config_);
-					}
-
+			for (int i = 0; i < configurationNodes.getLength(); i++) {
+				if (configurationNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+					process_config_element(
+							(Element) configurationNodes.item(i), config_);
 				}
-			} else
-				throw new InvalidDTNConfigurationException(
-						"The expected DTNConfiguration is missing");
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			//throw new InvalidDTNConfigurationException(e.toString());
+			}
+		} else {
+			throw new InvalidDTNConfigurationException(
+					"The expected DTNConfiguration is missing");
 		}
-
+		
 		return config_;
 
 	}
@@ -167,7 +169,7 @@ public class ConfigurationParser {
 	 * @throws Exception
 	 */
 	private static void process_config_element(Element config_element,
-			Configuration config) throws Exception {
+			Configuration config) throws InvalidDTNConfigurationException {
 		if (config_element.getTagName().equals(StorageSettingTagName)) {
 			process_storage_config(config_element, config);
 		}
@@ -198,7 +200,7 @@ public class ConfigurationParser {
 		}
 
 		else
-			throw new Exception("Unknow configuration option "
+			throw new InvalidDTNConfigurationException("Unknow configuration option "
 					+ config_element.getTagName());
 
 	}
