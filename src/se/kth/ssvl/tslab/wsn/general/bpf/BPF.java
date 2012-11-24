@@ -234,7 +234,7 @@ public class BPF {
 	 * @param A Stats object containing the statistics
 	 */
 	public void updateStats(Stats stats) {
-		service.getBPFActionReceiver().updateStats(stats);
+		service.updateStats(stats);
 	}
 	
 	
