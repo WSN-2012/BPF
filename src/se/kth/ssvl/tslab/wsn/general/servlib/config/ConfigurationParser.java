@@ -302,7 +302,7 @@ public class ConfigurationParser {
 					}
 
 					Attr dest = e.getAttributeNode("dest");
-					link_entry.set_des(dest.getValue());
+					link_entry.set_dest(dest.getValue());
 
 					Attr type = e.getAttributeNode("type");
 

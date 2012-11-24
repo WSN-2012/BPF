@@ -180,7 +180,7 @@ public class ContactManager extends BundleEventHandler {
 			LinkEntry element = i.next();
 			String id_ = element.id();
 			BPF.getInstance().getBPFLogger().debug(TAG, id_);
-			String dest_ = element.des();
+			String dest_ = element.dest();
 			BPF.getInstance().getBPFLogger().debug(TAG, dest_);
 
 			Link.link_type_t type_ = element.type();
