@@ -127,7 +127,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.storage.StatsManager;
 import se.kth.ssvl.tslab.wsn.general.systemlib.thread.MsgBlockingQueue;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.TimeHelper;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * main DTNService daemon class to execute Bundle events posted in its queue.
@@ -1978,7 +1977,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	}
 
 	protected void handle_bundle_report(BundleReportEvent event) {
-		throw new NotImplementedException();
+		
 	}
 
 	protected void handle_bundle_send(BundleSendRequest event) {
