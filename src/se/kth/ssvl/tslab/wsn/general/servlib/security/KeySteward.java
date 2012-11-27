@@ -45,7 +45,7 @@ public class KeySteward
 			IByteBuffer       enc_key) throws Exception
 	{
 
-		BPF.getInstance().getBPFLogger().debug(TAG,"Encrypting symmetric key...");
+		BPF.getInstance().getBPFLogger().warning(TAG,"Encrypting symmetric key...");
 
 		java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		KeyStore ks = KeyStore.getInstance("BKS");
@@ -58,9 +58,9 @@ public class KeySteward
 	    
 	    FileInputStream fis = null;
 	    try {
-	    	BPF.getInstance().getBPFLogger().info(TAG, "Opening file: " + kspath);
+	    	BPF.getInstance().getBPFLogger().warning(TAG, "Opening file: " + kspath);
 	        fis = new FileInputStream(kspath);
-	        BPF.getInstance().getBPFLogger().info(TAG, "Loading keystore from: " + kspath);
+	        BPF.getInstance().getBPFLogger().warning(TAG, "Loading keystore from: " + kspath);
 	        ks.load(fis, password);
 	    } catch(Exception e){
 	    	BPF.getInstance().getBPFLogger().error(TAG,"Error while loading keystore!");
@@ -77,17 +77,25 @@ public class KeySteward
 		while (en.hasMoreElements())
 		{
 			String alias = (String)en.nextElement();
-			BPF.getInstance().getBPFLogger().debug(TAG,"found alias: " + alias+ ", isCertificate?: " + ks.isCertificateEntry(alias));
+			BPF.getInstance().getBPFLogger().warning(TAG,"found alias: " + alias+ ", isCertificate?: " + ks.isCertificateEntry(alias));
 			if (alias.equals(security_dest)) //make sure that you encrypt with the public key of the security destination
 			{
-				BPF.getInstance().getBPFLogger().debug(TAG,"Got certificate.");
+				BPF.getInstance().getBPFLogger().warning(TAG,"Got certificate.");
 				cert=(X509Certificate) ks.getCertificate(alias);
 			}
 		}
 		
+		//log the key retrieved from the certificate
+		byte[] certKey = cert.getPublicKey().getEncoded();
+		String certKey_str=""; 
+		for (int i=0; i<certKey.length;i++)
+			certKey_str=new String(certKey_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(certKey[i])));
+		BPF.getInstance().getBPFLogger().warning(TAG,"Got server's public key from certificate: 0x " + certKey_str);
+		
 		//set up the generator
 //		CMSEnvelopedDataGenerator1 gen = new CMSEnvelopedDataGenerator1();
 		CMSEnvelopedDataGenerator1 gen = new ext.org.bouncycastle.cms.CMSEnvelopedDataGenerator1();
+		
 		//add the recipient's public key to the cms message. This key will be used to encrypt the sym key.
 		//it also fills the rid field in KeyTransRecipientInfo.
 		gen.addKeyTransRecipient(cert);
@@ -130,7 +138,7 @@ public class KeySteward
 			long        enc_data_len,
 			IByteBuffer   dec_key) throws Exception
 	{
-		BPF.getInstance().getBPFLogger().debug(TAG,"Decrypting symmetric key...");
+		BPF.getInstance().getBPFLogger().warning(TAG,"Decrypting symmetric key...");
 		
 		int init_pos = enc_data.position();
 
@@ -140,7 +148,7 @@ public class KeySteward
 		long[] len = new long[1];
 //		len[0]=enc_data_len;
 		SDNV.decode(enc_data, len);
-		BPF.getInstance().getBPFLogger().debug(TAG,"length of CMS encoded key field: " + len[0]);
+		BPF.getInstance().getBPFLogger().warning(TAG,"length of CMS encoded key field: " + len[0]);
 		
 		EndpointID local_eid = BundleDaemon.getInstance().local_eid();
 		String my_alias=local_eid.toString();
@@ -171,7 +179,14 @@ public class KeySteward
 	    	BPF.getInstance().getBPFLogger().error(TAG,"Private key could not be retrieved from keystore!");
 	    	return -1;
 	    }
-	    BPF.getInstance().getBPFLogger().debug(TAG,"Got private key.");
+	    BPF.getInstance().getBPFLogger().warning(TAG,"Got private key.");
+	    
+	    //log the key retrieved from the keystore
+  		byte[] privKey = key.getEncoded();
+  		String privKey_str=""; 
+  		for (int i=0; i<privKey.length;i++)
+  			privKey_str=new String(privKey_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(privKey[i])));
+  		BPF.getInstance().getBPFLogger().warning(TAG,"Got server's private key from certificate: 0x " + privKey_str);
 	    
 		CMSEnvelopedData enveloped;
 
@@ -218,7 +233,7 @@ public class KeySteward
 		for (int i=0; i<recData.length;i++)
 			key_str=new String(key_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(recData[i])));
 
-		BPF.getInstance().getBPFLogger().debug(TAG,"Decrypt(). symmetric key after decryption: 0x " + key_str);
+		BPF.getInstance().getBPFLogger().warning(TAG,"Decrypt(). symmetric key after decryption: 0x " + key_str);
 		
 		//we copy the decrypted key
 		dec_key.put(recData);
