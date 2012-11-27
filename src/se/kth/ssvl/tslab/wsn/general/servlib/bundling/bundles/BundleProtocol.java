@@ -32,6 +32,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PayloadBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PrimaryBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.security.Ciphersuite_C3;
 import se.kth.ssvl.tslab.wsn.general.servlib.security.Security;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
@@ -233,6 +234,12 @@ public class BundleProtocol {
 									iter.data_offset(), iter.data_length(),
 									iter.contents().position()));
 
+			byte[] print = iter.contents().array();
+			String key_str=""; 
+			for (int j=0; (j<print.length&&j<15);j++)
+				key_str=new String(key_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(print[j])));
+			BPF.getInstance().getBPFLogger().warning(TAG, "************ iter.contents(): 0x "+key_str);
+			
 			if (last) {
 				assert ((iter.flags() & BundleProtocol.block_flag_t.BLOCK_FLAG_LAST_BLOCK
 						.getCode()) != 0);
@@ -256,6 +263,12 @@ public class BundleProtocol {
 			BlockInfo iter = blocks.get(i);
 			iter.owner().finalize(bundle, blocks, iter, link);
 			total_len += iter.full_length();
+			
+			byte[] print = iter.contents().array();
+			String key_str=""; 
+			for (int j=0; (j<print.length&&j<15);j++)
+				key_str=new String(key_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(print[j])));
+			BPF.getInstance().getBPFLogger().warning(TAG, "************ iter.contents(): 0x "+key_str);
 		}
 
 		return total_len;
@@ -362,9 +375,25 @@ public class BundleProtocol {
 							remainder, current_block.type().toString(), offset
 
 					));
+			
+			byte[] print = data.array();
+			String key_str=""; 
+			for (int j=0; (j<print.length&&j<50);j++)
+				key_str=new String(key_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(print[j])));
+			BPF.getInstance().getBPFLogger().warning(TAG, "BEFORE PRODUCE block type: "
+				+ current_block.type().toString() + " content: 0x "+key_str);
+			
 			current_block.owner().produce(bundle, current_block, data, offset,
 					tocopy);
-
+			
+			byte[] print2 = data.array();
+			String key_str2=""; 
+			for (int j=0; (j<print2.length&&j<50);j++)
+				key_str2=new String(key_str2+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(print2[j])));
+			BPF.getInstance().getBPFLogger().warning(TAG, "AFTER PRODUCE block type: "
+					+ current_block.type().toString() + " content: 0x "+key_str2);
+			
+			
 			len -= tocopy;
 
 			// move the position of IByteBuffer
@@ -396,6 +425,8 @@ public class BundleProtocol {
 				break;
 			}
 
+			
+			
 			// advance to next block
 			current_block = iter.next();
 			offset = 0;

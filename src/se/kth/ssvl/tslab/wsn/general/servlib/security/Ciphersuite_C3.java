@@ -811,15 +811,24 @@ public class Ciphersuite_C3 extends Ciphersuite
 							//tasks
 							decMsg = new byte[gcmEngine.getOutputSize(len+tag_len)];
 
-							//inMsg = new byte[len];
+							
+							//-------------------------------------------
+							byte[] encMsg = new byte[bundle.payload().length()];
+							bundle.payload().read_data(0, bundle.payload().length(), encMsg);
+							int in_array_off=0;
+							
+							String payload_str = "";
+							for (int i=0; (i<encMsg.length);i++)
+								payload_str=new String(payload_str+ String.format("%2.2h ", 
+										unsignedByteToInt(encMsg[i])));
+							BPF.getInstance().getBPFLogger().warning(TAG, "ENCRYPTED PAYLOAD: 0x "+payload_str);
+							
+							
 
-							int in_array_off=buf.position();
-							//buf.get(inMsg);
+//							int in_array_off=buf.position();
 
-							byte[] encMsg = new byte[len+tag_len];
-							//for (int i=0; i<inMsg.length;i++)
-							//	encMsg[i]=inMsg[i];
-							buf.get(encMsg,len);
+//							byte[] encMsg = new byte[len+tag_len];
+//							buf.get(encMsg,len);
 							
 							
 							for (int i=len; i<len+tag_len;i++)
@@ -1614,7 +1623,14 @@ public class Ciphersuite_C3 extends Ciphersuite
 		while(blocks_iter.hasNext())
 		{
 			BlockInfo iter = blocks_iter.next();
-
+			
+			byte[] print = iter.contents().array();
+			String key_str=""; 
+			for (int i=0; (i<print.length&&i<15);i++)
+				key_str=new String(key_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(print[i])));
+			BPF.getInstance().getBPFLogger().warning(TAG, "************ iter.contents(): 0x "+key_str);
+			
+			
 			BPF.getInstance().getBPFLogger().debug(TAG, "finalize()  iteration.next. type of block: "+iter.type().toString());
 			BPF.getInstance().getBPFLogger().info(TAG, "data offset: " + iter.data_offset() + " data_length: " + iter.data_length());
 
@@ -2064,7 +2080,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 					{
 						//initialization
 						mutate_func_event_data do_crypt_data = (mutate_func_event_data) data;
-
+						
 						//Bundle bundle =do_crypt_data.bundle();
 						//BlockInfo callerBlock = do_crypt_data.caller_block();
 						//BlockInfo targetBlock = do_crypt_data.target_block();
@@ -2077,9 +2093,22 @@ public class Ciphersuite_C3 extends Ciphersuite
 						System.gc();
 						//tasks
 						encMsg = new byte[gcmEngine.getOutputSize(len)];
-						inMsg = new byte[len];
-						int in_array_off=buf.position();
-						buf.get(inMsg);
+						
+						//-------------------------------------------
+						byte[] inMsg = new byte[bundle.payload().length()];
+						bundle.payload().read_data(0, bundle.payload().length(), inMsg);
+						int in_array_off=0;
+						
+						String payload_str = "";
+						for (int i=0; (i<inMsg.length);i++)
+							payload_str=new String(payload_str+ String.format("%2.2h ", 
+									unsignedByteToInt(inMsg[i])));
+						BPF.getInstance().getBPFLogger().warning(TAG, "PAYLOAD: 0x "+payload_str);
+						
+//						inMsg = new byte[len];
+//						int in_array_off=buf.position();
+//						buf.get(inMsg);
+						
 						
 						assert (in_array_off==0);
 						assert (inMsg.length==len);
@@ -2093,7 +2122,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 						for (int i=0; (i<inMsg.length&&i<10);i++)
 							key_str=new String(key_str+ String.format("%2.2h ", unsignedByteToInt(inMsg[i])));
 
-						BPF.getInstance().getBPFLogger().debug(TAG, "generate(). Plaintext message (first 10 char max): 0x "+key_str);
+						BPF.getInstance().getBPFLogger().debug(TAG, "finalize(). Plaintext message (first 10 char max): 0x "+key_str);
 						
 						in_encr_length=inMsg.length;
 						BPF.getInstance().getBPFLogger().info(TAG, "in_array_off: " + in_array_off);

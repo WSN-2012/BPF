@@ -36,6 +36,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventHandler;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDVector;
+import se.kth.ssvl.tslab.wsn.general.servlib.security.Ciphersuite_C3;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
@@ -510,6 +511,15 @@ public class BlockProcessor implements Serializable {
 		// "convert the offset to a pointer in the target block" [DTN2]
 		IByteBuffer buf = target_block.contents();
 		
+		byte[] print = buf.array();
+		String key_str=""; 
+		for (int i=0; (i<print.length&&i<15);i++)
+			key_str=new String(key_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(print[i])));
+		BPF.getInstance().getBPFLogger().warning(TAG, "************ buffer: 0x "+key_str);
+	
+		
+		BPF.getInstance().getBPFLogger().warning(TAG, "************ buf.position: " + buf.position());
+		BPF.getInstance().getBPFLogger().warning(TAG, "************ offset: " + offset);
 		buf.position(buf.position() - offset); //modified by Fabio
 //		buf.position(buf.position() + offset);
 
