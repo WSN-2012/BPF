@@ -820,20 +820,6 @@ public class Ciphersuite_C3 extends Ciphersuite
 							bundle.payload().read_data(0, bundle.payload().length(), encMsg);
 							int in_array_off=0;
 							
-							String payload_str = "";
-							for (int i=0; (i<encMsg.length);i++)
-								payload_str=new String(payload_str+ String.format("%2.2h ", 
-										unsignedByteToInt(encMsg[i])));
-							BPF.getInstance().getBPFLogger().warning(TAG, "ENCRYPTED PAYLOAD: 0x "+payload_str);
-							
-							
-
-//							int in_array_off=buf.position();
-
-//							byte[] encMsg = new byte[len+tag_len];
-//							buf.get(encMsg,len);
-							
-							
 							for (int i=len; i<len+tag_len;i++)
 								encMsg[i]=tag.get(i-len);
 
@@ -1358,9 +1344,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 		key_buff.rewind();
 		locals.set_key(key_buff, key.length);
 
-		//Log.d(TAG, String.format(  "generate() key      0x%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx%2.2hhx",key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7],key[8], key[9], key[10], key[11], key[12], key[13], key[14], key[15]));
-		//Log.d(TAG, String.format(  "generate() random key: 0x %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h", key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7], key[8], key[9], key[10], key[11], key[12], key[13], key[14], key[15]));
-		BPF.getInstance().getBPFLogger().warning(TAG, String.format(  "generate() random key: 0x %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h", unsignedByteToInt(key[0]), unsignedByteToInt(key[1]), unsignedByteToInt(key[2]), unsignedByteToInt(key[3]), unsignedByteToInt(key[4]), unsignedByteToInt(key[5]), unsignedByteToInt(key[6]), unsignedByteToInt(key[7]), unsignedByteToInt(key[8]), unsignedByteToInt(key[9]), unsignedByteToInt(key[10]), unsignedByteToInt(key[11]), unsignedByteToInt(key[12]), unsignedByteToInt(key[13]), unsignedByteToInt(key[14]), unsignedByteToInt(key[15])));
+		BPF.getInstance().getBPFLogger().debug(TAG, String.format(  "generate() random key: 0x %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h %2.2h", unsignedByteToInt(key[0]), unsignedByteToInt(key[1]), unsignedByteToInt(key[2]), unsignedByteToInt(key[3]), unsignedByteToInt(key[4]), unsignedByteToInt(key[5]), unsignedByteToInt(key[6]), unsignedByteToInt(key[7]), unsignedByteToInt(key[8]), unsignedByteToInt(key[9]), unsignedByteToInt(key[10]), unsignedByteToInt(key[11]), unsignedByteToInt(key[12]), unsignedByteToInt(key[13]), unsignedByteToInt(key[14]), unsignedByteToInt(key[15])));
 
 		String sec_dest;
 		if (locals.security_dest()!=null)
@@ -2102,24 +2086,9 @@ public class Ciphersuite_C3 extends Ciphersuite
 						bundle.payload().read_data(0, bundle.payload().length(), inMsg);
 						int in_array_off=0;
 						
-						String payload_str = "";
-						for (int i=0; (i<inMsg.length);i++)
-							payload_str=new String(payload_str+ String.format("%2.2h ", 
-									unsignedByteToInt(inMsg[i])));
-						BPF.getInstance().getBPFLogger().warning(TAG, "PAYLOAD: 0x "+payload_str);
-						
-//						inMsg = new byte[len];
-//						int in_array_off=buf.position();
-//						buf.get(inMsg);
-						
-						
 						assert (in_array_off==0);
 						assert (inMsg.length==len);
 						//in_encr ="testing".getBytes();
-
-						//Log.e(TAG, "Plaintext message: "); 
-						//for (int i=0; i<in_encr.length;i++)
-						//	Log.e(TAG, ""+( unsignedByteToInt(in_encr[i])) );
 						
 						String key_str=""; 
 						for (int i=0; (i<inMsg.length&&i<10);i++)
