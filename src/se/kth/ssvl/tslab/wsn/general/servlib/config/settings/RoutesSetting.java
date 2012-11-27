@@ -57,7 +57,6 @@ public class RoutesSetting {
 	 *            the queuing_policy to set
 	 */
 	public void setQueuing_policy(QueueingType queuing_policy) {
-		BPF.getInstance().getBPFLogger().info("queuing", "-" + queuing_policy + "-");
 		this.queuing_policy = queuing_policy;
 	}
 

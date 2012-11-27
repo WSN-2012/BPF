@@ -1,6 +1,7 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.Stats;
 
 public interface BPFActionReceiver {
 
@@ -16,5 +17,5 @@ public interface BPFActionReceiver {
 	 * @param bundle The bundle which was received
 	 */
 	public abstract void bundleReceived(Bundle bundle);
-	
+		
 }

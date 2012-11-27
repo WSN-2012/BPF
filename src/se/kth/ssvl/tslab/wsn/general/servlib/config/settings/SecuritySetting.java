@@ -4,8 +4,8 @@ public class SecuritySetting {
 	
 	private String ks_path_;
 	private String ks_password_;
-	private String use_pcb_;
-	private String use_pib_;
+	private boolean use_pcb_;
+	private boolean use_pib_;
 	
 	//Accessors
 	public String ks_path() {
@@ -16,11 +16,11 @@ public class SecuritySetting {
 		return ks_password_;
 	}
 	
-	public String use_pcb() {
+	public boolean use_pcb() {
 		return use_pcb_;
 	}
 	
-	public String use_pib() {
+	public boolean use_pib() {
 		return use_pib_;
 	}
 	
@@ -33,11 +33,11 @@ public class SecuritySetting {
 		ks_password_ = ksPassword;
 	}
 	
-	public void set_use_pcb(String usePCB) {
+	public void set_use_pcb(boolean usePCB) {
 		use_pcb_ = usePCB;
 	}
 	
-	public void set_use_pib(String usePIB) {
+	public void set_use_pib(boolean usePIB) {
 		use_pib_ = usePIB;
 	}
 	

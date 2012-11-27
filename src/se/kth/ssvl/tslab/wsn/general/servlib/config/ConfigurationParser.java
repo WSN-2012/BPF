@@ -20,16 +20,19 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.config.exceptions.InvalidDTNConfigurationException;
 import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.DiscoveriesSetting.AnnounceEntry;
@@ -56,62 +59,62 @@ public class ConfigurationParser {
 	/**
 	 * The TAG name to parse for the DTNConfigration element
 	 */
-	private final static String DTNConfigurationTagName = "tns:DTNConfiguration";
+	public final static String DTNConfigurationTagName = "tns:DTNConfiguration";
 
 	/**
 	 * The TAG name to parse for the StorageSetting element
 	 */
-	private final static String StorageSettingTagName = "tns:StorageSetting";
+	public final static String StorageSettingTagName = "tns:StorageSetting";
 
 	/**
 	 * The TAG name to parse for the InterfacesSetting element
 	 */
-	private final static String InterfacesSettingTagName = "tns:InterfacesSetting";
+	public final static String InterfacesSettingTagName = "tns:InterfacesSetting";
 
 	/**
 	 * The TAG name to parse for the LinksSetting element
 	 */
-	private final static String LinksSettingTagName = "tns:LinksSetting";
+	public final static String LinksSettingTagName = "tns:LinksSetting";
 
 	/**
 	 * The TAG name to parse for the RoutesSetting element
 	 */
-	private final static String RoutesSettingTagName = "tns:RoutesSetting";
+	public final static String RoutesSettingTagName = "tns:RoutesSetting";
 
 	/**
 	 * The TAG name to parse for the DiscoveriesSetting element
 	 */
-	private final static String DiscoveriesSettingTagName = "tns:DiscoveriesSetting";
+	public final static String DiscoveriesSettingTagName = "tns:DiscoveriesSetting";
 
 	/**
 	 * The TAG name to parse for the SecuritySetting element
 	 */
-	private final static String SecuritySettingTagName = "tns:SecuritySetting";
+	public final static String SecuritySettingTagName = "tns:SecuritySetting";
 
 	/**
 	 * The TAG name to parse for the Link element
 	 */
-	private final static String LinkTagName = "tns:Link";
+	public final static String LinkTagName = "tns:Link";
 
 	/**
 	 * The TAG name to parse for the Interface element
 	 */
-	private final static String InterfaceTagName = "tns:Interface";
+	public final static String InterfaceTagName = "tns:Interface";
 
 	/**
 	 * The TAG name to parse for the Route element
 	 */
-	private final static String RouteTagName = "tns:Route";
+	public final static String RouteTagName = "tns:Route";
 
 	/**
 	 * The TAG name to parse for the Discovery element
 	 */
-	private final static String DiscoveryTagName = "tns:Discovery";
+	public final static String DiscoveryTagName = "tns:Discovery";
 
 	/**
 	 * The TAG name to parse for the Announce element
 	 */
-	private final static String AnnounceTagName = "tns:Announce";
+	public final static String AnnounceTagName = "tns:Announce";
 
 	/**
 	 * Main routine for parsing XML Configuration file input stream
@@ -121,38 +124,37 @@ public class ConfigurationParser {
 	 * @return the result DTNConfiguration object filled with data from the
 	 *         stream
 	 * @throws InvalidDTNConfigurationException
+	 * @throws ParserConfigurationException 
+	 * @throws IOException 
+	 * @throws SAXException 
 	 */
 	public static Configuration parse_config_file(InputStream xml_stream)
-			throws InvalidDTNConfigurationException {
+			throws InvalidDTNConfigurationException, ParserConfigurationException, SAXException, IOException {
+		
 		Configuration config_ = new Configuration();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-		try {
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document dom = builder.parse(xml_stream);
-			Element DTNConfigurationElement = dom.getDocumentElement();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document dom = builder.parse(xml_stream);
+		Element DTNConfigurationElement = dom.getDocumentElement();
 
-			if (DTNConfigurationElement.getTagName().equals(
-					DTNConfigurationTagName)) {
-				NodeList configurationNodes = DTNConfigurationElement
-						.getChildNodes();
+		if (DTNConfigurationElement.getTagName()
+				.equals(DTNConfigurationTagName)) {
+			NodeList configurationNodes = DTNConfigurationElement
+					.getChildNodes();
 
-				for (int i = 0; i < configurationNodes.getLength(); i++) {
-					if (configurationNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
-						process_config_element(
-								(Element) configurationNodes.item(i), config_);
-					}
-
+			for (int i = 0; i < configurationNodes.getLength(); i++) {
+				if (configurationNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+					process_config_element(
+							(Element) configurationNodes.item(i), config_);
 				}
-			} else
-				throw new InvalidDTNConfigurationException(
-						"The expected DTNConfiguration is missing");
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			//throw new InvalidDTNConfigurationException(e.toString());
+			}
+		} else {
+			throw new InvalidDTNConfigurationException(
+					"The expected DTNConfiguration is missing");
 		}
-
+		
 		return config_;
 
 	}
@@ -167,7 +169,7 @@ public class ConfigurationParser {
 	 * @throws Exception
 	 */
 	private static void process_config_element(Element config_element,
-			Configuration config) throws Exception {
+			Configuration config) throws InvalidDTNConfigurationException {
 		if (config_element.getTagName().equals(StorageSettingTagName)) {
 			process_storage_config(config_element, config);
 		}
@@ -198,7 +200,7 @@ public class ConfigurationParser {
 		}
 
 		else
-			throw new Exception("Unknow configuration option "
+			throw new InvalidDTNConfigurationException("Unknow configuration option "
 					+ config_element.getTagName());
 
 	}
@@ -252,8 +254,6 @@ public class ConfigurationParser {
 			}
 
 		}
-
-		return;
 	}
 
 	/**
@@ -304,7 +304,7 @@ public class ConfigurationParser {
 					}
 
 					Attr dest = e.getAttributeNode("dest");
-					link_entry.set_des(dest.getValue());
+					link_entry.set_dest(dest.getValue());
 
 					Attr type = e.getAttributeNode("type");
 
@@ -334,8 +334,6 @@ public class ConfigurationParser {
 			}
 
 		}
-
-		return;
 	}
 
 	/**
@@ -411,8 +409,6 @@ public class ConfigurationParser {
 			}
 
 		}
-
-		return;
 	}
 
 	/**
@@ -487,8 +483,6 @@ public class ConfigurationParser {
 			}
 
 		}
-
-		return;
 	}
 
 	/**
@@ -526,7 +520,14 @@ public class ConfigurationParser {
 			throw new InvalidDTNConfigurationException("Test data logging was not set to true or false");
 		}
 		
-		return;
+		Attr keep_copy = config_element.getAttributeNode("keep_copy");
+		if (keep_copy.getValue().equals("true")) {
+			config.storage_setting().set_keep_copy(true);
+		} else if (keep_copy.getValue().equals("false")) {
+			config.storage_setting().set_keep_copy(false);
+		} else {
+			throw new InvalidDTNConfigurationException("Keep copy was not set to true or false");
+		}
 	}
 
 	/**
@@ -538,23 +539,38 @@ public class ConfigurationParser {
 	 *            the configuration file we will put output on
 	 * @throws InvalidDTNConfigurationException
 	 */
-	// TODO: Throw exception if not needed values are found in the config
 	private static void process_security_config(Element config_element,
 			Configuration config) throws InvalidDTNConfigurationException {
 
 		Attr ks_path = config_element.getAttributeNode("ks_path");
+		if (ks_path.getValue().isEmpty()) {
+			throw new InvalidDTNConfigurationException("ks_path cannot be empty");
+		}
 		config.security_setting().set_ks_path(ks_path.getValue());
 
 		Attr ks_password = config_element.getAttributeNode("ks_password");
+		if (ks_password.getValue().isEmpty()) {
+			throw new InvalidDTNConfigurationException("ks_password should not be empty");
+		}
 		config.security_setting().set_ks_password(ks_password.getValue());
 
 		Attr use_pcb = config_element.getAttributeNode("use_pcb");
-		config.security_setting().set_use_pcb(use_pcb.getValue());
+		if (use_pcb.getValue().equals("true")) {
+			config.security_setting().set_use_pcb(true);			
+		} else if (use_pcb.getValue().equals("false")){
+			config.security_setting().set_use_pcb(false);			
+		} else {
+			throw new InvalidDTNConfigurationException("use_pcb needs to be true or false"); 
+		}
 
 		Attr use_pib = config_element.getAttributeNode("use_pib");
-		config.security_setting().set_use_pib(use_pib.getValue());
-
-		return;
+		if (use_pib.getValue().equals("true")) {
+			config.security_setting().set_use_pib(true);			
+		} else if (use_pib.getValue().equals("false")){
+			config.security_setting().set_use_pib(false);			
+		} else {
+			throw new InvalidDTNConfigurationException("use_pib needs to be true or false"); 
+		}
 	}
 
 }

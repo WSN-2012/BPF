@@ -207,8 +207,9 @@ public class TCPConnection extends Connection {
 		}
 
 		// if we have something to send , send it first
-		if (sendbuf_.position() > 0)
+		if (sendbuf_.position() > 0) {
 			send_data();
+		}
 
 		// poll to receive and process data
 		try {
@@ -294,7 +295,7 @@ public class TCPConnection extends Connection {
 		protected void timeout(Date now) {
 
 			BPF.getInstance().getBPFLogger()
-					.error(TAG,
+					.warning(TAG,
 							"write socket timeout timer fire, closing the write_channel");
 			try {
 				write_channel_.close();
@@ -360,8 +361,7 @@ public class TCPConnection extends Connection {
 			break_contact(reason_t.CL_ERROR);
 			sendbuf_.position(last_position);
 		} catch (IOException e) {
-
-			BPF.getInstance().getBPFLogger().error(TAG, "writting broken pipe");
+			BPF.getInstance().getBPFLogger().warning(TAG, "Could not write to channel. Contact might have disconnected.");
 			break_contact(reason_t.CL_ERROR);
 			sendbuf_.position(last_position);
 		}

@@ -341,11 +341,11 @@ public class BundleList implements Serializable {
 			int random_position = (int) (Math.random() * this.size());
 			add_bundle(bundle, random_position);
 		} catch (BundleLockNotHeldByCurrentThread e) {
-			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, "BundleLockNotHeldByCurrentThread: " + e.getMessage());
 		} catch (InterruptedException e) {
 			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
 		} catch (BundleListLockNotHoldByCurrentThread e) {
-			BPF.getInstance().getBPFLogger().error(TAG, e.getMessage());
+			BPF.getInstance().getBPFLogger().error(TAG, "BundleListsLockNotHeldByCurrentThread: " +e.getMessage());
 		} finally {
 			lock_.unlock();
 
@@ -651,7 +651,7 @@ public class BundleList implements Serializable {
 		BPF.getInstance().getBPFLogger().debug(
 				TAG,
 				String.format(
-						"bundle id %d is added to list [%s] , the size become",
+						"bundle id %d is added to list [%s] , the size is now %d",
 						b.bundleid(), name_, list_.size()));
 
 	}

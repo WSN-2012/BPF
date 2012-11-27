@@ -25,6 +25,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.loca
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
@@ -68,7 +69,7 @@ public class PingRegistration extends Registration {
 	 */
 
 	@Override
-	public void deliver_bundle(Bundle bundle) {
+	public void deliver_bundle(Bundle bundle, Link link) {
 
 		int payload_len = bundle.payload().length();
 

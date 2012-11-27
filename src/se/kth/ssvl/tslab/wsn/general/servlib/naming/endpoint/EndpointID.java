@@ -95,8 +95,20 @@ public class EndpointID implements Serializable {
 		return uri_.toString();
 	}
 
+	/**
+	 * Get the host part of the uri only
+	 * @return The host part only (e.g. dtn://host)
+	 */
 	public String getHostOnly() {
 		return uri_.getHost();
+	}
+
+	/**
+	 * Get the service part only (part after the host)
+	 * @return Service part of the URI without the prepended '/'
+	 */
+	public String getService() {
+		return uri_.getPath().substring(1);
 	}
 
 	/**

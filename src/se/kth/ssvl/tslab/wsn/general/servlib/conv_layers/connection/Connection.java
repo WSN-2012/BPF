@@ -358,7 +358,7 @@ public abstract class Connection extends CLConnection {
 	@Override
 	public void break_contact(ContactEvent.reason_t reason) {
 
-		BPF.getInstance().getBPFLogger().error(TAG,
+		BPF.getInstance().getBPFLogger().warning(TAG,
 				"Breaking contact with reason " + reason.toString());
 		// "it's possible that we can end up calling break_contact multiple
 		// times, if for example we have an error when sending out the
@@ -907,11 +907,7 @@ public abstract class Connection extends CLConnection {
 							bytes_sent);
 			BPF.getInstance().getBPFLogger().debug(TAG, text);
 		
-			//TODO: verify that it doesn't cause problems! 
-//			return finish_bundle(inflight);
-			
-			current_inflight_ = null;
-			return true;
+			return finish_bundle(inflight);
 		}
 
 		byte flags = 0;
@@ -1053,11 +1049,12 @@ public abstract class Connection extends CLConnection {
 		if (params_.segment_ack_enabled()) {
 			int acked_len = inflight.ack_data().size();
 			if (acked_len != inflight.total_length()) {
-				String text = String
-						.format("check_completed: bundle %d fail because only acked %d/%d",
-								inflight.bundle().bundleid(), acked_len,
-								inflight.total_length());
-				BPF.getInstance().getBPFLogger().error(TAG, text);
+				//TODO: Verify that commenting this out doesn't confuse anyone
+//				String text = String
+//						.format("check_completed: bundle %d fail because only acked %d/%d",
+//								inflight.bundle().bundleid(), acked_len,
+//								inflight.total_length());
+//				BPF.getInstance().getBPFLogger().error(TAG, text);
 				return;
 			}
 		}
@@ -1354,8 +1351,9 @@ public abstract class Connection extends CLConnection {
 
 				}
 
-				if (uploading_)
-					return false;
+				if (uploading_) {
+					BPF.getInstance().getBPFLogger().warning(TAG, "uploading_ is true, was about to return but didn't!");
+				}
 
 				handle_bundle_begin_download();
 

@@ -198,11 +198,19 @@ public class BundleStore {
 			List<Map<String, Object>> hashes = BPF.getInstance().getBPFDB().query(table, null,
 					"hash='" + hash + "'", null, null, null, null, null);
 			
-			// Means we didn't find any or we found too many
-			if (hashes.size() != 1) {
+			// Means we didn't find any
+			if (hashes.size() <= 0) {
+				BPF.getInstance().getBPFLogger().error(TAG, "Could not find bundle with hash: " + hash + 
+						" in store");
 				return null;
 			}
 			
+			// Means we found too many
+			if (hashes.size() > 1) {
+				BPF.getInstance().getBPFLogger().warning(TAG, "Found more than one bundle with hash: " + hash + 
+						" in store");
+			}
+						
 			return get((Integer)hashes.get(0).get("id"));
 		} catch (Exception e) {
 			BPF.getInstance().getBPFLogger().error(TAG, 
@@ -239,6 +247,7 @@ public class BundleStore {
 
 					if (impt_storage_.add_object(bundle, bundle_filname)) {
 						bundle_count_ += 1;
+						StatsManager.getInstance().update("stored", bundle_count_);
 					} else {
 						return false;
 					}
@@ -314,14 +323,15 @@ public class BundleStore {
 			values.put("type", bundle.payload().location().getCode());
 
 			// calculate and add hash if the bundle is not destined for us
-			BPF.getInstance().getBPFLogger().warning(TAG, bundle.dest().getHostOnly() + "=?=" + BundleDaemon.getInstance().local_eid().getHostOnly());
-			if (!bundle.dest().getHostOnly().equals(BundleDaemon.getInstance().local_eid().getHostOnly())) {
+			BPF.getInstance().getBPFLogger().warning(TAG, "Destination: " + bundle.dest() + ", Local: " + BundleDaemon.getInstance().local_eid());
+			if (!bundle.dest().getHostOnly().equals(BundleDaemon.getInstance().local_eid().getHostOnly())
+					&& !bundle.dest().uri().toString().contains("/epidemic")) {
 				try {
 					byte payload[] = new byte[bundle.payload().length()];
 					bundle.payload().read_data(0, bundle.payload().length(),
 							payload);
 					String toHash = new String(bundle.dest().byte_array())
-							+ new String(payload);
+							+ new String(payload) + bundle.creation_ts().seconds();
 					MessageDigest md;
 					md = MessageDigest.getInstance("SHA-1");
 					md.update(toHash.getBytes());
@@ -331,40 +341,41 @@ public class BundleStore {
 					BPF.getInstance().getBPFLogger()
 							.warning(TAG, "This is to be hashed: " + toHash);
 				} catch (NoSuchAlgorithmException e) {
-					BPF.getInstance()
-							.getBPFLogger()
-							.error(TAG,
-									"Exception during hash calculation: "
-											+ e.getMessage());
+					BPF.getInstance().getBPFLogger().error(TAG, "Exception during hash calculation: "
+							+ e.getMessage());
 				}
-			}
 
-			String condition = "id = " + bundleid;
+				String condition = "id = " + bundleid;
 
-			if (impt_sqlite_.update(table, values, condition, null)) {
-				
-				if (!saved_bundles_.containsKey(bundle.bundleid())) {
-					long bundle_size = impt_storage_
-							.get_file_size(bundleFileName
-									+ bundle.durable_key());
-					bundle_size += bundle.durable_size();
-					saved_bundles_.put(bundle.bundleid(), bundle_size);
-					global_storage_.add_total_size(bundle_size);
-					BPF.getInstance().getBPFLogger().debug(TAG, "Added size : " + bundle.durable_size()
-							+ " to " + global_storage_.get_total_size());
+				if (impt_sqlite_.update(table, values, condition, null)) {
+
+					if (!saved_bundles_.containsKey(bundle.bundleid())) {
+						long bundle_size = impt_storage_
+								.get_file_size(bundleFileName
+										+ bundle.durable_key());
+						bundle_size += bundle.durable_size();
+						saved_bundles_.put(bundle.bundleid(), bundle_size);
+						global_storage_.add_total_size(bundle_size);
+						BPF.getInstance().getBPFLogger().debug(TAG, "Added size : " + bundle.durable_size()+ " to " 
+								+ global_storage_.get_total_size());
+					}
+
+					String bundle_filname = bundleFileName
+							+ bundle.durable_key();
+
+					// Testing functions
+					boolean result = impt_storage_.add_object(bundle,
+							bundle_filname);
+
+					return result;
 				}
-				
-				String bundle_filname = bundleFileName + bundle.durable_key();
-				BPF.getInstance().getBPFLogger().error(TAG, "Updating One by One");
-				
-				// Testing functions
-				BPF.getInstance().getBPFLogger().error(TAG, "Updating Object");
-				boolean result = impt_storage_.add_object(bundle,
-						bundle_filname);
-
-				return result;
+			} else {
+				return true;
 			}
 		}
+		
+		
+		// Return false since this wasn't on the DISK
 		return false;
 	}
 
@@ -395,6 +406,7 @@ public class BundleStore {
 				if (impt_storage_.delete_file(filename)
 						&& impt_storage_.delete_file(filename_payload)) {
 					bundle_count_ -= 1;
+					StatsManager.getInstance().update("stored", bundle_count_);
 					return true;
 				}
 			}
@@ -428,6 +440,7 @@ public class BundleStore {
 			BPF.getInstance().getBPFLogger().debug(TAG,
 					"Going to Del bundle on disk:" + bundleid);
 			bundle_count_ -= 1;
+			StatsManager.getInstance().update("stored", bundle_count_);
 			impt_storage_.delete_file(filename);
 			impt_storage_.delete_file(filename_payload);
 
@@ -548,7 +561,7 @@ public class BundleStore {
 	 */
 
 	public long quota() {
-		return config_.storage_setting().quota() * (long) Math.pow(2, 15);
+		return config_.storage_setting().quota() * (long) Math.pow(2, 20);
 		// return (long) Math.pow(2, 14);
 		// return (long) Math.pow(2, 16);
 	}
@@ -685,6 +698,7 @@ public class BundleStore {
 		String[] field = new String[1];
 		field[0] = "count(id)";
 		bundle_count_ = impt_sqlite_.get_count(table, condition, field);
+		StatsManager.getInstance().update("stored", bundle_count_);
 
 		BPF.getInstance().getBPFLogger()
 				.debug(TAG, "Total Valid Bundles: " + bundle_count_);

@@ -341,14 +341,16 @@ public abstract class BundleRouter extends BundleEventHandler {
 	public boolean accept_bundle(Bundle bundle,
 			BundleProtocol.status_report_reason_t[] error_status) {
 		BundleStore bs = BundleStore.getInstance();
+		
 		if (bs.quota() != 0
 				&& (GlobalStorage.getInstance().get_total_size()
 						+ bundle.payload().length() > bs.quota())) {
+			
 			BPF.getInstance().getBPFLogger().info(TAG,
 					String.format(
 							"accept_bundle: rejecting bundle %d since "
 									+ "cur size %d + bundle size %d bytes > quota %d bytes",
-							bundle.bundleid(), bs.total_size(), bundle
+							bundle.bundleid(), GlobalStorage.getInstance().get_total_size(), bundle
 									.payload().length(), bs.quota()));
 
 			error_status[0] = BundleProtocol.status_report_reason_t.REASON_DEPLETED_STORAGE;

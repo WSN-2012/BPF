@@ -177,6 +177,7 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 			}
 		}
 
+		boolean more_to_send = false;
 		while (true) {
 			if (contact_broken_) {
 				BPF.getInstance().getBPFLogger().debug(TAG,
@@ -196,15 +197,14 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 				continue;
 			}
 
-			int timeout = 10;
+			handle_poll_activity(0);
 
 			if (contact_up_) {
 				// "send any data there is to send. if something was sent
 				// out and there's still more to go, we'll call poll() with a
 				// zero timeout so we can read any data there is to
 				// consume, then return to send another chunk" [DTN2].
-				boolean more_to_send = send_pending_data();
-				timeout = more_to_send ? 0 : poll_timeout_;
+				more_to_send = send_pending_data();
 			}
 
 			// "check again here for contact broken since we don't want to
@@ -220,7 +220,7 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			handle_poll_activity(timeout);
+			
 			
 		}
 	}

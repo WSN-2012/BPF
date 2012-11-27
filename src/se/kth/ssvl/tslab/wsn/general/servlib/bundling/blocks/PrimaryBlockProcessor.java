@@ -139,21 +139,14 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 			BPF.getInstance().getBPFLogger().debug(
 					TAG,
 					String.format("parsed primary block: version %s length %s",
-							primary.version(), block.data_length()));
+							primary.version(), primary.block_length_value()));
 
 			// Parse the flags.
 			parse_bundle_flags(bundle, primary.processing_flags_value());
 			parse_cos_flags(bundle, primary.processing_flags_value());
 			parse_srr_flags(bundle, primary.processing_flags_value());
 
-			// What remains in the buffer should now be equal to what the
-			// block-length
-			// field advertised./
-			assert (len == block.data_length()) : TAG
-					+ ": consume() data and block length not equal";
-
 			// set data_offset
-
 			block.set_data_offset(buf_block_content.position());
 			block.set_data_length((int) primary.block_length_value());
 
@@ -644,7 +637,7 @@ public class PrimaryBlockProcessor extends BlockProcessor implements
 		if (sdnv_len < 0) {
 			throw new BlockProcessorTooShortException();
 		}
-		assert (sdnv_len < 0) : TAG + "read sdnv: incorrect length";
+		assert (sdnv_len > 0) : TAG + "read sdnv: incorrect length";
 
 		return sdnv_len;
 	}

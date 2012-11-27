@@ -180,7 +180,7 @@ public class ContactManager extends BundleEventHandler {
 			LinkEntry element = i.next();
 			String id_ = element.id();
 			BPF.getInstance().getBPFLogger().debug(TAG, id_);
-			String dest_ = element.des();
+			String dest_ = element.dest();
 			BPF.getInstance().getBPFLogger().debug(TAG, dest_);
 
 			Link.link_type_t type_ = element.type();
@@ -212,8 +212,7 @@ public class ContactManager extends BundleEventHandler {
 			// Add the link to contact manager's table if it is not already
 			// present. The contact manager will post a LinkCreatedEvent to
 			// the daemon if the link is added successfully.
-			BundleDaemon BD = BundleDaemon.getInstance();
-			if (!BD.contactmgr().add_new_link(link)) {
+			if (!add_new_link(link)) {
 				// A link of that name already exists
 				link.delete_link();
 				String text = String.format(

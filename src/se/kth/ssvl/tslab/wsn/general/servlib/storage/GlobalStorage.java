@@ -94,6 +94,7 @@ public class GlobalStorage {
 	 */
 	public void set_total_size(long size) {
 		total_size_ = size;
+		StatsManager.getInstance().update("size", (int)total_size_);
 	}
 
 	/**
@@ -121,6 +122,7 @@ public class GlobalStorage {
 	 */
 	public void add_total_size(long size) {
 		total_size_ += size;
+		StatsManager.getInstance().update("size", (int)total_size_);
 	}
 
 	/**
@@ -132,6 +134,7 @@ public class GlobalStorage {
 
 	public void remove_total_size(long size) {
 		total_size_ -= size;
+		StatsManager.getInstance().update("size", (int)total_size_);
 	}
 
 	/**

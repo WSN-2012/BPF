@@ -56,7 +56,7 @@ public class LinksSetting {
 		/**
 		 * @return the dest_
 		 */
-		public String des() {
+		public String dest() {
 			return dest_;
 		}
 
@@ -64,7 +64,7 @@ public class LinksSetting {
 		 * @param dest
 		 *            the dest_ to set
 		 */
-		public void set_des(String dest) {
+		public void set_dest(String dest) {
 			dest_ = dest;
 		}
 
