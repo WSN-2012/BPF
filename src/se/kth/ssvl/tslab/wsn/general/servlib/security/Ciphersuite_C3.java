@@ -799,23 +799,11 @@ public class Ciphersuite_C3 extends Ciphersuite
 							//initialization
 							mutate_func_event_data do_crypt_data = (mutate_func_event_data) data;
 
-							//Bundle bundle =do_crypt_data.bundle();
-							//BlockInfo callerBlock = do_crypt_data.caller_block();
-							//BlockInfo targetBlock = do_crypt_data.target_block();
-							//int offset= do_crypt_data.offset();
-							//OpaqueContext r=do_crypt_data.context();
-							
-							
-//							IByteBuffer buf = do_crypt_data.buf();
-//							int len = do_crypt_data.len();
 							int len = bundle.payload().length();
 							GCMBlockCipher gcmEngine= do_crypt_data.context();
 							System.gc();
-							//tasks
 							decMsg = new byte[gcmEngine.getOutputSize(len+tag_len)];
 
-							
-							//-------------------------------------------
 							byte[] encMsg = new byte[bundle.payload().length() + tag_len];
 							bundle.payload().read_data(0, bundle.payload().length(), encMsg);
 							int in_array_off=0;
@@ -825,11 +813,6 @@ public class Ciphersuite_C3 extends Ciphersuite
 
 							assert (in_array_off==0);
 							
-
-							//Log.e(TAG, "encrypted message: "); 
-							//for (int i=0; i<in_encr.length;i++)
-							//	Log.e(TAG, ""+( unsignedByteToInt(in_encr[i])) );
-
 							String encr_payl=""; 
 							for (int i=0; i<len&&i<10;i++)
 								encr_payl=new String(encr_payl+ String.format("%2.2h ", unsignedByteToInt(encMsg[i])));
@@ -1611,15 +1594,8 @@ public class Ciphersuite_C3 extends Ciphersuite
 		{
 			BlockInfo iter = blocks_iter.next();
 			
-			byte[] print = iter.contents().array();
-			String key_str=""; 
-			for (int i=0; (i<print.length&&i<15);i++)
-				key_str=new String(key_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(print[i])));
-			BPF.getInstance().getBPFLogger().warning(TAG, "************ iter.contents(): 0x "+key_str);
-			
-			
 			BPF.getInstance().getBPFLogger().debug(TAG, "finalize()  iteration.next. type of block: "+iter.type().toString());
-			BPF.getInstance().getBPFLogger().info(TAG, "data offset: " + iter.data_offset() + " data_length: " + iter.data_length());
+			BPF.getInstance().getBPFLogger().debug(TAG, "data offset: " + iter.data_offset() + " data_length: " + iter.data_length());
 
 			// Advance the iterator to our current position.
 			// While we do it, we also remember the correlator values
@@ -2068,27 +2044,18 @@ public class Ciphersuite_C3 extends Ciphersuite
 						//initialization
 						mutate_func_event_data do_crypt_data = (mutate_func_event_data) data;
 						
-						//Bundle bundle =do_crypt_data.bundle();
-						//BlockInfo callerBlock = do_crypt_data.caller_block();
-						//BlockInfo targetBlock = do_crypt_data.target_block();
-						//int offset= do_crypt_data.offset();
 						IByteBuffer buf = do_crypt_data.buf();
 						int len = do_crypt_data.len();
-						//Log.e(TAG,String.format("len"+len));  32
-						//OpaqueContext r=do_crypt_data.context();
 						GCMBlockCipher gcmEngine= (GCMBlockCipher)do_crypt_data.context();
 						System.gc();
-						//tasks
 						encMsg = new byte[gcmEngine.getOutputSize(len)];
 						
-						//-------------------------------------------
 						byte[] inMsg = new byte[bundle.payload().length()];
 						bundle.payload().read_data(0, bundle.payload().length(), inMsg);
 						int in_array_off=0;
 						
 						assert (in_array_off==0);
 						assert (inMsg.length==len);
-						//in_encr ="testing".getBytes();
 						
 						String key_str=""; 
 						for (int i=0; (i<inMsg.length&&i<10);i++)
@@ -2097,10 +2064,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 						BPF.getInstance().getBPFLogger().debug(TAG, "finalize(). Plaintext message (first 10 char max): 0x "+key_str);
 						
 						in_encr_length=inMsg.length;
-						BPF.getInstance().getBPFLogger().info(TAG, "in_array_off: " + in_array_off);
-						 encLen = gcmEngine.processBytes(inMsg, in_array_off, len,encMsg,0);
-						//   byte[]          out_ICV= new byte[16];
-
+						encLen = gcmEngine.processBytes(inMsg, in_array_off, len,encMsg,0);
 
 						 BPF.getInstance().getBPFLogger().debug(TAG, "Ciphersuite_C3::do_crypt() operation encryption len " + len);
 
