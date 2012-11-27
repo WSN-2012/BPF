@@ -121,6 +121,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.reg.RegistrationTable;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.RoutingException;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.routers.BundleRouter.router_type_t;
+import se.kth.ssvl.tslab.wsn.general.servlib.security.Security;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.RegistrationStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.StatsManager;
@@ -667,7 +668,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		.debug(TAG, "Loaded registrations, going to load bundles");
 		load_bundles();
 		
-		// new Security();
+		// Start the security
+		new Security();
 		
 		shutting_down_ = false;
 		thread_ = new Thread(this);

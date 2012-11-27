@@ -33,7 +33,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PayloadBlockProcess
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PrimaryBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.security.Security;
-import se.kth.ssvl.tslab.wsn.general.servlib.security.Ciphersuite_C3;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
