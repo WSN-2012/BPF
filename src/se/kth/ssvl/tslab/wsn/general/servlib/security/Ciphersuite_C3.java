@@ -803,9 +803,12 @@ public class Ciphersuite_C3 extends Ciphersuite
 							//BlockInfo callerBlock = do_crypt_data.caller_block();
 							//BlockInfo targetBlock = do_crypt_data.target_block();
 							//int offset= do_crypt_data.offset();
-							IByteBuffer buf = do_crypt_data.buf();
-							int len = do_crypt_data.len();
 							//OpaqueContext r=do_crypt_data.context();
+							
+							
+//							IByteBuffer buf = do_crypt_data.buf();
+//							int len = do_crypt_data.len();
+							int len = bundle.payload().length();
 							GCMBlockCipher gcmEngine= do_crypt_data.context();
 							System.gc();
 							//tasks
@@ -813,7 +816,7 @@ public class Ciphersuite_C3 extends Ciphersuite
 
 							
 							//-------------------------------------------
-							byte[] encMsg = new byte[bundle.payload().length()];
+							byte[] encMsg = new byte[bundle.payload().length() + tag_len];
 							bundle.payload().read_data(0, bundle.payload().length(), encMsg);
 							int in_array_off=0;
 							
