@@ -1977,7 +1977,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	}
 
 	protected void handle_bundle_report(BundleReportEvent event) {
-		
+		BPF.getInstance().getBPFLogger().error(TAG, "Unimplmented method");
 	}
 
 	protected void handle_bundle_send(BundleSendRequest event) {
