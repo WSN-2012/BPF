@@ -26,6 +26,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.sta
 import se.kth.ssvl.tslab.wsn.general.servlib.common.ServlibEventData;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
+import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.BufferHelper;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
@@ -2114,14 +2115,15 @@ public class Ciphersuite_C3 extends Ciphersuite
 				temp_buf.rewind();
 				bundle.payload().write_data(temp_buf, 0, in_encr_length); //(from payloadblockprocessor)
 
-				byte[] temp_payload = new byte [in_encr_length];
-				bundle.payload().read_data(0, in_encr_length, temp_payload);
+				//need to update the hash list here ?
+//				BundleStore.getInstance().updateHash(bundle);
+				
+//				byte[] temp_payload = new byte [in_encr_length];
+//				bundle.payload().read_data(0, in_encr_length, temp_payload);
 				//Log.e(TAG, "New payload:");
 				//for (int i=0; i<in_encr.length;i++)
 				//	Log.e(TAG, ""+( unsignedByteToInt(temp_payload[i])) );
 
-				//update tag and tag_len, and 
-				//    tag=0;, tag_len
 
 				tag.rewind();
 				assert(tag.capacity()==encMsg.length-in_encr_length);

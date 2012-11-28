@@ -182,11 +182,11 @@ public class KeySteward
 	    BPF.getInstance().getBPFLogger().debug(TAG,"Got private key.");
 	    
 	    //log the key retrieved from the keystore
-  		byte[] privKey = key.getEncoded();
-  		String privKey_str=""; 
-  		for (int i=0; i<privKey.length;i++)
-  			privKey_str=new String(privKey_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(privKey[i])));
-  		BPF.getInstance().getBPFLogger().debug(TAG,"Got server's private key from certificate: 0x " + privKey_str);
+//  		byte[] privKey = key.getEncoded();
+//  		String privKey_str=""; 
+//  		for (int i=0; i<privKey.length;i++)
+//  			privKey_str=new String(privKey_str+ String.format("%2.2h ", Ciphersuite_C3.unsignedByteToInt(privKey[i])));
+//  		BPF.getInstance().getBPFLogger().debug(TAG,"Got server's private key from certificate: 0x " + privKey_str);
 	    
 		CMSEnvelopedData enveloped;
 
