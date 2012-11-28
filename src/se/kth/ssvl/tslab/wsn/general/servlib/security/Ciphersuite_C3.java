@@ -1168,7 +1168,9 @@ public class Ciphersuite_C3 extends Ciphersuite
 
 			block.set_contents( reserved_buffer );
 
-			BufferHelper.copy_data(reserved_buffer,	block.data_offset(), block.source().contents(), 0, length);
+			BufferHelper.copy_data(reserved_buffer,	block.data_offset(), 
+					block.source().contents(), block.source().data_offset(), 
+					length - block.source().data_offset());
 
 			BPF.getInstance().getBPFLogger().debug(TAG, "generate()  done");
 			return BP_SUCCESS;

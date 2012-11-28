@@ -29,13 +29,14 @@ public class Security {
 		if(BPF.getInstance().getConfig().security_setting().use_pcb()) {
 			Ciphersuite bp = Ciphersuite.find_suite(Ciphersuite_C3.CSNUM_C3);
 			assert (bp != null);
+			BPF.getInstance().getBPFLogger().debug(TAG, "Now preparing security blocks (PCB)...");
 			err = bp.prepare(bundle, xmit_blocks, null, link,
 					BlockInfo.list_owner_t.LIST_NONE);
 		}
 
 		// Do we have to use PIB?
 		if(BPF.getInstance().getConfig().security_setting().use_pib()) {
-			BPF.getInstance().getBPFLogger().error(TAG, "PIB blocks are not supported yet!");
+			BPF.getInstance().getBPFLogger().error(TAG, "PIB blocks are not supported yet! Skipping...");
 			// TODO: Add PIB support!
 		}
 

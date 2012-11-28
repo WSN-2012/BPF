@@ -195,8 +195,7 @@ public class BundleProtocol {
 		}
 
 		
-		//Now prepare security blocks
-		BPF.getInstance().getBPFLogger().debug(TAG, "Now preparing security blocks...");
+		//Now prepare security blocks (checking of the config is done inside this method)
 		Security.prepare_out_blocks(bundle, link, xmit_blocks);
 		
 		return xmit_blocks;
@@ -223,6 +222,7 @@ public class BundleProtocol {
 
 			BlockInfo iter = blocks.get(i);
 
+			BPF.getInstance().getBPFLogger().warning(TAG, "Calling generate for block type: " + iter.type());
 			iter.owner().generate(bundle, blocks, iter, link, last);
 
 			BPF.getInstance().getBPFLogger()
