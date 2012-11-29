@@ -26,7 +26,8 @@ public class Security {
 		int err = 0;
 		
 		//Do we have to use PCB?
-		if(BPF.getInstance().getConfig().security_setting().use_pcb()) {
+		if(BPF.getInstance().getConfig().security_setting().use_pcb()
+				&& !bundle.dest().getService().contains("epidemic")) {
 			Ciphersuite bp = Ciphersuite.find_suite(Ciphersuite_C3.CSNUM_C3);
 			assert (bp != null);
 			BPF.getInstance().getBPFLogger().debug(TAG, "Now preparing security blocks (PCB)...");
