@@ -297,9 +297,9 @@ public class BundleStore {
 	}
 
 	/**
-	 * When encrypting a bundle, the file stored on disk is changed.
-	 * We then need to update the hash for that bundle in the db.
-	 * This method does that.
+	 * This method updates the hash in the database for the given bundle
+	 * 
+	 * NOTE: not used and not tested
 	 * 
 	 * @param bundle
 	 */
@@ -315,8 +315,9 @@ public class BundleStore {
 		try {
 			byte payload[] = new byte[bundle.payload().length()];
 			bundle.payload().read_data(0, bundle.payload().length(), payload);
-			String toHash = new String(bundle.dest().byte_array())
-					+ new String(payload) + bundle.creation_ts().seconds();
+			String toHash = new String(bundle.source().byte_array())
+					+ new String(bundle.dest().byte_array())
+					+ bundle.creation_ts().toString(); //this looks like timestamp-bundleid
 			MessageDigest md;
 			md = MessageDigest.getInstance("SHA-1");
 			md.update(toHash.getBytes());
@@ -375,8 +376,9 @@ public class BundleStore {
 					byte payload[] = new byte[bundle.payload().length()];
 					bundle.payload().read_data(0, bundle.payload().length(),
 							payload);
-					String toHash = new String(bundle.dest().byte_array())
-							+ new String(payload) + bundle.creation_ts().seconds();
+					String toHash = new String(bundle.source().byte_array())
+							+ new String(bundle.dest().byte_array())
+							+ bundle.creation_ts().toString(); //this looks like timestamp-bundleid
 					MessageDigest md;
 					md = MessageDigest.getInstance("SHA-1");
 					md.update(toHash.getBytes());
