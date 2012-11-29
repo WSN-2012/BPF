@@ -4,6 +4,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.security;
 import static se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor.BP_FAIL;
 import static se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor.BP_SUCCESS;
 
+import java.io.File;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -2113,7 +2114,15 @@ public class Ciphersuite_C3 extends Ciphersuite
 				for (int i=0; i<in_encr_length;i++)
 					temp_buf.put(encMsg[i]);
 				temp_buf.rewind();
-				bundle.payload().write_data(temp_buf, 0, in_encr_length); //(from payloadblockprocessor)
+				bundle.payload().setIsEncrypted(true);
+				bundle.payload().setFile(
+						new File(bundle.payload().file().getParentFile()
+								.getAbsolutePath()
+								+ "/"
+								+ bundle.payload().file().getName()
+								+ "_"
+								+ Integer.toString((int)(Math.random() * 10000))));
+				bundle.payload().write_data(temp_buf, 0, in_encr_length);
 
 				//need to update the hash list here ?
 //				BundleStore.getInstance().updateHash(bundle);

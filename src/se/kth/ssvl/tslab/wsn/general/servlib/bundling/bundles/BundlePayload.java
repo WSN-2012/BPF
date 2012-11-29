@@ -73,6 +73,7 @@ public class BundlePayload implements Serializable {
 		location_ = location_t.DISK;
 		length_ = 0;
 		lock_ = lock;
+		isEncrypted = false;
 
 	}
 	
@@ -80,6 +81,7 @@ public class BundlePayload implements Serializable {
 		location_ = location;
 		length_ = 0;
 		lock_ = new Lock();
+		isEncrypted = false;
 	}
 
 	/**
@@ -136,10 +138,34 @@ public class BundlePayload implements Serializable {
 	}
 
 	/**
+	 * Check if the payload is an encrypted payload
+	 * @return Returns true if encrypted
+	 */
+	public boolean isEncrypted() {
+		return isEncrypted;
+	}
+	
+	/**
+	 * Setter to flag this payload encrypted
+	 * @param isEncrypted true if encrypted
+	 */
+	public void setIsEncrypted(boolean isEncrypted) {
+		this.isEncrypted = isEncrypted; 
+	}
+	
+	/**
 	 * Get File object, this will be valid in case of Payload location as Disk
 	 */
 	public File file() {
 		return file_;
+	}
+	
+	/**
+	 * Set the file pointer
+	 * @param file The file to point to
+	 */
+	public void setFile(File file) {
+		this.file_ = file;
 	}
 
 	/**
@@ -649,4 +675,6 @@ public class BundlePayload implements Serializable {
 	 * the lock for this Bundle payload to support mutual exclusion
 	 */
 	protected Lock lock_;
+	
+	private boolean isEncrypted;
 };

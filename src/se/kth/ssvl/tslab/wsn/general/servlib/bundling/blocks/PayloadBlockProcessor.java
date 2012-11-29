@@ -288,7 +288,12 @@ public class PayloadBlockProcessor extends BlockProcessor implements
 		bundle.payload().read_data(payload_offset, tocopy, buf);
 
 		buf.position(old_position);
-
-		return;
+		
+		// Just before returning deleting the temporary encrypted payload file if there is one
+		if (bundle.payload().isEncrypted()) {
+			if (!bundle.payload().file().delete()) {
+				BPF.getInstance().getBPFLogger().error(TAG, "Problems deleting the temporary encrypted payload file");
+			}
+		}
 	}
 }
