@@ -239,5 +239,9 @@ public class BundleTimestamp implements Serializable {
 	public void set_seqno(long seqno) {
 		seqno_ = seqno;
 	}
-
+	
+	public String toString() {
+		return seconds_ + "-" + seqno_;
+	}
+	
 };
