@@ -152,8 +152,10 @@ public class IPDiscovery extends Discovery implements Runnable {
 	protected boolean configure() {
 
 		if (thread_.isAlive()) {
-			BPF.getInstance().getBPFLogger().warning(TAG,
-					"reconfiguration of IPDiscovery not supported");
+			BPF.getInstance()
+					.getBPFLogger()
+					.warning(TAG,
+							"reconfiguration of IPDiscovery not supported");
 			return false;
 		}
 
@@ -167,11 +169,13 @@ public class IPDiscovery extends Discovery implements Runnable {
 			socket_.setBroadcast(true);
 			socket_.setSoTimeout(TIMEOUT_MS);
 		} catch (IOException e) {
-			BPF.getInstance().getBPFLogger().error(TAG, "bind failed " + e.getMessage());
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "bind failed " + e.getMessage());
 		}
 
-		BROADCAST = BPF.getInstance().getBPFCommunication().getBroadcastAddress();
-		
+		BROADCAST = BPF.getInstance().getBPFCommunication()
+				.getBroadcastAddress();
+
 		BPF.getInstance().getBPFLogger().debug(TAG, "starting thread");
 
 		return true;
@@ -190,12 +194,12 @@ public class IPDiscovery extends Discovery implements Runnable {
 		while (true) {
 			if (shutdown_)
 				break;
-			
+
 			/* Send section */
 			try {
 				int min_diff = INT_MAX;
 				Iterator<Announce> i = list_.iterator();
-				
+
 				while (i.hasNext()) {
 					IPAnnounce announce = (IPAnnounce) i.next();
 
@@ -223,16 +227,27 @@ public class IPDiscovery extends Discovery implements Runnable {
 							}
 
 							DatagramPacket pack = new DatagramPacket(data,
-									data.length,
-									BROADCAST,
-									port_);
+									data.length, BROADCAST, port_);
 							socket_.send(pack);
 							min_diff = announce.interval();
 						} catch (Exception e) {
-							BPF.getInstance().getBPFLogger().error(
-									TAG,
-									"error sending the packet "
-											+ e.getMessage());
+							BPF.getInstance()
+									.getBPFLogger()
+									.warning(TAG,
+											"error sending the packet "
+													+ e.getMessage());
+							
+							BROADCAST = BPF.getInstance().getBPFCommunication()
+									.getBroadcastAddress();
+							
+							if (BROADCAST != null) {
+								BPF.getInstance()
+								.getBPFLogger()
+								.debug(TAG,
+										"Got new broadcast address: "
+												+ BROADCAST
+												.getHostAddress());
+							}
 						}
 					} else {
 						if (remaining < min_diff) {
@@ -287,17 +302,28 @@ public class IPDiscovery extends Discovery implements Runnable {
 				BundleDaemon BD = BundleDaemon.getInstance();
 
 				if (!remote_eid.equals(BD.local_eid())) {
-					BPF.getInstance().getBPFLogger().debug(TAG, "Received beacon from: " 
-							+ remote_eid + "@" + packet.getAddress().toString().substring(1));
+					BPF.getInstance()
+							.getBPFLogger()
+							.debug(TAG,
+									"Received beacon from: "
+											+ remote_eid
+											+ "@"
+											+ packet.getAddress().toString()
+													.substring(1));
 					// distribute to all beacons registered for this CL type
-					handle_neighbor_discovered(Type, nexthop, remote_eid);	
+					handle_neighbor_discovered(Type, nexthop, remote_eid);
 				}
 			} catch (SocketTimeoutException e) {
-				/* Do nothing if it times out, this is normal.
-				 * This means that the no one is broadcasting to us and we just have to wait */
+				/*
+				 * Do nothing if it times out, this is normal. This means that
+				 * the no one is broadcasting to us and we just have to wait
+				 */
 			} catch (Exception e) {
-				BPF.getInstance().getBPFLogger().info(TAG,
-						"Fail receiving the UDP datagram " + e.getMessage());
+				BPF.getInstance()
+						.getBPFLogger()
+						.info(TAG,
+								"Fail receiving the UDP datagram "
+										+ e.getMessage());
 				e.printStackTrace();
 			}
 
