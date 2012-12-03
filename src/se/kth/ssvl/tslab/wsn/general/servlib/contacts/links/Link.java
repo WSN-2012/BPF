@@ -1013,8 +1013,8 @@ public class Link implements Serializable {
 				mtu_ = 0;
 			}
 
-			min_retry_interval_ = 3;
-			max_retry_interval_ = 3;
+			min_retry_interval_ = BPF.getInstance().getConfig().links_setting().retryInteval();
+			max_retry_interval_ = BPF.getInstance().getConfig().links_setting().retryInteval();
 			idle_close_time_ = 30;
 
 			potential_downtime_ = 30;
