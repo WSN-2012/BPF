@@ -155,13 +155,15 @@ public class TCPConnection extends Connection {
 		InetSocketAddress remote = new InetSocketAddress(params.remote_addr_,
 				params.remote_port_);
 		try {
+			BPF.getInstance().getBPFLogger().warning(TAG, "Gonna connect now");
 			socket_.connect(remote);
 			initialize_channels_and_streams();
 
 		} catch (IOException e) {
+			BPF.getInstance().getBPFLogger().warning(TAG, "Got an IOException: " + e.getMessage());
 			throw new ConnectionException();
 		} catch (Exception e) {
-
+			BPF.getInstance().getBPFLogger().warning(TAG, "Got an Exception: " + e.getMessage());
 			throw new ConnectionException();
 		}
 		// start a connection to the other side... in most cases, this

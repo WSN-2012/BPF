@@ -249,6 +249,8 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 		assert (params != null);
 		dest_addr_ = link.dest_ip();
 		dest_port_ = link.remote_port();
+		params.remote_addr_ = dest_addr_;
+		params.remote_port_ = dest_port_;
 		return new TCPConnection(this, params);
 	}
 

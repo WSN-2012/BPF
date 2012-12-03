@@ -381,7 +381,7 @@ public class Link implements Serializable {
 	public Link(String name, link_type_t type, ConvergenceLayer cl,
 			String nexthop) {
 
-		BPF.getInstance().getBPFLogger().debug(TAG, "Link" + name);
+		BPF.getInstance().getBPFLogger().debug(TAG, "Link " + name);
 		type_ = type;
 		state_ = Link.state_t.UNAVAILABLE;
 		deleted_ = false;
@@ -392,7 +392,7 @@ public class Link implements Serializable {
 		try {
 			dest_ip_ = InetAddress.getByName(parameters[0].replace("/", ""));
 		} catch (IOException e) {
-			BPF.getInstance().getBPFLogger().debug(TAG, "IOException getting dest_ip");
+			BPF.getInstance().getBPFLogger().error(TAG, "IOException getting dest_ip");
 		}
 		remote_port_ = (short) Integer.parseInt(parameters[1]);
 		name_ = name;
@@ -1275,6 +1275,17 @@ public class Link implements Serializable {
 	 * Accessors for the destination ip
 	 */
 	public InetAddress dest_ip() {
+		// If dest_ip is null it means we couldn't resolve it previously
+		// Re-resolve it
+		if (dest_ip_ == null) {
+			try {
+				dest_ip_ = InetAddress.getByName(nexthop_.split(":", 2)[0].replace("/", ""));
+				BPF.getInstance().getBPFLogger().warning(TAG, "dest_ip_ after resolve: " + dest_ip_);
+			} catch (IOException e) {
+				BPF.getInstance().getBPFLogger().error(TAG, "IOException getting dest_ip");
+			}
+		}
+		
 		return dest_ip_;
 	}
 
