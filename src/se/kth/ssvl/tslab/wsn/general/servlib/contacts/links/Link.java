@@ -1025,7 +1025,7 @@ public class Link implements Serializable {
 				}
 			}
 			
-			if (link.retryInterval() == LinkEntry.LINK_DEFAULT_RETRY_INTERVAL) {
+			if (link == null || link.retryInterval() == LinkEntry.LINK_DEFAULT_RETRY_INTERVAL) {
 				min_retry_interval_ = LinkEntry.LINK_DEFAULT_RETRY_INTERVAL;
 				max_retry_interval_ = LinkEntry.LINK_DEFAULT_RETRY_INTERVAL;
 			} else {
