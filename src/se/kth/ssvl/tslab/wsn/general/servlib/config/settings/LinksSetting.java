@@ -122,6 +122,8 @@ public class LinksSetting {
 	 */
 	private int fragmentation_mtu;
 
+	private int retryInterval;
+	
 
 	/**
 	 * Accessor for the Link Entries inside this Link Setting
@@ -156,5 +158,13 @@ public class LinksSetting {
 	
 	public int fragmentation_mtu() {
 		return fragmentation_mtu;
+	}
+	
+	public int retryInteval() {
+		return retryInterval;
+	}
+	
+	public void setRetryInterval(int interval) {
+		retryInterval = interval;
 	}
 }
