@@ -297,6 +297,52 @@ public class BundleStore {
 	}
 
 	/**
+	 * This method updates the hash in the database for the given bundle
+	 * 
+	 * NOTE: not used and not tested
+	 * 
+	 * @param bundle
+	 */
+	public void updateHash (Bundle bundle) {
+		
+		int bundleid = bundle.bundleid();
+		BPF.getInstance().getBPFLogger().debug(TAG,
+				"Going to update hash in database for bundle : " + bundleid);
+		
+		HashMap<String, Object> values = new HashMap<String, Object>();
+
+		//calculate hash
+		try {
+			byte payload[] = new byte[bundle.payload().length()];
+			bundle.payload().read_data(0, bundle.payload().length(), payload);
+			String toHash = new String(bundle.source().byte_array())
+					+ new String(bundle.dest().byte_array())
+					+ bundle.creation_ts().toString(); //this looks like timestamp-bundleid
+			MessageDigest md;
+			md = MessageDigest.getInstance("SHA-1");
+			md.update(toHash.getBytes());
+			byte byteData[] = md.digest();
+			String hash = byteArrayToHexString(byteData);
+			values.put("hash", hash);
+			BPF.getInstance().getBPFLogger()
+					.debug(TAG, "This is to be hashed: " + toHash);
+		} catch (NoSuchAlgorithmException e) {
+			BPF.getInstance()
+					.getBPFLogger()
+					.error(TAG,
+							"Exception during hash calculation: "
+									+ e.getMessage());
+		}
+
+		//update db
+		String condition = "id = " + bundleid;
+		if (!impt_sqlite_.update(table, values, condition, null)) {
+			BPF.getInstance().getBPFLogger().error(TAG, "Error while updating hash in database");
+		}
+	}
+	
+	
+	/**
 	 * Update the bundle if bundle already saved on the disk.
 	 * 
 	 * @param bundle
@@ -330,8 +376,9 @@ public class BundleStore {
 					byte payload[] = new byte[bundle.payload().length()];
 					bundle.payload().read_data(0, bundle.payload().length(),
 							payload);
-					String toHash = new String(bundle.dest().byte_array())
-							+ new String(payload) + bundle.creation_ts().seconds();
+					String toHash = new String(bundle.source().byte_array())
+							+ new String(bundle.dest().byte_array())
+							+ bundle.creation_ts().toString(); //this looks like timestamp-bundleid
 					MessageDigest md;
 					md = MessageDigest.getInstance("SHA-1");
 					md.update(toHash.getBytes());
@@ -339,7 +386,7 @@ public class BundleStore {
 					String hash = byteArrayToHexString(byteData);
 					values.put("hash", hash);
 					BPF.getInstance().getBPFLogger()
-							.warning(TAG, "This is to be hashed: " + toHash);
+							.debug(TAG, "This is to be hashed: " + toHash);
 				} catch (NoSuchAlgorithmException e) {
 					BPF.getInstance().getBPFLogger().error(TAG, "Exception during hash calculation: "
 							+ e.getMessage());

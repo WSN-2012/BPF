@@ -32,6 +32,7 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PayloadBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PrimaryBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
+import se.kth.ssvl.tslab.wsn.general.servlib.security.Ciphersuite_C3;
 import se.kth.ssvl.tslab.wsn.general.servlib.security.Security;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
@@ -194,9 +195,8 @@ public class BundleProtocol {
 		}
 
 		
-		//Now prepare security blocks
-		BPF.getInstance().getBPFLogger().debug(TAG, "Now preparing security blocks...");
-		//Security.prepare_out_blocks(bundle, link, xmit_blocks);
+		//Now prepare security blocks (checking of the config is done inside this method)
+		Security.prepare_out_blocks(bundle, link, xmit_blocks);
 		
 		return xmit_blocks;
 	}
@@ -222,6 +222,7 @@ public class BundleProtocol {
 
 			BlockInfo iter = blocks.get(i);
 
+			BPF.getInstance().getBPFLogger().warning(TAG, "Calling generate for block type: " + iter.type());
 			iter.owner().generate(bundle, blocks, iter, link, last);
 
 			BPF.getInstance().getBPFLogger()
@@ -232,7 +233,7 @@ public class BundleProtocol {
 									iter.owner().block_type(), iter.type(),
 									iter.data_offset(), iter.data_length(),
 									iter.contents().position()));
-
+			
 			if (last) {
 				assert ((iter.flags() & BundleProtocol.block_flag_t.BLOCK_FLAG_LAST_BLOCK
 						.getCode()) != 0);
@@ -362,9 +363,10 @@ public class BundleProtocol {
 							remainder, current_block.type().toString(), offset
 
 					));
+			
 			current_block.owner().produce(bundle, current_block, data, offset,
 					tocopy);
-
+			
 			len -= tocopy;
 
 			// move the position of IByteBuffer
@@ -396,6 +398,8 @@ public class BundleProtocol {
 				break;
 			}
 
+			
+			
 			// advance to next block
 			current_block = iter.next();
 			offset = 0;
@@ -480,6 +484,8 @@ public class BundleProtocol {
 									info.owner().block_type(), info.type(),
 									info.contents().position()));
 
+			int pos_data_temp = data.position();
+			
 			int cc = info.owner().consume(bundle, info, data, len);
 			if (cc < 0) {
 				BPF.getInstance().getBPFLogger().error(
@@ -490,6 +496,9 @@ public class BundleProtocol {
 				return -1;
 			}
 
+			//sd. in C++, "value" is not modified. But in Java, value.pos was modified. We set it back.
+	        data.position(pos_data_temp);
+			
 			// "decrement the amount that was just handled from the overall
 			// total. verify that the block was either completed or
 			// consumed all the data that was passed in." [DTN2]
