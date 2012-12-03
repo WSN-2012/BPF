@@ -33,10 +33,13 @@ public class LinksSetting {
 	 * Class represents individual link entry in the links
 	 */
 	public static class LinkEntry {
+		public static final int LINK_DEFAULT_RETRY_INTERVAL = 3;
+		
 		private String id_;
 		private String dest_;
 		private Link.link_type_t type_;
 		private conv_layer_type_t conv_layer_type_;
+		private int retryInterval = LINK_DEFAULT_RETRY_INTERVAL;
 
 		/**
 		 * @return the id_
@@ -98,6 +101,14 @@ public class LinksSetting {
 			conv_layer_type_ = conv_layer_type;
 		}
 
+		public int retryInterval() {
+			return retryInterval;
+		}
+		
+		public void setRetryInterval(int interval) {
+			retryInterval = interval;
+		}
+		
 	}
 
 	/**
@@ -122,8 +133,6 @@ public class LinksSetting {
 	 */
 	private int fragmentation_mtu;
 
-	private int retryInterval;
-	
 
 	/**
 	 * Accessor for the Link Entries inside this Link Setting
@@ -158,13 +167,5 @@ public class LinksSetting {
 	
 	public int fragmentation_mtu() {
 		return fragmentation_mtu;
-	}
-	
-	public int retryInteval() {
-		return retryInterval;
-	}
-	
-	public void setRetryInterval(int interval) {
-		retryInterval = interval;
 	}
 }

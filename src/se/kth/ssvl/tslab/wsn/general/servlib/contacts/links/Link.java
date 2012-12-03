@@ -32,6 +32,7 @@ import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
+import se.kth.ssvl.tslab.wsn.general.servlib.config.settings.LinksSetting.LinkEntry;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.Contact;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.AttributeVector;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.attributes.NamedAttribute;
@@ -143,7 +144,7 @@ public class Link implements Serializable {
 
 		assert (clayer_ != null) : "Link : Link, clayer is null";
 
-		params_ = new Params();
+		params_ = new Params(name_);
 		retry_interval_ = 5; // set in ContactManager
 
 		stats_ = new LinkStats();
@@ -412,7 +413,7 @@ public class Link implements Serializable {
 
 		assert (clayer_ != null) : "Link : Link, clayer is null";
 
-		params_ = new Params();
+		params_ = new Params(name_);
 		retry_interval_ = 5; // set in ContactManager
 
 		stats_ = new LinkStats();
@@ -1005,7 +1006,7 @@ public class Link implements Serializable {
 		/**
 		 * Default constructor.
 		 */
-		Params() {
+		Params(String name) {
 
 			if (BPF.getInstance().getConfig().links_setting().proactive_fragmentation()) {
 				mtu_ = BPF.getInstance().getConfig().links_setting().fragmentation_mtu();
@@ -1013,8 +1014,24 @@ public class Link implements Serializable {
 				mtu_ = 0;
 			}
 
-			min_retry_interval_ = BPF.getInstance().getConfig().links_setting().retryInteval();
-			max_retry_interval_ = BPF.getInstance().getConfig().links_setting().retryInteval();
+			// Search for this link to find retry interval
+			Iterator<LinkEntry> links = BPF.getInstance().getConfig().links_setting().link_entries().iterator();
+			LinkEntry link = null;
+			while (links.hasNext()) {
+				link = links.next();
+				if (link.id().contains(name)) {
+					// This mean we found the right link
+					break;
+				}
+			}
+			
+			if (link.retryInterval() == LinkEntry.LINK_DEFAULT_RETRY_INTERVAL) {
+				min_retry_interval_ = LinkEntry.LINK_DEFAULT_RETRY_INTERVAL;
+				max_retry_interval_ = LinkEntry.LINK_DEFAULT_RETRY_INTERVAL;
+			} else {
+				min_retry_interval_ = link.retryInterval();
+				max_retry_interval_ = link.retryInterval();
+			}
 			idle_close_time_ = 30;
 
 			potential_downtime_ = 30;

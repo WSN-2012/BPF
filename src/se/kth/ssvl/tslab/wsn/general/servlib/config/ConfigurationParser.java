@@ -324,10 +324,12 @@ public class ConfigurationParser {
 					else if (typeText.equals("OPPORTUNISTIC")) {
 						link_entry.set_type(link_type_t.OPPORTUNISTIC);
 					}
-					
+
 					try {
 						Attr interval = e.getAttributeNode("interval");
-						config.links_setting().setRetryInterval(Integer.parseInt(interval.getValue()));
+						if (interval != null) {
+							link_entry.setRetryInterval(Integer.parseInt(interval.getValue()));
+						}
 					} catch (NumberFormatException ex) {
 						throw new InvalidDTNConfigurationException("The retry interval was not a number");
 					}
