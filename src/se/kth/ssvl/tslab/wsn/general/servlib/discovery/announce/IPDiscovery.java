@@ -322,9 +322,8 @@ public class IPDiscovery extends Discovery implements Runnable {
 				BPF.getInstance()
 						.getBPFLogger()
 						.info(TAG,
-								"Fail receiving the UDP datagram "
+								"Fail receiving the UDP datagram: "
 										+ e.getMessage());
-				e.printStackTrace();
 			}
 
 		}
