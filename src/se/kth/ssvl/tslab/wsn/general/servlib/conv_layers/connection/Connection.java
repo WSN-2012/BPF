@@ -684,7 +684,7 @@ public abstract class Connection extends CLConnection {
 
 		int timeout = 10;
 		if (params.keepalive_interval() != 0)
-			timeout = 2 * params.keepalive_interval();
+			timeout = 5 * params.keepalive_interval();
 
 		elapsed_received = (now - data_rcvd_);
 

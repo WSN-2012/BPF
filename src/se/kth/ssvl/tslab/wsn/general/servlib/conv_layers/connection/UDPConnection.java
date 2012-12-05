@@ -87,7 +87,7 @@ public class UDPConnection extends CLConnection {
 	/**
 	 * Socket timeout in seconds both write and read
 	 */
-	private int SOCKET_TIMEOUT = 3;
+	private int SOCKET_TIMEOUT = 10;
 
 	/**
 	 * Uploading and downloading flags
@@ -1476,7 +1476,7 @@ public class UDPConnection extends CLConnection {
 
 		int timeout = 10;
 		if (params.keepalive_interval() != 0)
-			timeout = 2 * params.keepalive_interval();
+			timeout = 5 * params.keepalive_interval();
 
 		elapsed_received = (now - data_rcvd_);
 

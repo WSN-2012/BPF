@@ -57,7 +57,7 @@ public class TCPConnection extends Connection {
 	/**
 	 * Socket timeout in seconds both write and read
 	 */
-	private int SOCKET_TIMEOUT = 1;
+	private int SOCKET_TIMEOUT = 10;
 
 	/**
 	 * Unique identifier according to Java Serializable specification

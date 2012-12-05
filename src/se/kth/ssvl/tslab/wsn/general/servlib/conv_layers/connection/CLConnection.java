@@ -384,12 +384,13 @@ public abstract class CLConnection extends CLInfo implements Runnable {
 		boolean new_link = false;
 		Link link = cm.find_link_to(peer_eid);
 
-		if (link == null || link.contact() != null) {
-			if (link != null) {
-				BPF.getInstance().getBPFLogger().warning(TAG,
-						"in-use opportunistic link " + link);
-			}
-
+		
+		//if (link == null || link.contact() != null) {
+		//	if (link != null) {
+		//		BPF.getInstance().getBPFLogger().warning(TAG,
+		//				"in-use opportunistic link " + link);
+		//	}
+		if (link==null) {
 			link = cm.new_opportunistic_link(cl_, nexthop_, peer_eid);
 			if (link == null) {
 				BPF.getInstance().getBPFLogger().debug(TAG,
