@@ -101,7 +101,7 @@ public class Ciphersuite_C3 extends Ciphersuite {
 		// in on-the-fly scenario, process this data for those interested
 
 		if (!block.complete()) {
-			assert (cc == (int) len);
+			assert (cc == len);
 
 			return cc;
 		}
@@ -158,7 +158,7 @@ public class Ciphersuite_C3 extends Ciphersuite {
 		 * if it does match, parse and validate the block 5. the actions must
 		 * exactly reverse the transforming changes made in finalize()
 		 */
-		Bundle deliberate_const_cast_bundle = (Bundle) (bundle);
+		Bundle deliberate_const_cast_bundle = bundle;
 		BP_Local_CS locals = (BP_Local_CS) (block.locals());
 		int offset;
 		int len;
@@ -1564,7 +1564,7 @@ public class Ciphersuite_C3 extends Ciphersuite {
 						mutate_func_event_data do_crypt_data = (mutate_func_event_data) data;
 
 						int len = do_crypt_data.len();
-						GCMBlockCipher gcmEngine = (GCMBlockCipher) do_crypt_data
+						GCMBlockCipher gcmEngine = do_crypt_data
 								.context();
 						System.gc();
 						encMsg = new byte[gcmEngine.getOutputSize(len)];

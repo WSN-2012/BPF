@@ -64,7 +64,7 @@ public class C_BlockProcessor extends BlockProcessor {
 		// in on-the-fly scenario, process this data for those interested
 
 		if (!block.complete()) {
-			assert (cc == (int) len);
+			assert (cc == len);
 			return cc;
 		}
 
