@@ -173,9 +173,6 @@ public class IPDiscovery extends Discovery implements Runnable {
 					.error(TAG, "bind failed " + e.getMessage());
 		}
 
-		BROADCAST = BPF.getInstance().getBPFCommunication()
-				.getBroadcastAddress();
-
 		BPF.getInstance().getBPFLogger().debug(TAG, "starting thread");
 
 		return true;
@@ -227,7 +224,7 @@ public class IPDiscovery extends Discovery implements Runnable {
 							}
 
 							DatagramPacket pack = new DatagramPacket(data,
-									data.length, BROADCAST, port_);
+									data.length, announce.getBroadcastAddress(), port_);
 							socket_.send(pack);
 							min_diff = announce.interval();
 						} catch (Exception e) {
@@ -237,15 +234,12 @@ public class IPDiscovery extends Discovery implements Runnable {
 											"error sending the packet "
 													+ e.getMessage());
 							
-							BROADCAST = BPF.getInstance().getBPFCommunication()
-									.getBroadcastAddress();
-							
-							if (BROADCAST != null) {
+							if (announce.getBroadcastAddress() != null) {
 								BPF.getInstance()
 								.getBPFLogger()
 								.debug(TAG,
 										"Got new broadcast address: "
-												+ BROADCAST
+												+ announce.getBroadcastAddress()
 												.getHostAddress());
 							}
 						}
@@ -371,7 +365,5 @@ public class IPDiscovery extends Discovery implements Runnable {
 	// failures
 	protected DiscoveryHeader hdr; // / Header of the discovery packet
 	protected byte[] data; // / the data to be sent
-	protected InetAddress BROADCAST; // / Broadcast address of the network where
-	// the phone is connected
 
 }

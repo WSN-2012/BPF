@@ -20,8 +20,10 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce;
 
+import java.net.InetAddress;
 import java.util.Calendar;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.conv_layers.ConvergenceLayer;
 import se.kth.ssvl.tslab.wsn.general.servlib.discovery.DiscoveryHeader;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
@@ -41,6 +43,13 @@ import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 
 public abstract class Announce {
 
+	public InetAddress getBroadcastAddress() {
+		if (broadcastAddress == null) {
+			broadcastAddress = BPF.getInstance().getBPFCommunication().getBroadcastAddress(name_);
+		}
+		return broadcastAddress;
+	}
+	
 	/**
 	 * The name of this Announce instance
 	 */
@@ -143,5 +152,6 @@ public abstract class Announce {
 	protected String type_; // /< pulled from cl_
 	protected int interval_; // /< interval (in milliseconds) for beacon header
 	protected long data_sent_; // /< mark each time data is sent
+	protected InetAddress broadcastAddress;
 
 }
