@@ -9,7 +9,7 @@ public interface BPFCommunication {
 	 * Note: This can be a bit tricky, make sure you get the right address.
 	 * @return The ip address of the device.
 	 */
-	public abstract InetAddress getDeviceIP();
+	public abstract InetAddress getDeviceIP(String interfaceName);
 	
 	/**
 	 * Get the broadcast address for which to send the discovery packets on.

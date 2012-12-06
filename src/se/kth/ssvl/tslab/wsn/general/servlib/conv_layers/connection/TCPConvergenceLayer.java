@@ -78,8 +78,11 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	 * 
 	 * @return The current IP address
 	 */
-	public static InetAddress getting_my_ip() {
-			return BPF.getInstance().getBPFCommunication().getDeviceIP();
+	public InetAddress getting_my_ip(String interfaceName) {
+		if (localAddr == null) {
+			localAddr = BPF.getInstance().getBPFCommunication().getDeviceIP(interfaceName);
+		}
+		return localAddr;
 	}
 
 	/**
@@ -88,18 +91,20 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 	@Override
 	public boolean interface_up(Interface iface) {
 
-		BPF.getInstance().getBPFLogger().debug(TAG, "adding interface " + iface.name());
-		InetAddress local_addr_ = getting_my_ip();
+		BPF.getInstance().getBPFLogger()
+				.debug(TAG, "adding interface " + iface.name());
+		InetAddress local_addr_ = getting_my_ip(iface.name());
 
 		// check that the local interface / port are valid
 		if (local_addr_ == null) {
-			BPF.getInstance().getBPFLogger().error(TAG,
-					"invalid local address setting of null");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "invalid local address setting of null");
 			return false;
 		}
 
 		if (local_port == 0) {
-			BPF.getInstance().getBPFLogger().error(TAG, "invalid local port setting of 0");
+			BPF.getInstance().getBPFLogger()
+					.error(TAG, "invalid local port setting of 0");
 			return false;
 		}
 
@@ -109,7 +114,8 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 
 		if (!listen_.isBound()) {
 
-			BPF.getInstance().getBPFLogger().warning(TAG, "listener in not bound");
+			BPF.getInstance().getBPFLogger()
+					.warning(TAG, "listener in not bound");
 		}
 
 		iface.set_cl_info(listen_);
@@ -189,7 +195,6 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 		private static final long serialVersionUID = -1953097665691499712L;
 
 		public boolean hexdump_; // /< Log a hexdump of all traffic
-		public InetAddress local_addr_; // /< Local address to bind to
 		public InetAddress remote_addr_; // /< Peer address used for
 
 		public InetAddress remote_addr() {
@@ -206,7 +211,6 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 
 			super(init_defaults);
 			hexdump_ = false;
-			local_addr_ = getting_my_ip();
 			local_port_ = local_port;
 			remote_addr_ = dest_addr_;
 			remote_port_ = TCPCL_DEFAULT_PORT;
@@ -226,7 +230,6 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 		TCPLinkParams params = (TCPLinkParams) (link.cl_info());
 		assert (params != null) : "TCPConvergenceLayer : dump_link, params are null";
 
-		buf.append("local_addr: " + (params.local_addr_) + "\n");
 		buf.append("remote_addr: " + (params.remote_addr_) + "\n");
 		buf.append("remote_port: " + (params.remote_port_) + "\n");
 
@@ -258,6 +261,7 @@ public class TCPConvergenceLayer extends StreamConvergenceLayer implements
 							// connection)
 
 	protected InetAddress dest_addr_; // / Destination IPaddress
+	protected InetAddress localAddr; // Local IPaddress 
 	protected short dest_port_; // / destination port
 	protected short local_port; // / local port
 

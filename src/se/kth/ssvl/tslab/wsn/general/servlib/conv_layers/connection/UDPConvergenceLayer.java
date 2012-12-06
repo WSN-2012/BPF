@@ -78,8 +78,11 @@ public class UDPConvergenceLayer extends StreamConvergenceLayer implements
 	 * 
 	 * @return The current IP address
 	 */
-	public static InetAddress getting_my_ip() {
-		return TCPConvergenceLayer.getting_my_ip();
+	public InetAddress getting_my_ip(String interfaceName) {
+		if (localAddr == null) {
+			localAddr = BPF.getInstance().getBPFCommunication().getDeviceIP(interfaceName);
+		}
+		return localAddr;
 	}
 
 	/**
@@ -88,7 +91,7 @@ public class UDPConvergenceLayer extends StreamConvergenceLayer implements
 	@Override
 	public boolean interface_up(Interface iface) {
 		BPF.getInstance().getBPFLogger().debug(TAG, "adding interface " + iface.name());
-		InetAddress local_addr_ = getting_my_ip();
+		InetAddress local_addr_ = getting_my_ip(iface.name());
 
 		// check that the local interface / port are valid
 		if (local_addr_ == null) {
@@ -204,7 +207,6 @@ public class UDPConvergenceLayer extends StreamConvergenceLayer implements
 
 			super(init_defaults);
 			hexdump_ = false;
-			local_addr_ = getting_my_ip();
 			local_port_ = local_port;
 			remote_addr_ = dest_addr_;
 			remote_port_ = UDPCL_DEFAULT_PORT;
@@ -223,7 +225,6 @@ public class UDPConvergenceLayer extends StreamConvergenceLayer implements
 		UDPLinkParams params = (UDPLinkParams) (link.cl_info());
 		assert (params != null) : "UDPConvergenceLayer : dump_link, params are null";
 
-		buf.append("local_addr: " + (params.local_addr_) + "\n");
 		buf.append("remote_addr: " + (params.remote_addr_) + "\n");
 		buf.append("remote_port: " + (params.remote_port_) + "\n");
 	}
@@ -252,6 +253,7 @@ public class UDPConvergenceLayer extends StreamConvergenceLayer implements
 							// connection)
 
 	protected InetAddress dest_addr_; // / Destination IPaddress
+	protected InetAddress localAddr; // Local IPaddress 
 	protected short dest_port_; // / destination port
 	protected short local_port; // / local port
 
