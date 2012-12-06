@@ -23,6 +23,7 @@ package se.kth.ssvl.tslab.wsn.general.servlib.discovery;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
@@ -35,7 +36,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce.Announce;
 import se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce.AnnouncementList;
 import se.kth.ssvl.tslab.wsn.general.servlib.discovery.announce.IPDiscovery;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 /**
  * "Abstraction of neighbor discovery agent.

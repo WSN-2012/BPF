@@ -1,5 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.reg;
 
+import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.status_report_reason_t;
@@ -8,7 +9,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.routing.prophet.ProphetBundleRouter;
-import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 
 public class ProphetRegistration extends Registration {
 

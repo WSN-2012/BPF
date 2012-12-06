@@ -1,9 +1,7 @@
 package se.kth.ssvl.tslab.wsn.general.servlib.routing.routers;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.ForwardingInfo;
@@ -13,22 +11,13 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleActions;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleList;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundlePayload.location_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol.status_report_reason_t;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleProtocol;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.ExpirationTimer;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.custody.CustodyTimerSpec;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeleteRequest;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleDeliveredEvent;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.BundleReceivedEvent;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.ContactUpEvent;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.event.event_source_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
 import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointID;
-import se.kth.ssvl.tslab.wsn.general.servlib.naming.endpoint.EndpointIDPattern;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.EpidemicRegistration;
 import se.kth.ssvl.tslab.wsn.general.servlib.reg.Registration;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntry;
-import se.kth.ssvl.tslab.wsn.general.servlib.routing.routerentry.RouteEntryVec;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
@@ -57,7 +46,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 
 		String list[] = BundleStore.getInstance().getHashList();
 		if(list == null){
-			BPF.getInstance().getBPFLogger().warning(TAG, "List is empty, sending empty list");
+			BPF.getInstance().getBPFLogger().debug(TAG, "List is empty, sending empty list");
 			list = new String[]{"empty"};
 		}
 		BPF.getInstance().getBPFLogger().debug(TAG, "size of hashlist: " + list.length);
@@ -104,7 +93,7 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 				payload += "-";
 			}
 		}
-		BPF.getInstance().getBPFLogger().info(TAG, "List payload: " + payload);
+		BPF.getInstance().getBPFLogger().debug(TAG, "List payload: " + payload);
 		bundle.payload().set_data(payload.getBytes());
 
 		

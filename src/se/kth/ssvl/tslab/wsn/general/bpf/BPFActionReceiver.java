@@ -1,7 +1,6 @@
 package se.kth.ssvl.tslab.wsn.general.bpf;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.Bundle;
-import se.kth.ssvl.tslab.wsn.general.servlib.storage.Stats;
 
 public interface BPFActionReceiver {
 

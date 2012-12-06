@@ -32,7 +32,6 @@ import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.BlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PayloadBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.blocks.PrimaryBlockProcessor;
 import se.kth.ssvl.tslab.wsn.general.servlib.contacts.links.Link;
-import se.kth.ssvl.tslab.wsn.general.servlib.security.Ciphersuite_C3;
 import se.kth.ssvl.tslab.wsn.general.servlib.security.Security;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
 import se.kth.ssvl.tslab.wsn.general.systemlib.util.List;
@@ -222,7 +221,7 @@ public class BundleProtocol {
 
 			BlockInfo iter = blocks.get(i);
 
-			BPF.getInstance().getBPFLogger().warning(TAG, "Calling generate for block type: " + iter.type());
+			BPF.getInstance().getBPFLogger().debug(TAG, "Calling generate for block type: " + iter.type());
 			iter.owner().generate(bundle, blocks, iter, link, last);
 
 			BPF.getInstance().getBPFLogger()

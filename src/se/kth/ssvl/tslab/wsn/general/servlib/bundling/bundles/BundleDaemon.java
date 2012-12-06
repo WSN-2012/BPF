@@ -759,21 +759,9 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		boolean ok_to_route = true;
 		
-		BPF.getInstance().getBPFLogger().warning(TAG, "add_to_store: " + add_to_store);
-		BPF.getInstance().getBPFLogger().warning(TAG, "add_to_pending: fromApp = " + fromApp);
-		BPF.getInstance().getBPFLogger().warning(TAG, "add_to_pending: fromPeer = " + fromPeer);
-		
-		
 		// Routing is special when we have epidemic, so here we go
 		if (BPF.getInstance().getConfig().routes_setting().router_type() == router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
 			
-			// we do not want to route it, if it is from the app, because it is when we are sending a bundle (any)
-			// or we don not want to route it, if it came from a peer and it was for us. In this case we 
-			// want to store it only
-//			if (fromApp || (fromPeer && bundle.dest().str()
-//					.contains(BundleDaemon.getInstance().local_eid().str()))) {
-//				ok_to_route = false;
-//			}
 			if (fromApp) {
 				ok_to_route = false;
 			}
@@ -783,12 +771,9 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 				ok_to_route = true;
 			}
 		}
-		BPF.getInstance().getBPFLogger().warning(TAG, "ok_to_route: After the IF: " + ok_to_route);
-		
 
 		pending_bundles_.push_back(bundle);
 
-			
 		if (add_to_store) {
 			bundle.set_complete(true);
 			actions_.store_update(bundle);

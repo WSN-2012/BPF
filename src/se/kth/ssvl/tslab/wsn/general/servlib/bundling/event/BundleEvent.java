@@ -20,7 +20,6 @@
 
 package se.kth.ssvl.tslab.wsn.general.servlib.bundling.event;
 
-import java.util.Comparator;
 import java.util.Date;
 
 import se.kth.ssvl.tslab.wsn.general.servlib.bundling.bundles.BundleDaemon.BundleEventPriorityComparator;

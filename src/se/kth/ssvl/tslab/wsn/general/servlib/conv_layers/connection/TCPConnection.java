@@ -155,7 +155,6 @@ public class TCPConnection extends Connection {
 		InetSocketAddress remote = new InetSocketAddress(params.remote_addr_,
 				params.remote_port_);
 		try {
-			BPF.getInstance().getBPFLogger().warning(TAG, "Gonna connect now");
 			socket_.connect(remote);
 			initialize_channels_and_streams();
 
