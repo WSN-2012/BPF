@@ -2042,7 +2042,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		link.stats().set_bytes_transmitted(
 				link.stats().bytes_transmitted() + event.bytes_sent());
 
-		if (!bundle.source().getService().contains("epidemic")) {
+		if (bundle.bundleid() != 0) {
 			StatsManager.getInstance().increase("transmitted");
 		}
 
