@@ -19,10 +19,8 @@
  */
 package se.kth.ssvl.tslab.wsn.general.systemlib.util;
 
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.IByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.systemlib.util.SerializableByteBuffer;
-import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
+import se.kth.ssvl.tslab.wsn.general.servlib.bundling.SDNV;
 
 /**
  * Helper routine for managing and manipulating Byte Buffer

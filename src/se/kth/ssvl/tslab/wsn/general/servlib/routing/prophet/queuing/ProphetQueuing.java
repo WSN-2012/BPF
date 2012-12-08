@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import se.kth.ssvl.tslab.wsn.general.bpf.BPF;
-import se.kth.ssvl.tslab.wsn.general.servlib.config.types.conv_layer_type_t;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.BundleStore;
 import se.kth.ssvl.tslab.wsn.general.servlib.storage.GlobalStorage;
 
