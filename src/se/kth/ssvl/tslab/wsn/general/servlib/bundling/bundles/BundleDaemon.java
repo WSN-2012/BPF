@@ -554,18 +554,20 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 								at_back ? "back" : "head"));
 		event.set_posted_time(Calendar.getInstance().getTime());
 		;
-		if (!at_back) {
-			// if it's not at back , set the priority to higher than the head of
-			// the queue
-			if (eventq_.size() > 0) {
-				int highest_priority = eventq_.peek().priority();
-				event.set_priority(highest_priority + 1);
-
+		
+		if (eventq_ != null) {
+			if (!at_back) {
+				// if it's not at back , set the priority to higher than the head of
+				// the queue
+				if (eventq_.size() > 0) {
+					int highest_priority = eventq_.peek().priority();
+					event.set_priority(highest_priority + 1);
+					
+				}
 			}
+			
+			eventq_.put(event);
 		}
-
-		eventq_.put(event);
-
 	}
 
 	/**
