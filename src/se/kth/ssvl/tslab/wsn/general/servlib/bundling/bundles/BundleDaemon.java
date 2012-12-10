@@ -1640,10 +1640,12 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		String source_str = "";
 		switch (event.source()) {
 		case EVENTSRC_PEER:
-			BPF.getInstance()
-					.getBPFActionReceiver()
-					.notify("DTN Bundle Received",
-							"From " + bundle.source().toString());
+			if (!bundle.dest().getService().contains("epidemic")) {
+				BPF.getInstance()
+				.getBPFActionReceiver()
+				.notify("DTN Bundle Received",
+						"From " + bundle.source().toString());
+			}
 			break;
 
 		case EVENTSRC_APP:
@@ -2151,10 +2153,12 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 								bundle.bundleid(), link.name()));
 		bundle.fwdlog().update(link, ForwardingInfo.state_t.TRANSMITTED);
 
-		BPF.getInstance()
-				.getBPFActionReceiver()
-				.notify("DTN Bundle Transmitted",
-						"To " + bundle.dest().toString());
+		if (!bundle.dest().getService().contains("epidemic")) {
+			BPF.getInstance()
+			.getBPFActionReceiver()
+			.notify("DTN Bundle Transmitted",
+					"To " + bundle.dest().toString());
+		}
 
 		try {
 			BundleStore.getImpt_sqlite_().incForwardedTimes(bundle.bundleid());
