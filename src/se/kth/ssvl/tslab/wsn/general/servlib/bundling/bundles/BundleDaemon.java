@@ -2259,6 +2259,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 								link.name(), event.reason().getCaption(),
 								contact.toString()));
 
+		BPF.getInstance().getBPFActionReceiver().notify("Peer disconnected", contact.toString());
+		
 		// update the link stats , in seconds
 		link.stats().set_uptime(
 				link.stats().uptime()
@@ -2313,6 +2315,9 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 									link.name(), contact.toString()));
 			link.set_state(Link.state_t.OPEN);
 			link.stats_.set_contacts(link.stats_.contacts() + 1);
+			
+			BPF.getInstance().getBPFActionReceiver().notify("Peer connected", contact.toString());
+			
 		} finally {
 			contactmgr_.get_lock().unlock();
 		}
