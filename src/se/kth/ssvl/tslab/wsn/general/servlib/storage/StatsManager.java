@@ -68,51 +68,47 @@ public class StatsManager {
 		String cond_find_record = "stat = 'size'";
 		if (!impt_sqlite_.find_record(table, cond_find_record)) {
 			HashMap<String, Object> values = new HashMap<String, Object>();
-			values.put("stat", "'size'");
+			values.put("stat", "size");
 			values.put("value", (int) GlobalStorage.getInstance()
 					.get_total_size());
 			impt_sqlite_.add(table, values);
 			size = (int) GlobalStorage.getInstance().get_total_size();
 		} else {
-			String condition = "stat = 'size'";
-			size = impt_sqlite_.get_record(table, condition, "value", null);
+			size = impt_sqlite_.get_record(table, cond_find_record, "value", null);
 		}
 
 		cond_find_record = "stat = 'stored'";
 		if (!impt_sqlite_.find_record(table, cond_find_record)) {
 			HashMap<String, Object> values = new HashMap<String, Object>();
-			values.put("stat", "'stored'");
+			values.put("stat", "stored");
 			values.put("value", BundleStore.getInstance().get_bundle_count());
 			impt_sqlite_.add(table, values);
 			stored = BundleStore.getInstance().get_bundle_count();
 		} else {
-			String condition = "stat = 'stored'";
-			stored = impt_sqlite_.get_record(table, condition, "value", null);
+			stored = impt_sqlite_.get_record(table, cond_find_record, "value", null);
 		}
 
 		cond_find_record = "stat = 'transmitted'";
 		if (!impt_sqlite_.find_record(table, cond_find_record)) {
 			HashMap<String, Object> values = new HashMap<String, Object>();
-			values.put("stat", "'transmitted'");
+			values.put("stat", "transmitted");
 			values.put("value", 0);
 			impt_sqlite_.add(table, values);
 			transmitted = 0;
 		} else {
-			String condition = "stat = 'transmitted'";
-			transmitted = impt_sqlite_.get_record(table, condition, "value",
+			transmitted = impt_sqlite_.get_record(table, cond_find_record, "value",
 					null);
 		}
 
 		cond_find_record = "stat = 'received'";
 		if (!impt_sqlite_.find_record(table, cond_find_record)) {
 			HashMap<String, Object> values = new HashMap<String, Object>();
-			values.put("stat", "'received'");
+			values.put("stat", "received");
 			values.put("value", 0);
 			impt_sqlite_.add(table, values);
 			received = 0;
 		} else {
-			String condition = "stat = 'received'";
-			received = impt_sqlite_.get_record(table, condition, "value", null);
+			received = impt_sqlite_.get_record(table, cond_find_record, "value", null);
 		}
 
 		return true;
