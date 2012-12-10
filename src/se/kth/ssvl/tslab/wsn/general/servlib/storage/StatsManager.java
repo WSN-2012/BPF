@@ -166,8 +166,6 @@ public class StatsManager {
 
 		int current = impt_sqlite_.get_record(table, condition, "value", null);
 		
-		BPF.getInstance().getBPFLogger().error(TAG, "Got stat: " + stat + ". Value: " + current);
-		
 		if (current == -1) {
 			BPF.getInstance()
 					.getBPFLogger()
