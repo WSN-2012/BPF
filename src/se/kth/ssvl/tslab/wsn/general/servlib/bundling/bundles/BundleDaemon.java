@@ -201,25 +201,24 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		}
 
 		public int compare(BundleEvent x, BundleEvent y) {
-	    	// Error checking
-	    	if (y == null && x != null) {
-	    		return -1;
-	    	} else if (x == null && y != null) {
-	    		return 1;
-	    	} else if (x == null && y == null) {
-	    		return 0;
-	    	}
-	    	
-	    	if (x.priority() > y.priority()) {
-	    		return -1;
-	    	} else if (x.priority() < y.priority()) {
-	    		return 1;
-	    	}
-	        return 0;
+			// Error checking
+			if (y == null && x != null) {
+				return -1;
+			} else if (x == null && y != null) {
+				return 1;
+			} else if (x == null && y == null) {
+				return 0;
+			}
+
+			if (x.priority() > y.priority()) {
+				return -1;
+			} else if (x.priority() < y.priority()) {
+				return 1;
+			}
+			return 0;
 		}
 
 	}
-
 
 	public static Params params_;
 
@@ -554,18 +553,21 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 								at_back ? "back" : "head"));
 		event.set_posted_time(Calendar.getInstance().getTime());
 		;
-		if (!at_back) {
-			// if it's not at back , set the priority to higher than the head of
-			// the queue
-			if (eventq_.size() > 0) {
-				int highest_priority = eventq_.peek().priority();
-				event.set_priority(highest_priority + 1);
 
+		if (eventq_ != null) {
+			if (!at_back) {
+				// if it's not at back , set the priority to higher than the
+				// head of
+				// the queue
+				if (eventq_.size() > 0) {
+					int highest_priority = eventq_.peek().priority();
+					event.set_priority(highest_priority + 1);
+
+				}
 			}
+
+			eventq_.put(event);
 		}
-
-		eventq_.put(event);
-
 	}
 
 	/**
@@ -649,28 +651,28 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 					custody_bundles_);
 		} catch (RoutingException e) {
 			BPF.getInstance().getBPFLogger()
-			.error(TAG, "BundleDeamon:run(), UnknownRouterType ");
+					.error(TAG, "BundleDeamon:run(), UnknownRouterType ");
 			e.printStackTrace();
 		}
-		
+
 		// Load all registrations
 		BPF.getInstance().getBPFLogger()
-		.debug(TAG, "Going to load registrations");
+				.debug(TAG, "Going to load registrations");
 		load_registrations();
-		
+
 		// Clean all bad bundles
 		BPF.getInstance().getBPFLogger().debug(TAG, "Started cleaning");
 		BundleStore.getInstance().clean_garbage_bundles();
 		BPF.getInstance().getBPFLogger().debug(TAG, "Cleaning done");
-		
+
 		// Load all the existing bundles that are in the store
 		BPF.getInstance().getBPFLogger()
-		.debug(TAG, "Loaded registrations, going to load bundles");
+				.debug(TAG, "Loaded registrations, going to load bundles");
 		load_bundles();
-		
+
 		// Start the security
 		new Security();
-		
+
 		shutting_down_ = false;
 		thread_ = new Thread(this);
 		thread_.start();
@@ -750,7 +752,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	 * @return true "if the bundle is legal to be delivered and/or forwarded,
 	 *         false if it's already expired" [DTN2]
 	 */
-	protected boolean add_to_pending(Bundle bundle, boolean add_to_store, boolean fromApp, boolean fromPeer) {
+	protected boolean add_to_pending(Bundle bundle, boolean add_to_store,
+			boolean fromApp, boolean fromPeer) {
 		BPF.getInstance()
 				.getBPFLogger()
 				.debug(TAG,
@@ -758,14 +761,14 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 								bundle.bundleid()));
 
 		boolean ok_to_route = true;
-		
+
 		// Routing is special when we have epidemic, so here we go
 		if (BPF.getInstance().getConfig().routes_setting().router_type() == router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
-			
+
 			if (fromApp) {
 				ok_to_route = false;
 			}
-			
+
 			// Do route the epidemic bundles no matter what
 			if (bundle.dest().getService().contains("epidemic")) {
 				ok_to_route = true;
@@ -856,7 +859,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 	 * @return "whether or not any matching registrations were found or if the
 	 *         bundle is destined for the local node" [DTN2]
 	 */
-	protected boolean check_local_delivery(Bundle bundle, boolean deliver, Link link) {
+	protected boolean check_local_delivery(Bundle bundle, boolean deliver,
+			Link link) {
 		BPF.getInstance()
 				.getBPFLogger()
 				.debug(TAG,
@@ -1081,19 +1085,19 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		 */
 		Bundle bundle = null;
 
-//		if (event.type() == event_type_t.BUNDLE_TRANSMITTED) {
-//			bundle = ((BundleTransmittedEvent) event).bundle();
-//
-//		}
-//
-//		if (event.type() == event_type_t.BUNDLE_DELIVERED) {
-//			bundle = ((BundleDeliveredEvent) event).bundle();
-//
-//		}
-//
-//		if (bundle != null) {
-//			try_to_delete(bundle);
-//		}
+		// if (event.type() == event_type_t.BUNDLE_TRANSMITTED) {
+		// bundle = ((BundleTransmittedEvent) event).bundle();
+		//
+		// }
+		//
+		// if (event.type() == event_type_t.BUNDLE_DELIVERED) {
+		// bundle = ((BundleDeliveredEvent) event).bundle();
+		//
+		// }
+		//
+		// if (bundle != null) {
+		// try_to_delete(bundle);
+		// }
 
 		/**
 		 * "Once the bundle expired event has been processed, the bundle
@@ -1235,7 +1239,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		String reason_string = request.reason()[0] != null ? request.reason()[0]
 				.toString() : "no reason";
-		BPF.getInstance() 
+		BPF.getInstance()
 				.getBPFLogger()
 				.info(TAG,
 						String.format(
@@ -1556,7 +1560,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		 * unless it's generated by the router or is a bundle fragment. Delivery
 		 * of bundle fragments is deferred until after re-assembly." [DTN2]
 		 */
-		boolean is_local = check_local_delivery(bundle, !bundle.is_fragment(), event.link());
+		boolean is_local = check_local_delivery(bundle, !bundle.is_fragment(),
+				event.link());
 
 		/*
 		 * "Re-assemble bundle fragments that are destined to the local node."
@@ -1771,7 +1776,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 			 */
 			if (bundle.receive_rcpt()
 					|| reception_reason[0] != BundleProtocol.status_report_reason_t.REASON_NO_ADDTL_INFO) {
-				BPF.getInstance().getBPFLogger().error(TAG, "reception_reason is not NO_ADDTL_INFO");
+				BPF.getInstance().getBPFLogger()
+						.error(TAG, "reception_reason is not NO_ADDTL_INFO");
 				generate_status_report(bundle,
 						BundleStatusReport.flag_t.STATUS_RECEIVED,
 						reception_reason[0]);
@@ -1821,7 +1827,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 											.seqno()));
 
 			if (bundle.custody_requested() && duplicate.local_custody()) {
-				BPF.getInstance().getBPFLogger().error(TAG, "Custody was redundant");
+				BPF.getInstance().getBPFLogger()
+						.error(TAG, "Custody was redundant");
 				generate_custody_signal(
 						bundle,
 						false,
@@ -1910,7 +1917,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		 * "Check if this is a complete (non-fragment) bundle that obsoletes any
 		 * fragments that we know about." [DTN2]
 		 */
-		if (!BPF.getInstance().getConfig().links_setting().proactive_fragmentation()) {
+		if (!BPF.getInstance().getConfig().links_setting()
+				.proactive_fragmentation()) {
 			fragmentmgr_.delete_obsoleted_fragments(bundle);
 		}
 
@@ -1922,8 +1930,7 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 		boolean is_local = check_local_delivery(
 				bundle,
 				(event.source() != event_source_t.EVENTSRC_ROUTER)
-						&& (bundle.is_fragment() == false),
-				event.link());
+						&& (bundle.is_fragment() == false), event.link());
 
 		/*
 		 * "Re-assemble bundle fragments that are destined to the local node."
@@ -1938,24 +1945,28 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 									bundle.bundleid()));
 			fragmentmgr_.process_for_reassembly(bundle);
 		}
-		
-		
+
 		/*
-		 * Do a callback to the use of the framework with the bundle received.
+		 * Do a callback to the user of the framework with the bundle received.
 		 */
-		if (!bundle.dest().getService().contains("epidemic")){
-			StatsManager.getInstance().increase("received");
+		if (!bundle.dest().getService().contains("epidemic")) {
+			
+			if (event.source() == event_source_t.EVENTSRC_PEER) {
+				StatsManager.getInstance().increase("received");
+			}
+			
 			if (is_local) {
-				BPF.getInstance().getBPFLogger().debug(TAG,
-						"Bundle received and doing a callback to the framework user");
+				BPF.getInstance()
+						.getBPFLogger()
+						.debug(TAG,
+								"Bundle received and doing a callback to the framework user");
 				BPF.getInstance().getBPFActionReceiver().bundleReceived(bundle);
 				event.set_daemon_only(true);
 				BundleDaemon.getInstance().post(
-						new BundleDeleteRequest(bundle, status_report_reason_t.REASON_NO_ADDTL_INFO));
+						new BundleDeleteRequest(bundle,
+								status_report_reason_t.REASON_NO_ADDTL_INFO));
 			}
 		}
-		
-		
 
 		/*
 		 * "Finally, bounce out so the router(s) can do something further with
@@ -2030,8 +2041,10 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		link.stats().set_bytes_transmitted(
 				link.stats().bytes_transmitted() + event.bytes_sent());
-		
-		StatsManager.getInstance().increase("transmitted");
+
+		if (bundle.bundleid() != 0) {
+			StatsManager.getInstance().increase("transmitted");
+		}
 
 		// "remove the bundle from the link's in flight queue" [DTN2]
 		if (link.del_from_inflight(event.bundle(), total_len)) {
@@ -2179,9 +2192,10 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 					new CustodyTimer(fwdinfo.timestamp(), fwdinfo
 							.custody_spec(), bundle, link));
 		}
-		
+
 		// if it is not an epidemic list (id=0) and
-		// we are not configured to keep a copy of what we send, then delete bundle
+		// we are not configured to keep a copy of what we send, then delete
+		// bundle
 		if (bundle.bundleid() > 0
 				&& !BPF.getInstance().getConfig().storage_setting().keep_copy()) {
 			BundleDaemon.getInstance().post(
@@ -2311,7 +2325,8 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 								.data().succeeded() ? "succeeded" : "failed",
 								event.data().reason().getCaption()));
 
-		//TODO: Make sure that the below settings for the GbofId are working correctly
+		// TODO: Make sure that the below settings for the GbofId are working
+		// correctly
 		GbofId gbof_id = new GbofId();
 		gbof_id.source().assign(event.data().orig_source_eid());
 		gbof_id.set_creation_ts(event.data().orig_creation_tv());
@@ -3101,11 +3116,10 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 			handle_event(event);
 		}
 
-		if (BundleRouter.config().type() == router_type_t.PROPHET_BUNDLE_ROUTER ||
-				BundleRouter.config().type() == router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
+		if (BundleRouter.config().type() == router_type_t.PROPHET_BUNDLE_ROUTER
+				|| BundleRouter.config().type() == router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
 			RegistrationAddedEvent event = new RegistrationAddedEvent(
-					router_.getRegistration(),
-					event_source_t.EVENTSRC_ADMIN);
+					router_.getRegistration(), event_source_t.EVENTSRC_ADMIN);
 			handle_event(event);
 		}
 
@@ -3180,15 +3194,15 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 						String.format("pending_bundles size %d",
 								pending_bundles_.size()));
 		if (!bundle.is_queued_on(pending_bundles_)) {
-//			if (bundle.expired()) {
-//				BPF.getInstance()
-//						.getBPFLogger()
-//						.debug(TAG,
-//								String.format(
-//										"try_to_delete( bundle id %d): bundle already expired",
-//										bundle.bundleid()));
-//				return false;
-//			}
+			// if (bundle.expired()) {
+			// BPF.getInstance()
+			// .getBPFLogger()
+			// .debug(TAG,
+			// String.format(
+			// "try_to_delete( bundle id %d): bundle already expired",
+			// bundle.bundleid()));
+			// return false;
+			// }
 
 			BPF.getInstance()
 					.getBPFLogger()
@@ -3225,17 +3239,22 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 				BundleProtocol.status_report_reason_t.REASON_NO_ADDTL_INFO);
 
 	}
-	
-	
+
 	protected void printEventQueue() {
-		BPF.getInstance().getBPFLogger().debug(TAG, "********************* EVENT QUEUE **********************");
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						"********************* EVENT QUEUE **********************");
 		BundleEvent[] bea = new BundleEvent[eventq_.size()];
 		eventq_.toArray(bea);
 		Arrays.sort(bea);
-		for (int i=0; i < bea.length; i++){
+		for (int i = 0; i < bea.length; i++) {
 			BPF.getInstance().getBPFLogger().debug(TAG, bea[i].toString());
 		}
-		BPF.getInstance().getBPFLogger().debug(TAG, "********************************************************");
+		BPF.getInstance()
+				.getBPFLogger()
+				.debug(TAG,
+						"********************************************************");
 	}
 
 }

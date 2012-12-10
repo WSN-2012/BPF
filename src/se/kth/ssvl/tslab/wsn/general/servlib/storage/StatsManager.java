@@ -129,7 +129,7 @@ public class StatsManager {
 			return;
 		}
 
-		//update private variables
+		// update private variables
 		if (stat.equals("size")) {
 			size = value;
 		} else if (stat.equals("stored")) {
@@ -139,13 +139,21 @@ public class StatsManager {
 		} else if (stat.equals("received")) {
 			received = value;
 		}
-		
-		//inform the Service that new statistics are available
-		BPF.getInstance().updateStats(new Stats(size,stored,transmitted,received));
+
+		// inform the Service that new statistics are available
+		BPF.getInstance().updateStats(
+				new Stats(size, stored, transmitted, received));
 	}
 
 	public void increase(String stat) {
-		if (!stat.equals("transmitted") && !stat.equals("received")) {
+
+		String condition = "";
+		
+		if (stat.equals("transmitted")) {
+			condition = "stat = 'transmitted'";
+		} else if (stat.equals("received")) {
+			condition = "stat = 'received'";
+		} else {
 			BPF.getInstance()
 					.getBPFLogger()
 					.warning(
@@ -156,13 +164,14 @@ public class StatsManager {
 			return;
 		}
 
-		String condition = "stat = '" + stat + "'";
-
 		int current = impt_sqlite_.get_record(table, condition, "value", null);
+		
+		BPF.getInstance().getBPFLogger().error(TAG, "Got stat: " + stat + ". Value: " + current);
+		
 		if (current == -1) {
 			BPF.getInstance()
 					.getBPFLogger()
-					.warning(
+					.error(
 							TAG,
 							"Trying to increase stat: "
 									+ stat
