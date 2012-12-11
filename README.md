@@ -18,7 +18,7 @@ The BPF is a framework used in all our DTN devices as a base for all DTN communi
 ### Prerequisites
 You will need to have ant to compile this in an easy way. To get ant look into how to install it on your platform.
 
-### Buidling
+### Building
 The BPF should be built into a jar which should be imported into the application/service implementing it. 
 Follow the below steps to build it.
 
