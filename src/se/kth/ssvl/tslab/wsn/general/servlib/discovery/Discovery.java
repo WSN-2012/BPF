@@ -267,8 +267,8 @@ public abstract class Discovery {
 			} else {
 				discoveries.remove(remote_eid.str());
 				discoveries.put(remote_eid.str(), cl_addr);
-				BPF.getInstance().getBPFActionReceiver().notify("New peer discovered",
-						remote_eid.str());
+//				BPF.getInstance().getBPFActionReceiver().notify("New peer discovered",
+//						remote_eid.str());
 			}
 
 			BundleDaemon BD = BundleDaemon.getInstance();
