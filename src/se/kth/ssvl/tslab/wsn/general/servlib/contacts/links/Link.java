@@ -1409,6 +1409,14 @@ public class Link implements Serializable {
 	public static void set_link_counter(int linkCounter) {
 		link_counter_ = linkCounter;
 	}
+	
+	public boolean getEpidemicInitialPhaseDone() {
+		return epidemicInitialPhaseDone;
+	}
+	
+	public void setEpidemicInitialPhaseDone(boolean done) {
+		epidemicInitialPhaseDone = done;
+	}
 
 	// / Type of the link
 	protected link_type_t type_;
@@ -1495,5 +1503,7 @@ public class Link implements Serializable {
 
 	// / Counter of active links
 	private static int link_counter_;
+	
+	private boolean epidemicInitialPhaseDone = false;
 
 }
