@@ -171,15 +171,11 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 					actions_.queue_bundle(b, link, info.action(),
 							info.custody_spec());
 				}
-				// BundleDaemon.getInstance().post(
-				// new BundleDeleteRequest(b,
-				// status_report_reason_t.REASON_NO_ADDTL_INFO));
 			}
-			
-			// Tell the link that epidemic list exchange is done
-			link.setEpidemicInitialPhaseDone(true);
-			
 		}
+		
+		// Tell the link that epidemic list exchange is done
+		link.setEpidemicInitialPhaseDone(true);
 	}
 
 	protected int route_bundle(Bundle bundle) {
@@ -191,12 +187,13 @@ public class EpidemicBundleRouter extends TableBasedRouter {
 		int count = 0;
 		while (itr.hasNext()) {
 			RouteEntry route = itr.next();
-
-			if (route.link().getEpidemicInitialPhaseDone()) {
+			
+			if (route.link().getEpidemicInitialPhaseDone()
+					&& !bundle.dest().getService().contains("epidemic")) {
 				count += super.route_bundle(bundle);
 			}
 		}
-
+		
 		return count;
 	}
 

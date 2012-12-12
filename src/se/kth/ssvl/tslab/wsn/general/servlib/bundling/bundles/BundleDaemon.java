@@ -762,19 +762,6 @@ public class BundleDaemon extends BundleEventHandler implements Runnable {
 
 		boolean ok_to_route = true;
 
-		// Routing is special when we have epidemic, so here we go
-		if (BPF.getInstance().getConfig().routes_setting().router_type() == router_type_t.EPIDEMIC_BUNDLE_ROUTER) {
-
-			if (fromApp) {
-				ok_to_route = false;
-			}
-
-			// Do route the epidemic bundles no matter what
-			if (bundle.dest().getService().contains("epidemic")) {
-				ok_to_route = true;
-			}
-		}
-
 		pending_bundles_.push_back(bundle);
 
 		if (add_to_store) {
